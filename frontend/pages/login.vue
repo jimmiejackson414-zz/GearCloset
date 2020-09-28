@@ -1,7 +1,9 @@
 <template>
   <div class="login">
     <div class="left">
-      <login-description-box />
+      <fade-transition>
+        <login-description-box />
+      </fade-transition>
     </div>
     <div class="right">
       <slide-fade-transition>
@@ -28,7 +30,7 @@
             :rules="emailRules"
             validate-on-blur
             @keyup.enter="handleSubmit">
-            <template v-slot:prepend>
+            <template v-slot:prepend-inner>
               <icon
                 name="envelope-alt"
                 fill="#0077be"
@@ -48,7 +50,7 @@
             type="password"
             validate-on-blur
             @keyup.enter="handleSubmit">
-            <template v-slot:prepend>
+            <template v-slot:prepend-inner>
               <icon
                 name="padlock"
                 fill="#0077be"
@@ -86,7 +88,8 @@
   import Icon from '~/components/Icon';
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
   import LogoIcon from '~/components/icons/LogoIcon';
-  import SlideFadeTransition from '~/components/SlideFadeTransition';
+  import FadeTransition from '~/components/transitions/FadeTransition';
+  import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
 
   export default {
     layout: 'homepage',
@@ -123,6 +126,7 @@
     },
 
     components: {
+      FadeTransition,
       Icon,
       LoginDescriptionBox,
       LogoIcon,
