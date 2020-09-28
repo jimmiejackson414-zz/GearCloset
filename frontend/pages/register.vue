@@ -216,9 +216,14 @@
     .left {
       display: none;
 
-      @include breakpoint(tablet) {
+      @include breakpoint(laptop) {
         align-items: center;
         display: flex;
+        flex-basis: 60%;
+        flex-flow: row wrap;
+      }
+
+      @include breakpoint(smallDisplay) {
         flex-basis: 70%;
       }
     }
@@ -231,9 +236,13 @@
       flex-basis: 100%;
       padding: 0 5rem;
 
-      @include breakpoint(tablet) {
-        flex-basis: 30%;
+      @include breakpoint(laptop) {
+        flex-basis: 40%;
         padding: 0 4rem;
+      }
+
+      @include breakpoint(smallDisplay) {
+        flex-basis: 30%;
       }
 
       form {
@@ -242,6 +251,11 @@
         .form-header {
           margin-bottom: 1rem;
           text-align: center;
+        }
+
+        .btn-actions {
+          display: flex;
+          flex-direction: column;
         }
       }
 

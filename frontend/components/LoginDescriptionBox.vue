@@ -30,10 +30,12 @@
 <style lang="scss" scoped>
   .content {
     padding: 2rem;
-    max-width: 70%;
+    max-width: 740px;
 
     .header {
+      line-height: 70px;
       margin-bottom: 2rem;
+      word-break: normal;
     }
   }
 </style>
