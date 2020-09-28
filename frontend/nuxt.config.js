@@ -1,6 +1,10 @@
-import colors from 'vuetify/es5/util/colors';
-
 export default {
+  // publicRuntimeConfig: {
+  //   baseURL: process.env.BASE_URL
+  // },
+  // privateRuntimeConfig: {
+  //   apiSecret: process.env.API_SECRET
+  // },
   head: {
     titleTemplate: '%s - GearCloset',
     title: 'GearCloset',
@@ -15,7 +19,8 @@ export default {
   },
 
   css: [
-    '~/css/global.scss'
+    '~/css/global.scss',
+    '~/css/breakpoints.scss'
   ],
 
   plugins: [

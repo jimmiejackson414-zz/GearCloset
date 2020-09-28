@@ -3,8 +3,8 @@
     light>
     <v-app-bar
       absolute
-      flat
-      app>
+      app
+      flat>
       <v-toolbar-title>
         <nuxt-link to="/">
           <logo :color="logoColor" />
@@ -15,16 +15,16 @@
         <v-btn
           v-if="isCurrentPage('/login')"
           class="nav-link"
-          text
           :ripple="false"
+          text
           to="/register">
           Register
         </v-btn>
         <v-btn
-          v-if="isCurrentPage('/register')"
+          v-if="isCurrentPage('/register') || isCurrentPage('/forgot-password')"
           class="nav-link"
-          text
           :ripple="false"
+          text
           to="/login">
           Login
         </v-btn>
@@ -32,7 +32,7 @@
     </v-app-bar>
     <v-main :style="{ backgroundImage: 'url(' + require(`~/assets/images/${randBackground.src}`) + ')' }">
       <v-container
-        v-if="isHomepage"
+        v-if="isUserPage"
         fluid>
         <nuxt />
       </v-container>
@@ -40,12 +40,12 @@
         <nuxt />
       </v-container>
     </v-main>
-    <!-- <v-footer
+    <v-footer
+      absolute
       app
-      tile
-      fixed
-      class="custom flex-column">
-      <div class="social-container">
+      class="custom flex-column"
+      tile>
+      <!-- <div class="social-container">
         <div class="social facebook">
           <a
             href="https://www.facebook.com/jimmiejacksonphotography/"
@@ -79,9 +79,9 @@
               width="30px" />
           </a>
         </div>
-      </div>
-      <span class="subtitle-2">&copy; {{ new Date().getFullYear() }} Jimmie Jackson Photography</span>
-    </v-footer> -->
+      </div> -->
+      <span class="subtitle-1">&copy; {{ new Date().getFullYear() }} Gear Closet</span>
+    </v-footer>
   </v-app>
 </template>
 
@@ -91,6 +91,8 @@
   import Logo from '~/components/icons/Logo';
 
   export default {
+    name: 'Homepage',
+
     data: () => ({
       images: randBackgrounds,
       logo: null
@@ -103,11 +105,11 @@
       randBackground () {
         return this.images[Math.floor(Math.random() * this.images.length)];
       },
-      isHomepage () {
-        return this.$route.name === 'login';
+      isUserPage () {
+        return this.$route.name === 'login' || this.$route.name === 'register' || this.$route.name === 'forgot-password';
       },
       logoColor () {
-        return this.$route.name !== ('login' && 'register') ? '#4a4a4a' : '#fff';
+        return (this.$route.name !== 'login' || this.$route.name !== 'register' || this.$route.name !== 'forgot-password') ? '#4a4a4a' : '#fff';
       },
       position () {
         return this.randBackground.position;
@@ -139,32 +141,32 @@
   .v-toolbar {
     background-color: white !important;
 
-      &.left {
-        .v-toolbar__content {
-          justify-content: center;
+    &.left {
+      .v-toolbar__content {
+        justify-content: center;
 
-          @include breakpoint(desktop) {
-            justify-content: start;
-          }
+        @include breakpoint(desktop) {
+          justify-content: start;
         }
       }
+    }
 
-      &.right {
-        .v-toolbar__content {
-          justify-content: end;
-        }
+    &.right {
+      .v-toolbar__content {
+        justify-content: end;
       }
+    }
 
-      &.center {
-        .v-toolbar__content {
-          justify-content: center;
-        }
+    &.center {
+      .v-toolbar__content {
+        justify-content: center;
       }
+    }
   }
 
   .v-main {
     background-size: cover;
-    padding: 0;
+    padding-bottom: 0 !important;
   }
 
   footer.v-footer.custom {

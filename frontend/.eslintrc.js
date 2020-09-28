@@ -2,8 +2,6 @@ const path = require('path');
 
 require('dotenv').config();
 
-console.log('ndoe_env', process.env.NODE_ENV);
-
 module.exports = {
   root: true,
   env: {
@@ -98,7 +96,8 @@ module.exports = {
           'OTHER_ATTR',
           'EVENTS',
           'CONTENT'
-        ]
+        ],
+        alphabetical: true
       }
     ],
     'vue/order-in-components': [

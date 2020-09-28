@@ -1,5 +1,6 @@
 <template>
   <v-navigation-drawer
+    v-bind="$attrs"
     app
     bottom
     color="transparent"
@@ -8,7 +9,6 @@
     overlay-color="black"
     overlay-opacity=".1"
     temporary
-    v-bind="$attrs"
     v-on="$listeners">
     <v-list
       color="white"
@@ -16,13 +16,13 @@
       <v-list-item>
         <v-text-field
           v-model="query"
-          label="Search"
-          outlined
+          class="mb-3"
           clearable
           color="primary"
-          hide-details
           dense
-          class="mb-3"
+          hide-details
+          label="Search"
+          outlined
           @keypress.enter="performSearch">
           <template v-slot:prepend>
             <v-btn
@@ -31,9 +31,9 @@
               small
               @click="performSearch">
               <icon
-                name="search"
                 fill="gray"
                 height="20px"
+                name="search"
                 width="20px" />
             </v-btn>
           </template>
@@ -42,19 +42,19 @@
       <v-list-item
         v-for="item in items"
         :key="item.title"
-        :to="item.to"
+        color="primary"
         :exact="item.title === 'Home'"
-        color="primary">
+        :to="item.to">
         <v-list-item-content>
           <v-list-item-title
             v-if="item.badge"
             class="reset-overflow">
             <v-badge
+              class="inline-badge"
               color="red"
               :content="cartItems"
-              :value="cartItems"
-              class="inline-badge"
-              overlap>
+              overlap
+              :value="cartItems">
               {{ item.title }}
             </v-badge>
           </v-list-item-title>

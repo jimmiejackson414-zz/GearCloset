@@ -5,14 +5,14 @@
     light>
     <v-app-bar
       id="home-app-bar"
-      fixed
+      app
       elevate-on-scroll
-      app>
+      fixed>
       <v-toolbar-title>
         <nuxt-link to="/">
           <v-img
-            :src="logoSrc"
-            class="logo" />
+            class="logo"
+            :src="logoSrc" />
         </nuxt-link>
       </v-toolbar-title>
       <v-spacer />
@@ -23,12 +23,12 @@
             v-show="searchIsOpen"
             ref="searchField"
             v-model="searchTerm"
-            type="search"
             color="primary"
             dense
-            hide-details
             full-width
+            hide-details
             outlined
+            type="search"
             @keypress.enter="performSearch">
             <template v-slot:append>
               <v-btn
@@ -37,59 +37,59 @@
                 small
                 @click="performSearch">
                 <icon
-                  name="search"
                   fill="gray"
                   height="20px"
+                  name="search"
                   width="20px" />
               </v-btn>
             </template>
           </v-text-field>
         </transition>
         <transition
-          name="fade"
-          mode="out-in">
+          mode="out-in"
+          name="fade">
           <v-btn
             v-if="!searchIsOpen"
             key="open"
+            class="hidden-sm-and-down mr-4"
             icon
             :ripple="false"
-            class="hidden-sm-and-down mr-4"
             @click.prevent="toggleSearchInput">
             <icon
-              name="search"
               fill="gray"
               height="20px"
+              name="search"
               width="20px" />
           </v-btn>
           <v-btn
             v-else
             key="close"
+            class="hidden-sm-and-down mr-4"
             icon
             :ripple="false"
-            class="hidden-sm-and-down mr-4"
             @click.prevent="toggleSearchInput">
             <icon
-              name="multiply"
               fill="rgb(183, 65, 14)"
               height="20px"
+              name="multiply"
               width="20px" />
           </v-btn>
         </transition>
         <v-tabs
           class="hidden-sm-and-down"
-          :style="{ width: 'auto' }"
-          optional>
+          optional
+          :style="{ width: 'auto' }">
           <v-tab
             v-for="(item, i) in items"
             :key="i"
-            :exact="item.title === 'Home'"
-            :to="item.to"
-            :ripple="false"
             active-class="text--primary"
             class="font-weight-bold nav-link"
+            :exact="item.title === 'Home'"
             min-width="96"
             nuxt
-            text>
+            :ripple="false"
+            text
+            :to="item.to">
             <!-- <v-badge
               v-if="item.badge && hasCartItems"
               color="secondary"
@@ -100,12 +100,12 @@
               {{ item.title }}
             </v-badge> -->
             <v-menu
-              close-on-click
-              open-on-hover
               bottom
-              transition="slide-y-transition"
+              close-on-click
               nudge-bottom
-              offset-y>
+              offset-y
+              open-on-hover
+              transition="slide-y-transition">
               <template v-slot:activator="{ on, attrs }">
                 <span
                   v-bind="attrs"
@@ -119,8 +119,8 @@
                   v-for="(menuItem, index) in item.menuItems"
                   :key="index">
                   <nuxt-link
-                    :to="menuItem.to"
-                    class="body-1 font-weight-medium">
+                    class="body-1 font-weight-medium"
+                    :to="menuItem.to">
                     {{ menuItem.title }}
                   </nuxt-link>
                 </v-list-item>
@@ -156,8 +156,8 @@
 
     <v-main>
       <transition
-        name="fade"
-        mode="out-in">
+        mode="out-in"
+        name="fade">
         <v-container>
           <nuxt />
         </v-container>
@@ -166,20 +166,20 @@
 
     <v-footer
       app
-      tile
+      class="custom flex-column"
       padless
-      class="custom flex-column">
+      tile>
       <v-row
-        justify-center
-        class="social-container">
+        class="social-container"
+        justify-center>
         <div class="social facebook">
           <a
             href="https://www.facebook.com/jimmiejacksonphotography/"
             target="_blank">
             <icon
-              name="facebook-f"
               fill="grey"
               height="30px"
+              name="facebook-f"
               width="30px" />
           </a>
         </div>
@@ -188,9 +188,9 @@
             href="https://www.instagram.com/jimmie_photo/"
             target="_blank">
             <icon
-              name="instagram-alt"
               fill="grey"
               height="30px"
+              name="instagram-alt"
               width="30px" />
           </a>
         </div>
@@ -199,9 +199,9 @@
             href="mailto:howdy@jimmiejacksonphotography.com"
             target="_blank">
             <icon
-              name="envelope-alt"
               fill="grey"
               height="30px"
+              name="envelope-alt"
               width="30px" />
           </a>
         </div>
@@ -213,18 +213,18 @@
     <v-fab-transition>
       <v-btn
         v-show="showScrollBtn"
+        bottom
         color="#4a4a4a"
         dark
         fab
         fixed
-        bottom
         right
         :ripple="false"
         @click="scrollToTop">
         <icon
-          name="angle-up"
           fill="white"
           height="40px"
+          name="angle-up"
           width="40px" />
       </v-btn>
     </v-fab-transition>

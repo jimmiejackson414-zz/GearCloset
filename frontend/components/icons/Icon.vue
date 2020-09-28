@@ -1,11 +1,11 @@
 <template>
   <client-only>
     <unicon
-      :style="styles"
       :class="customClass"
-      :name="name"
       :fill="fillStyles"
       :height="height"
+      :name="name"
+      :style="styles"
       :width="width" />
   </client-only>
 </template>

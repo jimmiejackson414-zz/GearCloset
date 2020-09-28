@@ -1,7 +1,7 @@
 <template>
   <transition
-    name="fade"
-    appear>
+    appear
+    name="fade">
     <slot />
   </transition>
 </template>

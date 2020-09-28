@@ -14,7 +14,8 @@ import {
   uniPadlock,
   uniMountains,
   uniMultiply,
-  uniSearch
+  uniSearch,
+  uniUserCircle
 } from 'vue-unicons/src/icons';
 
 Unicon.add([
@@ -31,6 +32,7 @@ Unicon.add([
   uniMountains,
   uniMultiply,
   uniPadlock,
-  uniSearch
+  uniSearch,
+  uniUserCircle
 ]);
 Vue.use(Unicon);
