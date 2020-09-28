@@ -11,8 +11,11 @@ import {
   uniImageDownload,
   uniInfoCircle,
   uniInstagramAlt,
+  uniPadlock,
+  uniMountains,
   uniMultiply,
-  uniSearch
+  uniSearch,
+  uniUserCircle
 } from 'vue-unicons/src/icons';
 
 Unicon.add([
@@ -26,7 +29,10 @@ Unicon.add([
   uniImageDownload,
   uniInfoCircle,
   uniInstagramAlt,
+  uniMountains,
   uniMultiply,
-  uniSearch
+  uniPadlock,
+  uniSearch,
+  uniUserCircle
 ]);
 Vue.use(Unicon);

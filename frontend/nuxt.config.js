@@ -1,6 +1,10 @@
-import colors from 'vuetify/es5/util/colors'
-
 export default {
+  // publicRuntimeConfig: {
+  //   baseURL: process.env.BASE_URL
+  // },
+  // privateRuntimeConfig: {
+  //   apiSecret: process.env.API_SECRET
+  // },
   head: {
     titleTemplate: '%s - GearCloset',
     title: 'GearCloset',
@@ -15,22 +19,25 @@ export default {
   },
 
   css: [
+    '~/css/global.scss',
+    '~/css/breakpoints.scss'
   ],
 
   plugins: [
-    { src: '~/plugins/vue-unicons', mode: 'client' },
+    { src: '~/plugins/vue-unicons', mode: 'client' }
   ],
 
   components: true,
 
   buildModules: [
-    '@nuxtjs/vuetify',
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/vuetify'
   ],
 
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/pwa',
+    '@nuxtjs/pwa'
   ],
 
   auth: {
@@ -38,7 +45,7 @@ export default {
       'laravel.passport': {
         url: '',
         client_id: '',
-        client_secret: '',
+        client_secret: ''
       }
     }
   },
@@ -46,23 +53,52 @@ export default {
   axios: {},
 
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: ['~/css/variables.scss'],
+    treeShake: true,
+    icons: {
+      iconfont: 'vue-unicons'
+    },
     theme: {
-      dark: true,
+      options: {
+        customProperties: true
+      },
       themes: {
+        light: {
+          primary: '#0077be', // water
+          secondary: '#b7410e', // rust
+          accent: '#e1ad01', // mustard
+          info: '#759194', // stone
+          warning: '#f05e23', // orange
+          error: '#950714', // cranberry
+          success: '#228b22', // forrest
+          background: '#fff'
+        },
         dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
+          primary: '#0077be', // water
+          secondary: '#b7410e', // rust
+          accent: '#e1ad01', // mustard
+          info: '#759194', // stone
+          warning: '#f05e23', // orange
+          error: '#950714', // cranberry
+          success: '#228b22', // forrest
+          background: '#252525'
         }
       }
     }
   },
 
   build: {
+    standalone: true,
+    extend (config, { isDev, isClient }) {
+      // Run ESLint on save
+      if (isDev && isClient) {
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/
+        });
+      }
+    }
   }
-}
+};

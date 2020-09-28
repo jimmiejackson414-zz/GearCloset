@@ -1,0 +1,27 @@
+@import '~vuetify/src/styles/styles.sass';
+
+@mixin breakpoint($point) {
+ // @debug "#{map-get($display-breakpoints, 'xl-only')}";
+
+  @if $point == mobile { // 599px and down
+    @media #{map-get($display-breakpoints, 'xs-only')} {
+      @content;
+    }
+  } @else if $point == tablet { // 600px and up
+    @media #{map-get($display-breakpoints, 'sm-and-up')} {
+      @content;
+    }
+  } @else if $point == laptop { // 960px and up
+    @media #{map-get($display-breakpoints, 'md-and-up')} {
+      @content;
+    }
+  } @else if $point == smallDisplay { // 1264px and up
+    @media #{map-get($display-breakpoints, 'lg-and-up')} {
+      @content;
+    }
+  } @else if $point == largeDisplay { // 1904 and up
+    @media #{map-get($display-breakpoints, 'xl-only')} {
+      @content;
+    }
+  }
+};
