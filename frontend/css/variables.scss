@@ -92,14 +92,16 @@ $list-item-title-font-size: 1.4rem;
 
 $menu-content-elevation: 2;
 
+$ripple-animation-transition-in: none;
+$ripple-animation-transition-out: none;
+
 @import '~vuetify/src/styles/styles.sass';
 
 $material-light: map-merge(
   $material-light,
   (
     'background':
-      var(--v-background-base, map-get($material-light, 'background'))
-      !important
+      var(--v-background-base, map-get($material-light, 'background')) !important
   )
 );
 

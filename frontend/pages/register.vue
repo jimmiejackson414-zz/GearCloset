@@ -94,7 +94,7 @@
               type="password"
               validate-on-blur>
               <template v-slot:prepend-inner>
-                <icon
+                <custom-icon
                   fill="#0077be"
                   height="20px"
                   name="padlock"
@@ -156,7 +156,7 @@
 </template>
 
 <script>
-  import Icon from '~/components/icons/Icon';
+  import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
@@ -215,8 +215,8 @@
     },
 
     components: {
+      CustomIcon,
       FadeTransition,
-      Icon,
       Loading,
       LoginDescriptionBox,
       LogoIcon,

@@ -73,7 +73,7 @@ a {
   cursor: pointer;
 }
 
-.nav-link {
+.nav-link, .v-btn {
   &:hover::before {
     opacity: 0 !important;
   }
@@ -81,4 +81,8 @@ a {
   &:focus::before {
     opacity: 0 !important;
   }
+}
+
+.v-ripple__container {
+  display: none !important;
 }
