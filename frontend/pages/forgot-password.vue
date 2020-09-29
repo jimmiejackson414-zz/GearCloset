@@ -25,6 +25,8 @@
             <v-text-field
               v-model="email"
               color="primary"
+              dense
+              :disabled="submitting"
               label="Email"
               outlined
               required
@@ -45,10 +47,15 @@
                 block
                 color="primary"
                 depressed
-                :disabled="loggingIn"
+                :disabled="submitting"
                 :ripple="false"
                 @click="handleSubmit">
-                Submit
+                <loading
+                  v-if="submitting"
+                  color="#0077be"
+                  height="30px"
+                  width="30px" />
+                <span v-else>Submit</span>
               </v-btn>
             </div>
           </v-form>
@@ -69,6 +76,7 @@
 <script>
   import Icon from '~/components/icons/Icon';
   import FadeTransition from '~/components/transitions/FadeTransition';
+  import Loading from '~/components/Loading';
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
   import LogoIcon from '~/components/icons/LogoIcon';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
@@ -76,13 +84,15 @@
   export default {
     layout: 'homepage',
 
+    name: 'ForgotPassword',
+
     data () {
       return {
         email: '',
         emailRules: [
           v => !!v || 'Email is required'
         ],
-        loggingIn: false,
+        submitting: false,
         valid: false
       };
     },
@@ -91,14 +101,14 @@
       handleSubmit () {
         console.log('user Service');
         // if (this.$refs.loginForm.validate()) {
-        //   this.loggingIn = true;
+        //   this.submitting = true;
         //   const payload = { email: this.email, password: this.password };
         //   if (payload.email && payload.password) {
         //     const res = await userService.login(payload);
         //     if (res.status === 401) {
-        //       this.logginIn = false;
+        //       this.submitting = false;
         //     } else {
-        //       this.loggingIn = false;
+        //       this.submitting = false;
         //       router.push('/');
         //     }
         //   }
@@ -109,6 +119,7 @@
     components: {
       FadeTransition,
       Icon,
+      Loading,
       LoginDescriptionBox,
       LogoIcon,
       SlideFadeTransition

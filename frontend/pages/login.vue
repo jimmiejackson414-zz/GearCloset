@@ -25,6 +25,8 @@
             <v-text-field
               v-model="email"
               color="primary"
+              dense
+              :disabled="loggingIn"
               label="Email"
               outlined
               required
@@ -44,6 +46,8 @@
             <v-text-field
               v-model="password"
               color="primary"
+              dense
+              :disabled="loggingIn"
               label="Password"
               outlined
               required
@@ -69,7 +73,12 @@
                 :disabled="loggingIn"
                 :ripple="false"
                 @click="handleSubmit">
-                Login
+                <loading
+                  v-if="loggingIn"
+                  color="#0077be"
+                  height="30px"
+                  width="30px" />
+                <span v-else>Login</span>
               </v-btn>
               <v-btn
                 class="mt-3"
@@ -98,12 +107,15 @@
 <script>
   import Icon from '~/components/icons/Icon';
   import FadeTransition from '~/components/transitions/FadeTransition';
+  import Loading from '~/components/Loading';
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
   import LogoIcon from '~/components/icons/LogoIcon';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
 
   export default {
     layout: 'homepage',
+
+    name: 'Login',
 
     data: () => ({
       email: '',
@@ -139,6 +151,7 @@
     components: {
       FadeTransition,
       Icon,
+      Loading,
       LoginDescriptionBox,
       LogoIcon,
       SlideFadeTransition

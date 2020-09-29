@@ -25,6 +25,8 @@
             <v-text-field
               v-model="user.first_name"
               color="primary"
+              dense
+              :disabled="submitting"
               label="First Name"
               outlined
               required
@@ -43,6 +45,8 @@
             <v-text-field
               v-model="user.last_name"
               color="primary"
+              dense
+              :disabled="submitting"
               label="Last Name"
               outlined
               required
@@ -61,6 +65,8 @@
             <v-text-field
               v-model="user.email"
               color="primary"
+              dense
+              :disabled="submitting"
               label="Email"
               outlined
               required
@@ -79,6 +85,8 @@
             <v-text-field
               v-model="user.password"
               color="primary"
+              dense
+              :disabled="submitting"
               label="Password"
               outlined
               required
@@ -98,6 +106,8 @@
             <v-text-field
               v-model="confirm_password"
               color="primary"
+              dense
+              :disabled="submitting"
               label="Confirm Password"
               outlined
               required
@@ -119,10 +129,15 @@
                 block
                 color="primary"
                 depressed
-                :disabled="loggingIn"
+                :disabled="submitting"
                 :ripple="false"
                 @click="handleSubmit">
-                Register
+                <loading
+                  v-if="submitting"
+                  color="#0077be"
+                  height="30px"
+                  width="30px" />
+                <span v-else>Register</span>
               </v-btn>
             </div>
           </v-form>
@@ -143,6 +158,7 @@
 <script>
   import Icon from '~/components/icons/Icon';
   import FadeTransition from '~/components/transitions/FadeTransition';
+  import Loading from '~/components/Loading';
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
   import LogoIcon from '~/components/icons/LogoIcon';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
@@ -150,15 +166,16 @@
   export default {
     layout: 'homepage',
 
+    name: 'Register',
+
     data () {
       return {
         confirm_password: '',
-        email: '',
         emailRules: [
           v => !!v || 'Email is required',
           v => /.+@.+/.test(v) || 'E-mail must be valid'
         ],
-        loggingIn: false,
+        submitting: false,
         nameRules: [
           v => !!v || 'This is a required field'
         ],
@@ -182,14 +199,14 @@
       handleSubmit () {
         console.log('user Service');
         // if (this.$refs.loginForm.validate()) {
-        //   this.loggingIn = true;
+        //   this.submitting = true;
         //   const payload = { email: this.email, password: this.password };
         //   if (payload.email && payload.password) {
         //     const res = await userService.login(payload);
         //     if (res.status === 401) {
-        //       this.logginIn = false;
+        //       this.submitting = false;
         //     } else {
-        //       this.loggingIn = false;
+        //       this.submitting = false;
         //       router.push('/');
         //     }
         //   }
@@ -200,6 +217,7 @@
     components: {
       FadeTransition,
       Icon,
+      Loading,
       LoginDescriptionBox,
       LogoIcon,
       SlideFadeTransition

@@ -1,6 +1,7 @@
 <template>
   <transition
     appear
+    mode="out-in"
     name="slide-fade">
     <slot />
   </transition>

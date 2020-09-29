@@ -9,9 +9,10 @@
       <slide-fade-transition>
         <div
           v-if="isSubmitted"
+          key="submitted"
           class="submitted-message">
           <h2 class="display-1">
-            Thank You.
+            Thank You!
           </h2>
           <p class="body-1">
             We have received your message and will respond as soon as possible.
@@ -19,6 +20,7 @@
         </div>
         <div
           v-else
+          key="notSubmitted"
           class="form-wrapper">
           <v-form
             ref="contactForm"
@@ -37,6 +39,8 @@
             <v-text-field
               v-model="user.first_name"
               color="primary"
+              dense
+              :disabled="submitting"
               label="First Name"
               outlined
               required
@@ -55,6 +59,8 @@
             <v-text-field
               v-model="user.last_name"
               color="primary"
+              dense
+              :disabled="submitting"
               label="Last Name"
               outlined
               required
@@ -73,6 +79,8 @@
             <v-text-field
               v-model="user.email"
               color="primary"
+              dense
+              :disabled="submitting"
               label="Email"
               outlined
               required
@@ -91,6 +99,8 @@
             <v-textarea
               v-model="user.message"
               color="primary"
+              dense
+              :disabled="submitting"
               label="Message"
               outlined
               required
@@ -110,14 +120,18 @@
                 block
                 color="primary"
                 depressed
-                :disabled="loggingIn"
+                :disabled="submitting"
                 :ripple="false"
                 @click="handleSubmit">
-                Submit
+                <loading
+                  v-if="submitting"
+                  color="#0077be"
+                  height="30px"
+                  width="30px" />
+                <span v-else>Submit</span>
               </v-btn>
             </div>
           </v-form>
-          </div.submitted-message>
         </div>
       </slide-fade-transition>
       <div class="contact-wrapper">
@@ -135,12 +149,15 @@
 <script>
   import Icon from '~/components/icons/Icon';
   import FadeTransition from '~/components/transitions/FadeTransition';
+  import Loading from '~/components/Loading';
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
   import LogoIcon from '~/components/icons/LogoIcon';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
 
   export default {
     layout: 'homepage',
+
+    name: 'Contact',
 
     data () {
       return {
@@ -149,7 +166,7 @@
           v => /.+@.+/.test(v) || 'E-mail must be valid'
         ],
         isSubmitted: false,
-        loggingIn: false,
+        submitting: false,
         nameRules: [
           v => !!v || 'This is a required field'
         ],
@@ -167,14 +184,14 @@
       handleSubmit () {
         console.log('user Service');
         // if (this.$refs.loginForm.validate()) {
-        //   this.loggingIn = true;
+        //   this.submitting = true;
         //   const payload = { email: this.email, password: this.password };
         //   if (payload.email && payload.password) {
         //     const res = await userService.login(payload);
         //     if (res.status === 401) {
         //       this.logginIn = false;
         //     } else {
-        //       this.loggingIn = false;
+        //       this.submitting = false;
         //       router.push('/');
         //     }
         //   }
@@ -188,6 +205,7 @@
     components: {
       FadeTransition,
       Icon,
+      Loading,
       LoginDescriptionBox,
       LogoIcon,
       SlideFadeTransition
