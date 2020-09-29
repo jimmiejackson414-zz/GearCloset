@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="contact">
     <div class="left">
       <fade-transition>
         <login-description-box />
@@ -7,30 +7,77 @@
     </div>
     <div class="right">
       <slide-fade-transition>
-        <div class="form-wrapper">
+        <div
+          v-if="isSubmitted"
+          class="submitted-message">
+          <h2 class="display-1">
+            Thank You.
+          </h2>
+          <p class="body-1">
+            We have received your message and will respond as soon as possible.
+          </p>
+        </div>
+        <div
+          v-else
+          class="form-wrapper">
           <v-form
-            ref="loginForm"
+            ref="contactForm"
             v-model="valid">
             <div class="form-header">
               <logo-icon
                 height="50px"
                 width="50px" />
               <h2 class="display-1">
-                Login
+                Contact Us
               </h2>
-              <span class="body-1">or <router-link to="/register">create a new account.</router-link></span>
+              <span class="body-1">or <router-link to="/login">go back to login.</router-link></span>
             </div>
+
+            <!-- First Name -->
+            <v-text-field
+              v-model="user.first_name"
+              color="primary"
+              label="First Name"
+              outlined
+              required
+              :rules="nameRules"
+              validate-on-blur>
+              <template v-slot:prepend-inner>
+                <icon
+                  fill="#0077be"
+                  height="20px"
+                  name="user-circle"
+                  width="20px" />
+              </template>
+            </v-text-field>
+
+            <!-- Last Name -->
+            <v-text-field
+              v-model="user.last_name"
+              color="primary"
+              label="Last Name"
+              outlined
+              required
+              :rules="nameRules"
+              validate-on-blur>
+              <template v-slot:prepend-inner>
+                <icon
+                  fill="#0077be"
+                  height="20px"
+                  name="user-circle"
+                  width="20px" />
+              </template>
+            </v-text-field>
 
             <!-- Email -->
             <v-text-field
-              v-model="email"
+              v-model="user.email"
               color="primary"
               label="Email"
               outlined
               required
               :rules="emailRules"
-              validate-on-blur
-              @keyup.enter="handleSubmit">
+              validate-on-blur>
               <template v-slot:prepend-inner>
                 <icon
                   fill="#0077be"
@@ -40,25 +87,22 @@
               </template>
             </v-text-field>
 
-            <!-- Password -->
-            <v-text-field
-              v-model="password"
+            <!-- Message -->
+            <v-textarea
+              v-model="user.message"
               color="primary"
-              label="Password"
+              label="Message"
               outlined
               required
-              :rules="passwordRules"
-              type="password"
-              validate-on-blur
-              @keyup.enter="handleSubmit">
+              validate-on-blur>
               <template v-slot:prepend-inner>
                 <icon
                   fill="#0077be"
                   height="20px"
-                  name="padlock"
+                  name="comment-alt-dots"
                   width="20px" />
               </template>
-            </v-text-field>
+            </v-textarea>
 
             <!-- Form Submit -->
             <div class="btn-actions">
@@ -69,22 +113,15 @@
                 :disabled="loggingIn"
                 :ripple="false"
                 @click="handleSubmit">
-                Login
-              </v-btn>
-              <v-btn
-                class="mt-3"
-                color="primary"
-                nuxt
-                text
-                to="/forgot-password">
-                Forgot Password?
+                Submit
               </v-btn>
             </div>
           </v-form>
+          </div.submitted-message>
         </div>
       </slide-fade-transition>
       <div class="contact-wrapper">
-        <div class="contact body-1 mb-2">
+        <div class="body-1 mb-2">
           <nuxt-link to="/contact">
             Contact Us
           </nuxt-link>
@@ -105,17 +142,26 @@
   export default {
     layout: 'homepage',
 
-    data: () => ({
-      email: '',
-      emailRules: [
-        v => !!v || 'Email is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
-      ],
-      loggingIn: false,
-      password: '',
-      passwordRules: [v => !!v || 'Password is required'],
-      valid: false
-    }),
+    data () {
+      return {
+        emailRules: [
+          v => !!v || 'Email is required',
+          v => /.+@.+/.test(v) || 'E-mail must be valid'
+        ],
+        isSubmitted: false,
+        loggingIn: false,
+        nameRules: [
+          v => !!v || 'This is a required field'
+        ],
+        user: {
+          first_name: '',
+          last_name: '',
+          email: '',
+          message: ''
+        },
+        valid: false
+      };
+    },
 
     methods: {
       handleSubmit () {
@@ -133,6 +179,9 @@
         //     }
         //   }
         // }
+        setTimeout(() => {
+          this.isSubmitted = true;
+        }, 2000);
       }
     },
 
@@ -150,7 +199,7 @@
   @import '~/css/global';
   @import '~/css/breakpoints';
 
-  .login {
+  .contact {
     display: flex;
     flex-flow: row wrap;
     height: 100%;
@@ -187,6 +236,16 @@
 
       @include breakpoint(smallDisplay) {
         flex-basis: 30%;
+      }
+
+      .submitted-message {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        justify-content: center;
+        text-align: center;
+        width: 60%;
       }
 
       .form-wrapper {

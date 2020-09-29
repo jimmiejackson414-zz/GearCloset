@@ -10,9 +10,7 @@
       fixed>
       <v-toolbar-title>
         <nuxt-link to="/">
-          <v-img
-            class="logo"
-            :src="logoSrc" />
+          <logo color="#4a4a4a" />
         </nuxt-link>
       </v-toolbar-title>
       <v-spacer />
@@ -90,16 +88,8 @@
             :ripple="false"
             text
             :to="item.to">
-            <!-- <v-badge
-              v-if="item.badge && hasCartItems"
-              color="secondary"
-              :content="cartItems"
-              :value="cartItems"
-              class="default-badge"
-              overlap>
-              {{ item.title }}
-            </v-badge> -->
             <v-menu
+              v-if="item.hasMenu"
               bottom
               close-on-click
               nudge-bottom
@@ -126,7 +116,7 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-            <!-- <span v-else>{{ item.title }}</span> -->
+            <span v-else>{{ item.title }}</span>
           </v-tab>
         </v-tabs>
         <span class="ml-4">
@@ -150,9 +140,7 @@
         @click="drawer = !drawer" />
     </v-app-bar>
 
-    <!-- <home-drawer
-      v-model="drawer"
-      :cart-items="cartItems" /> -->
+    <home-drawer v-model="drawer" />
 
     <v-main>
       <transition
@@ -169,45 +157,8 @@
       class="custom flex-column"
       padless
       tile>
-      <v-row
-        class="social-container"
-        justify-center>
-        <div class="social facebook">
-          <a
-            href="https://www.facebook.com/jimmiejacksonphotography/"
-            target="_blank">
-            <icon
-              fill="grey"
-              height="30px"
-              name="facebook-f"
-              width="30px" />
-          </a>
-        </div>
-        <div class="social instagram">
-          <a
-            href="https://www.instagram.com/jimmie_photo/"
-            target="_blank">
-            <icon
-              fill="grey"
-              height="30px"
-              name="instagram-alt"
-              width="30px" />
-          </a>
-        </div>
-        <div class="social email">
-          <a
-            href="mailto:howdy@jimmiejacksonphotography.com"
-            target="_blank">
-            <icon
-              fill="grey"
-              height="30px"
-              name="envelope-alt"
-              width="30px" />
-          </a>
-        </div>
-      </v-row>
       <span
-        class="subtitle-2 grey--text text--darken-3">&copy; {{ new Date().getFullYear() }} Jimmie Jackson Photography</span>
+        class="subtitle-2 grey--text text--darken-3">&copy; {{ new Date().getFullYear() }} Gear Closet</span>
     </v-footer>
 
     <v-fab-transition>
@@ -232,8 +183,7 @@
 </template>
 
 <script>
-  // import { mapActions, mapGetters } from 'vuex';
-
+  import Icon from '~/components/icons/Icon';
   export default {
     name: 'Default',
 
@@ -242,75 +192,29 @@
       items: [
         { title: 'Portfolio', to: '/portfolio', badge: false, hasMenu: false },
         { title: 'About', to: '/about', badge: false, hasMenu: true, menuItems: [{ title: 'Gear', to: '/gear' }, { title: 'Blog', to: '/blog' }] },
-        { title: 'Contact', to: '/contact', badge: false, hasMenu: false },
-        { title: 'Cart', to: '/cart', badge: true, hasMenu: false }
+        { title: 'Contact', to: '/contact', badge: false, hasMenu: false }
       ],
-      offsetTop: 0,
-      searchIsOpen: false,
-      searchTerm: null
+      offsetTop: 0
     }),
 
     computed: {
-      // ...mapGetters('cart', ['cartItems']),
-      calculateThemeMode () {
-        return this.$vuetify.theme.isDark ? 'Light Mode' : 'Dark Mode';
-      },
-      // hasCartItems () {
-      //   return this.cartItems > 0;
-      // },
-      logoSrc () {
-        return this.$vuetify.theme.isDark ? '/JJP_Logo_White_V2.png' : '/JJP_Logo_Black_V2.png';
-      },
       showScrollBtn () {
         return this.offsetTop > 60;
       }
     },
 
     methods: {
-      // ...mapActions('search', ['setQuery']),
-      delay (t) {
-        return new Promise(resolve => setTimeout(resolve, t));
-      },
       onScroll () {
         this.offsetTop = window.pageYOffset || document.documentElement.scrollTop;
       },
-      performSearch () {
-        this.setQuery(this.searchTerm);
-        this.searchIsOpen = false;
-
-        // have to refresh page if user is already on search page
-        if (this.$router.currentRoute.name === 'search') {
-          this.$router.go();
-        } else {
-          this.$router.push({ name: 'search' });
-        }
-      },
       scrollToTop () {
         this.$vuetify.goTo('#app', { duration: 500, offset: 0 });
-      },
-      toggleSearchInput () {
-        this.searchIsOpen = !this.searchIsOpen;
-        this.$nextTick(() => {
-          this.$refs.searchField.focus();
-          if (!this.searchIsOpen) { this.searchTerm = null; }
-        });
-      }
-    },
-
-    watch: {
-      cartItems (newValue, oldValue) {
-        const badge = document.querySelector('.v-badge__badge');
-        if (badge && newValue !== oldValue) {
-          badge.classList.add('bounce');
-          this.delay(500).then(() => {
-            badge.classList.remove('bounce');
-          });
-        }
       }
     },
 
     components: {
-      // HomeDrawer: () => import('~/components/Drawer')
+      HomeDrawer: () => import('~/components/Drawer'),
+      Icon
     }
   };
 </script>
