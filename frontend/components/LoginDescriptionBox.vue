@@ -3,10 +3,10 @@
     <v-card
       class="content mx-auto">
       <v-card-title>
-        <h2 class="display-2 mb-3">
+        <h2 class="text-h3 mb-3">
           Gear Closet
         </h2>
-        <h1 class="display-4 font-weight-bold header">
+        <h1 class="text-h2 font-weight-bold header">
           Let's go outside.
         </h1>
       </v-card-title>

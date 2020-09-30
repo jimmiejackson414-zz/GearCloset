@@ -15,9 +15,9 @@
               <logo-icon
                 height="50px"
                 width="50px" />
-              <h2 class="display-1">
+              <div class="text-h4">
                 Login
-              </h2>
+              </div>
               <span class="body-1">or <router-link to="/register">create a new account.</router-link></span>
             </div>
 
@@ -34,7 +34,7 @@
               validate-on-blur
               @keyup.enter="handleSubmit">
               <template v-slot:prepend-inner>
-                <icon
+                <custom-icon
                   fill="#0077be"
                   height="20px"
                   name="envelope-alt"

@@ -15,9 +15,9 @@
               <logo-icon
                 height="50px"
                 width="50px" />
-              <h2 class="display-1">
+              <div class="text-h4">
                 Forgot Your Password?
-              </h2>
+              </div>
               <span class="body-1"><router-link to="/login">Login to your existing account.</router-link></span>
             </div>
 

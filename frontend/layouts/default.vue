@@ -11,9 +11,7 @@
       <transition
         mode="out-in"
         name="fade">
-        <v-container>
-          <nuxt />
-        </v-container>
+        <nuxt />
       </transition>
     </v-main>
 
@@ -85,14 +83,6 @@
 
 <style lang="scss" scoped>
   @import '~/css/breakpoints';
-
-  main.v-main {
-    padding: 50px 0 !important;
-
-    @include breakpoint(desktop) {
-      padding: 100px 0 !important;
-    }
-  }
 
   footer.v-footer.custom {
     background-color: transparent;

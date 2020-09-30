@@ -11,9 +11,9 @@
           v-if="isSubmitted"
           key="submitted"
           class="submitted-message">
-          <h2 class="display-1">
+          <div class="text-h4">
             Thank You!
-          </h2>
+          </div>
           <p class="body-1">
             We have received your message and will respond as soon as possible.
           </p>
@@ -29,9 +29,9 @@
               <logo-icon
                 height="50px"
                 width="50px" />
-              <h2 class="display-1">
+              <div class="text-h4">
                 Contact Us
-              </h2>
+              </div>
               <span class="body-1">or <router-link to="/login">go back to login.</router-link></span>
             </div>
 
@@ -47,7 +47,7 @@
               :rules="nameRules"
               validate-on-blur>
               <template v-slot:prepend-inner>
-                <icon
+                <custom-icon
                   fill="#0077be"
                   height="20px"
                   name="user-circle"
@@ -67,7 +67,7 @@
               :rules="nameRules"
               validate-on-blur>
               <template v-slot:prepend-inner>
-                <icon
+                <custom-icon
                   fill="#0077be"
                   height="20px"
                   name="user-circle"
@@ -106,7 +106,7 @@
               required
               validate-on-blur>
               <template v-slot:prepend-inner>
-                <icon
+                <custom-icon
                   fill="#0077be"
                   height="20px"
                   name="comment-alt-dots"

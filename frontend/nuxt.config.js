@@ -69,24 +69,26 @@ export default {
       },
       themes: {
         light: {
-          primary: '#0077be', // water
+          primary: '#4a90e2', // water
           secondary: '#b7410e', // rust
           accent: '#e1ad01', // mustard
           info: '#759194', // stone
           warning: '#f05e23', // orange
           error: '#950714', // cranberry
           success: '#228b22', // forrest
-          background: '#fff'
+          background: '#fff',
+          'dark-grey': '#4a4a4a'
         },
         dark: {
-          primary: '#0077be', // water
+          primary: '#4a90e2', // water
           secondary: '#b7410e', // rust
           accent: '#e1ad01', // mustard
           info: '#759194', // stone
           warning: '#f05e23', // orange
           error: '#950714', // cranberry
           success: '#228b22', // forrest
-          background: '#252525'
+          background: '#252525',
+          'dark-grey': '#4a4a4a'
         }
       }
     }

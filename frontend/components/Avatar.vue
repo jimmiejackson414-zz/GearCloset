@@ -2,7 +2,7 @@
   <v-avatar
     color="primary"
     :size="size">
-    <span class="white--text headline font-weight-bold">{{ initials }}</span>
+    <span class="white--text text-body-1 font-weight-bold">{{ initials }}</span>
   </v-avatar>
 </template>
 

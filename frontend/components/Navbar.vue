@@ -17,10 +17,10 @@
         optional
         :style="{ width: 'auto' }">
         <v-tab
-          v-for="(item, i) in items"
+          v-for="(item, i) in navItems"
           :key="i"
           active-class="text--primary"
-          class="font-weight-bold nav-link"
+          class="font-weight-medium nav-link"
           :exact="item.title === 'Home'"
           min-width="96"
           nuxt
@@ -60,20 +60,18 @@
         <v-list
           dense
           elevation="1">
-          <v-list-item dense>
-            <nuxt-link
-              class="body-1 font-weight-medium"
-              to="/profile">
-              Profile
-            </nuxt-link>
-          </v-list-item>
-          <v-list-item dense>
-            <nuxt-link
-              class="body-1 font-weight-medium"
-              to="/login">
-              Logout
-            </nuxt-link>
-          </v-list-item>
+          <v-list-item-group>
+            <v-list-item
+              v-for="(item, i) in dropdownItems"
+              :key="i"
+              dense>
+              <nuxt-link
+                class="body-1 font-weight-medium"
+                :to="item.to">
+                {{ item.title }}
+              </nuxt-link>
+            </v-list-item>
+          </v-list-item-group>
         </v-list>
       </v-menu>
     </div>
@@ -90,7 +88,11 @@
 
   export default {
     data: () => ({
-      items: [
+      dropdownItems: [
+        { title: 'Profile', to: '/profile' },
+        { title: 'Logout', to: '/login' }
+      ],
+      navItems: [
         { title: 'Dashboard', to: '/dashboard', badge: false, hasMenu: false },
         { title: 'Explore', to: '/explore', badge: false, hasMenu: false },
         { title: 'Forum', to: '/forum', badge: false, hasMenu: false },
@@ -144,12 +146,6 @@
           .v-tab {
             &:before {
               display: none;
-            }
-
-            .nav-link {
-              color: rgba(0, 0, 0, 0.54);
-              font-size: 1rem;
-              letter-spacing: 2px;
             }
           }
         }
@@ -215,4 +211,56 @@
     animation: bouncein 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   }
 
+</style>
+
+<style lang="scss">
+  @import '~/css/global';
+
+  .nav-link {
+    &:after {
+      height: 2px;
+      background: $primary;
+      content: "";
+      width: 0;
+      position: absolute;
+      transform: translateX(-50%);
+      transition: width 0.4s;
+      transition-timing-function: cubic-bezier(1, -0.65, 0, 2.31);
+      left: 50%;
+      margin-top: 2rem;
+    }
+
+    &:before {
+      background-color: transparent !important;
+    }
+
+    &:hover,
+    &:focus {
+      outline: none;
+
+      &:after {
+        width: calc(100% - 40px);
+      }
+
+      &:before {
+        background-color: transparent;
+      }
+    }
+
+    &.active {
+      &:after {
+        height: 2px;
+        background: $primary;
+        content: "";
+        width: calc(100% - 40px);
+        position: absolute;
+        left: 50%;
+        margin-top: 2rem;
+      }
+
+      &:before {
+        background-color: transparent !important;
+      }
+    }
+  }
 </style>

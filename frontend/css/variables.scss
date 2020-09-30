@@ -1,73 +1,69 @@
 // Ref: https://github.com/nuxt-community/vuetify-module#customvariables
 
-$font-size-root: 10px;
 $body-font-family: 'Avenir Next', 'Lato', Roboto, 'Helvetica Neue', sans-serif !default;
-$heading-font-family: 'Avenir Next', 'Lato', Roboto, 'Helvetica Neue',
-  sans-serif !default;
-$headings: (
-  'h1': (
-    // 'size': 6rem,
-    'color': #4a4a4a,
-    'letter-spacing': 1px,
-    'font-weight': 700
-  ),
-  'h2': (
-    // 'size': 4.8rem,
-    'color': #4a4a4a,
-    'letter-spacing': 1px,
-  ),
-  'h3': (
-    // 'size': 3.6rem,
-    'color': #4a4a4a,
-    'letter-spacing': 1px
-  ),
-  'h4': (
-    // 'size': 2.4rem,
-    'color': #4a4a4a,
-    'letter-spacing': 1px
-  ),
-  'h5': (
-    // 'size': 1.8rem,
-    'color': #4a4a4a,
-    'letter-spacing': 1px
-  ),
-  'h6': (
-    // 'size': 1.6rem,
-    'color': #4a4a4a,
-    'letter-spacing': 1px
-  ),
-
-  'subtitle-1': (
-    'size': 1.2rem,
-    'color': #4a4a4a,
-    'letter-spacing': 1px
-  ),
-  'subtitle-2': (
-    'size': 1rem,
-    'color': #4a4a4a,
-    'letter-spacing': 1px
-  ),
-  'caption': (
-    'size': 1.4rem,
-    'letter-spacing': 1px
-  ),
-  // 'overline': (
-  //   'size': 1.6rem,
-  //   'letter-spacing': 1px
+$heading-font-family: 'Avenir Next', 'Lato', Roboto, 'Helvetica Neue', sans-serif !default;
+// $headings: (
+  // 'h1': (
+//     // 'size': 6rem,
+//     'letter-spacing': 1px,
+//     'font-weight': 700
   // ),
-  'body-1': (
-    'size': 1.4rem,
-    'color': #4a4a4a,
-    'letter-spacing': 1px,
-    'line-height': 2,
-  ),
-  'body-2': (
-    'size': 1.2rem,
-    'color': #4a4a4a,
-    'letter-spacing': 1px,
-    'line-height': 2,
-  )
-);
+//   'h2': (
+//     // 'size': 4.8rem,
+//     'color': #4a4a4a,
+//     'letter-spacing': 1px,
+//   ),
+//   'h3': (
+//     // 'size': 3.6rem,
+//     'color': #4a4a4a,
+//     'letter-spacing': 1px
+//   ),
+//   'h4': (
+//     // 'size': 2.4rem,
+//     'color': #4a4a4a,
+//     'letter-spacing': 1px
+//   ),
+//   'h5': (
+//     // 'size': 1.8rem,
+//     'color': #4a4a4a,
+//     'letter-spacing': 1px
+//   ),
+//   'h6': (
+//     'size': 1.6rem,
+//     'color': #4a4a4a,
+//     'letter-spacing': 1px
+//   ),
+//   'subtitle-1': (
+//     'size': 1.2rem,
+//     'color': #4a4a4a,
+//     'letter-spacing': 1px
+//   ),
+//   'subtitle-2': (
+//     'size': 1rem,
+//     'color': #4a4a4a,
+//     'letter-spacing': 1px
+//   ),
+//   'caption': (
+//     'size': 1.4rem,
+//     'letter-spacing': 1px
+//   ),
+//   'overline': (
+//     'size': 1.6rem,
+//     'letter-spacing': 1px
+//   ),
+//   'body-1': (
+//     'size': 1.4rem,
+//     'color': #4a4a4a,
+//     'letter-spacing': 1px,
+//     'line-height': 2,
+//   ),
+//   'body-2': (
+//     'size': 1.2rem,
+//     'color': #4a4a4a,
+//     'letter-spacing': 1px,
+//     'line-height': 2,
+//   )
+// );
 
 $material-light: (
   'text': (
@@ -77,12 +73,12 @@ $material-light: (
 
 $text-field-outlined-fieldset-border: 1px solid currentColor !default;
 
-$btn-font-sizes: (
-  'default': 1.4rem,
-  'small': 1.4rem,
-  'large': 1.4rem,
-  'x-large': 1.4rem
-);
+// $btn-font-sizes: (
+//   'default': 1.4rem,
+//   'small': 1.4rem,
+//   'large': 1.4rem,
+//   'x-large': 1.4rem
+// );
 
 $btn-font-weight: 600;
 $btn-hover-opacity: 0.1 !default;
@@ -97,18 +93,18 @@ $ripple-animation-transition-out: none;
 
 @import '~vuetify/src/styles/styles.sass';
 
-$material-light: map-merge(
-  $material-light,
-  (
-    'background':
-      var(--v-background-base, map-get($material-light, 'background')) !important
-  )
-);
+// $material-light: map-merge(
+//   $material-light,
+//   (
+//     'background':
+//       var(--v-background-base, map-get($material-light, 'background')) !important
+//   )
+// );
 
-$material-dark: map-merge(
-  $material-dark,
-  (
-    'background':
-      var(--v-background-base, map-get($material-dark, 'background')) !important
-  )
-);
+// $material-dark: map-merge(
+//   $material-dark,
+//   (
+//     'background':
+//       var(--v-background-base, map-get($material-dark, 'background')) !important
+//   )
+// );

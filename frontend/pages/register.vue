@@ -15,10 +15,10 @@
               <logo-icon
                 height="50px"
                 width="50px" />
-              <h2 class="display-1">
+              <div class="text-h4">
                 Register
-              </h2>
-              <span class="body-1">or <router-link to="/login">login to your existing account.</router-link></span>
+              </div>
+              <span class="text-body-1">or <router-link to="/login">login to your existing account.</router-link></span>
             </div>
 
             <!-- First Name -->
@@ -33,7 +33,7 @@
               :rules="nameRules"
               validate-on-blur>
               <template v-slot:prepend-inner>
-                <icon
+                <custom-icon
                   fill="#0077be"
                   height="20px"
                   name="user-circle"
@@ -53,7 +53,7 @@
               :rules="nameRules"
               validate-on-blur>
               <template v-slot:prepend-inner>
-                <icon
+                <custom-icon
                   fill="#0077be"
                   height="20px"
                   name="user-circle"
@@ -73,7 +73,7 @@
               :rules="emailRules"
               validate-on-blur>
               <template v-slot:prepend-inner>
-                <icon
+                <custom-icon
                   fill="#0077be"
                   height="20px"
                   name="envelope-alt"
@@ -115,7 +115,7 @@
               type="password"
               validate-on-blur>
               <template v-slot:prepend-inner>
-                <icon
+                <custom-icon
                   fill="#0077be"
                   height="20px"
                   name="padlock"
