@@ -10,7 +10,7 @@
   export default {
     props: {
       initials: {
-        default: 'JJ',
+        default: 'GC',
         type: String
       },
       size: {

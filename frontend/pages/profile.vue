@@ -64,6 +64,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
   import AccountSettings from '~/components/profile/forms/AccountSettings';
   import CustomIcon from '~/components/icons/CustomIcon';
   import SubscriptionSettings from '~/components/profile/forms/SubscriptionSettings';
@@ -75,17 +76,6 @@
     data () {
       return {
         confirm_password: '',
-        currentUser: {
-          avatar_url: null,
-          country: 'United States',
-          email: 'jimmiejackson414@gmail.com',
-          first_name: 'Jimmie',
-          last_name: 'Jackson',
-          password: 'password',
-          subscription_level: 'annual member',
-          system: 'Imperial',
-          trail_name: 'Walk and Eat'
-        },
         iconColor: '',
 
         submitting: false,
@@ -95,6 +85,12 @@
           { title: 'Subscription', icon: 'file-landscape-alt' }
         ]
       };
+    },
+
+    computed: {
+      ...mapState({
+        currentUser: state => state.user
+      })
     },
 
     methods: {

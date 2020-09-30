@@ -22,7 +22,8 @@ export default {
 
   plugins: [
     { src: '~/plugins/vue-unicons', mode: 'client' },
-    { src: '~/plugins/filters' }
+    { src: '~/plugins/filters' },
+    { src: '~/plugins/mixins' }
   ],
 
   components: true,

@@ -130,9 +130,6 @@
       handleModalOpen () {
         this.modalOpen = true;
       },
-      // handlePlanChange (plan) {
-      //   console.log(`Upgrade to ${plan}`);
-      // },
       shouldShow (card, itemName, subscriptionLevel) {
         return Object.keys(card)[0] === itemName && this.currentUser.subscription_level.toLowerCase() !== subscriptionLevel;
       }

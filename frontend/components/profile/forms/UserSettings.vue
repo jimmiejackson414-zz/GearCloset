@@ -10,7 +10,7 @@
             color="primary"
             size="200">
             <h1 class="white--text">
-              {{ initials }}
+              {{ currentUser | initials }}
             </h1>
             <div class="overlay">
               <v-btn
@@ -250,9 +250,6 @@
     computed: {
       countriesArr () {
         return countries;
-      },
-      initials () {
-        return 'JJ';
       }
     },
 

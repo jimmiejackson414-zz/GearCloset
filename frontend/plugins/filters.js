@@ -20,6 +20,12 @@ Vue.filter('prettyName', (user) => {
   return name;
 });
 
+Vue.filter('initials', (user) => {
+  const firstInitial = user.first_name.charAt(0);
+  const lastInitial = user.last_name.charAt(0);
+  return `${firstInitial}${lastInitial}`;
+});
+
 Vue.filter('truncate', (string, length = 140) => {
   const isEmpty = string => !string || string.length === 0;
 

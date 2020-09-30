@@ -30,14 +30,25 @@
           <span>{{ item.title }}</span>
         </v-tab>
       </v-tabs>
-      <v-btn
-        icon>
-        <custom-icon
-          color="#4a4a4a"
-          height="20px"
-          name="bell"
-          width="20px" />
-      </v-btn>
+      <v-badge
+        bottom
+        class="notification-badge"
+        color="secondary"
+        :content="currentUser.notifications.length || 0"
+        dot
+        left
+        overlap
+        :value="currentUser.notifications.length || 0">
+        <v-btn
+          depressed
+          icon>
+          <custom-icon
+            color="#4a4a4a"
+            height="20px"
+            name="bell"
+            width="20px" />
+        </v-btn>
+      </v-badge>
       <v-menu
         bottom
         class="avatar-menu"
@@ -54,6 +65,7 @@
             v-on="on">
             <avatar
               class="ml-5"
+              :initials="currentUser | initials"
               :size="40" />
           </v-btn>
         </template>
@@ -83,6 +95,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
   import Avatar from '~/components/Avatar';
   import CustomIcon from '~/components/icons/CustomIcon';
 
@@ -100,6 +113,12 @@
         { title: 'Closet', to: '/closet', badge: false, hasMenu: false }
       ]
     }),
+
+    computed: {
+      ...mapState({
+        currentUser: state => state.user
+      })
+    },
 
     components: {
       Avatar,
@@ -216,6 +235,16 @@
 <style lang="scss">
   @import '~/css/global';
 
+  #home-app-bar {
+    &.theme--light {
+      background-color: #fff;
+    }
+
+    &.theme--dark {
+      background-color: #272727;
+    }
+  }
+
   .nav-link {
     &:after {
       height: 2px;
@@ -249,18 +278,20 @@
 
     &.v-tab--active {
       &:after {
-        /* height: 2px; */
         background: none;
-        /* content: ""; */
-        /* width: calc(100% - 40px); */
-        /* position: absolute; */
-        /* left: 50%; */
-        /* margin-top: 2rem; */
       }
 
       &:before {
         background-color: transparent !important;
       }
+    }
+  }
+
+  .notification-badge {
+    .v-badge__badge {
+      cursor: pointer;
+      right: calc(100% - 20px) !important;
+      top: calc(100% - 20px) !important;
     }
   }
 </style>
