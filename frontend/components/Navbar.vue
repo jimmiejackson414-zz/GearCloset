@@ -5,7 +5,7 @@
     elevate-on-scroll
     fixed>
     <v-toolbar-title>
-      <nuxt-link to="/">
+      <nuxt-link to="/dashboard">
         <logo color="#4a4a4a" />
       </nuxt-link>
     </v-toolbar-title>
@@ -227,7 +227,7 @@
       transition: width 0.4s;
       transition-timing-function: cubic-bezier(1, -0.65, 0, 2.31);
       left: 50%;
-      margin-top: 2rem;
+      margin-top: 46px;
     }
 
     &:before {
@@ -247,15 +247,15 @@
       }
     }
 
-    &.active {
+    &.v-tab--active {
       &:after {
-        height: 2px;
-        background: $primary;
-        content: "";
-        width: calc(100% - 40px);
-        position: absolute;
-        left: 50%;
-        margin-top: 2rem;
+        /* height: 2px; */
+        background: none;
+        /* content: ""; */
+        /* width: calc(100% - 40px); */
+        /* position: absolute; */
+        /* left: 50%; */
+        /* margin-top: 2rem; */
       }
 
       &:before {
