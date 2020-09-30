@@ -21,8 +21,33 @@
       padless
       tile>
       <span
-        class="subtitle-2 grey--text text--darken-3">&copy; {{ new Date().getFullYear() }} Gear Closet</span>
+        class="subtitle-2 text-dark-grey">&copy; {{ new Date().getFullYear() }} Gear Closet</span>
     </v-footer>
+
+    <v-snackbar
+      v-if="alert.message"
+      bottom
+      :color="alert.type"
+      left
+      :timeout="5000"
+      :value="alert.message">
+      <custom-icon
+        class="mr-4"
+        fill="#fff"
+        height="26px"
+        :name="alert.type === 'success' ? 'check-circle' : 'multiply'"
+        width="26px" />
+      {{ alert.message }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          v-bind="attrs"
+          :ripple="false"
+          text
+          @click="clearAlert()">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
 
     <v-fab-transition>
       <v-btn
@@ -46,6 +71,7 @@
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex';
   import CustomIcon from '~/components/icons/CustomIcon';
   import Navbar from '~/components/Navbar';
 
@@ -59,17 +85,37 @@
     }),
 
     computed: {
+      ...mapState({
+        alert: state => state.alert
+      }),
       showScrollBtn () {
         return this.offsetTop > 60;
       }
     },
 
     methods: {
+      ...mapActions({
+        clearAlert: 'alert/clear'
+      }),
       onScroll () {
         this.offsetTop = window.pageYOffset || document.documentElement.scrollTop;
       },
       scrollToTop () {
         this.$vuetify.goTo('#app', { duration: 500, offset: 0 });
+      }
+    },
+
+    watch: {
+      $route () {
+        this.clearAlert();
+      },
+      // reset alert to default
+      'alert.snackbar' (newValue, oldValue) {
+        if (newValue) {
+          setTimeout(() => {
+            this.clearAlert();
+          }, 5000);
+        }
       }
     },
 
@@ -151,5 +197,14 @@
   .slide-fade-enter, .slide-fade-leave-to {
     transform: translateX(10px);
     opacity: 0;
+  }
+</style>
+
+<style lang="scss">
+  .v-snack {
+    .v-snack__content {
+      align-items: center;
+      display: flex;
+    }
   }
 </style>

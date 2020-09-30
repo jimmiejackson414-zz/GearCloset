@@ -82,7 +82,7 @@
           first_name: 'Jimmie',
           last_name: 'Jackson',
           password: 'password',
-          subscription_level: 'free',
+          subscription_level: 'annual member',
           system: 'Imperial',
           trail_name: 'Walk and Eat'
         },
