@@ -21,7 +21,8 @@ export default {
   ],
 
   plugins: [
-    { src: '~/plugins/vue-unicons', mode: 'client' }
+    { src: '~/plugins/vue-unicons', mode: 'client' },
+    { src: '~/plugins/filters' }
   ],
 
   components: true,
@@ -77,7 +78,8 @@ export default {
           error: '#950714', // cranberry
           success: '#228b22', // forrest
           background: '#fff',
-          'dark-grey': '#4a4a4a'
+          'dark-grey': '#4a4a4a',
+          'light-grey': '#aaa'
         },
         dark: {
           primary: '#4a90e2', // water

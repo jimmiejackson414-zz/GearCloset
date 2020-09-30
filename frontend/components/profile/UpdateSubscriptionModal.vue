@@ -14,7 +14,15 @@
           This will change your subscription.
         </div>
       </v-card-text>
-      <v-card-actions class="justify-end">
+      <v-card-actions class="justify-space-between">
+        <v-btn
+          class="light-grey--text"
+          :disabled="submitting"
+          :ripple="false"
+          text
+          @click="closeModal">
+          Cancel
+        </v-btn>
         <v-btn
           color="primary"
           depressed
@@ -73,6 +81,7 @@
 
         setTimeout(() => {
           this.closeModal();
+          this.submitting = false;
           this.success('Your subscription was successfully changed!');
         }, 3000);
       }
@@ -85,5 +94,9 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '~/css/global';
 
+  .v-card {
+    border-top: 5px solid $primary;
+  }
 </style>

@@ -38,6 +38,7 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
+    'arrow-parens': 0,
     'vue/html-self-closing': [
       1,
       {

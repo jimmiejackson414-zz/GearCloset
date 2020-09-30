@@ -1,7 +1,7 @@
 <template>
   <v-container class="pt-0 subscription-container">
     <h6 class="font-weight-bold text-h6 text-center">
-      {{ username }}
+      {{ currentUser | prettyName }}
     </h6>
     <h6 class="text-h6 font-weight-light text-center">
       Current Subscription: <span class="font-weight-medium primary--text">{{ subscriptionLevel }}</span>
@@ -123,9 +123,6 @@
       },
       subscriptionLevel () {
         return this.currentUser.subscription_level;
-      },
-      username () {
-        return `${this.currentUser.first_name} "${this.currentUser.trail_name}" ${this.currentUser.last_name}`;
       }
     },
 

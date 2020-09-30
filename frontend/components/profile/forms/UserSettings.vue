@@ -49,10 +49,13 @@
         </div>
         <div class="names-container">
           <div class="text-h6 font-weight-bold">
-            "{{ currentUser.trail_name }}"
+            {{ currentUser | prettyName }}
           </div>
           <div class="text-body-1">
-            {{ currentUser.first_name }} {{ currentUser.last_name }}
+            {{ currentUser.email }}
+          </div>
+          <div class="text-body-1">
+            {{ currentUser.country }}
           </div>
         </div>
       </v-row>
