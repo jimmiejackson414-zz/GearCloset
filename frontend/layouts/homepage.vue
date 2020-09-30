@@ -21,7 +21,7 @@
           Register
         </v-btn>
         <v-btn
-          v-if="isCurrentPage('/register') || isCurrentPage('/forgot-password')"
+          v-if="isCurrentPage('/register') || isCurrentPage('/forgot-password') || isCurrentPage('/contact')"
           class="nav-link"
           :ripple="false"
           text
@@ -45,42 +45,6 @@
       app
       class="custom flex-column"
       tile>
-      <!-- <div class="social-container">
-        <div class="social facebook">
-          <a
-            href="https://www.facebook.com/jimmiejacksonphotography/"
-            target="_blank">
-            <icon
-              name="facebook-f"
-              fill="white"
-              height="30px"
-              width="30px" />
-          </a>
-        </div>
-        <div class="social instagram">
-          <a
-            href="https://www.instagram.com/jimmie_photo/"
-            target="_blank">
-            <icon
-              name="instagram-alt"
-              fill="white"
-              height="30px"
-              width="30px" />
-          </a>
-        </div>
-        <div class="social email">
-          <a
-            href="mailto:howdy@jimmiejacksonphotography.com"
-            target="_blank">
-            <icon
-              name="envelope-alt"
-              fill="white"
-              height="30px"
-              width="30px" />
-          </a>
-        </div>
-      </div> -->
-      <span class="subtitle-1">&copy; {{ new Date().getFullYear() }} Gear Closet</span>
     </v-footer>
   </v-app>
 </template>
@@ -106,7 +70,7 @@
         return this.images[Math.floor(Math.random() * this.images.length)];
       },
       isUserPage () {
-        return this.$route.name === 'login' || this.$route.name === 'register' || this.$route.name === 'forgot-password';
+        return this.$route.name === 'login' || this.$route.name === 'register' || this.$route.name === 'forgot-password' || this.$route.name === 'contact';
       },
       logoColor () {
         return (this.$route.name !== 'login' || this.$route.name !== 'register' || this.$route.name !== 'forgot-password') ? '#4a4a4a' : '#fff';
@@ -129,11 +93,12 @@
 </script>
 
 <style lang="scss">
-  @import '~/css/breakpoints.scss';
+  @import '~/css/global';
+  @import '~/css/breakpoints';
 
   .container.container--fluid {
-    height: 100%;
-    padding: 0;
+    height: 100% !important;
+    padding: 0 !important;
   }
 
   .v-toolbar {
@@ -168,52 +133,17 @@
   }
 
   footer.v-footer.custom {
-    background-color: transparent;
-    color: white;
+    background-color: transparent !important;
     display: flex;
     justify-content: center;
     padding: 2rem;
 
-    .social-container {
-      display: grid;
-      justify-content: center;
-      grid-gap: 2rem;
-      grid-template-columns: repeat(3, auto);
-      margin-bottom: 1rem;
+    span {
+      color: $dark-grey;
+      font-weight: 500;
 
-      .social {
-        align-items: center;
-        border-radius: 50%;
-        cursor: pointer;
-        display: flex;
-        height: 46px;
-        justify-content: center;
-        line-height: 1 !important;
-        width: 46px;
-
-        &.facebook {
-          transition: 0.2s background-color ease-in-out;
-
-          &:hover {
-            background-color: #3b5998;
-          }
-        }
-
-        &.instagram {
-          transition: 0.2s background-color ease-in-out;
-
-          &:hover {
-            background-color: #fbad50;
-          }
-        }
-
-        &.email {
-          transition: 0.2s background-color ease-in-out;
-
-          &:hover {
-            background-color: #21860c;
-          }
-        }
+      @include breakpoint(mobile) {
+        color: $dark-grey;
       }
     }
   }

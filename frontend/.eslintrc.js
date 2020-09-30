@@ -10,14 +10,11 @@ module.exports = {
   },
   extends: [
     '@nuxtjs'
-    // 'airbnb-base',
-    // 'plugin:vue/recommended',
   ],
   parserOptions: {
     parser: 'babel-eslint',
     sourceType: 'module'
   },
-  // plugins: ['eslint'],
   globals: {
     $nuxt: true
   },
@@ -41,6 +38,7 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
+    'arrow-parens': 0,
     'vue/html-self-closing': [
       1,
       {

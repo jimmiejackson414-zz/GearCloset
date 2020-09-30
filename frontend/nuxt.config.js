@@ -1,20 +1,17 @@
 export default {
-  // publicRuntimeConfig: {
-  //   baseURL: process.env.BASE_URL
-  // },
-  // privateRuntimeConfig: {
-  //   apiSecret: process.env.API_SECRET
-  // },
   head: {
     titleTemplate: '%s - GearCloset',
     title: 'GearCloset',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },
+      { hid: 'description', name: 'description', content: '' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Gear Closet - Plan hikes with your friends!'
+      },
+      { 'http-equiv': 'Accept-CH', content: 'DPR, Viewport-Width, Width' }
     ]
   },
 
@@ -24,7 +21,9 @@ export default {
   ],
 
   plugins: [
-    { src: '~/plugins/vue-unicons', mode: 'client' }
+    { src: '~/plugins/vue-unicons', mode: 'client' },
+    { src: '~/plugins/filters' },
+    { src: '~/plugins/mixins' }
   ],
 
   components: true,
@@ -39,6 +38,14 @@ export default {
     '@nuxtjs/auth',
     '@nuxtjs/pwa'
   ],
+
+  pwa: {
+    icon: {
+      fileName: 'icon.png',
+      source: './static/icon.png',
+      sizes: [64, 120, 144, 152, 192, 384, 512]
+    }
+  },
 
   auth: {
     strategies: {
@@ -64,24 +71,27 @@ export default {
       },
       themes: {
         light: {
-          primary: '#0077be', // water
+          primary: '#4a90e2', // water
           secondary: '#b7410e', // rust
           accent: '#e1ad01', // mustard
           info: '#759194', // stone
           warning: '#f05e23', // orange
           error: '#950714', // cranberry
           success: '#228b22', // forrest
-          background: '#fff'
+          background: '#fff',
+          'dark-grey': '#4a4a4a',
+          'light-grey': '#aaa'
         },
         dark: {
-          primary: '#0077be', // water
+          primary: '#4a90e2', // water
           secondary: '#b7410e', // rust
           accent: '#e1ad01', // mustard
           info: '#759194', // stone
           warning: '#f05e23', // orange
           error: '#950714', // cranberry
           success: '#228b22', // forrest
-          background: '#252525'
+          background: '#252525',
+          'dark-grey': '#4a4a4a'
         }
       }
     }
