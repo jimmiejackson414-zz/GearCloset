@@ -27,35 +27,7 @@
           :ripple="false"
           text
           :to="item.to">
-          <v-menu
-            v-if="item.hasMenu"
-            bottom
-            close-on-click
-            nudge-bottom
-            offset-y
-            open-on-hover
-            transition="slide-y-transition">
-            <template v-slot:activator="{ on, attrs }">
-              <span
-                v-bind="attrs"
-                v-on="on">
-                {{ item.title }}
-              </span>
-            </template>
-            <v-list
-              elevation="1">
-              <v-list-item
-                v-for="(menuItem, index) in item.menuItems"
-                :key="index">
-                <nuxt-link
-                  class="body-1 font-weight-medium"
-                  :to="menuItem.to">
-                  {{ menuItem.title }}
-                </nuxt-link>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-          <span v-else>{{ item.title }}</span>
+          <span>{{ item.title }}</span>
         </v-tab>
       </v-tabs>
       <v-btn
@@ -66,9 +38,44 @@
           name="bell"
           width="20px" />
       </v-btn>
-      <avatar
-        class="ml-5"
-        :size="40" />
+      <v-menu
+        bottom
+        class="avatar-menu"
+        close-on-click
+        nudge-bottom
+        offset-y
+        open-on-focus
+        open-on-hover
+        transition="slide-y-transition">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            icon
+            v-on="on">
+            <avatar
+              class="ml-5"
+              :size="40" />
+          </v-btn>
+        </template>
+        <v-list
+          dense
+          elevation="1">
+          <v-list-item dense>
+            <nuxt-link
+              class="body-1 font-weight-medium"
+              to="/profile">
+              Profile
+            </nuxt-link>
+          </v-list-item>
+          <v-list-item dense>
+            <nuxt-link
+              class="body-1 font-weight-medium"
+              to="/login">
+              Logout
+            </nuxt-link>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
 
     <v-app-bar-nav-icon
@@ -100,7 +107,8 @@
 </script>
 
 <style lang="scss">
-  @import '~/css/breakpoints.scss';
+  @import '~/css/breakpoints';
+  @import '~/css/global';
 
   #home-app-bar {
     &.theme--light {
@@ -156,15 +164,22 @@
   }
 
   .v-menu__content {
-    .v-list-item {
-      a {
-        color: #4a4a4a;
-      }
+    border-top: 5px solid $primary;
 
-      &.theme--dark a {
-        color: #fff;
+    .v-list {
+      padding: 0;
+
+      .v-list-item {
+        a {
+          color: #4a4a4a;
+        }
+
+        &.theme--dark a {
+          color: #fff;
+        }
       }
     }
+
   }
 
   .default-badge {

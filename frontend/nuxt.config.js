@@ -1,20 +1,17 @@
 export default {
-  // publicRuntimeConfig: {
-  //   baseURL: process.env.BASE_URL
-  // },
-  // privateRuntimeConfig: {
-  //   apiSecret: process.env.API_SECRET
-  // },
   head: {
     titleTemplate: '%s - GearCloset',
     title: 'GearCloset',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },
+      { hid: 'description', name: 'description', content: '' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Gear Closet - Plan hikes with your friends!'
+      },
+      { 'http-equiv': 'Accept-CH', content: 'DPR, Viewport-Width, Width' }
     ]
   },
 
@@ -39,6 +36,14 @@ export default {
     '@nuxtjs/auth',
     '@nuxtjs/pwa'
   ],
+
+  pwa: {
+    icon: {
+      fileName: 'icon.png',
+      source: './static/icon.png',
+      sizes: [64, 120, 144, 152, 192, 384, 512]
+    }
+  },
 
   auth: {
     strategies: {
