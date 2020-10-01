@@ -18,10 +18,12 @@ import {
   uniInfoCircle,
   uniInstagramAlt,
   uniPadlock,
+  uniPlus,
   uniMountains,
   uniMultiply,
   uniSearch,
   uniSetting,
+  uniTrashAlt,
   uniUserCircle
 } from 'vue-unicons/src/icons';
 
@@ -45,8 +47,10 @@ Unicon.add([
   uniMountains,
   uniMultiply,
   uniPadlock,
+  uniPlus,
   uniSearch,
   uniSetting,
+  uniTrashAlt,
   uniUserCircle
 ]);
 Vue.use(Unicon);
