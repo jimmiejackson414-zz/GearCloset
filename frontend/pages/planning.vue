@@ -9,34 +9,28 @@
     <v-layout
       row
       wrap>
-      <!-- <v-flex
-        lg4
-        md6
-        sm6
-        xs12>
-        <selected-pack-widget :pack="selectedPack" />
-      </v-flex>
+      <!-- Selected Pack Widget -->
       <v-flex
-        lg4
         md6
-        sm6
         xs12>
-        <trip-details-widget
-          :details="details"
-          :hike="selectedHike" />
+        <selected-pack />
       </v-flex>
+
+      <!-- Friends Widget -->
       <v-flex
-        lg4
         md6
-        sm6
         xs12>
-        <hike-details-widget :hike="selectedHike" />
-      </v-flex> -->
+        <friends />
+      </v-flex>
+
+      <!-- Todo List Widget -->
       <v-flex
         md6
         xs12>
         <todo-list />
       </v-flex>
+
+      <!-- Shopping List Widget -->
       <v-flex
         md6
         xs12>
@@ -47,6 +41,8 @@
 </template>
 
 <script>
+  import Friends from '~/components/planning/widgets/Friends';
+  import SelectedPack from '~/components/planning/widgets/SelectedPack';
   import ShoppingList from '~/components/planning/widgets/ShoppingList';
   import TodoList from '~/components/planning/widgets/TodoList';
 
@@ -61,6 +57,8 @@
     // }),
 
     components: {
+      Friends,
+      SelectedPack,
       ShoppingList,
       TodoList
     }

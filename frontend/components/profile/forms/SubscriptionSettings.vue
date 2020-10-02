@@ -98,7 +98,7 @@
 
 <script>
   import dayjs from 'dayjs';
-  import UpdateSubscriptionModal from '~/components/profile/UpdateSubscriptionModal';
+  import UpdateSubscriptionModal from '~/components/modals/UpdateSubscriptionModal';
 
   export default {
     props: {

@@ -154,12 +154,13 @@
       },
       setEditing (ref) {
         this.editableItem = ref;
-        this.$nextTick(() => document.querySelector(`${ref}`).focus());
+        this.$nextTick(() => document.querySelector(`#${ref}`).focus());
       },
       updateAllItems (value) {
         this.items.forEach(i => this.updateItem(value, i, 'checked'));
       },
       updateItem (event, item, field) {
+        // TODO: Need to handle editing better overall (or edit in modal)
         this.editableItem = null;
 
         // return if value hasn't changed

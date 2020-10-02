@@ -95,11 +95,13 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
   import Avatar from '~/components/Avatar';
+  import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon';
 
   export default {
+    mixins: [currentUser],
+
     data: () => ({
       dropdownItems: [
         { title: 'Profile', to: '/profile' },
@@ -113,12 +115,6 @@
         { title: 'Closet', to: '/closet', badge: false, hasMenu: false }
       ]
     }),
-
-    computed: {
-      ...mapState({
-        currentUser: state => state.user
-      })
-    },
 
     components: {
       Avatar,

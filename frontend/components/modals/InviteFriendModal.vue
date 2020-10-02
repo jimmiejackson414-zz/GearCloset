@@ -1,17 +1,13 @@
 <template>
   <v-dialog
     v-model="show"
-    max-width="400px"
+    max-width="750"
     :persistent="submitting">
     <v-card>
-      <v-card-title>
-        <!-- <div class="text-h4"> -->
-        Change Your Subscription
-        <!-- </div> -->
-      </v-card-title>
+      <v-card-title>Invite A Friend</v-card-title>
       <v-card-text>
         <div class="text-body-1">
-          This will change your subscription.
+          Bring along an existing friend or invite a new one.
         </div>
       </v-card-text>
       <v-card-actions class="justify-space-between">
@@ -28,13 +24,13 @@
           depressed
           :disabled="submitting"
           :ripple="false"
-          @click="handleUpgrade">
+          @click="handleInviteFriend">
           <loading
             v-if="submitting"
             color="#fff"
             height="30px"
             width="30px" />
-          <span v-else>Upgrade</span>
+          <span v-else>Invite</span>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -76,14 +72,14 @@
       closeModal () {
         this.show = false;
       },
-      handleUpgrade () {
+      handleInviteFriend () {
         this.submitting = true;
 
         setTimeout(() => {
           this.closeModal();
           this.submitting = false;
-          this.success('Your subscription was successfully changed!');
-        }, 3000);
+          this.success('Your friend was successfully invited.');
+        }, 2000);
       }
     },
 

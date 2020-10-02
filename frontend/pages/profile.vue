@@ -64,14 +64,16 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
   import AccountSettings from '~/components/profile/forms/AccountSettings';
+  import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon';
   import SubscriptionSettings from '~/components/profile/forms/SubscriptionSettings';
   import UserSettings from '~/components/profile/forms/UserSettings';
 
   export default {
     name: 'Profile',
+
+    mixins: [currentUser],
 
     data () {
       return {
@@ -85,12 +87,6 @@
           { title: 'Subscription', icon: 'file-landscape-alt' }
         ]
       };
-    },
-
-    computed: {
-      ...mapState({
-        currentUser: state => state.user
-      })
     },
 
     methods: {
