@@ -4,39 +4,12 @@
       <div class="text-h6">
         Selected Pack
       </div>
-      <v-menu
-        bottom
-        class="ellipsis-menu"
-        nudge-bottom
-        offset-y
-        transition="slide-y-transition">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            class="ellipsis"
-            icon
-            :ripple="false"
-            v-on="on">
-            <custom-icon
-              :fill="primaryColor"
-              height="30px"
-              name="ellipsis-v"
-              width="30px" />
-          </v-btn>
-        </template>
-        <v-list
-          dense
-          elevation="1">
-          <v-list-item-group>
-            <v-list-item dense>
-              <span class="body-1 font-weight-medium">Change selected pack</span>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-menu>
+      <ellipsis-button
+        :items="ellipsisItems"
+        @change-pack="modalOpen = true" />
     </div>
     <div
-      v-if="!activePack"
+      v-if="activePack"
       class="selected-pack-wrapper">
       <div class="text-body-1">
         Active Pack Graph
@@ -45,28 +18,31 @@
     <p v-else>
       You haven't added a pack to this trip yet! Click on the dots in the top right to get started.
     </p>
+    <select-pack-modal v-model="modalOpen" />
   </div>
 </template>
 
 <script>
+  import EllipsisButton from '~/components/icons/EllipsisButton';
+  import SelectPackModal from '~/components/modals/SelectPackModal';
   import currentUser from '~/mixins/currentUser';
 
   export default {
     mixins: [currentUser],
 
     data: () => ({
-      primaryColor: ''
+      ellipsisItems: [{ title: 'Change Selected Pack', event: 'change-pack' }],
+      modalOpen: false
     }),
     computed: {
       activePack () {
-        return this.currentUser.packs.forEach(pack => {
-          if (pack.active) { return pack; }
-        });
+        return this.currentUser.packs.some(pack => pack.active);
       }
     },
 
-    mounted () {
-      this.primaryColor = $nuxt.$vuetify.theme.themes.light.primary;
+    components: {
+      EllipsisButton,
+      SelectPackModal
     }
   };
 </script>

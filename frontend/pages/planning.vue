@@ -23,6 +23,19 @@
         <friends />
       </v-flex>
 
+      <!-- Trip Details Widget -->
+      <v-flex
+        md6
+        xs12>
+        <trip-details />
+      </v-flex>
+
+      <v-flex
+        md6
+        xs12>
+        <hike-details />
+      </v-flex>
+
       <!-- Todo List Widget -->
       <v-flex
         md6
@@ -42,25 +55,22 @@
 
 <script>
   import Friends from '~/components/planning/widgets/Friends';
+  import HikeDetails from '~/components/planning/widgets/HikeDetails';
   import SelectedPack from '~/components/planning/widgets/SelectedPack';
   import ShoppingList from '~/components/planning/widgets/ShoppingList';
   import TodoList from '~/components/planning/widgets/TodoList';
+  import TripDetails from '~/components/planning/widgets/TripDetails';
 
   export default {
     name: 'Planning',
 
-    // data: () => ({
-    //   todos: [
-    //     { id: 28, title: 'Book Car Rental', checked: 0, created_at: '2020-03-08 11:31:27', updated_at: '2020-03-08 11:31:27' },
-    //     { id: 29, title: 'Call hostel', checked: 1, created_at: '2020-04-08 11:31:27', updated_at: '2020-04-08 11:31:27' }
-    //   ]
-    // }),
-
     components: {
       Friends,
+      HikeDetails,
       SelectedPack,
       ShoppingList,
-      TodoList
+      TodoList,
+      TripDetails
     }
   };
 </script>

@@ -17,5 +17,10 @@
     grid-template-columns: repeat(2, auto);
     justify-content: space-between;
     margin-bottom: 1rem;
+
+    &.no-action {
+      grid-template-columns: 1fr;
+      justify-content: start;
+    }
   }
 }

@@ -30,3 +30,5 @@ export const totalItemsInPack = pack => {
   });
   return total;
 };
+
+export const capitalize = text => text.replace(/^./, str => str.toUpperCase());

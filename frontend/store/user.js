@@ -109,7 +109,7 @@ export const state = () => ({
     { message: 'This is a notification', date: '05/01/2020' }
   ],
   packs: [
-    { id: 1, name: 'Summer', active: 0, created_at: '2020-03-07 20:44:51', updated_at: '2020-03-07 20:44:51', categories: [] }
+    { id: 1, name: 'Summer', active: 1, created_at: '2020-03-07 20:44:51', updated_at: '2020-03-07 20:44:51', categories: [] }
   ],
   password: 'password',
   subscription_level: 'annual member',
