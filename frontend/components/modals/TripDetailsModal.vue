@@ -1,11 +1,15 @@
 <template>
   <v-dialog
     v-model="show"
-    max-width="500"
+    max-width="750"
     :persistent="submitting">
     <v-card>
-      <v-card-title>Delete {{ formatItem }}</v-card-title>
-      <v-card-text>Are you sure you want to delete this {{ item }}?</v-card-text>
+      <v-card-title>{{ formatAction }} Detail</v-card-title>
+      <v-card-text>
+        <div class="text-body-1">
+          Create or Update a detail
+        </div>
+      </v-card-text>
       <v-card-actions class="justify-space-between">
         <v-btn
           class="light-grey--text"
@@ -16,17 +20,17 @@
           Cancel
         </v-btn>
         <v-btn
-          color="secondary"
+          color="primary"
           depressed
           :disabled="submitting"
           :ripple="false"
-          @click="handleDeleteItem">
+          @click="directClick">
           <loading
             v-if="submitting"
             color="#fff"
             height="30px"
             width="30px" />
-          <span v-else>Delete</span>
+          <span v-else>{{ formatAction }}</span>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -40,9 +44,10 @@
 
   export default {
     props: {
-      item: {
-        type: String,
-        default: ''
+      detail: {
+        type: Object,
+        required: false,
+        default: () => {}
       },
       value: {
         type: Boolean,
@@ -55,8 +60,11 @@
     }),
 
     computed: {
-      formatItem () {
-        return capitalize(this.item);
+      createOrUpdate () {
+        return this.detail ? 'update' : 'create';
+      },
+      formatAction () {
+        return capitalize(this.createOrUpdate) || '';
       },
       show: {
         get () {
@@ -70,16 +78,37 @@
 
     methods: {
       ...mapActions({
-        success: 'alert/success'
+        success: 'alert/success',
+        error: 'alert/error'
       }),
       closeModal () {
         this.show = false;
         this.$emit('handle-reset-modal');
       },
-      handleDeleteItem () {
-        this.$emit('handle-remove-item', this.selectedItem);
-        this.success(`${capitalize(this.item)} successfully deleted`);
-        this.closeModal();
+      directClick () {
+        return this.createOrUpdate === 'update' ? this.handleUpdate : this.handleCreate;
+      },
+      handleCreate () {
+        console.log('handleCreate');
+        this.submitting = true;
+
+        setTimeout(() => {
+          this.closeModal();
+          this.submitting = false;
+          this.$emit('handle-reset-modal');
+          this.success('Detail successfully added.');
+        }, 2000);
+      },
+      handleUpdate () {
+        console.log('handleUpdate');
+        this.submitting = true;
+
+        setTimeout(() => {
+          this.closeModal();
+          this.submitting = false;
+          this.$emit('handle-reset-modal');
+          this.success('Detail successfully updated.');
+        }, 2000);
       }
     },
 
@@ -93,6 +122,6 @@
   @import '~/css/global';
 
   .v-card {
-    border-top: 5px solid $secondary;
+    border-top: 5px solid $primary;
   }
 </style>

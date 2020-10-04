@@ -4,7 +4,7 @@
       <div class="text-h6">
         Trip Details
       </div>
-      <plus-button @handle-click="handleAddDetail" />
+      <plus-button @handle-click="tripDetailsModalOpen = true" />
     </div>
     <div class="trip-details-wrapper">
       <div class="row">
@@ -45,14 +45,11 @@
         You haven't added any details yet!
       </p>
     </div>
-    <!-- <create-detail
-      v-model="createDetailModalOpen"
-      @handle-create-detail="createDetail" /> -->
 
-    <!-- <update-detail
-      v-model="updateDetailModalOpen"
+    <trip-details-modal
+      v-model="tripDetailsModalOpen"
       :detail="selectedDetail"
-      @handle-update-detail="updateDetail" /> -->
+      @handle-reset-modal="resetModal" />
 
     <delete-confirm-modal
       v-model="removeDetailModalOpen"
@@ -67,6 +64,7 @@
   import DeleteConfirmModal from '~/components/modals/DeleteConfirmModal';
   import EllipsisButton from '~/components/icons/EllipsisButton';
   import PlusButton from '~/components/icons/PlusButton';
+  import TripDetailsModal from '~/components/modals/TripDetailsModal';
 
   export default {
     data: () => ({
@@ -85,23 +83,24 @@
       endingPoint: 'Mt. Whitney',
       removeDetailModalOpen: false,
       selectedDetail: null,
-      startingPoint: 'Yosemite'
+      startingPoint: 'Yosemite',
+      tripDetailsModalOpen: false
     }),
 
     methods: {
-      handleAddDetail () {
-        console.log('addDetail');
-      },
       openDelete (detail) {
-        console.log('openDelete: ', detail);
         this.selectedDetail = detail;
         this.removeDetailModalOpen = true;
       },
       openUpdate (detail) {
-        console.log('openUpdate', detail);
+        this.selectedDetail = detail;
+        this.tripDetailsModalOpen = true;
       },
       removeDetail () {
         console.log('removeDetail');
+      },
+      resetModal () {
+        this.selectedDetail = null;
       }
     },
 
@@ -113,7 +112,8 @@
       CustomIcon,
       DeleteConfirmModal,
       EllipsisButton,
-      PlusButton
+      PlusButton,
+      TripDetailsModal
     }
   };
 </script>

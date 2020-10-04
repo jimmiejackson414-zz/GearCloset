@@ -4,7 +4,7 @@
       <div class="text-h6">
         Hike Details
       </div>
-      <plus-button @handle-click="handleAddDetail" />
+      <plus-button @handle-click="hikeDetailsModalOpen = true" />
     </div>
     <div class="trip-details-wrapper">
       <div class="row">
@@ -39,31 +39,29 @@
         You haven't added any details yet!
       </p>
     </div>
-    <!-- <create-detail
-      v-model="createDetailModalOpen"
-      @handle-create-detail="createDetail" /> -->
 
-    <!-- <update-detail
-      v-model="updateDetailModalOpen"
+    <hike-details-modal
+      v-model="hikeDetailsModalOpen"
       :detail="selectedDetail"
-      @handle-update-detail="updateDetail" /> -->
+      @handle-reset-modal="resetModal" />
 
     <delete-confirm-modal
       v-model="removeDetailModalOpen"
       item="detail"
       :selected-detail="selectedDetail"
-      @handle-remove-item="removeDetail" />
+      @handle-remove-item="removeDetail"
+      @handle-reset-modal="resetModal" />
   </div>
 </template>
 
 <script>
   import DeleteConfirmModal from '~/components/modals/DeleteConfirmModal';
   import EllipsisButton from '~/components/icons/EllipsisButton';
+  import HikeDetailsModal from '~/components/modals/HikeDetailsModal';
   import PlusButton from '~/components/icons/PlusButton';
 
   export default {
     data: () => ({
-      arrowColor: '',
       hike: {
         title: 'John Muir Trail',
         details: [
@@ -78,6 +76,7 @@
         { title: 'Update', event: 'update-detail' },
         { title: 'Delete', event: 'delete-detail' }
       ],
+      hikeDetailsModalOpen: false,
       removeDetailModalOpen: false,
       selectedDetail: null
     }),
@@ -87,25 +86,26 @@
         console.log('addDetail');
       },
       openDelete (detail) {
-        console.log('openDelete: ', detail);
         this.selectedDetail = detail;
         this.removeDetailModalOpen = true;
       },
       openUpdate (detail) {
         console.log('openUpdate', detail);
+        this.selectedDetail = detail;
+        this.hikeDetailsModalOpen = true;
       },
       removeDetail () {
         console.log('removeDetail');
+      },
+      resetModal () {
+        this.selectedDetail = null;
       }
-    },
-
-    mounted () {
-      this.arrowColor = $nuxt.$vuetify.theme.themes.light['dark-grey'];
     },
 
     components: {
       DeleteConfirmModal,
       EllipsisButton,
+      HikeDetailsModal,
       PlusButton
     }
   };

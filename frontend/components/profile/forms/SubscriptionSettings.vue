@@ -49,7 +49,7 @@
               <div
                 v-if="shouldShow(card, 'free', 'free')"
                 class="overline text-center">
-                Downgrade Options:
+                Downgrade Option:
               </div>
               <div
                 v-if="shouldShow(card, 'member', 'annual member')"
