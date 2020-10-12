@@ -125,7 +125,7 @@
 
 <style lang="scss">
   @import '~/css/breakpoints';
-  @import '~/css/global';
+  @import '~/css/colors';
 
   #home-app-bar {
     &.theme--light {
@@ -229,7 +229,7 @@
 </style>
 
 <style lang="scss">
-  @import '~/css/global';
+  @import '~/css/colors';
 
   #home-app-bar {
     &.theme--light {

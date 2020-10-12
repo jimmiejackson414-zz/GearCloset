@@ -146,7 +146,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/global';
+  @import '~/css/colors';
 
   .subscription-container {
     h6 {

@@ -93,7 +93,7 @@
 </script>
 
 <style lang="scss">
-  @import '~/css/global';
+  @import '~/css/colors';
   @import '~/css/breakpoints';
 
   .container.container--fluid {

@@ -119,7 +119,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/global';
+  @import '~/css/colors';
 
   .v-card {
     border-top: 5px solid $primary;

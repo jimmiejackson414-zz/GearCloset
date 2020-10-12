@@ -128,7 +128,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/global';
+  @import '~/css/colors';
   @import '~/css/breakpoints';
 
   .forgot-password {

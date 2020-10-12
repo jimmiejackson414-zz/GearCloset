@@ -9,7 +9,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/global';
+  @import '~/css/colors';
 
   .sidebar-wrapper-styles {
     display   : inline-block;

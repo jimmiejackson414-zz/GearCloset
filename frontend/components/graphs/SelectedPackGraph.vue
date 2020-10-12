@@ -33,6 +33,14 @@
                 enabled: true,
                 speed: 350
               }
+            },
+            // doesn't work at this point
+            states: {
+              active: {
+                filter: {
+                  type: 'none'
+                }
+              }
             }
           },
           labels: ['Kitchen', 'Big 3', 'Water', 'Clothing'],

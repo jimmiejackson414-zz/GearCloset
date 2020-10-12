@@ -109,7 +109,85 @@ export const state = () => ({
     { message: 'This is a notification', date: '05/01/2020' }
   ],
   packs: [
-    { id: 1, name: 'Summer', active: 1, created_at: '2020-03-07 20:44:51', updated_at: '2020-03-07 20:44:51', categories: [] }
+    {
+      id: 1,
+      name: 'Summer',
+      active: 1,
+      created_at: '2020-03-07 20:44:51',
+      updated_at: '2020-03-07 20:44:51',
+      categories: [
+        {
+          id: 1,
+          name: 'The Big 3',
+          pack_id: 1,
+          created_at: '2020-03-07 20:45:51',
+          updated_at: '2020-03-07 20:45:51',
+          items: [
+            {
+              id: 1,
+              name: 'Zpacks Arc Haul',
+              weight: 24.4,
+              price: 22000,
+              generic_type: 'Backpack',
+              category_id: 1,
+              consumable: 1,
+              worn: 1,
+              quantity: 1,
+              created_at: '2020-03-07 20:45:51',
+              updated_at: '2020-03-07 20:45:51'
+            },
+            {
+              id: 2,
+              name: 'REI Magma 15 Long',
+              weight: 24.4,
+              price: 22000,
+              generic_type: 'Sleeping Bag',
+              category_id: 1,
+              consumable: 0,
+              worn: 0,
+              quantity: 1,
+              created_at: '2020-03-07 20:45:51',
+              updated_at: '2020-03-07 20:45:51'
+            }
+          ]
+        },
+        {
+          id: 2,
+          name: 'Kitchen',
+          pack_id: 1,
+          created_at: '2020-03-07 20:45:51',
+          updated_at: '2020-03-07 20:45:51',
+          items: [
+            {
+              id: 3,
+              name: 'MSR Pocket Rocket 2',
+              weight: 24.4,
+              price: 22000,
+              generic_type: 'Stove',
+              category_id: 2,
+              consumable: 1,
+              worn: 0,
+              quantity: 1,
+              created_at: '2020-03-07 20:45:51',
+              updated_at: '2020-03-07 20:45:51'
+            },
+            {
+              id: 4,
+              name: 'Toaks 700mL Pot',
+              weight: 24.4,
+              price: 22000,
+              generic_type: 'Titanium Pot',
+              category_id: 2,
+              consumable: 1,
+              worn: 1,
+              quantity: 1,
+              created_at: '2020-03-07 20:45:51',
+              updated_at: '2020-03-07 20:45:51'
+            }
+          ]
+        }
+      ]
+    }
   ],
   password: 'password',
   subscription_level: 'annual member',

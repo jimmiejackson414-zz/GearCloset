@@ -16,17 +16,20 @@ import {
   uniFacebookF,
   uniFileLandscapeAlt,
   uniGlobe,
+  uniGripHorizontalLine,
   uniImageDownload,
   uniInfoCircle,
   uniInstagramAlt,
-  uniPadlock,
-  uniPlus,
+  uniLayerGroup,
   uniMountains,
   uniMultiply,
+  uniPadlock,
+  uniPlus,
   uniSearch,
   uniSetting,
   uniTrashAlt,
-  uniUserCircle
+  uniUserCircle,
+  uniUtensilsAlt
 } from 'vue-unicons/src/icons';
 
 Unicon.add([
@@ -45,9 +48,11 @@ Unicon.add([
   uniFacebookF,
   uniFileLandscapeAlt,
   uniGlobe,
+  uniGripHorizontalLine,
   uniImageDownload,
   uniInfoCircle,
   uniInstagramAlt,
+  uniLayerGroup,
   uniMountains,
   uniMultiply,
   uniPadlock,
@@ -55,6 +60,7 @@ Unicon.add([
   uniSearch,
   uniSetting,
   uniTrashAlt,
-  uniUserCircle
+  uniUserCircle,
+  uniUtensilsAlt
 ]);
 Vue.use(Unicon);
