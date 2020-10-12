@@ -38,7 +38,14 @@
             </td>
             <td
               class="text-start">
-              <span
+              <!-- Test of Click To Edit component -->
+              <click-to-edit
+                :unique-identifier="`title${item.id}Ref`"
+                :value="item.title"
+                @handle-update-item="updateItem($event, item, 'title')" />
+
+              <!-- Original Click to Edit -->
+              <!-- <span
                 v-if="editableItem !== `title${item.id}Ref`"
                 class="text-body-2"
                 @click="setEditing(`title${item.id}Ref`)">
@@ -54,9 +61,9 @@
                 outlined
                 type="text"
                 :value="item.title"
-                @blur="updateItem($event, item, 'title')"
-                @change="updateItem($event, item, 'title')"
-                @keyup.enter="updateItem($event, item, 'title')" />
+                @blur="updateItem(item, 'title', $event)"
+                @change="updateItem(item, 'title', $event)"
+                @keyup.enter="updateItem(item, 'title', $event)" /> -->
             </td>
             <td
               class="text-end"
@@ -86,6 +93,7 @@
 </template>
 
 <script>
+  import ClickToEdit from '~/components/ClickToEdit';
   import CustomIcon from '~/components/icons/CustomIcon';
   import PlusButton from '~/components/icons/PlusButton';
 
@@ -131,13 +139,13 @@
       updateAllItems (value) {
         this.todos.forEach(i => this.updateItem(value, i, 'checked'));
       },
-      updateItem (event, todo, field) {
-        // TODO: Need to handle editing better overall (or edit in modal)
-        this.editableItem = null;
-
-        // return if value hasn't changed
-        if (event === String(todo[field])) { return; }
-        todo[field] = event;
+      updateItem (value, todo, field) {
+        if (value === String(todo[field])) {
+          // return if value hasn't changed
+          return;
+        } else {
+          todo[field] = value;
+        }
 
         console.log('updateItem');
         // await todoService.update(todo);
@@ -149,6 +157,7 @@
     },
 
     components: {
+      ClickToEdit,
       CustomIcon,
       PlusButton
     }
