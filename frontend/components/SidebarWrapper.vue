@@ -16,7 +16,7 @@
     width     : 100%;
     max-width : 300px;
     height    : 100%;
-    background: $primary;
+    background: $lighter-grey;
     overflow-y: auto;
     padding   : 2rem;
     z-index   : 2;

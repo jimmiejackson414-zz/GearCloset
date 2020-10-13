@@ -1,6 +1,9 @@
 <template>
   <div class="closet-page-styles">
-    <!-- Sidebar? -->
+    <!-- Sidebar -->
+    <closet-sidebar />
+
+    <!-- Content -->
     <div class="content-container">
       <transition name="fade">
         <v-container grid-list-lg>
@@ -130,6 +133,7 @@
 
 <script>
   import ClickToEdit from '~/components/ClickToEdit';
+  import ClosetSidebar from '~/components/closet/ClosetSidebar';
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon';
 
@@ -202,6 +206,7 @@
 
     components: {
       ClickToEdit,
+      ClosetSidebar,
       CustomIcon
     }
   };
@@ -211,7 +216,12 @@
   @import '~/css/colors';
 
   .closet-page-styles {
+    display: flex;
+    height: 100%;
+
     .content-container {
+      width: 100%;
+
       .items-list-styles {
         .items-table-container {
           tr {
@@ -244,7 +254,7 @@
 
               &:last-child, &:first-child {
                 opacity: 0;
-                transition: 0.2s opacity cubic-bezier(0.57, 0.06, 0, 1.06);
+                transition: 0.2s opacity $cubic-bezier;
               }
             }
 

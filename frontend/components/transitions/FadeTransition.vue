@@ -12,9 +12,11 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '~/css/colors';
+
   .fade-enter-active, .fade-leave-active {
     opacity: 1;
-    transition: all 0.5s cubic-bezier(0.57, 0.06, 0, 1.06);
+    transition: all 0.5s $cubic-bezier;
   }
 
   .fade-enter, .fade-leave-to {
