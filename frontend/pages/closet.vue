@@ -7,6 +7,29 @@
     <div class="content-container">
       <transition name="fade">
         <v-container grid-list-lg>
+          <div class="header mb-6">
+            <h3 class="text-h3 font-weight-bold">
+              {{ activePack.name }}
+            </h3>
+            <div class="actions">
+              <div class="share-wrapper">
+                <v-btn
+                  class="share-btn"
+                  icon
+                  :ripple="false"
+                  @click="shareListModalOpen = true">
+                  <custom-icon
+                    fill="#4a4a4a"
+                    height="20px"
+                    name="share"
+                    width="20px" />
+                  <p class="body-2 mb-0">
+                    Share
+                  </p>
+                </v-btn>
+              </div>
+            </div>
+          </div>
           <div class="items-list-styles">
             <div class="items-list-container">
               <h2 class="text-h6">
@@ -61,6 +84,7 @@
                             @handle-update-item="updateItem($event, item, 'name')" />
                         </td>
 
+                        <!-- TODO: Figure out how to handle weights -->
                         <!-- Weight Edit In Place -->
                         <td>
                           <click-to-edit
@@ -68,6 +92,15 @@
                             :unique-identifier="`weight${item.id}Ref`"
                             :value="String(item.weight)"
                             @handle-update-item="updateItem($event, item, 'weight')" />
+                        </td>
+
+                        <!-- Price Edit In Place -->
+                        <td>
+                          <click-to-edit
+                            :mask="currencyMask"
+                            :unique-identifier="`price${item.id}Ref`"
+                            :value="String(item.price / 100)"
+                            @handle-update-item="updateItem($event, item, 'price')" />
                         </td>
 
                         <!-- Consumable Toggle -->
@@ -125,6 +158,9 @@
               </v-list>
             </div>
           </div>
+
+          <!-- Share Pack List Modal -->
+          <share-pack-list-modal v-model="shareListModalOpen" />
         </v-container>
       </transition>
     </div>
@@ -132,10 +168,13 @@
 </template>
 
 <script>
+  import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   import ClickToEdit from '~/components/ClickToEdit';
   import ClosetSidebar from '~/components/closet/ClosetSidebar';
+  import { convertToDollars } from '~/helpers/functions';
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon';
+  import SharePackListModal from '~/components/modals/SharePackListModal';
 
   export default {
     name: 'Closet',
@@ -150,6 +189,7 @@
         { text: 'Type', align: 'left', sortable: true, value: 'generic_type' },
         { text: 'Name', align: 'left', sortable: true, value: 'name' },
         { text: 'Weight', align: 'left', sortable: true, value: 'weight' },
+        { text: 'Price', align: 'left', sortable: true, value: 'price' },
         { text: 'Consumable', align: 'center', sortable: true, value: 'consumable' },
         { text: 'Worn', align: 'center', sortable: true, value: 'worn' },
         { text: '', align: 'right', sortable: false, value: 'remove' }
@@ -158,7 +198,8 @@
         v => /^(((\d{1,3})(,\d{3})*)|(\d+))(.\d+)?$/.test(v) || 'Only numbers are permitted'
       ],
       itemKeys: new WeakMap(),
-      selectedItem: null
+      selectedItem: null,
+      shareListModalOpen: false
     }),
 
     computed: {
@@ -170,10 +211,23 @@
           return this.activePack.categories;
         }
         return [];
+      },
+      currencyMask () {
+        return createNumberMask({
+          allowDecimal: true,
+          allowNegative: false,
+          includeThousandsSeparator: true,
+          prefix: '$',
+          requireDecimal: true, // TODO: Need to figure out why 00 isn't appending
+          thousandsSeparatorSymbol: ','
+        });
       }
     },
 
     methods: {
+      convertCurrency (amount) {
+        return convertToDollars(amount);
+      },
       handleRemoveModalOpen (item) {
         this.selectedItem = item;
         this.deleteConfirmOpen = true;
@@ -207,7 +261,8 @@
     components: {
       ClickToEdit,
       ClosetSidebar,
-      CustomIcon
+      CustomIcon,
+      SharePackListModal
     }
   };
 </script>
@@ -217,10 +272,40 @@
 
   .closet-page-styles {
     display: flex;
-    height: 100%;
+    height : 100%;
 
     .content-container {
       width: 100%;
+
+      .header {
+        align-items    : center;
+        display        : flex;
+        justify-content: space-between;
+
+        .actions {
+          margin-right: 2rem;
+
+          .share-wrapper {
+            display: flex;
+
+            .share-btn {
+              p, svg {
+                transition: 0.2s color ease-in-out;
+              }
+
+              &:hover {
+                p {
+                  color: $primary;
+                }
+
+                svg {
+                  fill: $primary;
+                }
+              }
+            }
+          }
+        }
+      }
 
       .items-list-styles {
         .items-table-container {
@@ -239,6 +324,7 @@
 
                   &.consumable-btn {
                     background-color: $warning;
+
                     svg {
                       fill: white;
                     }
@@ -253,7 +339,7 @@
               }
 
               &:last-child, &:first-child {
-                opacity: 0;
+                opacity   : 0;
                 transition: 0.2s opacity $cubic-bezier;
               }
             }
@@ -263,10 +349,6 @@
                 opacity: 1;
               }
             }
-          }
-
-          td {
-
           }
         }
       }

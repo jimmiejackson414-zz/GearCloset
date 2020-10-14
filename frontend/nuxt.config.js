@@ -22,6 +22,7 @@ export default {
 
   plugins: [
     { src: '~/plugins/vue-unicons', mode: 'client' },
+    { src: '~/plugins/v-mask', mode: 'client' },
     { src: '~/plugins/apex-charts', mode: 'client' },
     { src: '~/plugins/filters' }
   ],

@@ -19,6 +19,17 @@ export const calculatePackWeights = pack => {
   return data;
 };
 
+export const capitalize = text => text.replace(/^./, str => str.toUpperCase());
+
+export const convertToDollars = num => {
+  return (num / 100).toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2
+  });
+};
+
 export const totalItemsInPack = pack => {
   let total = 0;
   if (!pack.categories) { return total; }
@@ -30,5 +41,3 @@ export const totalItemsInPack = pack => {
   });
   return total;
 };
-
-export const capitalize = text => text.replace(/^./, str => str.toUpperCase());

@@ -28,6 +28,7 @@ import {
   uniPlusCircle,
   uniSearch,
   uniSetting,
+  uniShare,
   uniTrashAlt,
   uniUserCircle,
   uniUtensilsAlt
@@ -61,6 +62,7 @@ Unicon.add([
   uniPlusCircle,
   uniSearch,
   uniSetting,
+  uniShare,
   uniTrashAlt,
   uniUserCircle,
   uniUtensilsAlt

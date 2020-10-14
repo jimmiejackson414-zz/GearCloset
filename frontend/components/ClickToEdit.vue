@@ -3,6 +3,7 @@
     :id="uniqueIdentifier"
     :ref="uniqueIdentifier"
     v-focus
+    v-mask="mask"
     :class="[ 'click-to-edit', active ? 'active' : 'b-none' ]"
     color="primary"
     dense
@@ -16,15 +17,20 @@
 </template>
 
 <script>
+  /* eslint-disable vue/require-default-prop */
   export default {
     props: {
-      uniqueIdentifier: {
-        type: String,
-        default: () => ''
+      mask: {
+        type: Function,
+        required: false
       },
       type: {
         type: String,
         default: () => 'text'
+      },
+      uniqueIdentifier: {
+        type: String,
+        default: () => ''
       },
       value: {
         type: String,
