@@ -236,7 +236,7 @@
         console.log('handleUpdateUnits');
       },
       itemKey (item) {
-        if (!this.itemKeys.has(item)) { this.itemeys.set(item, ++this.currentItemKey); }
+        if (!this.itemKeys.has(item)) { this.itemKeys.set(item, ++this.currentItemKey); }
         return this.itemKeys.get(item);
       },
       updateItem (value, category, field) {
