@@ -59,18 +59,22 @@
         </v-btn>
       </div>
       <v-list v-if="packs.length">
-        <v-list-item
-          v-for="pack in filteredPacks()"
-          :key="pack.id"
-          :class="{ selected: activeSelection(pack.id) }"
-          :ripple="false"
-          @click="handleSelectedPack(pack)">
-          <v-list-item-content>
-            <p class="mb-0 font-weight-medium">
-              {{ pack.name }}
-            </p>
-          </v-list-item-content>
-        </v-list-item>
+        <transition-group
+          mode="in-out"
+          name="fade">
+          <v-list-item
+            v-for="pack in filteredPacks()"
+            :key="pack.id"
+            :class="{ selected: activeSelection(pack.id) }"
+            :ripple="false"
+            @click="handleSelectedPack(pack)">
+            <v-list-item-content>
+              <p class="mb-0 font-weight-medium">
+                {{ pack.name }}
+              </p>
+            </v-list-item-content>
+          </v-list-item>
+        </transition-group>
       </v-list>
       <p v-else>
         You haven't created any packs yet!
@@ -126,22 +130,26 @@
               {{ category.name }}
             </v-list-item-title>
           </template>
-          <v-list-item
-            v-for="item in filteredItems(category)"
-            :key="item.id"
-            class="pointer"
-            dense
-            :ripple="false">
-            <custom-icon
-              custom-class="gear-handle mr-2"
-              fill="#4a4a4a"
-              height="20px"
-              name="grip-horizontal-line"
-              width="20px" />
-            <p class="mb-0">
-              {{ item.name }}
-            </p>
-          </v-list-item>
+          <transition-group
+            mode="in-out"
+            name="fade">
+            <v-list-item
+              v-for="item in filteredItems(category)"
+              :key="item.id"
+              class="pointer"
+              dense
+              :ripple="false">
+              <custom-icon
+                custom-class="gear-handle mr-2"
+                fill="#4a4a4a"
+                height="20px"
+                name="grip-horizontal-line"
+                width="20px" />
+              <p class="mb-0">
+                {{ item.name }}
+              </p>
+            </v-list-item>
+          </transition-group>
         </v-list-group>
       </v-list>
     </div>
@@ -187,8 +195,7 @@
       filteredItems (category) {
         let filteredItems = [];
         if (this.searchQuery) {
-          console.log('searchQuery: ', this.searchQuery);
-          const text = this.searchQuery.toLowercase();
+          const text = this.searchQuery.toLowerCase();
           filteredItems = category.items.filter(item => item.name && item.name.toLowerCase().includes(text));
         } else {
           filteredItems = category.items;
