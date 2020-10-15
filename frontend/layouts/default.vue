@@ -29,7 +29,7 @@
       bottom
       :color="alert.type"
       left
-      :timeout="5000"
+      :timeout="3000"
       :value="alert.message">
       <custom-icon
         class="mr-4"
@@ -114,7 +114,7 @@
         if (newValue) {
           setTimeout(() => {
             this.clearAlert();
-          }, 5000);
+          }, 3500);
         }
       }
     },

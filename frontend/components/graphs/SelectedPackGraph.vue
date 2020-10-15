@@ -1,10 +1,12 @@
 <template>
-  <apexchart
-    :height="height"
-    :options="chartOptions"
-    :series="series"
-    type="donut"
-    width="100%" />
+  <client-only>
+    <apexchart
+      :height="height"
+      :options="chartOptions"
+      :series="series"
+      type="donut"
+      width="100%" />
+  </client-only>
 </template>
 
 <script>

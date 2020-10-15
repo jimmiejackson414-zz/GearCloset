@@ -226,6 +226,11 @@
 
   .search-container {
     border-bottom: 1px solid $dark-grey;
+
+    .wrapper {
+      border-bottom: 1px solid $dark-grey;
+      padding-bottom: 1rem;
+    }
   }
 </style>
 
@@ -247,9 +252,6 @@
   }
 
   .wrapper {
-    border-bottom: 1px solid $dark-grey;
-    padding-bottom: 1rem;
-
     .header {
       align-items    : center;
       display        : flex;

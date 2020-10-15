@@ -30,6 +30,11 @@
               </div>
             </div>
           </div>
+          <v-row class="closet-pack-graph-wrapper">
+            <v-col class="wrapper col-12 col-md-6 offset-md-3">
+              <selected-pack-graph :height="300" />
+            </v-col>
+          </v-row>
           <div class="items-list-styles">
             <div class="items-list-container">
               <h2 class="text-h6">
@@ -45,6 +50,7 @@
                   @handle-update-item="updateItem($event, category, 'name')" />
                 <v-data-table
                   :ref="`sortableTable${index}`"
+                  calculate-widths
                   class="items-table-container"
                   disable-pagination
                   :headers="headers"
@@ -87,20 +93,29 @@
                         <!-- TODO: Figure out how to handle weights -->
                         <!-- Weight Edit In Place -->
                         <td>
-                          <click-to-edit
-                            type="number"
-                            :unique-identifier="`weight${item.id}Ref`"
-                            :value="String(item.weight)"
-                            @handle-update-item="updateItem($event, item, 'weight')" />
+                          <span class="weight-column">
+                            <click-to-edit
+                              :unique-identifier="`weight${item.id}Ref`"
+                              :value="String(item.weight)"
+                              @handle-update-item="updateItem($event, item, 'weight')" />
+                            <v-select
+                              dense
+                              hide-details
+                              :items="weightItems"
+                              value="oz"
+                              @change="handleUpdateUnits($event, item)" />
+                          </span>
                         </td>
 
                         <!-- Price Edit In Place -->
                         <td>
-                          <click-to-edit
-                            :mask="currencyMask"
-                            :unique-identifier="`price${item.id}Ref`"
-                            :value="String(item.price / 100)"
-                            @handle-update-item="updateItem($event, item, 'price')" />
+                          <span class="price-column">
+                            <click-to-edit
+                              :mask="currencyMask"
+                              :unique-identifier="`price${item.id}Ref`"
+                              :value="String(item.price / 100)"
+                              @handle-update-item="updateItem($event, item, 'price')" />
+                          </span>
                         </td>
 
                         <!-- Consumable Toggle -->
@@ -160,7 +175,9 @@
           </div>
 
           <!-- Share Pack List Modal -->
-          <share-pack-list-modal v-model="shareListModalOpen" />
+          <share-pack-list-modal
+            v-model="shareListModalOpen"
+            :list="list" />
         </v-container>
       </transition>
     </div>
@@ -171,9 +188,10 @@
   import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   import ClickToEdit from '~/components/ClickToEdit';
   import ClosetSidebar from '~/components/closet/ClosetSidebar';
-  import { convertToDollars } from '~/helpers/functions';
+  import { convertToDollars, generateUUID } from '~/helpers/functions';
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon';
+  import SelectedPackGraph from '~/components/graphs/SelectedPackGraph';
   import SharePackListModal from '~/components/modals/SharePackListModal';
 
   export default {
@@ -185,21 +203,27 @@
       currentItemKey: 0,
       deleteConfirmOpen: false,
       headers: [
-        { text: '', align: 'left', sortable: false, value: 'drag' },
-        { text: 'Type', align: 'left', sortable: true, value: 'generic_type' },
-        { text: 'Name', align: 'left', sortable: true, value: 'name' },
-        { text: 'Weight', align: 'left', sortable: true, value: 'weight' },
-        { text: 'Price', align: 'left', sortable: true, value: 'price' },
-        { text: 'Consumable', align: 'center', sortable: true, value: 'consumable' },
-        { text: 'Worn', align: 'center', sortable: true, value: 'worn' },
-        { text: '', align: 'right', sortable: false, value: 'remove' }
+        { text: '', align: 'left', sortable: false, value: 'drag', width: '2%' },
+        { text: 'Type', align: 'left', sortable: true, value: 'generic_type', width: '20%' },
+        { text: 'Name', align: 'left', sortable: true, value: 'name', width: '20%' },
+        { text: 'Weight', align: 'center', sortable: true, value: 'weight', width: '13%' },
+        { text: 'Price', align: 'center', sortable: true, value: 'price', width: '14%' },
+        { text: 'Consumable', align: 'center', sortable: true, value: 'consumable', width: '101' },
+        { text: 'Worn', align: 'center', sortable: true, value: 'worn', width: '8%' },
+        { text: '', align: 'right', sortable: false, value: 'remove', width: '2%' }
       ],
       integerRule: [
         v => /^(((\d{1,3})(,\d{3})*)|(\d+))(.\d+)?$/.test(v) || 'Only numbers are permitted'
       ],
       itemKeys: new WeakMap(),
+      list: {
+        id: 1,
+        title: 'Summer',
+        uuid: generateUUID()
+      },
       selectedItem: null,
-      shareListModalOpen: false
+      shareListModalOpen: false,
+      weightItems: ['oz', 'lbs', 'g', 'kg']
     }),
 
     computed: {
@@ -232,6 +256,10 @@
         this.selectedItem = item;
         this.deleteConfirmOpen = true;
       },
+      handleUpdateUnits (e, item) {
+        // access ref using item to convert specific text field's value
+        console.log('handleUpdateUnits');
+      },
       itemKey (item) {
         if (!this.itemKeys.has(item)) { this.itemKeys.set(item, ++this.currentItemKey); }
         return this.itemKeys.get(item);
@@ -262,6 +290,7 @@
       ClickToEdit,
       ClosetSidebar,
       CustomIcon,
+      SelectedPackGraph,
       SharePackListModal
     }
   };
@@ -312,6 +341,37 @@
           tr {
             td {
               padding: 0 4px;
+
+              .price-column {
+                .click-to-edit {
+                  .v-input__slot {
+                    input {
+                      text-align: center;
+                    }
+                  }
+                }
+              }
+
+              .weight-column {
+                display: grid;
+                grid-template-columns: auto minmax(auto, 57px);
+
+                .v-select {
+                  .v-input__slot {
+                    &:before, &:after {
+                      border: none;
+                    }
+                  }
+                }
+
+                .click-to-edit {
+                  .v-input__slot {
+                    input {
+                      text-align: right;
+                    }
+                  }
+                }
+              }
 
               .v-btn {
                 &.active {
