@@ -43,7 +43,7 @@
               <v-list
                 v-for="(category, index) in categories"
                 :key="category.id"
-                class="categories-container">
+                :class="['categories-container', categories.length === index + 1 ? 'last' : '']">
                 <click-to-edit
                   :unique-identifier="`title${category.id}Ref`"
                   :value="category.name"
@@ -170,7 +170,44 @@
                     </tbody>
                   </template>
                 </v-data-table>
+
+                <!-- Add New Item Button -->
+                <v-btn
+                  :ripple="false"
+                  text
+                  @click="handleAddNewItem">
+                  <custom-icon
+                    :fill="primaryColor"
+                    height="18px"
+                    name="plus"
+                    width="18px" />
+                  <p class="body-2 primary--text mb-0 ml-3">
+                    Add New Item
+                  </p>
+                </v-btn>
               </v-list>
+
+              <!-- Add New Category Button -->
+              <v-container class="new-category-container">
+                <v-row>
+                  <v-col class="col-12">
+                    <v-btn
+                      class="pl-1"
+                      :ripple="false"
+                      text
+                      @click="handleAddNewCategory">
+                      <custom-icon
+                        :fill="primaryColor"
+                        height="18px"
+                        name="plus"
+                        width="18px" />
+                      <p class="body-2 primary--text mb-0 ml-3">
+                        Add New Category
+                      </p>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
             </div>
           </div>
 
@@ -203,14 +240,14 @@
       currentItemKey: 0,
       deleteConfirmOpen: false,
       headers: [
-        { text: '', align: 'left', sortable: false, value: 'drag', width: '2%' },
-        { text: 'Type', align: 'left', sortable: true, value: 'generic_type', width: '20%' },
-        { text: 'Name', align: 'left', sortable: true, value: 'name', width: '20%' },
-        { text: 'Weight', align: 'center', sortable: true, value: 'weight', width: '13%' },
-        { text: 'Price', align: 'center', sortable: true, value: 'price', width: '14%' },
-        { text: 'Consumable', align: 'center', sortable: true, value: 'consumable', width: '101' },
+        { text: '', align: 'left', sortable: false, value: 'drag', width: '1%' },
+        { text: 'Type', align: 'left', sortable: true, value: 'generic_type', width: '25%' },
+        { text: 'Name', align: 'left', sortable: true, value: 'name', width: '25%' },
+        { text: 'Weight', align: 'center', sortable: true, value: 'weight', width: '15%' },
+        { text: 'Price', align: 'center', sortable: true, value: 'price', width: '15%' },
+        { text: 'Consumable', align: 'center', sortable: true, value: 'consumable', width: '10%' },
         { text: 'Worn', align: 'center', sortable: true, value: 'worn', width: '8%' },
-        { text: '', align: 'right', sortable: false, value: 'remove', width: '2%' }
+        { text: '', align: 'right', sortable: false, value: 'remove', width: '1%' }
       ],
       integerRule: [
         v => /^(((\d{1,3})(,\d{3})*)|(\d+))(.\d+)?$/.test(v) || 'Only numbers are permitted'
@@ -221,6 +258,7 @@
         title: 'Summer',
         uuid: generateUUID()
       },
+      primaryColor: '',
       selectedItem: null,
       shareListModalOpen: false,
       weightItems: ['oz', 'lbs', 'g', 'kg']
@@ -242,7 +280,7 @@
           allowNegative: false,
           includeThousandsSeparator: true,
           prefix: '$',
-          requireDecimal: true, // TODO: Need to figure out why 00 isn't appending
+          // requireDecimal: true, // TODO: Need to figure out why 00 isn't appending
           thousandsSeparatorSymbol: ','
         });
       }
@@ -251,6 +289,12 @@
     methods: {
       convertCurrency (amount) {
         return convertToDollars(amount);
+      },
+      handleAddNewCategory () {
+        console.log('handleAddNewCategory');
+      },
+      handleAddNewItem () {
+        console.log('handleAddNewItem');
       },
       handleRemoveModalOpen (item) {
         this.selectedItem = item;
@@ -286,6 +330,10 @@
       }
     },
 
+    mounted () {
+      this.primaryColor = this.$nuxt.$vuetify.theme.themes.light.primary;
+    },
+
     components: {
       ClickToEdit,
       ClosetSidebar,
@@ -296,7 +344,7 @@
   };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '~/css/colors';
 
   .closet-page-styles {
@@ -335,8 +383,23 @@
           }
         }
       }
+    }
+  }
+</style>
 
+<style lang="scss">
+  @import '~/css/colors';
+
+  .closet-page-styles {
+    .content-container {
       .items-list-styles {
+        .categories-container {
+          &.last {
+            border-bottom: 1px solid $light-grey;
+            padding-bottom: 24px;
+          }
+        }
+
         .items-table-container {
           tr {
             td {
@@ -398,17 +461,21 @@
                 }
               }
 
-              &:last-child, &:first-child {
+              &:last-child svg, &:first-child svg {
                 opacity   : 0;
                 transition: 0.2s opacity $cubic-bezier;
               }
             }
 
             &:hover {
-              td:first-child, td:last-child {
+              td:first-child svg, td:last-child svg {
                 opacity: 1;
               }
             }
+          }
+
+          .new-category-container {
+            border-top: 1px solid $light-grey;
           }
         }
       }
