@@ -9,6 +9,7 @@
     dense
     hide-details
     outlined
+    :style="{...customStyle}"
     :type="type"
     :value="localValue"
     @blur="handleUpdateItem($event)"
@@ -20,6 +21,10 @@
   /* eslint-disable vue/require-default-prop */
   export default {
     props: {
+      customStyle: { // if additional custom styles need to be added
+        type: Object,
+        default: () => {}
+      },
       mask: {
         type: Function,
         required: false

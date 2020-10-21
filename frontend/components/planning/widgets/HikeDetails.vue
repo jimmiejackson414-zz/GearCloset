@@ -55,10 +55,10 @@
 </template>
 
 <script>
-  import DeleteConfirmModal from '~/components/modals/DeleteConfirmModal';
-  import EllipsisButton from '~/components/icons/EllipsisButton';
-  import HikeDetailsModal from '~/components/modals/HikeDetailsModal';
-  import PlusButton from '~/components/icons/PlusButton';
+  import DeleteConfirmModal from '~/components/modals/DeleteConfirmModal.vue';
+  import EllipsisButton from '~/components/icons/EllipsisButton.vue';
+  import HikeDetailsModal from '~/components/modals/HikeDetailsModal.vue';
+  import PlusButton from '~/components/icons/PlusButton.vue';
 
   export default {
     data: () => ({
@@ -117,9 +117,9 @@
 
   .trip-details-wrapper {
     .trip-details {
-      display: grid;
+      display        : grid;
       list-style-type: none;
-      padding: 0;
+      padding        : 0;
       text-decoration: none;
 
       .detail {

@@ -36,7 +36,7 @@
 <script>
   import { mapActions } from 'vuex';
   import { capitalize } from '~/helpers/functions';
-  import Loading from '~/components/Loading';
+  import Loading from '~/components/Loading.vue';
 
   export default {
     props: {

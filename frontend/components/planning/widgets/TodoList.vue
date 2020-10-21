@@ -9,6 +9,7 @@
     <v-data-table
       v-if="todos.length"
       class="todos-table"
+      disable-pagination
       :headers="headers"
       hide-default-footer
       :items="todos"
@@ -38,32 +39,10 @@
             </td>
             <td
               class="text-start">
-              <!-- Test of Click To Edit component -->
               <click-to-edit
                 :unique-identifier="`title${item.id}Ref`"
                 :value="item.title"
                 @handle-update-item="updateItem($event, item, 'title')" />
-
-              <!-- Original Click to Edit -->
-              <!-- <span
-                v-if="editableItem !== `title${item.id}Ref`"
-                class="text-body-2"
-                @click="setEditing(`title${item.id}Ref`)">
-                {{ item.title }}
-              </span>
-              <v-text-field
-                v-else
-                :id="`title${item.id}Ref`"
-                :ref="`title${item.id}Ref`"
-                color="primary"
-                dense
-                hide-details
-                outlined
-                type="text"
-                :value="item.title"
-                @blur="updateItem(item, 'title', $event)"
-                @change="updateItem(item, 'title', $event)"
-                @keyup.enter="updateItem(item, 'title', $event)" /> -->
             </td>
             <td
               class="text-end"

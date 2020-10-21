@@ -9,6 +9,7 @@
         :key="category.id"
         :class="['categories-container', categories.length === index + 1 ? 'last' : '']">
         <click-to-edit
+          :custom-style="{ width: 'fit-content' }"
           :unique-identifier="`title${category.id}Ref`"
           :value="category.name"
           @handle-update-item="updateItem($event, category, 'name')" />
@@ -178,7 +179,7 @@
 
 <script>
   import createNumberMask from 'text-mask-addons/dist/createNumberMask';
-  import ClickToEdit from '~/components/ClickToEdit';
+  import ClickToEdit from '~/components/ClickToEdit.vue';
 
   export default {
     props: {

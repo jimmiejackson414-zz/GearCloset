@@ -3,8 +3,4 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  // "vetur.format.defaultFormatter.html": "js-beautify-html"
-  //   "[html]": {
-  //     "editor.defaultFormatter": "vscode.html-language-features"
-  //   }
 }

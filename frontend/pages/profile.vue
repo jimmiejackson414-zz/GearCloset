@@ -21,9 +21,10 @@
         </v-tab>
 
         <!-- User Settings -->
+        <!-- TODO: Set transitions to false temporarily until fade transition works better -->
         <v-tab-item
-          reverse-transition="fade-transition"
-          transition="fade-transition">
+          :reverse-transition="false"
+          :transition="false">
           <v-card flat>
             <v-card-text class="py-0">
               <user-settings
@@ -35,8 +36,8 @@
 
         <!-- Account Settings -->
         <v-tab-item
-          reverse-transition="fade-transition"
-          transition="fade-transition">
+          :reverse-transition="false"
+          :transition="false">
           <v-card flat>
             <v-card-text>
               <account-settings
@@ -48,8 +49,8 @@
 
         <!-- Subscription Settings -->
         <v-tab-item
-          reverse-transition="fade-transition"
-          transition="fade-transition">
+          :reverse-transition="false"
+          :transition="false">
           <v-card flat>
             <v-card-text>
               <subscription-settings

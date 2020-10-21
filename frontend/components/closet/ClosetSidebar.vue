@@ -162,7 +162,7 @@
 <script>
   // import { sortBy } from 'lodash';
   import currentUser from '~/mixins/currentUser';
-  import SidebarWrapper from '~/components/SidebarWrapper';
+  import SidebarWrapper from '~/components/SidebarWrapper.vue';
 
   export default {
     mixins: [currentUser],

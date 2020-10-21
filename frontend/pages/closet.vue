@@ -48,13 +48,13 @@
 </template>
 
 <script>
-  import ClosetDataTable from '~/components/closet/ClosetDataTable';
-  import ClosetSidebar from '~/components/closet/ClosetSidebar';
+  import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
+  import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
   import { convertToDollars, generateUUID } from '~/helpers/functions';
   import currentUser from '~/mixins/currentUser';
-  import CustomIcon from '~/components/icons/CustomIcon';
-  import SelectedPackGraph from '~/components/graphs/SelectedPackGraph';
-  import SharePackListModal from '~/components/modals/SharePackListModal';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
+  import SharePackListModal from '~/components/modals/SharePackListModal.vue';
 
   export default {
     name: 'Closet',

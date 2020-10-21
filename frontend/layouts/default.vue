@@ -3,7 +3,7 @@
     id="app"
     v-scroll="onScroll"
     light>
-    <navbar />
+    <navbar @handle-toggle-drawer="handleToggleDrawer" />
 
     <home-drawer v-model="drawer" />
 
@@ -79,7 +79,7 @@
     name: 'Default',
 
     data: () => ({
-      drawer: null,
+      drawer: false,
 
       offsetTop: 0
     }),
@@ -97,6 +97,9 @@
       ...mapActions({
         clearAlert: 'alert/clear'
       }),
+      handleToggleDrawer () {
+        this.drawer = !this.drawer;
+      },
       onScroll () {
         this.offsetTop = window.pageYOffset || document.documentElement.scrollTop;
       },

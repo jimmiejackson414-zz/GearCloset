@@ -90,7 +90,7 @@
 
     <v-app-bar-nav-icon
       class="hidden-md-and-up"
-      @click="drawer = !drawer" />
+      @click="handleToggleDrawer" />
   </v-app-bar>
 </template>
 
@@ -115,6 +115,12 @@
         { title: 'Closet', to: '/closet', badge: false, hasMenu: false }
       ]
     }),
+
+    methods: {
+      handleToggleDrawer () {
+        this.$emit('handle-toggle-drawer');
+      }
+    },
 
     components: {
       Avatar,
