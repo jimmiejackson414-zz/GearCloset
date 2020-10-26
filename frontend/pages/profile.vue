@@ -80,7 +80,6 @@
       return {
         confirm_password: '',
         iconColor: '',
-
         submitting: false,
         tabs: [
           { title: 'User Settings', icon: 'user-circle' },

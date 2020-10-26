@@ -17,127 +17,146 @@
           :ref="`sortableTable${index}`"
           calculate-widths
           class="items-table-container"
+          dense
           disable-pagination
           :headers="headers"
           hide-default-footer
           :items="category.items">
-          <template v-slot:body="{ items }">
-            <tbody :data-category="JSON.stringify(category.id)">
-              <tr
-                v-for="item in items"
-                :key="itemKey(item)"
-                class="sortableRow"
-                :data-items="JSON.stringify(item)">
-                <!-- Drag Handle -->
-                <td
-                  class="px-1"
-                  style="width: 0.1%">
-                  <custom-icon
-                    color="#4a4a4a"
-                    height="20px"
-                    name="grip-horizontal-line"
-                    width="20px" />
-                </td>
+          <!-- Drag Handle -->
+          <template v-slot:item.drag>
+            <custom-icon
+              color="#4a4a4a"
+              custom-class="drag"
+              height="20px"
+              name="grip-horizontal-line"
+              width="20px" />
+          </template>
 
-                <!-- Type Edit In Place -->
-                <td>
-                  <click-to-edit
-                    :unique-identifier="`type${item.id}`"
-                    :value="item.generic_type"
-                    @handle-update-item="updateItem($event, item, 'generic_type')" />
-                </td>
+          <!-- Generic Type Click To Edit -->
+          <template v-slot:item.generic_type="{ item }">
+            <click-to-edit
+              :style="{ fontSize: '0.875rem' }"
+              :unique-identifier="`type${item.id}`"
+              :value="item.generic_type"
+              @handle-update-item="updateItem($event, item, 'generic_type')" />
+          </template>
 
-                <!-- Name Edit In Place -->
-                <td>
-                  <click-to-edit
-                    :unique-identifier="`name${item.id}Ref`"
-                    :value="item.name"
-                    @handle-update-item="updateItem($event, item, 'name')" />
-                </td>
+          <!-- Name Click To Edit -->
+          <template v-slot:item.name="{ item }">
+            <click-to-edit
+              :style="{ fontSize: '0.875rem' }"
+              :unique-identifier="`name${item.id}Ref`"
+              :value="item.name"
+              @handle-update-item="updateItem($event, item, 'name')" />
+          </template>
 
-                <!-- TODO: Figure out how to handle weights -->
-                <!-- Weight Edit In Place -->
-                <td>
-                  <span class="weight-column">
-                    <click-to-edit
-                      :unique-identifier="`weight${item.id}Ref`"
-                      :value="String(item.weight)"
-                      @handle-update-item="updateItem($event, item, 'weight')" />
-                    <v-select
-                      dense
-                      hide-details
-                      :items="weightItems"
-                      value="oz"
-                      @change="handleUpdateUnits($event, item)" />
-                  </span>
-                </td>
+          <!-- Consumable Toggle -->
+          <template v-slot:item.consumable="{ item }">
+            <v-btn
+              :class="[{ active: item.consumable }, 'consumable-btn']"
+              icon
+              :ripple="false"
+              text
+              @click="updateBooleanItem(item, 'consumable')">
+              <custom-icon
+                height="20px"
+                name="utensils-alt"
+                width="20px" />
+            </v-btn>
+          </template>
 
-                <!-- Price Edit In Place -->
-                <td>
-                  <span class="price-column">
-                    <click-to-edit
-                      :mask="currencyMask"
-                      :unique-identifier="`price${item.id}Ref`"
-                      :value="String(item.price / 100)"
-                      @handle-update-item="updateItem($event, item, 'price')" />
-                  </span>
-                </td>
+          <!-- Worn Toggle -->
+          <template v-slot:item.worn="{ item }">
+            <v-btn
+              :class="[{ active: item.worn }, 'worn-btn']"
+              icon
+              :ripple="false"
+              text
+              @click="updateBooleanItem(item, 'worn')">
+              <custom-icon
+                height="20px"
+                name="layer-group"
+                width="20px" />
+            </v-btn>
+          </template>
 
-                <!-- Consumable Toggle -->
-                <td class="text-center">
-                  <v-btn
-                    :class="[{ active: item.consumable }, 'consumable-btn']"
-                    icon
-                    :ripple="false"
-                    text
-                    @click="updateBooleanItem(item, 'consumable')">
-                    <custom-icon
-                      height="20px"
-                      name="utensils-alt"
-                      width="20px" />
-                  </v-btn>
-                </td>
+          <!-- Weight Click To Edit and Dropdown -->
+          <template v-slot:item.weight="{ item }">
+            <span class="weight-column">
+              <click-to-edit
+                :style="{ fontSize: '0.875rem' }"
+                :unique-identifier="`weight${item.id}Ref`"
+                :value="String(item.weight)"
+                @handle-update-item="updateItem($event, item, 'weight')" />
+              <v-select
+                dense
+                hide-details
+                :items="weightItems"
+                value="oz"
+                @change="handleUpdateUnits($event, item)" />
+            </span>
+          </template>
 
-                <!-- Worn Toggle -->
-                <td class="text-center">
-                  <v-btn
-                    :class="[{ active: item.worn }, 'worn-btn']"
-                    icon
-                    :ripple="false"
-                    text
-                    @click="updateBooleanItem(item, 'worn')">
-                    <custom-icon
-                      height="20px"
-                      name="layer-group"
-                      width="20px" />
-                  </v-btn>
-                </td>
+          <!-- Price Click To Edit -->
+          <template v-slot:item.price="{ item }">
+            <click-to-edit
+              :custom-class="'price-column'"
+              :mask="currencyMask"
+              :style="{ fontSize: '0.875rem' }"
+              :unique-identifier="`price${item.id}Ref`"
+              :value="itemPrice(item)"
+              @handle-update-item="updateItem($event, item, 'price')" />
+          </template>
 
-                <!-- Remove Item -->
-                <td
-                  class="text-right pr-2"
-                  width="1%">
-                  <v-btn
-                    class="px-1 remove"
-                    color="error"
-                    icon
-                    :ripple="false"
-                    style="width: 1%"
-                    text
-                    @click="handleRemoveModalOpen(item)">
-                    <custom-icon
-                      height="20px"
-                      name="trash-alt"
-                      width="20px" />
-                  </v-btn>
-                </td>
-              </tr>
-            </tbody>
+          <!-- Quantity Click To Edit -->
+          <template v-slot:item.quantity="{ item }">
+            <click-to-edit
+              :custom-class="'quantity-column'"
+              :style="{ fontSize: '0.875rem' }"
+              type="number"
+              :unique-identifier="`quantity${item.id}Ref`"
+              :value="String(item.quantity)"
+              @handle-update-item="updateItem($event, item, 'quantity')" />
+          </template>
+
+          <!-- Totals -->
+          <template v-slot:body.append="{ items }">
+            <tr>
+              <td :colspan="1"></td>
+              <td :colspan="1">
+                <span class="font-weight-bold">Totals:</span>
+              </td>
+              <td :colspan="1"></td>
+              <td :colspan="1"></td>
+              <td :colspan="1"></td>
+
+              <!-- Weight Total -->
+              <td
+                class="text-center"
+                :colspan="1">
+                {{ weightTotal(items) }}
+              </td>
+
+              <!-- Price Total -->
+              <td
+                class="text-center"
+                :colspan="1">
+                {{ priceTotal(items) }}
+              </td>
+
+              <!-- Quantity Total -->
+              <td
+                class="text-center"
+                :colspan="1">
+                {{ quantityTotal(items) }}
+              </td>
+            </tr>
           </template>
         </v-data-table>
 
         <!-- Add New Item Button -->
         <v-btn
+          v-if="!friend"
           :ripple="false"
           text
           @click="handleAddNewItem">
@@ -153,7 +172,9 @@
       </v-list>
 
       <!-- Add New Category Button -->
-      <v-container class="new-category-container">
+      <v-container
+        v-if="!friend"
+        class="new-category-container">
         <v-row>
           <v-col class="col-12">
             <v-btn
@@ -180,26 +201,32 @@
 <script>
   import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   import ClickToEdit from '~/components/ClickToEdit.vue';
+  import { convertToDollars } from '~/helpers/functions';
 
   export default {
     props: {
       activePack: {
         type: Object,
         default: () => {}
+      },
+      friend: {
+        type: Boolean,
+        default: false
       }
     },
 
     data: () => ({
       currentItemKey: 0,
       headers: [
-        { text: '', align: 'left', sortable: false, value: 'drag', width: '1%' },
-        { text: 'Type', align: 'left', sortable: true, value: 'generic_type', width: '25%' },
-        { text: 'Name', align: 'left', sortable: true, value: 'name', width: '25%' },
-        { text: 'Weight', align: 'center', sortable: true, value: 'weight', width: '15%' },
-        { text: 'Price', align: 'center', sortable: true, value: 'price', width: '15%' },
-        { text: 'Consumable', align: 'center', sortable: true, value: 'consumable', width: '10%' },
-        { text: 'Worn', align: 'center', sortable: true, value: 'worn', width: '8%' },
-        { text: '', align: 'right', sortable: false, value: 'remove', width: '1%' }
+        { text: '', align: 'left', sortable: false, value: 'drag' },
+        { text: 'Type', align: 'left', sortable: true, value: 'generic_type' },
+        { text: 'Name', align: 'left', sortable: true, value: 'name' },
+        { text: 'Consumable', align: 'center', sortable: true, value: 'consumable' },
+        { text: 'Worn', align: 'center', sortable: true, value: 'worn' },
+        { text: 'Weight', align: 'center', sortable: true, value: 'weight' },
+        { text: 'Price', align: 'center', sortable: true, value: 'price' },
+        { text: 'Quantity', align: 'center', sortable: true, value: 'quantity' },
+        { text: '', align: 'right', sortable: false, value: 'remove' }
       ],
       itemKeys: new WeakMap(),
       primaryColor: '',
@@ -240,6 +267,16 @@
         if (!this.itemKeys.has(item)) { this.itemKeys.set(item, ++this.currentItemKey); }
         return this.itemKeys.get(item);
       },
+      itemPrice (item) {
+        return convertToDollars(item.price);
+      },
+      quantityTotal (items) {
+        return items.reduce((sum, elem) => sum + elem.quantity, 0);
+      },
+      priceTotal (items) {
+        const reduced = items.reduce((sum, elem) => sum + elem.price, 0);
+        return convertToDollars(reduced);
+      },
       updateItem (value, category, field) {
         if (value === String(category[field])) {
           // return if value hasn't changed
@@ -250,6 +287,9 @@
 
         console.log('updateItem');
         // await categoryService.update(category);
+      },
+      weightTotal (items) {
+        return `${items.reduce((sum, elem) => sum + elem.weight, 0)}oz`;
       }
     },
 
@@ -263,6 +303,19 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+  .price-column, .quantity-column {
+    input {
+      text-align: center;
+    }
+  }
 
+  .weight-column {
+    margin: 0 auto;
+    max-width: fit-content;
+
+    input {
+      max-width: 50px;
+    }
+  }
 </style>

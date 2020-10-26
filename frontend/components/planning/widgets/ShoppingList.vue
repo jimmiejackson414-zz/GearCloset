@@ -8,10 +8,13 @@
     </div>
     <v-data-table
       v-if="items.length"
-      class="items-table"
+      v-resize="onResize"
+      :class="['items-table', {mobile: isMobile}]"
+      disable-pagination
       :headers="headers"
       hide-default-footer
       :items="items"
+      :mobile-breakpoint="0"
       show-select>
       <template v-slot:header.data-table-select>
         <v-simple-checkbox
@@ -21,10 +24,10 @@
           @input="updateAllItems($event)" />
       </template>
       <template v-slot:header.title="{ header }">
-        <span class="font-italic font-weight-medium">{{ header.text }}</span>
+        <span class="font-weight-bold">{{ header.text }}</span>
       </template>
       <template v-slot:header.quantity="{ header }">
-        <span class="font-italic font-weight-medium">{{ header.text }}</span>
+        <span class="font-weight-bold">{{ header.text }}</span>
       </template>
       <template v-slot:body="{ items }">
         <tbody
@@ -33,9 +36,7 @@
           <tr
             v-for="(item, index) in items"
             :key="item.id">
-            <td
-              class="text-start"
-              width="25">
+            <td class="text-start">
               <v-simple-checkbox
                 color="primary"
                 :ripple="false"
@@ -82,9 +83,7 @@
                 @change="updateItem($event, item, 'quantity')"
                 @keyup.enter="updateItem($event, item, 'quantity')" />
             </td>
-            <td
-              class="text-end"
-              width="25">
+            <td class="text-end">
               <v-btn
                 class="deleteItem"
                 color="error"
@@ -118,10 +117,11 @@
       deleteColor: '',
       editableItem: null,
       headers: [
-        { text: 'Item', align: 'left', sortable: true, value: 'title' },
-        { text: 'Quantity', align: 'center', sortable: true, value: 'quantity' },
-        { text: '', align: 'end', sortable: false, value: 'actions' }
+        { text: 'Item', align: 'left', sortable: true, value: 'title', width: '60%' },
+        { text: 'Quantity', align: 'center', sortable: true, value: 'quantity', width: '40%' },
+        { text: '', align: 'end', sortable: false, value: 'actions', width: '1%' }
       ],
+      isMobile: false,
       items: [
         { id: 9, title: 'Smartwater Bottles', checked: 1, quantity: 2, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' },
         { id: 10, title: 'Beef Jerkey', checked: 0, quantity: 1, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' },
@@ -149,6 +149,9 @@
           updated_at: Date.now()
         });
       },
+      onResize () {
+        window.innerWidth < 769 ? this.isMobile = true : this.isMobile = false;
+      },
       removeItem (item, index) {
         this.items.splice(index, 1);
       },
@@ -174,6 +177,7 @@
 
     mounted () {
       this.deleteColor = $nuxt.$vuetify.theme.themes.light.secondary;
+      this.onResize();
     },
 
     components: {
@@ -183,12 +187,19 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import 'widget-styles';
+  @import '~/css/breakpoints';
   @import '~/css/list-transition';
 
   .v-data-table.items-table {
     background: transparent;
+
+    thead {
+      th.text-start, th.text-left, th.text-center {
+        padding: 0 8px;
+      }
+    }
 
     tbody {
       tr {
@@ -196,16 +207,41 @@
           border-bottom: none !important;
         }
 
-        td.text-end .delete-icon {
-          opacity: 0;
-          padding-left: 4px;
-          padding-right: 4px;
-          transition: opacity 0.25s ease-in-out;
+        td.text-start {
+          padding: 0 8px;
+        }
+
+        td.text-end {
+          padding: 0 8px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+
+          @include breakpoint(laptop) {
+            padding: 0 16px;
+          }
+
+          .deleteItem {
+            .delete-icon {
+              opacity: 1;
+
+              @include breakpoint(laptop) {
+                opacity: 0;
+                transition: opacity 0.25s ease-in-out;
+              }
+            }
+          }
         }
 
         &:hover {
-          td.text-end .delete-icon {
-            opacity: 1;
+          td.text-end {
+            .deleteItem {
+              .delete-icon {
+                @include breakpoint(laptop) {
+                  opacity: 1;
+                }
+              }
+            }
           }
         }
       }

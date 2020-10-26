@@ -8,11 +8,13 @@
     </div>
     <v-data-table
       v-if="todos.length"
-      class="todos-table"
+      v-resize="onResize"
+      :class="['todos-table', {mobile: isMobile}]"
       disable-pagination
       :headers="headers"
       hide-default-footer
       :items="todos"
+      :mobile-breakpoint="0"
       show-select>
       <template v-slot:header.data-table-select>
         <v-simple-checkbox
@@ -28,25 +30,20 @@
           <tr
             v-for="(item, index) in items"
             :key="item.id">
-            <td
-              class="text-start"
-              width="25">
+            <td class="text-start">
               <v-simple-checkbox
                 color="primary"
                 :ripple="false"
                 :value="Boolean(item.checked)"
                 @input="updateItem($event, item, 'checked')" />
             </td>
-            <td
-              class="text-start">
+            <td class="text-start pl-1">
               <click-to-edit
                 :unique-identifier="`title${item.id}Ref`"
                 :value="item.title"
                 @handle-update-item="updateItem($event, item, 'title')" />
             </td>
-            <td
-              class="text-end"
-              width="25">
+            <td class="text-end">
               <v-btn
                 class="deleteTodo"
                 color="error"
@@ -81,9 +78,10 @@
       deleteColor: '',
       editableItem: null,
       headers: [
-        { text: 'Item', value: 'title', align: 'left', sortable: true },
-        { text: '', value: 'delete', align: 'left', sortable: false }
+        { text: 'Item', value: 'title', align: 'left', sortable: true, width: '95%' },
+        { text: '', value: 'delete', align: 'left', sortable: false, width: '5%' }
       ],
+      isMobile: false,
       todos: [
         { id: 28, title: 'Book Car Rental', checked: 0, created_at: '2020-03-08 11:31:27', updated_at: '2020-03-08 11:31:27' },
         { id: 29, title: 'Call hostel', checked: 1, created_at: '2020-04-08 11:31:27', updated_at: '2020-04-08 11:31:27' }
@@ -107,6 +105,9 @@
           created_at: Date.now(),
           updated_at: Date.now()
         });
+      },
+      onResize () {
+        window.innerWidth < 769 ? this.isMobile = true : this.isMobile = false;
       },
       removeTodo (todo, index) {
         this.todos.splice(index, 1);
@@ -133,6 +134,7 @@
 
     mounted () {
       this.deleteColor = $nuxt.$vuetify.theme.themes.light.secondary;
+      this.onResize();
     },
 
     components: {
@@ -143,12 +145,19 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import 'widget-styles';
+  @import '~/css/breakpoints';
   @import '~/css/list-transition';
 
   .v-data-table.todos-table {
     background: transparent;
+
+    thead {
+      th.text-start {
+        padding: 0 8px;
+      }
+    }
 
     tbody {
       tr {
@@ -156,14 +165,41 @@
           border-bottom: none !important;
         }
 
-        td.text-end .delete-icon {
-          opacity: 0;
-          transition: opacity 0.25s ease-in-out;
+        td.text-start {
+          padding: 0 8px;
+        }
+
+        td.text-end {
+          padding: 0 8px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+
+          @include breakpoint(laptop) {
+            padding: 0 16px;
+          }
+
+          .deleteTodo {
+            .delete-icon {
+              opacity: 1;
+
+              @include breakpoint(laptop) {
+                opacity: 0;
+                transition: opacity 0.25s ease-in-out;
+              }
+            }
+          }
         }
 
         &:hover {
-          td.text-end .delete-icon {
-            opacity: 1;
+          td.text-end {
+            .deleteTodo {
+              .delete-icon {
+                @include breakpoint(laptop) {
+                  opacity: 1;
+                }
+              }
+            }
           }
         }
       }

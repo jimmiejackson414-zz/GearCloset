@@ -4,7 +4,7 @@
     :ref="uniqueIdentifier"
     v-focus
     v-mask="mask"
-    :class="[ 'click-to-edit', active ? 'active' : 'b-none' ]"
+    :class="[ 'click-to-edit', active ? 'active' : 'b-none', ...customClass ]"
     color="primary"
     dense
     hide-details
@@ -21,6 +21,10 @@
   /* eslint-disable vue/require-default-prop */
   export default {
     props: {
+      customClass: { // additional custom classes
+        type: String,
+        default: ''
+      },
       customStyle: { // if additional custom styles need to be added
         type: Object,
         default: () => {}

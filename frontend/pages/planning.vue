@@ -54,12 +54,12 @@
 </template>
 
 <script>
-  import Friends from '~/components/planning/widgets/Friends';
-  import HikeDetails from '~/components/planning/widgets/HikeDetails';
-  import SelectedPack from '~/components/planning/widgets/SelectedPack';
-  import ShoppingList from '~/components/planning/widgets/ShoppingList';
-  import TodoList from '~/components/planning/widgets/TodoList';
-  import TripDetails from '~/components/planning/widgets/TripDetails';
+  import Friends from '~/components/planning/widgets/Friends.vue';
+  import HikeDetails from '~/components/planning/widgets/HikeDetails.vue';
+  import SelectedPack from '~/components/planning/widgets/SelectedPack.vue';
+  import ShoppingList from '~/components/planning/widgets/ShoppingList.vue';
+  import TodoList from '~/components/planning/widgets/TodoList.vue';
+  import TripDetails from '~/components/planning/widgets/TripDetails.vue';
 
   export default {
     name: 'Planning',

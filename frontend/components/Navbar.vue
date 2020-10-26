@@ -1,12 +1,15 @@
 <template>
   <v-app-bar
     id="home-app-bar"
+    v-resize="onResize"
     app
     elevate-on-scroll
     fixed>
     <v-toolbar-title>
       <nuxt-link to="/dashboard">
-        <logo color="#4a4a4a" />
+        <logo
+          color="#4a4a4a"
+          :width="logoWidth" />
       </nuxt-link>
     </v-toolbar-title>
     <v-spacer />
@@ -95,9 +98,10 @@
 </template>
 
 <script>
-  import Avatar from '~/components/Avatar';
+  import Avatar from '~/components/Avatar.vue';
   import currentUser from '~/mixins/currentUser';
-  import CustomIcon from '~/components/icons/CustomIcon';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import Logo from '~/components/icons/Logo.vue';
 
   export default {
     mixins: [currentUser],
@@ -107,6 +111,7 @@
         { title: 'Profile', to: '/profile' },
         { title: 'Logout', to: '/login' }
       ],
+      logoWidth: '175px',
       navItems: [
         { title: 'Dashboard', to: '/dashboard', badge: false, hasMenu: false },
         { title: 'Explore', to: '/explore', badge: false, hasMenu: false },
@@ -119,12 +124,20 @@
     methods: {
       handleToggleDrawer () {
         this.$emit('handle-toggle-drawer');
+      },
+      onResize () {
+        window.innerWidth < 769 ? this.logoWidth = '175px' : this.logoWidth = '300px';
       }
+    },
+
+    mounted () {
+      this.onResize();
     },
 
     components: {
       Avatar,
-      CustomIcon
+      CustomIcon,
+      Logo
     }
   };
 </script>

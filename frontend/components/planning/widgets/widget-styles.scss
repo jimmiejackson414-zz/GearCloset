@@ -1,4 +1,5 @@
 @import '~/css/colors';
+@import '~/css/breakpoints';
 
 .widget-wrapper {
   align-content: start;
@@ -6,9 +7,13 @@
   border-radius: 4px;
   display: grid;
   height: 100%;
-  padding: 2rem;
+  padding: 1rem;
   position: relative;
   width: 100%;
+
+  @include breakpoint(tablet) {
+    padding: 2rem;
+  }
 
   .widget-header {
     align-items: start;

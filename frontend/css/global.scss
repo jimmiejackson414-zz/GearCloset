@@ -68,6 +68,10 @@ span, div, input {
   cursor: pointer;
 }
 
+.drag {
+  cursor: grab;
+}
+
 .nav-link, .v-btn {
   &:hover::before {
     opacity: 0 !important;

@@ -13,9 +13,94 @@ export const state = () => ({
       first_name: 'Michael',
       last_name: 'Scott',
       password: 'password',
-      subscription_level: 'monthly member',
+      subscription_level: 'annual member',
       system: 'Imperial',
-      trail_name: 'Boss'
+      trail_name: 'Boss',
+      packs: [
+        {
+          id: 2,
+          name: 'JMT',
+          active: 1,
+          created_at: '2020-03-07 20:44:51',
+          updated_at: '2020-03-07 20:44:51',
+          categories: [
+            {
+              id: 10,
+              name: 'The Big 3',
+              pack_id: 1,
+              created_at: '2020-03-07 20:45:51',
+              updated_at: '2020-03-07 20:45:51',
+              items: [
+                {
+                  id: 1,
+                  name: 'Zpacks Arc Haul',
+                  weight: 24.4,
+                  weight_type: 'oz',
+                  price: 22000,
+                  generic_type: 'Backpack',
+                  category_id: 1,
+                  consumable: 1,
+                  worn: 1,
+                  quantity: 1,
+                  created_at: '2020-03-07 20:45:51',
+                  updated_at: '2020-03-07 20:45:51'
+                },
+                {
+                  id: 2,
+                  name: 'REI Magma 15 Long',
+                  weight: 24.4,
+                  weight_type: 'oz',
+                  price: 22000,
+                  generic_type: 'Sleeping Bag',
+                  category_id: 1,
+                  consumable: 0,
+                  worn: 0,
+                  quantity: 1,
+                  created_at: '2020-03-07 20:45:51',
+                  updated_at: '2020-03-07 20:45:51'
+                }
+              ]
+            },
+            {
+              id: 2,
+              name: 'Kitchen',
+              pack_id: 1,
+              created_at: '2020-03-07 20:45:51',
+              updated_at: '2020-03-07 20:45:51',
+              items: [
+                {
+                  id: 3,
+                  name: 'MSR Pocket Rocket 2',
+                  weight: 24.4,
+                  weight_type: 'oz',
+                  price: 22000,
+                  generic_type: 'Stove',
+                  category_id: 2,
+                  consumable: 1,
+                  worn: 0,
+                  quantity: 1,
+                  created_at: '2020-03-07 20:45:51',
+                  updated_at: '2020-03-07 20:45:51'
+                },
+                {
+                  id: 4,
+                  name: 'Toaks 700mL Pot',
+                  weight: 24.4,
+                  weight_type: 'oz',
+                  price: 22000,
+                  generic_type: 'Titanium Pot',
+                  category_id: 2,
+                  consumable: 1,
+                  worn: 1,
+                  quantity: 1,
+                  created_at: '2020-03-07 20:45:51',
+                  updated_at: '2020-03-07 20:45:51'
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       id: 3,
@@ -127,6 +212,7 @@ export const state = () => ({
               id: 1,
               name: 'Zpacks Arc Haul',
               weight: 24.4,
+              weight_type: 'oz',
               price: 22000,
               generic_type: 'Backpack',
               category_id: 1,
@@ -140,6 +226,7 @@ export const state = () => ({
               id: 2,
               name: 'REI Magma 15 Long',
               weight: 24.4,
+              weight_type: 'oz',
               price: 22000,
               generic_type: 'Sleeping Bag',
               category_id: 1,
@@ -162,6 +249,7 @@ export const state = () => ({
               id: 3,
               name: 'MSR Pocket Rocket 2',
               weight: 24.4,
+              weight_type: 'oz',
               price: 22000,
               generic_type: 'Stove',
               category_id: 2,
@@ -175,6 +263,7 @@ export const state = () => ({
               id: 4,
               name: 'Toaks 700mL Pot',
               weight: 24.4,
+              weight_type: 'oz',
               price: 22000,
               generic_type: 'Titanium Pot',
               category_id: 2,

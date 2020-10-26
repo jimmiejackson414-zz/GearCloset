@@ -36,7 +36,8 @@
         </v-row>
 
         <!-- Data Tables -->
-        <closet-data-table :active-pack="activePack" />
+        <closet-data-table
+          :active-pack="activePack" />
 
         <!-- Share Pack List Modal -->
         <share-pack-list-modal

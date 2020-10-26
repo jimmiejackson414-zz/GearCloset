@@ -11,7 +11,9 @@
     <div
       v-if="activePack"
       class="selected-pack-wrapper">
-      <selected-pack-graph :height="300" />
+      <selected-pack-graph
+        v-resize="onResize"
+        :height="chartHeight" />
     </div>
     <p v-else>
       You haven't added a pack to this trip yet! Click on the dots in the top right to get started.
@@ -30,6 +32,7 @@
     mixins: [currentUser],
 
     data: () => ({
+      chartHeight: 300,
       ellipsisItems: [{ title: 'Change Selected Pack', event: 'change-pack' }],
       modalOpen: false
     }),
@@ -41,6 +44,16 @@
       packName () {
         return this.activePack && this.activePack.name;
       }
+    },
+
+    methods: {
+      onResize () {
+        window.innerWidth < 769 ? this.chartHeight = 200 : this.chartHeight = 300;
+      }
+    },
+
+    mounted () {
+      this.onResize();
     },
 
     components: {
