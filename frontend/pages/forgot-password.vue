@@ -123,6 +123,12 @@
       LoginDescriptionBox,
       LogoIcon,
       SlideFadeTransition
+    },
+
+    head () {
+      return {
+        title: 'Forgot Password'
+      };
     }
   };
 </script>

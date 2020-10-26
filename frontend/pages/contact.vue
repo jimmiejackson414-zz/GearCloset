@@ -209,6 +209,12 @@
       LoginDescriptionBox,
       LogoIcon,
       SlideFadeTransition
+    },
+
+    head () {
+      return {
+        title: 'Contact'
+      };
     }
   };
 </script>

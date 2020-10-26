@@ -71,6 +71,12 @@
       ShoppingList,
       TodoList,
       TripDetails
+    },
+
+    head () {
+      return {
+        title: 'Planning'
+      };
     }
   };
 </script>

@@ -155,6 +155,12 @@
       LoginDescriptionBox,
       LogoIcon,
       SlideFadeTransition
+    },
+
+    head () {
+      return {
+        title: 'Login'
+      };
     }
   };
 </script>

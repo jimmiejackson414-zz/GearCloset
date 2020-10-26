@@ -113,9 +113,9 @@
       ],
       logoWidth: '175px',
       navItems: [
-        { title: 'Dashboard', to: '/dashboard', badge: false, hasMenu: false },
-        { title: 'Explore', to: '/explore', badge: false, hasMenu: false },
-        { title: 'Forum', to: '/forum', badge: false, hasMenu: false },
+        // { title: 'Dashboard', to: '/dashboard', badge: false, hasMenu: false },
+        // { title: 'Explore', to: '/explore', badge: false, hasMenu: false },
+        // { title: 'Forum', to: '/forum', badge: false, hasMenu: false },
         { title: 'Planning', to: '/planning', badge: false, hasMenu: false },
         { title: 'Closet', to: '/closet', badge: false, hasMenu: false }
       ]

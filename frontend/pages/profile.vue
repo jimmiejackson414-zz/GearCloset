@@ -109,6 +109,12 @@
       CustomIcon,
       SubscriptionSettings,
       UserSettings
+    },
+
+    head () {
+      return {
+        title: 'Profile'
+      };
     }
   };
 </script>

@@ -105,6 +105,12 @@
       CustomIcon,
       SelectedPackGraph,
       SharePackListModal
+    },
+
+    head () {
+      return {
+        title: 'Closet'
+      };
     }
   };
 </script>

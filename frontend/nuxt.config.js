@@ -1,6 +1,6 @@
 export default {
   head: {
-    titleTemplate: '%s - GearCloset',
+    titleTemplate: '%s | GearCloset',
     title: 'GearCloset',
     meta: [
       { charset: 'utf-8' },

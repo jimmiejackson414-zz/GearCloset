@@ -171,6 +171,12 @@
 
     components: {
       MembershipChip
+    },
+
+    head () {
+      return {
+        title: `${this.$options.filters.prettyName(this.friend)} | Pack List`
+      };
     }
   };
 </script>

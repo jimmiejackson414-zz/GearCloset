@@ -221,6 +221,12 @@
       LoginDescriptionBox,
       LogoIcon,
       SlideFadeTransition
+    },
+
+    head () {
+      return {
+        title: 'Register'
+      };
     }
   };
 </script>
