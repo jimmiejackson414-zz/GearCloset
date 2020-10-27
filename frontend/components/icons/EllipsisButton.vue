@@ -28,7 +28,7 @@
           :key="index"
           dense
           @click="handleEvent(item)">
-          <span class="body-1 font-weight-medium">{{ item.title }}</span>
+          <span :class="['body-1', 'font-weight-medium', ...item.customClass]">{{ item.title }}</span>
         </v-list-item>
       </v-list-item-group>
     </v-list>

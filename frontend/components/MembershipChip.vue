@@ -2,7 +2,7 @@
   <!-- Member Chip -->
   <v-chip
     v-if="isMember"
-    class="ma-2"
+    :class="[ ...customClass ]"
     color="success"
     :ripple="false"
     text-color="white">
@@ -18,7 +18,7 @@
   <!-- Free Chip -->
   <v-chip
     v-else
-    class="ma-2"
+    :class="{...customClass}"
     color="secondary"
     outlined
     text-color="secondary">
@@ -36,6 +36,10 @@
 
   export default {
     props: {
+      customClass: {
+        type: String,
+        default: ''
+      },
       user: {
         type: Object,
         default: () => {},

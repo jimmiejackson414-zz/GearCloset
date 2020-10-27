@@ -57,6 +57,9 @@
           <div class="text-body-1">
             {{ currentUser.country }}
           </div>
+          <membership-chip
+            :custom-class="'mt-2'"
+            :user="currentUser" />
         </div>
       </v-row>
       <v-row>
@@ -217,6 +220,7 @@
 
 <script>
   import { countries } from '~/helpers';
+  import MembershipChip from '~/components/MembershipChip';
 
   export default {
     props: {
@@ -262,11 +266,17 @@
     mounted () {
       this.iconColor = $nuxt.$vuetify.theme.themes.light['dark-grey'];
       this.primaryColor = $nuxt.$vuetify.theme.themes.light.primary;
+    },
+
+    components: {
+      MembershipChip
     }
   };
 </script>
 
 <style lang="scss" scoped>
+  @import '~/css/breakpoints';
+
   .avatar-container {
     margin-right: 3rem;
 
@@ -294,6 +304,14 @@
           opacity: 1;
         }
       }
+    }
+  }
+
+  .names-container {
+    text-align: center;
+
+    @include breakpoint(laptop) {
+      text-align: left;
     }
   }
 </style>

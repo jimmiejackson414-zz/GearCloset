@@ -1,12 +1,79 @@
 <template>
-  <div class="page-wrapper mt-10">
+  <div
+    v-resize="onResize"
+    class="page-wrapper mt-10">
     <div class="container text-left">
       <div class="page-title text-h4">
         Profile
       </div>
+
+      <!-- Custom Mobile Tabs -->
+      <div
+        v-if="isMobile"
+        class="mobile-tabs">
+        <v-select
+          class="px-8 mb-4"
+          dense
+          hide-details
+          item-text="title"
+          item-value="value"
+          :items="tabs"
+          label="Settings"
+          outlined
+          value="user"
+          @change="handleTabSwitch($event)" />
+
+        <!-- Account Settings -->
+        <div
+          v-if="mobileTab === 'account'"
+          class="user-settings">
+          <slide-fade-transition>
+            <v-card flat>
+              <v-card-text>
+                <account-settings
+                  :current-user="currentUser"
+                  @handle-submit="handleSubmit" />
+              </v-card-text>
+            </v-card>
+          </slide-fade-transition>
+        </div>
+
+        <!-- Subscription Settings -->
+        <div
+          v-else-if="mobileTab === 'subscription'"
+          class="user-settings">
+          <slide-fade-transition>
+            <v-card flat>
+              <v-card-text>
+                <subscription-settings
+                  :current-user="currentUser"
+                  @handle-submit="handleSubmit" />
+              </v-card-text>
+            </v-card>
+          </slide-fade-transition>
+        </div>
+
+        <!-- User Settings -->
+        <div
+          v-else
+          class="user-settings">
+          <slide-fade-transition>
+            <v-card flat>
+              <v-card-text class="py-0">
+                <user-settings
+                  :current-user="currentUser"
+                  @handle-submit="handleSubmit" />
+              </v-card-text>
+            </v-card>
+          </slide-fade-transition>
+        </div>
+      </div>
+
+      <!-- Desktop Tabs -->
       <v-tabs
+        v-else
         class="mt-4"
-        vertical>
+        :vertical="!isMobile">
         <v-tab
           v-for="(tab, i) in tabs"
           :key="i"
@@ -65,11 +132,12 @@
 </template>
 
 <script>
-  import AccountSettings from '~/components/profile/forms/AccountSettings';
+  import AccountSettings from '~/components/profile/forms/AccountSettings.vue';
   import currentUser from '~/mixins/currentUser';
-  import CustomIcon from '~/components/icons/CustomIcon';
-  import SubscriptionSettings from '~/components/profile/forms/SubscriptionSettings';
-  import UserSettings from '~/components/profile/forms/UserSettings';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import SlideFadeTransition from '~/components/transitions/SlideFadeTransition.vue';
+  import SubscriptionSettings from '~/components/profile/forms/SubscriptionSettings.vue';
+  import UserSettings from '~/components/profile/forms/UserSettings.vue';
 
   export default {
     name: 'Profile',
@@ -80,11 +148,13 @@
       return {
         confirm_password: '',
         iconColor: '',
+        isMobile: true,
         submitting: false,
+        mobileTab: 'user',
         tabs: [
-          { title: 'User Settings', icon: 'user-circle' },
-          { title: 'Account Settings', icon: 'setting' },
-          { title: 'Subscription', icon: 'file-landscape-alt' }
+          { title: 'User Settings', icon: 'user-circle', value: 'user' },
+          { title: 'Account Settings', icon: 'setting', value: 'account' },
+          { title: 'Subscription', icon: 'file-landscape-alt', value: 'subscription' }
         ]
       };
     },
@@ -97,16 +167,25 @@
         setTimeout(() => {
           this.submitting = false;
         }, 3000);
+      },
+      handleTabSwitch (e) {
+        console.log('e: ', e);
+        this.mobileTab = e;
+      },
+      onResize () {
+        window.innerWidth < 769 ? this.isMobile = true : this.isMobile = false;
       }
     },
 
     mounted () {
       this.iconColor = $nuxt.$vuetify.theme.themes.light['dark-grey'];
+      this.onResize();
     },
 
     components: {
       AccountSettings,
       CustomIcon,
+      SlideFadeTransition,
       SubscriptionSettings,
       UserSettings
     },
@@ -120,5 +199,15 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '~/css/breakpoints.scss';
 
+  .page-title {
+    margin-bottom: 1rem;
+    text-align: center;
+
+    @include breakpoint(laptop) {
+      margin-bottom: 0;
+      text-align: left;
+    }
+  }
 </style>

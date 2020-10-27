@@ -3,8 +3,25 @@
     class="planning-container"
     grid-list-lg
     mx-auto>
-    <div class="page-title text-h4 text-center mt-8 mb-4">
-      Planning
+    <div class="header">
+      <div class="page-title text-h4 text-center mt-8 mb-4">
+        Planning
+      </div>
+      <div class="actions d-flex mt-8 mb-4">
+        <v-select
+          dense
+          hide-details
+          :items="items"
+          label="Pick a Trip"
+          outlined
+          value="Foo"
+          @change="handleUpdateList($event)" />
+        <ellipsis-button
+          class="ellipsis"
+          :items="listItems"
+          @create-trip="handleCreateTrip"
+          @delete-trip="handleDeleteTrip" />
+      </div>
     </div>
     <v-layout
       row
@@ -50,10 +67,17 @@
         <shopping-list />
       </v-flex>
     </v-layout>
+
+    <delete-confirm-modal
+      v-model="deleteTripModalOpen"
+      item="trip" />
   </v-container>
 </template>
 
 <script>
+  import currentUser from '~/mixins/currentUser';
+  import DeleteConfirmModal from '~/components/modals/DeleteConfirmModal.vue';
+  import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import Friends from '~/components/planning/widgets/Friends.vue';
   import HikeDetails from '~/components/planning/widgets/HikeDetails.vue';
   import SelectedPack from '~/components/planning/widgets/SelectedPack.vue';
@@ -64,7 +88,41 @@
   export default {
     name: 'Planning',
 
+    mixins: [currentUser],
+
+    data: () => ({
+      deleteTripModalOpen: false,
+      items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+      listItems: [
+        { title: 'Create trip', event: 'create-trip' },
+        { title: 'Delete trip', event: 'delete-trip', customClass: 'secondary--text' }
+      ]
+    }),
+
+    computed: {
+      // TODO: Need to create db table to tie all of a trip's elements
+      // together (selectedPack, friends, details, etc) and return here
+      // trips () {
+      //   return this.currentUser.trips;
+      // }
+    },
+
+    methods: {
+      handleCreateTrip () {
+        console.log('createTrip');
+      },
+      handleDeleteTrip () {
+        console.log('deleteTrip');
+        this.deleteTripModalOpen = true;
+      },
+      handleUpdateList (e) {
+        console.log('handleUpdateList', e);
+      }
+    },
+
     components: {
+      DeleteConfirmModal,
+      EllipsisButton,
       Friends,
       HikeDetails,
       SelectedPack,
@@ -82,5 +140,18 @@
 </script>
 
 <style lang="scss" scoped>
+  .header {
+    display: grid;
+    grid-column-gap: 5px;
+    grid-template-columns: 1fr auto 1fr;
+    justify-items: center;
 
+    .page-title {
+      grid-column-start: 2;
+    }
+
+    .actions {
+      margin-left: auto;
+    }
+  }
 </style>

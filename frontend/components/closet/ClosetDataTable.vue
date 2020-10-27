@@ -124,7 +124,7 @@
             <tr>
               <td :colspan="1"></td>
               <td :colspan="1">
-                <span class="font-weight-bold">Totals:</span>
+                <span class="font-weight-bold px-3">Totals:</span>
               </td>
               <td :colspan="1"></td>
               <td :colspan="1"></td>
@@ -146,7 +146,7 @@
 
               <!-- Quantity Total -->
               <td
-                class="text-center"
+                class="text-center pr-4"
                 :colspan="1">
                 {{ quantityTotal(items) }}
               </td>
@@ -312,7 +312,7 @@
 
   .weight-column {
     margin: 0 auto;
-    max-width: fit-content;
+    max-width: max-content;
 
     input {
       max-width: 50px;
