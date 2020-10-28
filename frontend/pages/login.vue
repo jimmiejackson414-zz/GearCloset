@@ -166,9 +166,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/colors';
-  @import '~/css/breakpoints';
-
   .login {
     display: flex;
     flex-flow: row wrap;

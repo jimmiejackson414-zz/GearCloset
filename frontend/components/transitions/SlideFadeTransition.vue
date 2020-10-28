@@ -12,13 +12,11 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/colors';
-
   .slide-fade-enter-active,
   .slide-fade-leave-active {
     opacity: 1;
     transform: translateX(0);
-    transition: all 0.5s $cubic-bezier;
+    transition: all 0.5s $cubicBezier;
   }
 
   .slide-fade-enter,

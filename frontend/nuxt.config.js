@@ -20,8 +20,7 @@ export default {
   },
 
   css: [
-    '~/css/global.scss',
-    '~/css/breakpoints.scss'
+    '~/css/global.scss'
   ],
 
   plugins: [
@@ -35,7 +34,8 @@ export default {
 
   buildModules: [
     '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/style-resources'
   ],
 
   modules: [
@@ -72,6 +72,10 @@ export default {
 
   },
 
+  styleResources: {
+    scss: ['./css/_colors.scss', '~/css/_breakpoints.scss']
+  },
+
   vuetify: {
     customVariables: ['~/css/variables.scss'],
     treeShake: true,
@@ -84,27 +88,37 @@ export default {
       },
       themes: {
         light: {
-          primary: '#4a90e2', // water
-          secondary: '#b7410e', // rust
-          accent: '#e1ad01', // mustard
-          info: '#759194', // stone
-          warning: '#f05e23', // orange
-          error: '#950714', // cranberry
-          success: '#228b22', // forrest
-          background: '#fff',
-          'dark-grey': '#4a4a4a',
-          'light-grey': '#aaa'
-        },
-        dark: {
-          primary: '#4a90e2', // water
-          secondary: '#b7410e', // rust
-          accent: '#e1ad01', // mustard
-          info: '#759194', // stone
-          warning: '#f05e23', // orange
-          error: '#950714', // cranberry
-          success: '#228b22', // forrest
-          background: '#252525',
-          'dark-grey': '#4a4a4a'
+          grey10: '#21242a',
+          grey9: '#343a40',
+          grey8: '#494f57',
+          grey7: '#868e95',
+          grey6: '#adb5bd',
+          grey5: '#cfd4da',
+          grey4: '#dee2e6',
+          grey3: '#e9ecee',
+          grey2: '#f0f3f5',
+          grey1: '#f8f9fa',
+
+          primary: '#2368a2',
+          primaryDark: '#1a4971',
+          primaryLight: '#aad3f5',
+
+          secondary: '#1a645d',
+          secondaryLight: '#6ed7d3',
+
+          accent: '#74d99f',
+          accentDark: '#4cce83',
+          accentDarkest: '#32b56a',
+
+          warning: '#fae19f',
+          warningDark: '#8c6c20',
+          warningDarkest: '#5b4712',
+          warningLight: '#fae19f',
+          warningLightest: '#fffcf4',
+
+          info: '#adb5bd',
+          error: '#db3030',
+          success: '#227d47'
         }
       }
     }

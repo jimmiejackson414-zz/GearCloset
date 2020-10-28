@@ -182,8 +182,6 @@
 </script>
 
 <style lang="scss">
-  @import '~/css/colors';
-
   .header {
     align-items: center;
     display: flex;
@@ -210,12 +208,12 @@
           }
 
           &.worn {
-            background-color: $success;
+            background-color: $accentDarkest;
             border-radius: 50%;
           }
 
           &.consumable {
-            background-color: $warning;
+            background-color: darken($secondaryLight, 10%);
             border-radius: 50%;
           }
         }

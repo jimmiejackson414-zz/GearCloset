@@ -275,8 +275,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/breakpoints';
-
   .avatar-container {
     margin-bottom: 1rem;
     margin-right: 0;

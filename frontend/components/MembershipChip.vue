@@ -1,33 +1,16 @@
 <template>
-  <!-- Member Chip -->
   <v-chip
-    v-if="isMember"
     :class="[ ...customClass ]"
-    color="success"
-    :ripple="false"
-    text-color="white">
+    :color="chip.color"
+    :outlined="chip.outlined"
+    :ripple="false">
     <custom-icon
       custom-class="mr-2"
-      fill="#fff"
+      :fill="chip.icon"
       height="20px"
       name="favorite"
       width="20px" />
-    Member
-  </v-chip>
-
-  <!-- Free Chip -->
-  <v-chip
-    v-else
-    :class="{...customClass}"
-    color="secondary"
-    outlined
-    text-color="secondary">
-    <custom-icon
-      :fill="fillColor"
-      height="20px"
-      name="favorite"
-      width="20px" />
-    Free
+    <span class="font-weight-bold">{{ chip.copy }}</span>
   </v-chip>
 </template>
 
@@ -47,18 +30,50 @@
       }
     },
 
+    data: () => ({
+      chip: {
+        color: '',
+        copy: '',
+        icon: '',
+        outlined: false,
+        text: ''
+      }
+    }),
+
     computed: {
-      chipCopy () {
-        return this.isMember ? 'Member' : 'Free';
-      },
-      chipOutline () {
-        return !this.isMember;
-      },
-      fillColor () {
-        return this.isMember ? '#fff' : this.$nuxt.$vuetify.theme.themes.light.secondary;
-      },
       isMember () {
-        return this.user.subscription_level === 'annual member' || this.user.subscription_level === 'monthly member';
+        return this.user.subscription_level === 'annual' || this.user.subscription_level === 'monthly';
+      }
+    },
+
+    methods: {
+      handleChipDefinition () {
+        const theme = this.$nuxt.$vuetify.theme.themes.light;
+        if (this.isMember) {
+          this.chip.color = 'success';
+          this.chip.copy = 'Member';
+          this.chip.text = '#fff';
+          this.chip.icon = '#fff';
+          this.chip.outlined = false;
+        } else {
+          this.chip.color = 'accentDark';
+          this.chip.copy = 'Free';
+          this.chip.text = theme.accentDark;
+          this.chip.icon = theme.accentDark;
+          this.chip.outlined = true;
+        }
+      }
+    },
+
+    created () {
+      this.handleChipDefinition();
+    },
+
+    watch: {
+      isMember (val, oldVal) {
+        if (val !== oldVal) {
+          this.handleChipDefinition();
+        }
       }
     },
 

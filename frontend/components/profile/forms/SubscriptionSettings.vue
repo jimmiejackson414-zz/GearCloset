@@ -52,12 +52,12 @@
                 Downgrade Option:
               </div>
               <div
-                v-if="shouldShow(card, 'member', 'annual member')"
+                v-if="shouldShow(card, 'member', 'annual')"
                 class="overline text-center">
                 Upgrade Options:
               </div>
               <div
-                v-if="Object.keys(card)[0] === 'member' && currentUser.subscription_level.toLowerCase() === 'annual member'"
+                v-if="Object.keys(card)[0] === 'member' && currentUser.subscription_level.toLowerCase() === 'annual'"
                 class="overline text-center">
                 Downgrade Option:
               </div>
@@ -72,7 +72,7 @@
                 Free
               </v-btn>
               <v-btn
-                v-if="shouldShow(card, 'member', 'monthly member')"
+                v-if="shouldShow(card, 'member', 'monthly')"
                 color="primary"
                 depressed
                 :ripple="false"
@@ -80,7 +80,7 @@
                 Monthly ($0.99/mo)
               </v-btn>
               <v-btn
-                v-if="shouldShow(card, 'member', 'annual member')"
+                v-if="shouldShow(card, 'member', 'annual')"
                 color="success"
                 depressed
                 :ripple="false"
@@ -146,8 +146,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/colors';
-
   .subscription-container {
     h6 {
       text-transform: capitalize;

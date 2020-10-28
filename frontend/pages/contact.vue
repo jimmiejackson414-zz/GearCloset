@@ -220,9 +220,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/colors';
-  @import '~/css/breakpoints';
-
   .contact {
     display: flex;
     flex-flow: row wrap;

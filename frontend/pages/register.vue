@@ -232,9 +232,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/colors';
-  @import '~/css/breakpoints';
-
   .register {
     display: flex;
     flex-flow: row wrap;

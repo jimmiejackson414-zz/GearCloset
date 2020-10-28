@@ -93,9 +93,6 @@
 </script>
 
 <style lang="scss">
-  @import '~/css/colors';
-  @import '~/css/breakpoints';
-
   .container.container--fluid {
     height: 100% !important;
     padding: 0 !important;
@@ -139,11 +136,11 @@
     padding: 2rem;
 
     span {
-      color: $dark-grey;
+      color: $grey8;
       font-weight: 500;
 
       @include breakpoint(mobile) {
-        color: $dark-grey;
+        color: $grey8;
       }
     }
   }

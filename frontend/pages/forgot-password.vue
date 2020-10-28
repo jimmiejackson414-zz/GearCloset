@@ -134,9 +134,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/colors';
-  @import '~/css/breakpoints';
-
   .forgot-password {
     display: flex;
     flex-flow: row wrap;

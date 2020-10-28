@@ -83,7 +83,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/colors';
   @import 'widget-styles';
 
   .friends-wrapper {
@@ -93,7 +92,7 @@
 
     .friend-btn {
       .v-avatar {
-        transition: transform 0.15s $cubic-bezier;
+        transition: transform 0.15s $cubicBezier;
       }
       &:hover {
         box-shadow: 0 15px 20px 0 rgba(42, 51, 83, 0.12), 0 5px 15px rgba(0, 0, 0, 0.06) !important;

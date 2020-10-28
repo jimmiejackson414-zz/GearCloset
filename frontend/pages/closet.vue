@@ -116,8 +116,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/colors';
-
   .closet-page-styles {
     display: flex;
     height : 100%;
@@ -159,14 +157,12 @@
 </style>
 
 <style lang="scss">
-  @import '~/css/colors';
-
   .closet-page-styles {
     .content-container {
       .items-list-styles {
         .categories-container {
           &.last {
-            border-bottom: 1px solid $light-grey;
+            border-bottom: 1px solid $grey5;
             padding-bottom: 24px;
           }
         }
@@ -210,14 +206,14 @@
               .v-btn {
                 &.active {
                   &.worn-btn {
-                    background-color: $success;
+                    background-color: $accentDarkest;
                     svg {
                       fill: white;
                     }
                   }
 
                   &.consumable-btn {
-                    background-color: $warning;
+                    background-color: darken($secondaryLight, 10%);
 
                     svg {
                       fill: white;
@@ -234,7 +230,7 @@
 
               &:last-child svg, &:first-child svg {
                 opacity   : 0;
-                transition: 0.2s opacity $cubic-bezier;
+                transition: 0.2s opacity $cubicBezier;
               }
             }
 
@@ -246,7 +242,7 @@
           }
 
           .new-category-container {
-            border-top: 1px solid $light-grey;
+            border-top: 1px solid $grey5;
           }
         }
       }

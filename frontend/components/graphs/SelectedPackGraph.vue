@@ -82,7 +82,7 @@
             // palette: 'palette1' // default theme
             monochrome: {
               enabled: true,
-              // color: $nuxt.$vuetify.theme.themes.light.primary, // wtf is happening?!?
+              color: '',
               shadeTo: 'light',
               shadeIntensity: 0.65
             }
@@ -93,6 +93,10 @@
         },
         series: [44, 55, 41, 17]
       };
+    },
+
+    created () {
+      this.chartOptions.theme.monochrome.color = this.$nuxt.$vuetify.theme.themes.light.accentDarkest;
     }
   };
 </script>

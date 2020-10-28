@@ -92,8 +92,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/colors';
-
   .v-card {
     border-top: 5px solid $primary;
   }

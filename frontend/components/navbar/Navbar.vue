@@ -93,9 +93,6 @@
 </script>
 
 <style lang="scss">
-  @import '~/css/breakpoints';
-  @import '~/css/colors';
-
   #home-app-bar {
     &.theme--light {
       background-color: #fff;
@@ -192,14 +189,12 @@
   }
 
   .bounce {
-    animation: bouncein 500ms $cubic-bezier both;
+    animation: bouncein 500ms $cubicBezier both;
   }
 
 </style>
 
 <style lang="scss">
-  @import '~/css/colors';
-
   #home-app-bar {
     &.theme--light {
       background-color: #fff;

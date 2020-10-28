@@ -13,7 +13,7 @@ export const state = () => ({
       first_name: 'Michael',
       last_name: 'Scott',
       password: 'password',
-      subscription_level: 'annual member',
+      subscription_level: 'free',
       system: 'Imperial',
       trail_name: 'Boss',
       packs: [
@@ -134,7 +134,7 @@ export const state = () => ({
       first_name: 'Jim',
       last_name: 'Halpert',
       password: 'password',
-      subscription_level: 'annual member',
+      subscription_level: 'annual',
       system: 'Imperial',
       trail_name: 'Big Tuna'
     },
@@ -146,7 +146,7 @@ export const state = () => ({
       first_name: 'Holly',
       last_name: 'Flax',
       password: 'password',
-      subscription_level: 'annual member',
+      subscription_level: 'annual',
       system: 'Imperial',
       trail_name: 'HR'
     },
@@ -158,7 +158,7 @@ export const state = () => ({
       first_name: 'Oscar',
       last_name: 'Nunez',
       password: 'password',
-      subscription_level: 'annual member',
+      subscription_level: 'annual',
       system: 'Imperial',
       trail_name: 'Know It All'
     },
@@ -170,7 +170,7 @@ export const state = () => ({
       first_name: 'Andy',
       last_name: 'Bernard',
       password: 'password',
-      subscription_level: 'annual member',
+      subscription_level: 'annual',
       system: 'Imperial',
       trail_name: 'Temper Tantrum'
     },
@@ -182,7 +182,7 @@ export const state = () => ({
       first_name: 'Toby',
       last_name: 'Flenderson',
       password: 'password',
-      subscription_level: 'annual member',
+      subscription_level: 'annual',
       system: 'Imperial',
       trail_name: 'Bleh'
     }
@@ -279,7 +279,7 @@ export const state = () => ({
     }
   ],
   password: 'password',
-  subscription_level: 'annual member',
+  subscription_level: 'annual',
   system: 'Imperial',
   trail_name: 'Walk and Eat'
 });

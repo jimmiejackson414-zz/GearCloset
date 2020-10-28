@@ -304,6 +304,7 @@
 </script>
 
 <style lang="scss">
+
   .price-column, .quantity-column {
     input {
       text-align: center;

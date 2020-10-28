@@ -9,16 +9,13 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/colors';
-
   .sidebar-wrapper-styles {
     display   : inline-block;
     width     : 100%;
     max-width : 300px;
     height    : 100%;
-    background: $lighter-grey;
+    background: $primary;
     overflow-y: auto;
-    padding   : 2rem;
     z-index   : 2;
 
     h3,

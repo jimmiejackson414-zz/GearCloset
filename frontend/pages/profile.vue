@@ -197,8 +197,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/breakpoints.scss';
-
   .page-title {
     margin-bottom: 1rem;
     text-align: center;

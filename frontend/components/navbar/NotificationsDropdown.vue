@@ -5,7 +5,7 @@
     <v-badge
       bottom
       class="notification-badge"
-      color="secondary"
+      color="error"
       :content="currentUser.notifications.length || 0"
       dot
       left

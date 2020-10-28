@@ -27,7 +27,7 @@
     <div class="wrapper">
       <div class="header">
         <div class="header-divider">
-          <h6 class="text-h6">
+          <h6 class="text-h6 white--text">
             My Packs
           </h6>
           <v-tooltip
@@ -38,7 +38,7 @@
                 v-bind="attrs"
                 v-on="on">
                 <custom-icon
-                  fill="rgba(0, 0, 0, 0.25)"
+                  :fill="primaryLight"
                   height="20px"
                   name="info-circle"
                   width="20px" />
@@ -52,24 +52,26 @@
           :ripple="false"
           @click="createPackModalOpen = true">
           <custom-icon
-            :fill="darkGrey"
+            fill="#fff"
             height="35px"
             name="plus-circle"
             width="35px" />
         </v-btn>
       </div>
-      <v-list v-if="packs.length">
+      <v-list
+        v-if="packs.length"
+        class="packs-list mb-4">
         <transition-group
           mode="in-out"
           name="fade">
           <v-list-item
             v-for="pack in filteredPacks()"
             :key="pack.id"
-            :class="{ selected: activeSelection(pack.id) }"
+            :class="[{ selected: activeSelection(pack.id) }, 'pr-8 pl-12' ]"
             :ripple="false"
             @click="handleSelectedPack(pack)">
             <v-list-item-content>
-              <p class="mb-0 font-weight-medium">
+              <p class="mb-0 font-weight-medium white--text">
                 {{ pack.name }}
               </p>
             </v-list-item-content>
@@ -87,7 +89,7 @@
       class="wrapper">
       <div class="header">
         <div class="header-divider">
-          <h6 class="text-h6">
+          <h6 class="text-h6 white--text">
             My Gear
           </h6>
           <v-tooltip
@@ -98,7 +100,7 @@
                 v-bind="attrs"
                 v-on="on">
                 <custom-icon
-                  fill="rgba(0, 0, 0, 0.25)"
+                  :fill="primaryLight"
                   height="20px"
                   name="info-circle"
                   width="20px" />
@@ -112,7 +114,7 @@
           :ripple="false"
           @click="createItemModalOpen = true">
           <custom-icon
-            :fill="darkGrey"
+            fill="#fff"
             height="35px"
             name="plus-circle"
             width="35px" />
@@ -126,9 +128,11 @@
           :ripple="false"
           :value="true">
           <template v-slot:activator>
-            <v-list-item-title class="font-weight-medium mb-0">
-              {{ category.name }}
-            </v-list-item-title>
+            <v-list-item-content class="pl-8 pr-8">
+              <v-list-item-title class="font-weight-medium mb-0 white--text">
+                {{ category.name }}
+              </v-list-item-title>
+            </v-list-item-content>
           </template>
           <transition-group
             mode="in-out"
@@ -136,16 +140,16 @@
             <v-list-item
               v-for="item in filteredItems(category)"
               :key="item.id"
-              class="pointer"
+              class="pointer px-10"
               dense
               :ripple="false">
               <custom-icon
                 custom-class="gear-handle mr-2"
-                fill="#4a4a4a"
+                :fill="primaryLight"
                 height="20px"
                 name="grip-horizontal-line"
                 width="20px" />
-              <p class="mb-0">
+              <p class="mb-0 white--text">
                 {{ item.name }}
               </p>
             </v-list-item>
@@ -170,7 +174,7 @@
     data: () => ({
       createItemModalOpen: false,
       createPackModalOpen: false,
-      darkGrey: '',
+      primaryLight: '',
       searchQuery: ''
     }),
 
@@ -219,7 +223,7 @@
     },
 
     mounted () {
-      this.darkGrey = $nuxt.$vuetify.theme.themes.light.primary;
+      this.primaryLight = $nuxt.$vuetify.theme.themes.light.primaryLight;
     },
 
     components: {
@@ -229,29 +233,24 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/colors';
-
   .search-container {
-    border-bottom: 1px solid $dark-grey;
+    border-bottom: 1px solid $grey8;
+    margin: 2rem 2rem 1rem;
 
     .wrapper {
-      border-bottom: 1px solid $dark-grey;
+      border-bottom: 1px solid $grey8;
       padding-bottom: 1rem;
     }
   }
 </style>
 
 <style lang="scss">
-  @import '~/css/colors';
-
   .search-container {
-    padding-bottom: 1rem;
-
     .v-input {
       &.v-input--is-focused {
         .v-input__slot {
           input {
-            color: $dark-grey !important;
+            color: $grey8 !important;
           }
         }
       }
@@ -263,6 +262,7 @@
       align-items    : center;
       display        : flex;
       justify-content: space-between;
+      margin: 0 2rem;
 
       .header-divider {
         align-items    : center;
@@ -281,16 +281,25 @@
       box-shadow: none;
       padding: 0;
 
+      &.packs-list {
+        .v-list-item {
+          &.selected {
+            background-color: $primaryDark;
+          }
+        }
+      }
+
       .v-list-group {
         .v-list-group__header {
           .v-list-item__title {
-            color: $dark-grey;
             font-size: 1rem;
             font-weight: 600;
           }
           .v-list-item__icon {
+            margin-right: 20px;
+
             i {
-              color: $dark-grey !important;
+              color: $primaryLight;
             }
           }
         }
@@ -299,7 +308,7 @@
           .v-list-item {
             .gear-handle {
               opacity: 0;
-              transition: 0.2s opacity $cubic-bezier;
+              transition: 0.2s opacity $cubicBezier;
             }
 
             &:hover {

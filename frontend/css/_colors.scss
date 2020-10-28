@@ -1,0 +1,34 @@
+// colors
+$grey10: #21242a;
+$grey9: #343a40;
+$grey8: #494f57;
+$grey7: #868e95;
+$grey6: #adb5bd;
+$grey5: #cfd4da;
+$grey4: #dee2e6;
+$grey3: #e9ecee;
+$grey2: #f0f3f5;
+$grey1: #f8f9fa;
+
+$primary: #2368a2;
+$primaryDark: #1a4971;
+$primaryLight: #aad3f5;
+
+$secondary: #1a645d;
+$secondaryLight: #6ed7d3;
+
+$accent: #74d99f;
+$accentDark: darken($accent, 10%);
+$accentDarkest: darken($accent, 20%);
+
+$warning: #fae19f;
+$warningDark:#8c6c20;
+$warningDarkest: #5b4712;
+$warningLight:#fae19f;
+$warningLightest: #fffcf4;
+
+$info: $grey6;
+$error: #db3030;
+$success: #227d47;
+
+$cubicBezier: cubic-bezier(0.57, 0.06, 0, 1.06);

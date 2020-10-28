@@ -189,7 +189,6 @@
 
 <style lang="scss">
   @import 'widget-styles';
-  @import '~/css/breakpoints';
   @import '~/css/list-transition';
 
   .v-data-table.items-table {
