@@ -76,7 +76,6 @@
 
 <script>
   import currentUser from '~/mixins/currentUser';
-  import DeleteConfirmModal from '~/components/modals/DeleteConfirmModal.vue';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import Friends from '~/components/planning/widgets/Friends.vue';
   import HikeDetails from '~/components/planning/widgets/HikeDetails.vue';
@@ -121,7 +120,7 @@
     },
 
     components: {
-      DeleteConfirmModal,
+      DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal.vue'),
       EllipsisButton,
       Friends,
       HikeDetails,

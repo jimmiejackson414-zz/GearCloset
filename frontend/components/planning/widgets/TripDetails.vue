@@ -61,10 +61,8 @@
 
 <script>
   import CustomIcon from '~/components/icons/CustomIcon';
-  import DeleteConfirmModal from '~/components/modals/DeleteConfirmModal';
   import EllipsisButton from '~/components/icons/EllipsisButton';
   import PlusButton from '~/components/icons/PlusButton';
-  import TripDetailsModal from '~/components/modals/TripDetailsModal';
 
   export default {
     data: () => ({
@@ -110,10 +108,10 @@
 
     components: {
       CustomIcon,
-      DeleteConfirmModal,
+      DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
       EllipsisButton,
       PlusButton,
-      TripDetailsModal
+      TripDetailsModal: () => import(/* webpackPrefetch: true */ '~/components/modals/TripDetailsModal')
     }
   };
 </script>

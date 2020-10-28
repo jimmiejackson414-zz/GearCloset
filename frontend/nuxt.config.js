@@ -116,8 +116,10 @@ export default {
           warningLight: '#fae19f',
           warningLightest: '#fffcf4',
 
-          info: '#adb5bd',
           error: '#db3030',
+          errorDark: '#ce2424',
+
+          info: '#adb5bd',
           success: '#227d47'
         }
       }

@@ -55,9 +55,7 @@
 </template>
 
 <script>
-  import DeleteConfirmModal from '~/components/modals/DeleteConfirmModal.vue';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
-  import HikeDetailsModal from '~/components/modals/HikeDetailsModal.vue';
   import PlusButton from '~/components/icons/PlusButton.vue';
 
   export default {
@@ -103,9 +101,9 @@
     },
 
     components: {
-      DeleteConfirmModal,
+      DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal.vue'),
       EllipsisButton,
-      HikeDetailsModal,
+      HikeDetailsModal: () => import(/* webpackPrefetch: true */'~/components/modals/HikeDetailsModal.vue'),
       PlusButton
     }
   };

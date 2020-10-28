@@ -53,7 +53,6 @@
 
 <script>
   import currentUser from '~/mixins/currentUser';
-  import InviteFriendModal from '~/components/modals/InviteFriendModal';
   import PlusButton from '~/components/icons/PlusButton';
 
   export default {
@@ -76,7 +75,7 @@
     },
 
     components: {
-      InviteFriendModal,
+      InviteFriendModal: () => import(/* webpackPrefetch: true */ '~/components/modals/InviteFriendModal'),
       PlusButton
     }
   };

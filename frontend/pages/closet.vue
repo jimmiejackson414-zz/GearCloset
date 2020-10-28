@@ -55,7 +55,6 @@
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
-  import SharePackListModal from '~/components/modals/SharePackListModal.vue';
 
   export default {
     name: 'Closet',
@@ -104,7 +103,7 @@
       ClosetSidebar,
       CustomIcon,
       SelectedPackGraph,
-      SharePackListModal
+      SharePackListModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SharePackListModal.vue')
     },
 
     head () {

@@ -98,7 +98,6 @@
 
 <script>
   import dayjs from 'dayjs';
-  import UpdateSubscriptionModal from '~/components/modals/UpdateSubscriptionModal';
 
   export default {
     props: {
@@ -140,7 +139,7 @@
     },
 
     components: {
-      UpdateSubscriptionModal
+      UpdateSubscriptionModal: () => import(/* webpackPrefetch: true */ '~/components/modals/UpdateSubscriptionModal')
     }
   };
 </script>

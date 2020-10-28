@@ -8,7 +8,7 @@
       <v-card-text>Are you sure you want to delete this {{ item }}?</v-card-text>
       <v-card-actions class="justify-space-between">
         <v-btn
-          class="light-grey--text"
+          class="grey7--text"
           :disabled="submitting"
           :ripple="false"
           text
@@ -16,7 +16,7 @@
           Cancel
         </v-btn>
         <v-btn
-          color="secondary"
+          color="errorDark"
           depressed
           :disabled="submitting"
           :ripple="false"
@@ -91,6 +91,12 @@
 
 <style lang="scss" scoped>
   .v-card {
-    border-top: 5px solid $secondary;
+    border-top: 5px solid $errorDark;
+
+    .v-card__actions {
+      .v-btn {
+        color: #fff;
+      }
+    }
   }
 </style>

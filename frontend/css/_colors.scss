@@ -28,7 +28,9 @@ $warningLight:#fae19f;
 $warningLightest: #fffcf4;
 
 $info: $grey6;
-$error: #db3030;
 $success: #227d47;
+
+$error: #db3030;
+$errorDark: darken($error, 5%);
 
 $cubicBezier: cubic-bezier(0.57, 0.06, 0, 1.06);

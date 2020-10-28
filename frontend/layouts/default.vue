@@ -124,7 +124,7 @@
 
     components: {
       CustomIcon,
-      HomeDrawer: () => import('~/components/Drawer'),
+      HomeDrawer: () => import(/* webpackPrefetch: true */ '~/components/Drawer'),
       Navbar
     }
   };

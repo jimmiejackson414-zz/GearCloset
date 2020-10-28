@@ -25,7 +25,6 @@
 <script>
   import EllipsisButton from '~/components/icons/EllipsisButton';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph';
-  import SelectPackModal from '~/components/modals/SelectPackModal';
   import currentUser from '~/mixins/currentUser';
 
   export default {
@@ -59,7 +58,7 @@
     components: {
       EllipsisButton,
       SelectedPackGraph,
-      SelectPackModal
+      SelectPackModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SelectPackModal')
     }
   };
 </script>
