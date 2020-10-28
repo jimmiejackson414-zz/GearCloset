@@ -52,28 +52,7 @@ $text-field-outlined-fieldset-border: 1px solid currentColor !default;
 $btn-font-weight: 600;
 $btn-hover-opacity: 0.1 !default;
 
-$list-item-dense-title-font-size: 1.4rem;
-$list-item-title-font-size: 1.4rem;
-
 $menu-content-elevation: 2;
 
 $ripple-animation-transition-in: none;
 $ripple-animation-transition-out: none;
-
-@import '~vuetify/src/styles/styles.sass';
-
-// $material-light: map-merge(
-//   $material-light,
-//   (
-//     'background':
-//       var(--v-background-base, map-get($material-light, 'background')) !important
-//   )
-// );
-
-// $material-dark: map-merge(
-//   $material-dark,
-//   (
-//     'background':
-//       var(--v-background-base, map-get($material-dark, 'background')) !important
-//   )
-// );

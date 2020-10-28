@@ -33,62 +33,10 @@
           <span>{{ item.title }}</span>
         </v-tab>
       </v-tabs>
-      <v-badge
-        bottom
-        class="notification-badge"
-        color="secondary"
-        :content="currentUser.notifications.length || 0"
-        dot
-        left
-        overlap
-        :value="currentUser.notifications.length || 0">
-        <v-btn
-          depressed
-          icon>
-          <custom-icon
-            color="#4a4a4a"
-            height="20px"
-            name="bell"
-            width="20px" />
-        </v-btn>
-      </v-badge>
-      <v-menu
-        bottom
-        class="avatar-menu"
-        close-on-click
-        nudge-bottom
-        offset-y
-        open-on-focus
-        open-on-hover
-        transition="slide-y-transition">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            icon
-            v-on="on">
-            <avatar
-              class="ml-5"
-              :initials="currentUser | initials"
-              :size="40" />
-          </v-btn>
-        </template>
-        <v-list
-          dense
-          elevation="1">
-          <v-list-item-group>
-            <v-list-item
-              v-for="(item, i) in dropdownItems"
-              :key="i"
-              dense>
-              <nuxt-link
-                class="body-1 font-weight-medium"
-                :to="item.to">
-                {{ item.title }}
-              </nuxt-link>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-menu>
+
+      <notifications-dropdown :current-user="currentUser" />
+
+      <avatar-dropdown :current-user="currentUser" />
     </div>
 
     <v-app-bar-nav-icon
@@ -98,19 +46,15 @@
 </template>
 
 <script>
-  import Avatar from '~/components/Avatar.vue';
+  import AvatarDropdown from './AvatarDropdown.vue';
+  import NotificationsDropdown from './NotificationsDropdown.vue';
   import currentUser from '~/mixins/currentUser';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import Logo from '~/components/icons/Logo.vue';
 
   export default {
     mixins: [currentUser],
 
     data: () => ({
-      dropdownItems: [
-        { title: 'Profile', to: '/profile' },
-        { title: 'Logout', to: '/login' }
-      ],
       logoWidth: '175px',
       navItems: [
         // { title: 'Dashboard', to: '/dashboard', badge: false, hasMenu: false },
@@ -120,6 +64,12 @@
         { title: 'Closet', to: '/closet', badge: false, hasMenu: false }
       ]
     }),
+
+    computed: {
+      maxWidth () {
+        return this.$vuetify.breakpoint.mobile ? 296 : 320;
+      }
+    },
 
     methods: {
       handleToggleDrawer () {
@@ -135,9 +85,9 @@
     },
 
     components: {
-      Avatar,
-      CustomIcon,
-      Logo
+      AvatarDropdown,
+      Logo,
+      NotificationsDropdown
     }
   };
 </script>

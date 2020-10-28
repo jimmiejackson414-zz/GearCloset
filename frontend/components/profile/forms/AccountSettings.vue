@@ -3,6 +3,13 @@
     ref="accountSettingsForm"
     v-model="valid">
     <v-container class="pt-0">
+      <v-row>
+        <v-col class="col-12 pb-0">
+          <h6 class="text-h6 text-left">
+            Password
+          </h6>
+        </v-col>
+      </v-row>
       <v-row class="justify-center align-center">
         <!-- Password -->
         <v-col class="col-12 col-md-6">

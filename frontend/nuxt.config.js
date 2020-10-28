@@ -41,7 +41,8 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/dayjs'
   ],
 
   pwa: {
@@ -63,6 +64,13 @@ export default {
   },
 
   axios: {},
+
+  dayjs: {
+    locales: ['en'],
+    defaultLocale: 'en',
+    plugins: []
+
+  },
 
   vuetify: {
     customVariables: ['~/css/variables.scss'],

@@ -189,9 +189,9 @@ export const state = () => ({
   ],
   last_name: 'Timkins',
   notifications: [
-    { message: 'This is a notification', date: '04/24/2020' },
-    { message: 'This is a notification', date: '04/28/2020' },
-    { message: 'This is a notification', date: '05/01/2020' }
+    { id: 1, message: 'This is a notification', date: '2020-03-07 20:45:51' },
+    { id: 2, message: 'This is a notification', date: '2020-04-14 20:45:51' },
+    { id: 3, message: 'This is a notification', date: '2020-05-21 20:45:51' }
   ],
   packs: [
     {

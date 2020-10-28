@@ -278,7 +278,13 @@
   @import '~/css/breakpoints';
 
   .avatar-container {
-    margin-right: 3rem;
+    margin-bottom: 1rem;
+    margin-right: 0;
+
+    @include breakpoint(laptop) {
+      margin-bottom: 0;
+      margin-right: 3rem;
+    }
 
     .v-avatar {
       .white--text {

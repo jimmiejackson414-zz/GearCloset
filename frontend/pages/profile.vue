@@ -24,10 +24,11 @@
           @change="handleTabSwitch($event)" />
 
         <!-- Account Settings -->
-        <div
-          v-if="mobileTab === 'account'"
-          class="user-settings">
-          <slide-fade-transition>
+        <slide-fade-transition>
+          <div
+            v-if="mobileTab === 'account'"
+            key="1"
+            class="user-settings">
             <v-card flat>
               <v-card-text>
                 <account-settings
@@ -35,14 +36,13 @@
                   @handle-submit="handleSubmit" />
               </v-card-text>
             </v-card>
-          </slide-fade-transition>
-        </div>
+          </div>
 
-        <!-- Subscription Settings -->
-        <div
-          v-else-if="mobileTab === 'subscription'"
-          class="user-settings">
-          <slide-fade-transition>
+          <!-- Subscription Settings -->
+          <div
+            v-if="mobileTab === 'subscription'"
+            key="2"
+            class="user-settings">
             <v-card flat>
               <v-card-text>
                 <subscription-settings
@@ -50,14 +50,13 @@
                   @handle-submit="handleSubmit" />
               </v-card-text>
             </v-card>
-          </slide-fade-transition>
-        </div>
+          </div>
 
-        <!-- User Settings -->
-        <div
-          v-else
-          class="user-settings">
-          <slide-fade-transition>
+          <!-- User Settings -->
+          <div
+            v-if="mobileTab === 'user'"
+            key="3"
+            class="user-settings">
             <v-card flat>
               <v-card-text class="py-0">
                 <user-settings
@@ -65,8 +64,8 @@
                   @handle-submit="handleSubmit" />
               </v-card-text>
             </v-card>
-          </slide-fade-transition>
-        </div>
+          </div>
+        </slide-fade-transition>
       </div>
 
       <!-- Desktop Tabs -->
@@ -169,7 +168,6 @@
         }, 3000);
       },
       handleTabSwitch (e) {
-        console.log('e: ', e);
         this.mobileTab = e;
       },
       onResize () {

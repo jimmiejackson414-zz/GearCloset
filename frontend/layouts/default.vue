@@ -73,7 +73,7 @@
 <script>
   import { mapState, mapActions } from 'vuex';
   import CustomIcon from '~/components/icons/CustomIcon';
-  import Navbar from '~/components/Navbar';
+  import Navbar from '~/components/navbar/Navbar';
 
   export default {
     name: 'Default',
