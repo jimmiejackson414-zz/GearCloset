@@ -22,10 +22,22 @@
     <v-list
       dense
       elevation="1">
+      <v-list-item>
+        <div class="text-right">
+          <v-list-item-title class="title justify-end">
+            {{ currentUser | prettyName }}
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            {{ currentUser.email }}
+          </v-list-item-subtitle>
+        </div>
+      </v-list-item>
+      <v-divider></v-divider>
       <v-list-item-group>
         <v-list-item
           v-for="(item, i) in dropdownItems"
           :key="i"
+          class="justify-end"
           dense>
           <nuxt-link
             class="body-1 font-weight-medium"

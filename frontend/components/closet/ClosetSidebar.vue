@@ -38,7 +38,7 @@
                 v-bind="attrs"
                 v-on="on">
                 <custom-icon
-                  :fill="primaryLight"
+                  :fill="secondaryLight"
                   height="20px"
                   name="info-circle"
                   width="20px" />
@@ -100,7 +100,7 @@
                 v-bind="attrs"
                 v-on="on">
                 <custom-icon
-                  :fill="primaryLight"
+                  :fill="secondaryLight"
                   height="20px"
                   name="info-circle"
                   width="20px" />
@@ -145,7 +145,7 @@
               :ripple="false">
               <custom-icon
                 custom-class="gear-handle mr-2"
-                :fill="primaryLight"
+                :fill="secondaryLight"
                 height="20px"
                 name="grip-horizontal-line"
                 width="20px" />
@@ -174,8 +174,8 @@
     data: () => ({
       createItemModalOpen: false,
       createPackModalOpen: false,
-      primaryLight: '',
-      searchQuery: ''
+      searchQuery: '',
+      secondaryLight: ''
     }),
 
     computed: {
@@ -223,7 +223,7 @@
     },
 
     mounted () {
-      this.primaryLight = $nuxt.$vuetify.theme.themes.light.primaryLight;
+      this.secondaryLight = $nuxt.$vuetify.theme.themes.light.secondaryLight;
     },
 
     components: {
@@ -299,7 +299,7 @@
             margin-right: 20px;
 
             i {
-              color: $primaryLight;
+              color: $secondaryLight;
             }
           }
         }
