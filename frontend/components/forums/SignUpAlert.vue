@@ -14,7 +14,13 @@
         width="30px" />
     </template>
     <p class="body-text-1 mb-0 grey8--text">
-      Posting in these forums requires a membership. Sign up today to enjoy all the benefits of joining Gear Closet!
+      Posting in these forums requires a membership.
+      <span
+        class="primary--text font-weight-bold pointer"
+        @click.stop="handleOpenUpgradeForm">
+        &nbsp;Sign up today
+      </span>
+      &nbsp;to enjoy all the benefits of joining Gear Closet!
     </p>
   </v-alert>
 </template>
@@ -32,6 +38,12 @@
     computed: {
       showJoin () {
         return this.currentUser && this.currentUser.subscription_level === 'free';
+      }
+    },
+
+    methods: {
+      handleOpenUpgradeForm () {
+        this.$emit('handle-open-upgrade-form');
       }
     },
 

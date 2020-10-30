@@ -22,7 +22,7 @@
               </nuxt-link>
               prior to posting.</span>
           </div>
-          <sign-up-alert />
+          <sign-up-alert @handle-open-upgrade-form="handleOpenUpgradeForm" />
         </div>
       </v-col>
     </v-row>
@@ -37,6 +37,9 @@
           :category="category" />
       </v-col>
     </v-row>
+
+    <!-- Full Screen Upgrade -->
+    <full-screen-upgrade v-model="upgradeModalOpen" />
   </v-container>
 </template>
 
@@ -46,14 +49,25 @@
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
+    data: () => ({
+      upgradeModalOpen: false
+    }),
+
     computed: {
       ...mapState({
         categories: state => state.forums.categories
       })
     },
 
+    methods: {
+      handleOpenUpgradeForm () {
+        this.upgradeModalOpen = true;
+      }
+    },
+
     components: {
       CategoryBox,
+      FullScreenUpgrade: () => import(/* webpackPrefetch: true */'~/components/modals/FullScreenUpgrade'),
       SignUpAlert
     },
 
