@@ -16,14 +16,14 @@
       :items="todos"
       :mobile-breakpoint="0"
       show-select>
-      <template v-slot:header.data-table-select>
+      <template #header.data-table-select>
         <v-simple-checkbox
           color="primary"
           :ripple="false"
           :value="allSelected"
           @input="updateAllItems($event)" />
       </template>
-      <template v-slot:body="{ items }">
+      <template #body="{ items }">
         <tbody
           is="transition-group"
           name="list">

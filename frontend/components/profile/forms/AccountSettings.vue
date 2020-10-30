@@ -24,7 +24,7 @@
             :rules="passwordRules"
             type="password"
             validate-on-blur>
-            <template v-slot:prepend-inner>
+            <template #prepend-inner>
               <custom-icon
                 fill="#0077be"
                 height="20px"
@@ -47,7 +47,7 @@
             :rules="passwordsMatchRules"
             type="password"
             validate-on-blur>
-            <template v-slot:prepend-inner>
+            <template #prepend-inner>
               <custom-icon
                 fill="#0077be"
                 height="20px"

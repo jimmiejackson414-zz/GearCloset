@@ -13,7 +13,7 @@
         placeholder="Search"
         solo-inverted
         @click:append="clearSearch">
-        <template v-slot:prepend-inner>
+        <template #prepend-inner>
           <custom-icon
             fill="#4a4a4a"
             height="20px"
@@ -33,7 +33,7 @@
           <v-tooltip
             max-width="300"
             right>
-            <template v-slot:activator="{ on, attrs }">
+            <template #activator="{ on, attrs }">
               <span
                 v-bind="attrs"
                 v-on="on">
@@ -95,7 +95,7 @@
           <v-tooltip
             max-width="300"
             right>
-            <template v-slot:activator="{ on, attrs }">
+            <template #activator="{ on, attrs }">
               <span
                 v-bind="attrs"
                 v-on="on">
@@ -127,7 +127,7 @@
           eager
           :ripple="false"
           :value="true">
-          <template v-slot:activator>
+          <template #activator>
             <v-list-item-content class="pl-8 pr-8">
               <v-list-item-title class="font-weight-medium mb-0 white--text">
                 {{ category.name }}

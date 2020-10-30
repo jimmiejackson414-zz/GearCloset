@@ -16,20 +16,20 @@
       :items="items"
       :mobile-breakpoint="0"
       show-select>
-      <template v-slot:header.data-table-select>
+      <template #header.data-table-select>
         <v-simple-checkbox
           color="primary"
           :ripple="false"
           :value="allSelected"
           @input="updateAllItems($event)" />
       </template>
-      <template v-slot:header.title="{ header }">
+      <template #header.title="{ header }">
         <span class="font-weight-bold">{{ header.text }}</span>
       </template>
-      <template v-slot:header.quantity="{ header }">
+      <template #header.quantity="{ header }">
         <span class="font-weight-bold">{{ header.text }}</span>
       </template>
-      <template v-slot:body="{ items }">
+      <template #body="{ items }">
         <tbody
           is="transition-group"
           name="list">

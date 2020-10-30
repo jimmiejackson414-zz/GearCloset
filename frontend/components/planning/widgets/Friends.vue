@@ -2,7 +2,7 @@
   <div class="widget-wrapper">
     <div class="widget-header">
       <div class="text-h6">
-        Friends <span class="text-caption light-grey--text ml-3 mb-1">({{ friendCount }})</span>
+        Friends <span class="text-caption grey7--text ml-3 mb-1">({{ friendCount }})</span>
       </div>
       <plus-button @handle-click="handleInviteFriend" />
     </div>
@@ -15,7 +15,7 @@
         color="dark-grey"
         nudge-top
         top>
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
             class="friend-btn"

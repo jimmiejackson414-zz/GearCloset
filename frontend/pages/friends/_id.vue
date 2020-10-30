@@ -59,13 +59,13 @@
             :headers="headers"
             hide-default-footer
             :items="category.items">
-            <template v-slot:item.weight="{item}">
+            <template #item.weight="{item}">
               {{ item.weight }}{{ item.weight_type }}
             </template>
-            <template v-slot:item.price="{ item }">
+            <template #item.price="{ item }">
               {{ itemPrice(item) }}
             </template>
-            <template v-slot:item.consumable="{ item }">
+            <template #item.consumable="{ item }">
               <div :class="['boolean-wrapper consumable', {active: item.consumable}]">
                 <custom-icon
                   height="20px"
@@ -73,7 +73,7 @@
                   width="20px" />
               </div>
             </template>
-            <template v-slot:item.worn="{ item }">
+            <template #item.worn="{ item }">
               <div :class="['boolean-wrapper worn', {active: item.worn}]">
                 <custom-icon
                   height="20px"
@@ -81,7 +81,7 @@
                   width="20px" />
               </div>
             </template>
-            <template v-slot:body.append="{ items }">
+            <template #body.append="{ items }">
               <tr>
                 <td :colspan="1">
                   <span class="font-weight-bold">Totals:</span>

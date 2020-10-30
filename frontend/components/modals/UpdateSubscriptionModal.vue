@@ -14,7 +14,7 @@
       </v-card-text>
       <v-card-actions class="justify-space-between">
         <v-btn
-          class="light-grey--text"
+          class="grey7--text"
           :disabled="submitting"
           :ripple="false"
           text

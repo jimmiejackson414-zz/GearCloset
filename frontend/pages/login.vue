@@ -33,7 +33,7 @@
               :rules="emailRules"
               validate-on-blur
               @keyup.enter="handleSubmit">
-              <template v-slot:prepend-inner>
+              <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
                   height="20px"
@@ -55,7 +55,7 @@
               type="password"
               validate-on-blur
               @keyup.enter="handleSubmit">
-              <template v-slot:prepend-inner>
+              <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
                   height="20px"

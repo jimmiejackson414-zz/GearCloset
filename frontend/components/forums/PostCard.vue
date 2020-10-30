@@ -30,7 +30,31 @@
               </p>
             </div>
           </div>
-          <div class="right d-flex flex-column align-center">
+          <div class="right">
+            <ellipsis-button
+              class="ellipsis"
+              :items="ellipsisItems"
+              @delete-post="deletePost"
+              @edit-post="editPost"
+              @report-post="reportPost" />
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col
+          class="favorite-wrapper"
+          cols="1">
+          <favorite-item />
+        </v-col>
+        <v-col
+          class="post-text"
+          cols="9">
+          <p class="body-text-1 mb-0">
+            {{ post.text }}
+          </p>
+        </v-col>
+        <v-col cols="2">
+          <div class="right d-flex flex-column align-end">
             <p class="body-text-2 mb-0 grey6--text text-right">
               {{ postDate }}
             </p>
@@ -40,15 +64,6 @@
           </div>
         </v-col>
       </v-row>
-      <v-row>
-        <v-col
-          class="post-text"
-          cols="12">
-          <p class="body-text-1 mb-0">
-            {{ post.text }}
-          </p>
-        </v-col>
-      </v-row>
     </v-card>
     <v-divider v-if="!isOriginalPost" />
   </div>
@@ -56,8 +71,13 @@
 
 <script>
   import * as dayjs from 'dayjs';
+  import currentUser from '~/mixins/currentUser';
+  import EllipsisButton from '~/components/icons/EllipsisButton';
+  import FavoriteItem from '~/components/icons/FavoriteItem';
 
   export default {
+    mixins: [currentUser],
+
     props: {
       author: {
         type: Object,
@@ -73,13 +93,44 @@
       }
     },
 
+    data () {
+      return {
+        postLocal: this.post
+      };
+    },
+
     computed: {
+      ellipsisItems () {
+        const items = [];
+
+        if (this.post.author !== this.currentUser.id) { items.push({ title: 'Report', event: 'report-post' }); }
+        if (this.post.author === this.currentUser.id) { items.push({ title: 'Edit', event: 'edit-post' }, { title: 'Delete', event: 'delete-post', customClass: 'error--text' }); }
+
+        return items;
+      },
       postDate () {
         return dayjs(this.post.created_at).format('MM/DD/YYYY');
       },
       postTime () {
         return dayjs(this.post.created_at).format('h:mm A');
       }
+    },
+
+    methods: {
+      deletePost () {
+        this.$emit('toggle-delete-confirm-modal', this.postLocal);
+      },
+      editPost () {
+        console.log('editPost');
+      },
+      reportPost () {
+        this.$emit('toggle-report-post-modal', this.postLocal);
+      }
+    },
+
+    components: {
+      EllipsisButton,
+      FavoriteItem
     }
   };
 </script>
@@ -89,7 +140,7 @@
     border-color: $primary!important;
   }
 
-  .post-text {
-    padding-left: 87px;
+  .favorite-wrapper {
+    padding-left: 18px;
   }
 </style>

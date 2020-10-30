@@ -35,24 +35,44 @@
           <post-card
             :author="topicAuthor"
             :is-original-post="isOriginalPost"
-            :post="topic.posts[0]" />
+            :post="topic.posts[0]"
+            @toggle-delete-confirm-modal="toggleDeleteConfirmModal"
+            @toggle-report-post-modal="toggleReportPostModal" />
 
           <!-- Replies Wrapper -->
           <div class="replies-wrapper">
             <post-card
               v-for="reply in replies"
               :key="reply.id"
-              :author="currentUser"
-              :post="reply" />
+              :author="currentUser.friends[0]"
+              :post="reply"
+              @toggle-delete-confirm-modal="toggleDeleteConfirmModal"
+              @toggle-report-post-modal="toggleReportPostModal" />
           </div>
 
           <!-- Create Reply Wrapper -->
-          <div class="create-reply-wrapper">
+          <div
+            v-if="currentUser.subscription_level !== 'free'"
+            class="create-reply-wrapper">
             <quill-editor />
           </div>
         </div>
       </v-col>
     </v-row>
+
+    <!-- Delete Confirm Modal -->
+    <delete-confirm-modal
+      v-model="deletePostModalOpen"
+      item="post"
+      :selected-detail="selectedPost"
+      @handle-remove-post="handleRemovePost"
+      @handle-reset-modal="handleResetModal" />
+
+    <!-- Report Post Modal -->
+    <report-post-modal
+      v-model="reportPostModalOpen"
+      :selected-item="selectedPost"
+      @handle-reset-modal="handleResetModal" />
   </v-container>
 </template>
 
@@ -71,11 +91,14 @@
 
     data () {
       return {
+        deletePostModalOpen: false,
         items: [
           { text: 'Forums', disabled: false, to: '/forums' },
           { text: convertSlugToTitle(this.$route.params.slug), disabled: false, to: `/forums/${this.$route.params.slug}` },
           { text: 'NOT WORKING', disabled: true, to: '#' } // TODO: Figure out last breadcrumb
-        ]
+        ],
+        reportPostModalOpen: false,
+        selectedPost: null
       };
     },
 
@@ -113,9 +136,29 @@
       }
     },
 
+    methods: {
+      handleRemovePost () {
+        console.log('handleRemovePost');
+      },
+      handleResetModal () {
+        this.selectedPost = null;
+      },
+      toggleDeleteConfirmModal (post) {
+        this.selectedPost = post;
+        this.deletePostModalOpen = true;
+      },
+      toggleReportPostModal (post) {
+        console.log({ post });
+        this.selectedPost = post;
+        this.reportPostModalOpen = true;
+      }
+    },
+
     components: {
+      DeleteConfirmModal: () => import('~/components/modals/DeleteConfirmModal'),
       PostCard,
       QuillEditor,
+      ReportPostModal: () => import('~/components/modals/ReportPostModal'),
       SignUpAlert
     },
 

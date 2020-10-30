@@ -21,7 +21,7 @@
         <v-tooltip
           max-width="300"
           top>
-          <template v-slot:activator="{ on, attrs }">
+          <template #activator="{ on, attrs }">
             <v-btn
               v-bind="attrs"
               icon
@@ -40,7 +40,7 @@
       </v-card-text>
       <v-card-actions class="justify-end">
         <v-btn
-          class="light-grey--text"
+          class="grey7--text"
           :ripple="false"
           text
           @click="closeModal">

@@ -38,7 +38,7 @@
         :name="alert.type === 'success' ? 'check-circle' : 'multiply'"
         width="26px" />
       {{ alert.message }}
-      <template v-slot:action="{ attrs }">
+      <template #action="{ attrs }">
         <v-btn
           v-bind="attrs"
           :ripple="false"
