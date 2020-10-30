@@ -22,9 +22,13 @@
             </v-breadcrumbs-item>
           </template>
         </v-breadcrumbs>
-        <h4 class="text-h4 page-title mb-8 pl-2">
+        <h4 class="text-h4 page-title mb-2 pl-2">
           {{ pageTitle }}
         </h4>
+        <p class="body-text-2 grey8--text mb-8 pl-2">
+          Viewing {{ totalPosts }} Total Posts
+        </p>
+        <sign-up-alert />
 
         <!-- Post Wrapper -->
         <div class="post-wrapper">
@@ -41,6 +45,16 @@
               :author="currentUser"
               :post="reply" />
           </div>
+
+          <!-- Create Reply Wrapper -->
+          <div class="create-reply-wrapper">
+            <v-textarea
+              auto-grow
+              counter
+              label="Create a reply to this post."
+              name="create-reply"
+              outlined />
+          </div>
         </div>
       </v-col>
     </v-row>
@@ -51,7 +65,8 @@
   import { mapState } from 'vuex';
   import { convertSlugToTitle } from '~/helpers/functions';
   import currentUser from '~/mixins/currentUser';
-  import PostCard from '~/components/forums/PostCard';
+  import PostCard from '~/components/forums/PostCard.vue';
+  import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
     name: 'Post',
@@ -63,7 +78,7 @@
         items: [
           { text: 'Forums', disabled: false, to: '/forums' },
           { text: convertSlugToTitle(this.$route.params.slug), disabled: false, to: this.$route.params.slug },
-          { text: this.topic ? this.topic.title : '', disabled: false, to: '/forums' } // TODO: Figure out last breadcrumb
+          { text: 'NOT WORKING', disabled: true, to: '#' } // TODO: Figure out last breadcrumb
         ]
       };
     },
@@ -96,11 +111,15 @@
       },
       topicAuthor () {
         return this.currentUser;
+      },
+      totalPosts () {
+        return this.topic.posts.length.toLocaleString();
       }
     },
 
     components: {
-      PostCard
+      PostCard,
+      SignUpAlert
     }
   };
 </script>

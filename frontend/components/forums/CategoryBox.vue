@@ -86,18 +86,10 @@
 
     methods: {
       postsCount (sub) {
-        let postLength = 0;
-        this.category.topics.forEach(topic => {
-          if (topic.subcategory_id === sub.id) {
-            postLength += topic.posts.length;
-          }
-        });
-        return postLength;
+        return sub.topics.reduce((sum, elem) => sum + elem.posts.length, 0);
       },
       topicsCount (sub) {
-        return this.category.topics
-          .filter(topic => topic.subcategory_id === sub.id)
-          .length.toLocaleString();
+        return sub.topics.length;
       }
     },
 

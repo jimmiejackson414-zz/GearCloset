@@ -25,6 +25,7 @@
         <h4 class="text-h4 page-title mb-8 pl-2">
           {{ pageTitle }}
         </h4>
+        <sign-up-alert />
 
         <!-- list of category posts -->
         <v-text-field
@@ -72,6 +73,7 @@
   import relativeTime from 'dayjs/plugin/relativeTime';
   import currentUser from '~/mixins/currentUser';
   import { convertSlugToTitle } from '~/helpers/functions';
+  import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
     name: 'CategorySlug',
@@ -133,6 +135,10 @@
     created () {
       this.determineItems();
       dayjs.extend(relativeTime);
+    },
+
+    components: {
+      SignUpAlert
     }
   };
 </script>

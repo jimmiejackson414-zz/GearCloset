@@ -22,23 +22,7 @@
               </nuxt-link>
               prior to posting.</span>
           </div>
-          <v-alert
-            v-if="showJoin"
-            border="top"
-            color="accentDarkest"
-            outlined>
-            <template #prepend>
-              <custom-icon
-                custom-class="mr-4"
-                :fill="accentColor"
-                height="30px"
-                name="info-circle"
-                width="30px" />
-            </template>
-            <p class="body-text-1 mb-0 grey8--text">
-              Posting in these forums requires a membership. Sign up today to enjoy all the benefits of joining GearCloset!
-            </p>
-          </v-alert>
+          <sign-up-alert />
         </div>
       </v-col>
     </v-row>
@@ -58,31 +42,19 @@
 
 <script>
   import { mapState } from 'vuex';
-  import currentUser from '~/mixins/currentUser';
   import CategoryBox from '~/components/forums/CategoryBox.vue';
+  import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
-    mixins: [currentUser],
-
-    data: () => ({
-      accentColor: ''
-    }),
-
     computed: {
       ...mapState({
         categories: state => state.forums.categories
-      }),
-      showJoin () {
-        return this.currentUser && this.currentUser.subscription_level === 'free';
-      }
-    },
-
-    created () {
-      this.accentColor = this.$nuxt.$vuetify.theme.themes.light.accent;
+      })
     },
 
     components: {
-      CategoryBox
+      CategoryBox,
+      SignUpAlert
     }
   };
 </script>
