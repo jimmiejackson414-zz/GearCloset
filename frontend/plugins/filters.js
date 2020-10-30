@@ -1,9 +1,18 @@
 /* eslint-disable camelcase */
 import Vue from 'vue';
 
-Vue.filter('prettyName', (user) => {
+Vue.filter('prettyName', (user, type) => {
   const { first_name, last_name, trail_name, email } = user;
   let name = '';
+
+  if (type === 'noTrailName') {
+    if (first_name && last_name) {
+      name = `${first_name} ${last_name}`;
+    } else {
+      name = `${email}`;
+    }
+    return name;
+  }
 
   if (first_name && last_name && trail_name) {
     name = `${first_name} "${trail_name}" ${last_name}`;

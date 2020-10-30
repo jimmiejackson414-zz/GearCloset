@@ -8,9 +8,7 @@
           <v-list-item class="px-0">
             <v-list-item-content>
               <v-list-item-title class="headline mb-1">
-                <!-- <nuxt-link :to="{ name: 'forums-slug', params: { slug: category.slug } }"> -->
                 {{ category.title }}
-              <!-- </nuxt-link> -->
               </v-list-item-title>
               <v-list-item-subtitle>
                 {{ category.description }}
