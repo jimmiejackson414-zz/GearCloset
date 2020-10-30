@@ -17,7 +17,7 @@
             to foster helpful and positive discussions about backpacking.
             <span class="font-weight-bold">
               Please be respectful and review our
-              <nuxt-link to="/forum/guidelines">
+              <nuxt-link to="/forums/guidelines">
                 Forum Guidelines
               </nuxt-link>
               prior to posting.</span>

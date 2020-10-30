@@ -73,7 +73,7 @@
       return {
         items: [
           { text: 'Forums', disabled: false, to: '/forums' },
-          { text: convertSlugToTitle(this.$route.params.slug), disabled: false, to: this.$route.params.slug },
+          { text: convertSlugToTitle(this.$route.params.slug), disabled: false, to: `/forums/${this.$route.params.slug}` },
           { text: 'NOT WORKING', disabled: true, to: '#' } // TODO: Figure out last breadcrumb
         ]
       };

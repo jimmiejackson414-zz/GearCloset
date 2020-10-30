@@ -33,7 +33,7 @@
       content: '',
       editorToolbar: [['bold', 'italic', 'underline'], [{ list: 'ordered' }, { list: 'bullet' }], ['blockquote', 'link']],
       editorOptions: {},
-      placeholder: 'Please remember to remain polite with your fellow hikers.',
+      placeholder: 'Please remember to remain respectful of your fellow hikers.',
       submitting: false
     }),
 
