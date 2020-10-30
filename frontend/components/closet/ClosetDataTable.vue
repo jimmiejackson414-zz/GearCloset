@@ -23,7 +23,7 @@
           hide-default-footer
           :items="category.items">
           <!-- Drag Handle -->
-          <template v-slot:item.drag>
+          <template #item.drag>
             <custom-icon
               color="#4a4a4a"
               custom-class="drag"
@@ -33,7 +33,7 @@
           </template>
 
           <!-- Generic Type Click To Edit -->
-          <template v-slot:item.generic_type="{ item }">
+          <template #item.generic_type="{ item }">
             <click-to-edit
               :style="{ fontSize: '0.875rem' }"
               :unique-identifier="`type${item.id}`"
@@ -42,7 +42,7 @@
           </template>
 
           <!-- Name Click To Edit -->
-          <template v-slot:item.name="{ item }">
+          <template #item.name="{ item }">
             <click-to-edit
               :style="{ fontSize: '0.875rem' }"
               :unique-identifier="`name${item.id}Ref`"
@@ -51,7 +51,7 @@
           </template>
 
           <!-- Consumable Toggle -->
-          <template v-slot:item.consumable="{ item }">
+          <template #item.consumable="{ item }">
             <v-btn
               :class="[{ active: item.consumable }, 'consumable-btn']"
               icon
@@ -66,7 +66,7 @@
           </template>
 
           <!-- Worn Toggle -->
-          <template v-slot:item.worn="{ item }">
+          <template #item.worn="{ item }">
             <v-btn
               :class="[{ active: item.worn }, 'worn-btn']"
               icon
@@ -81,7 +81,7 @@
           </template>
 
           <!-- Weight Click To Edit and Dropdown -->
-          <template v-slot:item.weight="{ item }">
+          <template #item.weight="{ item }">
             <span class="weight-column">
               <click-to-edit
                 :style="{ fontSize: '0.875rem' }"
@@ -98,7 +98,7 @@
           </template>
 
           <!-- Price Click To Edit -->
-          <template v-slot:item.price="{ item }">
+          <template #item.price="{ item }">
             <click-to-edit
               :custom-class="'price-column'"
               :mask="currencyMask"
@@ -109,7 +109,7 @@
           </template>
 
           <!-- Quantity Click To Edit -->
-          <template v-slot:item.quantity="{ item }">
+          <template #item.quantity="{ item }">
             <click-to-edit
               :custom-class="'quantity-column'"
               :style="{ fontSize: '0.875rem' }"
@@ -120,7 +120,7 @@
           </template>
 
           <!-- Totals -->
-          <template v-slot:body.append="{ items }">
+          <template #body.append="{ items }">
             <tr>
               <td :colspan="1"></td>
               <td :colspan="1">

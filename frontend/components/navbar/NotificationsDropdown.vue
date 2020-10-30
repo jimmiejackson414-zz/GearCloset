@@ -75,7 +75,7 @@
       },
       openNotificationsMenu (e) {
         this.showMenu = true;
-        this.menuPosition.x = e.clientX * 0.8;
+        this.menuPosition.x = e.clientX - 250;
         if (e.clientY < 60) {
           this.menuPosition.y = 60;
         } else {
