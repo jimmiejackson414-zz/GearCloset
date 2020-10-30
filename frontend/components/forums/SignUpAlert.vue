@@ -14,7 +14,7 @@
         width="30px" />
     </template>
     <p class="body-text-1 mb-0 grey8--text">
-      Posting in these forums requires a membership. Sign up today to enjoy all the benefits of joining GearCloset!
+      Posting in these forums requires a membership. Sign up today to enjoy all the benefits of joining Gear Closet!
     </p>
   </v-alert>
 </template>

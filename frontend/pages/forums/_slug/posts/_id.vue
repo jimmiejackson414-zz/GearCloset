@@ -48,12 +48,7 @@
 
           <!-- Create Reply Wrapper -->
           <div class="create-reply-wrapper">
-            <v-textarea
-              auto-grow
-              counter
-              label="Create a reply to this post."
-              name="create-reply"
-              outlined />
+            <quill-editor />
           </div>
         </div>
       </v-col>
@@ -66,6 +61,7 @@
   import { convertSlugToTitle } from '~/helpers/functions';
   import currentUser from '~/mixins/currentUser';
   import PostCard from '~/components/forums/PostCard.vue';
+  import QuillEditor from '~/components/QuillEditor';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
@@ -119,7 +115,14 @@
 
     components: {
       PostCard,
+      QuillEditor,
       SignUpAlert
+    },
+
+    head () {
+      return {
+        title: this.pageTitle
+      };
     }
   };
 </script>

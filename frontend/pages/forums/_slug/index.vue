@@ -139,6 +139,12 @@
 
     components: {
       SignUpAlert
+    },
+
+    head () {
+      return {
+        title: this.pageTitle
+      };
     }
   };
 </script>

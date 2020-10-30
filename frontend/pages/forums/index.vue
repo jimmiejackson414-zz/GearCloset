@@ -13,7 +13,7 @@
             Forums
           </div>
           <div class="disclaimer text-center mb-6">
-            GearCloset forums are moderated, frequented by people from all over the world, and here primarily
+            Gear Closet forums are moderated, frequented by people from all over the world, and here primarily
             to foster helpful and positive discussions about backpacking.
             <span class="font-weight-bold">
               Please be respectful and review our
@@ -55,6 +55,12 @@
     components: {
       CategoryBox,
       SignUpAlert
+    },
+
+    head () {
+      return {
+        title: 'Forums'
+      };
     }
   };
 </script>
