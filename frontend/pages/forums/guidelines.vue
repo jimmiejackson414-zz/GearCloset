@@ -1,8 +1,5 @@
 <template>
-  <v-container
-    class="guidelines-container"
-    grid-list-lg
-    mx-auto>
+  <v-container class="guidelines-container">
     <v-row>
       <v-col
         cols="12"
@@ -10,7 +7,7 @@
         offset-md="2">
         <div class="header">
           <h4 class="text-h4 font-weight-bold page-title text-center mt-8 mb-4">
-            Forum Guidelines</h1>
+            Forum Guidelines
           </h4>
         </div>
         <h5 class="text-h5 mb-4">
@@ -220,9 +217,5 @@
 <style lang="scss" scoped>
   section {
     margin: 4rem 0;
-  }
-
-  .bottom-info {
-
   }
 </style>
