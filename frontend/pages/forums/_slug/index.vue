@@ -1,8 +1,5 @@
 <template>
-  <v-container
-    class="category-slug-container"
-    grid-list-lg
-    mx-auto>
+  <v-container class="category-slug-container">
     <v-row>
       <v-col
         cols="12"
@@ -10,7 +7,7 @@
         offset-md="2">
         <!-- breadcrumbs -->
         <v-breadcrumbs
-          class="pl-2"
+          class="pl-0"
           :items="breadcrumbs">
           <template #item="{ item }">
             <v-breadcrumbs-item
@@ -22,15 +19,28 @@
             </v-breadcrumbs-item>
           </template>
         </v-breadcrumbs>
-        <h4 class="text-h4 page-title mb-8 pl-2">
-          {{ pageTitle }}
-        </h4>
+        <div class="page-header d-flex justify-space-between">
+          <h4 class="text-h4 page-title mb-8">
+            {{ pageTitle }}
+          </h4>
+          <v-btn
+            color="success"
+            depressed
+            @click="handleCreateNewTopic">
+            <custom-icon
+              custom-class="mr-2"
+              fill="#fff"
+              height="16px"
+              name="plus"
+              width="16px" />New Post
+          </v-btn>
+        </div>
         <sign-up-alert />
 
         <!-- list of category posts -->
         <v-text-field
           v-model="search"
-          class="px-2"
+          class="my-4"
           clearable
           dense
           hide-details
@@ -118,6 +128,9 @@
           });
         });
         this.items = allTopics[0];
+      },
+      handleCreateNewTopic () {
+
       },
       lastPost (item) {
         // TODO: Refactor when backend is in place

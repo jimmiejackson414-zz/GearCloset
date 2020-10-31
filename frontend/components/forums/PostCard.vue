@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card
-      :class="['pa-4', 'mx-2', {'op-card': isOriginalPost}, isOriginalPost ? 'mb-8' : 'mb-2']"
+      :class="['pa-4', {'op-card': isOriginalPost}, isOriginalPost ? 'mb-8' : 'mb-2']"
       :flat="!isOriginalPost"
       :outlined="isOriginalPost">
       <v-row>

@@ -2,7 +2,6 @@
   <v-alert
     v-if="showJoin"
     border="top"
-    class="mx-2"
     color="primaryLight"
     outlined>
     <template #prepend>
