@@ -51,15 +51,25 @@
         <v-data-table
           class="posts-table"
           :headers="headers"
+          :item-class="isPinned"
           :items="items"
           :items-per-page="20"
           :search="search">
           <template #item.title="{ item }">
-            <nuxt-link
-              class="text-h6"
-              :to="`/forums/${$route.params.slug}/posts/${item.id}`">
-              {{ item.title }}
-            </nuxt-link>
+            <div class="title d-flex">
+              <custom-icon
+                v-if="item.pinned"
+                custom-class="mr-2"
+                :fill="warningDarkest"
+                :height="20"
+                name="map-marker-info"
+                :width="20" />
+              <nuxt-link
+                class="text-h6"
+                :to="`/forums/${$route.params.slug}/posts/${item.id}`">
+                {{ item.title }}
+              </nuxt-link>
+            </div>
             <p class="body-text-2 mb-0">
               Author: {{ postAuthor(item) }}
             </p>
@@ -107,7 +117,8 @@
           { text: convertSlugToTitle(this.$route.params.slug), disabled: true, to: this.$route.params.slug }
         ],
         items: null,
-        search: ''
+        search: '',
+        warningDarkest: ''
       };
     },
 
@@ -132,10 +143,18 @@
             }
           });
         });
-        this.items = allTopics[0];
+        // Set pinned topics at start, then rest of topics sorted by descending order
+        this.items = [
+          ...allTopics[0].filter(t => t.pinned),
+          ...allTopics[0].filter(t => !t.pinned)
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        ];
       },
       handleCreateNewTopic () {
         this.createNewTopicModal = true;
+      },
+      isPinned (item) {
+        return item.pinned && 'pinned';
       },
       lastPost (item) {
         // TODO: Refactor when backend is in place
@@ -156,6 +175,7 @@
     created () {
       this.determineItems();
       dayjs.extend(relativeTime);
+      this.warningDarkest = this.$nuxt.$vuetify.theme.themes.light.warningDarkest;
     },
 
     components: {
@@ -174,8 +194,27 @@
 <style lang="scss">
   .posts-table {
     tbody {
-      td {
-        padding: 0.5rem 16px !important;
+      tr {
+        &.pinned {
+          background-color: $warningLight;
+
+          .title {
+            a {
+              color: $warningDarkest;
+            }
+          }
+
+        }
+
+        &:hover {
+          &.pinned {
+            background-color: lighten($warning, 5%) !important;
+          }
+        }
+
+        td {
+          padding: 0.5rem 16px !important;
+        }
       }
     }
   }

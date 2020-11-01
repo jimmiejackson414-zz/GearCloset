@@ -22,10 +22,11 @@ $accentDark: darken($accent, 10%);
 $accentDarkest: darken($accent, 20%);
 
 $warning: #fae19f;
-$warningDark:#8c6c20;
+$warningDark:darken($warning, 10%);
+// $warningDarkest: darken($warning, 20%);
 $warningDarkest: #5b4712;
-$warningLight:#fae19f;
-$warningLightest: #fffcf4;
+$warningLight:lighten($warning, 10%);
+$warningLightest: lighten($warning, 15%);
 
 $info: $grey6;
 $success: #137547;

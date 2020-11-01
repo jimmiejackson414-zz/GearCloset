@@ -112,10 +112,10 @@ export default {
           accentDarkest: '#32b56a',
 
           warning: '#fae19f',
-          warningDark: '#8c6c20',
+          warningDark: '#F7D26F',
           warningDarkest: '#5b4712',
-          warningLight: '#fae19f',
-          warningLightest: '#fffcf4',
+          warningLight: '#FDF0CF',
+          warningLightest: '#FEF8E8',
 
           error: '#db3030',
           errorDark: '#ce2424',
