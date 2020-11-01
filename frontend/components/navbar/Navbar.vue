@@ -18,13 +18,14 @@
       <v-tabs
         class="hidden-sm-and-down"
         optional
-        :style="{ width: 'auto' }">
+        :style="{ width: 'auto' }"
+        :value="value">
         <v-tab
           v-for="(item, i) in navItems"
           :key="i"
           active-class="text--primary"
           class="font-weight-medium nav-link"
-          :exact="item.title === 'Home'"
+          :exact="item.exact"
           min-width="96"
           nuxt
           :ripple="false"
@@ -68,6 +69,11 @@
     computed: {
       maxWidth () {
         return this.$vuetify.breakpoint.mobile ? 296 : 320;
+      },
+      value () {
+        const path = this.$route.path;
+        const full = this.$route.fullPath;
+        return path[path.length - 1] !== '/' ? `${path}/${full.substring(path.length)}` : full;
       }
     },
 
@@ -94,14 +100,6 @@
 
 <style lang="scss">
   #home-app-bar {
-    &.theme--light {
-      background-color: #fff;
-    }
-
-    &.theme--dark {
-      background-color: #272727;
-    }
-
     .logo {
       max-width: 200px;
 
@@ -113,13 +111,18 @@
     .right-menu-wrapper {
       align-items: center;
 
-      .v-tabs-slider {
-        max-width: 50%;
-        margin: 0 auto;
-      }
-
       .v-tabs {
-        background-color: transparent;
+        .v-tabs-slider {
+          max-width: 50%;
+          margin: 0 auto;
+        }
+
+        .nav-link {
+          &:after {
+
+          }
+        }
+        /* background-color: transparent;
 
         .v-item-group {
           background-color: transparent;
@@ -129,11 +132,15 @@
               display: none;
             }
           }
-        }
+        } */
+      }
 
-        &.theme--dark {
-          .nav-link {
-            color: #fff;
+      .notifications-wrapper {
+        .notification-badge {
+          .v-badge__badge {
+            cursor: pointer;
+            right: calc(100% - 20px) !important;
+            top: calc(100% - 20px) !important;
           }
         }
       }
@@ -192,66 +199,4 @@
     animation: bouncein 500ms $cubicBezier both;
   }
 
-</style>
-
-<style lang="scss">
-  #home-app-bar {
-    &.theme--light {
-      background-color: #fff;
-    }
-
-    &.theme--dark {
-      background-color: #272727;
-    }
-  }
-
-  .nav-link {
-    &:after {
-      height: 2px;
-      background: $primary;
-      content: "";
-      width: 0;
-      position: absolute;
-      transform: translateX(-50%);
-      transition: width 0.4s;
-      transition-timing-function: cubic-bezier(1, -0.65, 0, 2.31);
-      left: 50%;
-      margin-top: 46px;
-    }
-
-    &:before {
-      background-color: transparent !important;
-    }
-
-    &:hover,
-    &:focus {
-      outline: none;
-
-      &:after {
-        width: calc(100% - 40px);
-      }
-
-      &:before {
-        background-color: transparent;
-      }
-    }
-
-    &.v-tab--active {
-      &:after {
-        background: none;
-      }
-
-      &:before {
-        background-color: transparent !important;
-      }
-    }
-  }
-
-  .notification-badge {
-    .v-badge__badge {
-      cursor: pointer;
-      right: calc(100% - 20px) !important;
-      top: calc(100% - 20px) !important;
-    }
-  }
 </style>
