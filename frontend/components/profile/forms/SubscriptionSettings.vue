@@ -64,6 +64,14 @@
 
               <!-- Upgrade/Downgrade Buttons -->
               <v-btn
+                v-if="Object.keys(card)[0] === currentUser.subscription_level.toLowerCase()"
+                color="info"
+                depressed
+                disabled
+                :ripple="false">
+                Current Plan
+              </v-btn>
+              <v-btn
                 v-if="shouldShow(card, 'free', 'free')"
                 color="accent"
                 depressed

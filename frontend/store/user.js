@@ -279,7 +279,7 @@ export const state = () => ({
     }
   ],
   password: 'password',
-  subscription_level: 'free',
+  subscription_level: 'annual',
   system: 'Imperial',
   trail_name: 'Walk and Eat'
 });

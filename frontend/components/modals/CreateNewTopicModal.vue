@@ -1,14 +1,34 @@
 <template>
   <v-dialog
+
     v-model="show"
     max-width="750"
     :persistent="submitting">
     <v-card>
-      <v-card-title>{{ formatAction }} Detail</v-card-title>
+      <v-card-title>
+        Create New Post
+      </v-card-title>
       <v-card-text>
-        <p class="text-body-1">
-          Create or Update a detail
-        </p>
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="title"
+                color="primary"
+                dense
+                :disabled="submitting"
+                label="Title"
+                outlined
+                required
+                :rules="titleRules"
+                validate-on-blur
+                @keyup.enter="handleSubmit" />
+              <tip-tap-editor
+                :content="content"
+                @handle-update-content="handleUpdateContent" />
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card-text>
       <v-card-actions class="justify-space-between">
         <v-btn
@@ -24,13 +44,13 @@
           depressed
           :disabled="submitting"
           :ripple="false"
-          @click="directClick">
+          @click="handleCreate">
           <loading
             v-if="submitting"
             color="#fff"
             height="30px"
             width="30px" />
-          <span v-else>{{ formatAction }}</span>
+          <span v-else>Create Post</span>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -39,16 +59,11 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import { capitalize } from '~/helpers/functions';
   import Loading from '~/components/Loading.vue';
+  import TipTapEditor from '~/components/TipTapEditor';
 
   export default {
     props: {
-      detail: {
-        type: Object,
-        required: false,
-        default: () => {}
-      },
       value: {
         type: Boolean,
         default: false
@@ -56,16 +71,16 @@
     },
 
     data: () => ({
-      submitting: false
+      content: 'Test',
+      // Please remember to remain respectful of your fellow hikers.
+      submitting: false,
+      title: '',
+      titleRules: [
+        v => !!v || 'Title is required'
+      ]
     }),
 
     computed: {
-      createOrUpdate () {
-        return this.detail ? 'update' : 'create';
-      },
-      formatAction () {
-        return capitalize(this.createOrUpdate) || '';
-      },
       show: {
         get () {
           return this.value;
@@ -85,9 +100,6 @@
         this.show = false;
         this.$emit('handle-reset-modal');
       },
-      directClick () {
-        return this.createOrUpdate === 'update' ? this.handleUpdate : this.handleCreate;
-      },
       handleCreate () {
         console.log('handleCreate');
         this.submitting = true;
@@ -96,24 +108,18 @@
           this.closeModal();
           this.submitting = false;
           this.$emit('handle-reset-modal');
-          this.success('Detail successfully added.');
+          this.success('Post successfully created.');
+          console.log('new post details: ', this.title, this.content);
         }, 2000);
       },
-      handleUpdate () {
-        console.log('handleUpdate');
-        this.submitting = true;
-
-        setTimeout(() => {
-          this.closeModal();
-          this.submitting = false;
-          this.$emit('handle-reset-modal');
-          this.success('Detail successfully updated.');
-        }, 2000);
+      handleUpdateContent (value) {
+        this.content = value;
       }
     },
 
     components: {
-      Loading
+      Loading,
+      TipTapEditor
     }
   };
 </script>

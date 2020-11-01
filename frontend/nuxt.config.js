@@ -27,7 +27,6 @@ export default {
     { src: '~/plugins/vue-unicons', mode: 'client' },
     { src: '~/plugins/v-mask', mode: 'client' },
     { src: '~/plugins/apex-charts', mode: 'client' },
-    { src: '~/plugins/quill', mode: 'client' },
     { src: '~/plugins/filters' }
   ],
 
@@ -74,7 +73,7 @@ export default {
   },
 
   styleResources: {
-    scss: ['./css/_colors.scss', '~/css/_breakpoints.scss']
+    scss: ['./css/_colors.scss', '~/css/_breakpoints.scss', '~/css/_defaults.scss']
   },
 
   vuetify: {
@@ -121,7 +120,7 @@ export default {
           errorDark: '#ce2424',
 
           info: '#adb5bd',
-          success: '#227d47'
+          success: '#137547'
         }
       }
     }

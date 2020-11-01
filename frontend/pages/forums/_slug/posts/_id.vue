@@ -54,7 +54,7 @@
           <div
             v-if="currentUser.subscription_level !== 'free'"
             class="create-reply-wrapper">
-            <quill-editor />
+            <tip-tap-editor />
           </div>
         </div>
       </v-col>
@@ -81,7 +81,7 @@
   import { convertSlugToTitle } from '~/helpers/functions';
   import currentUser from '~/mixins/currentUser';
   import PostCard from '~/components/forums/PostCard.vue';
-  import QuillEditor from '~/components/QuillEditor';
+  import TipTapEditor from '~/components/TipTapEditor';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
@@ -157,7 +157,7 @@
     components: {
       DeleteConfirmModal: () => import('~/components/modals/DeleteConfirmModal'),
       PostCard,
-      QuillEditor,
+      TipTapEditor,
       ReportPostModal: () => import('~/components/modals/ReportPostModal'),
       SignUpAlert
     },

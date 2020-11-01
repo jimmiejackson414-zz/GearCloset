@@ -24,6 +24,7 @@
             {{ pageTitle }}
           </h4>
           <v-btn
+            v-if="currentUser.subscription_level !== 'free'"
             color="success"
             depressed
             @click="handleCreateNewTopic">
@@ -74,6 +75,11 @@
         </v-data-table>
       </v-col>
     </v-row>
+
+    <!-- Create New Topic Modal -->
+    <create-new-topic-modal
+      v-model="createNewTopicModal"
+      @handle-reset-modal="resetModal" />
   </v-container>
 </template>
 
@@ -92,6 +98,7 @@
 
     data () {
       return {
+        createNewTopicModal: false,
         headers: [
           { text: 'Topic', align: 'start', sortable: false, value: 'title' },
           { text: 'Posts', align: 'center', sortable: false, value: 'posts.length', filterable: false },
@@ -130,7 +137,7 @@
         this.items = allTopics[0];
       },
       handleCreateNewTopic () {
-
+        this.createNewTopicModal = true;
       },
       lastPost (item) {
         // TODO: Refactor when backend is in place
@@ -142,6 +149,9 @@
       postAuthor (topic) {
         // TODO: Refactor when backend is in place
         return 'Randy Savage';
+      },
+      resetModal () {
+        console.log('resetModal');
       }
     },
 
@@ -151,12 +161,13 @@
     },
 
     components: {
+      CreateNewTopicModal: () => import('~/components/modals/CreateNewTopicModal.vue'),
       SignUpAlert
     },
 
     head () {
       return {
-        title: this.pageTitle
+        title: `${this.pageTitle} | Forums`
       };
     }
   };

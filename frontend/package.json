@@ -23,10 +23,11 @@
     "lodash": "^4.17.20",
     "nuxt": "^2.14.5",
     "text-mask-addons": "^3.8.0",
+    "tiptap": "^1.30.0",
+    "tiptap-extensions": "^1.33.2",
     "v-mask": "^2.2.3",
     "vue-apexcharts": "^1.6.0",
-    "vue-unicons": "^2.3.0",
-    "vue2-editor": "^2.10.2"
+    "vue-unicons": "^2.3.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.1.0",
