@@ -80,9 +80,9 @@
           <custom-icon
             class="mr-3"
             :color="iconColor"
-            height="25px"
+            :height="25"
             :name="tab.icon"
-            width="25px" />
+            :width="25" />
           {{ tab.title }}
         </v-tab>
 

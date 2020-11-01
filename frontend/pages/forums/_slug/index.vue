@@ -31,9 +31,9 @@
             <custom-icon
               custom-class="mr-2"
               fill="#fff"
-              height="16px"
+              :height="16"
               name="plus"
-              width="16px" />New Post
+              :width="16" />New Post
           </v-btn>
         </div>
         <sign-up-alert />
@@ -77,9 +77,7 @@
     </v-row>
 
     <!-- Create New Topic Modal -->
-    <create-new-topic-modal
-      v-model="createNewTopicModal"
-      @handle-reset-modal="resetModal" />
+    <create-new-topic-modal v-model="createNewTopicModal" />
   </v-container>
 </template>
 

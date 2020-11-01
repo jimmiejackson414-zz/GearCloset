@@ -78,9 +78,9 @@
             <template #prepend-inner>
               <custom-icon
                 :fill="primaryColor"
-                height="20px"
+                :height="20"
                 name="user-circle"
-                width="20px" />
+                :width="20" />
             </template>
           </v-text-field>
         </v-col>
@@ -100,9 +100,9 @@
             <template #prepend-inner>
               <custom-icon
                 :fill="primaryColor"
-                height="20px"
+                :height="20"
                 name="user-circle"
-                width="20px" />
+                :width="20" />
             </template>
           </v-text-field>
         </v-col>
@@ -122,9 +122,9 @@
             <template #prepend-inner>
               <custom-icon
                 :fill="primaryColor"
-                height="20px"
+                :height="20"
                 name="user-circle"
-                width="20px" />
+                :width="20" />
             </template>
           </v-text-field>
         </v-col>
@@ -144,9 +144,9 @@
             <template #prepend-inner>
               <custom-icon
                 :fill="primaryColor"
-                height="20px"
+                :height="20"
                 name="globe"
-                width="20px" />
+                :width="20" />
             </template>
           </v-select>
         </v-col>
@@ -166,9 +166,9 @@
             <template #prepend-inner>
               <custom-icon
                 fill="#0077be"
-                height="20px"
+                :height="20"
                 name="envelope-alt"
-                width="20px" />
+                :width="20" />
             </template>
           </v-text-field>
         </v-col>
@@ -188,9 +188,9 @@
             <template #prepend-inner>
               <custom-icon
                 :fill="primaryColor"
-                height="20px"
+                :height="20"
                 name="balance-scale"
-                width="20px" />
+                :width="20" />
             </template>
           </v-select>
         </v-col>

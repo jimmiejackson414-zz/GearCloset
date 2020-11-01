@@ -36,9 +36,9 @@
               <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
-                  height="20px"
+                  :height="20"
                   name="envelope-alt"
-                  width="20px" />
+                  :width="20" />
               </template>
             </v-text-field>
 
@@ -58,9 +58,9 @@
               <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
-                  height="20px"
+                  :height="20"
                   name="padlock"
-                  width="20px" />
+                  :width="20" />
               </template>
             </v-text-field>
 

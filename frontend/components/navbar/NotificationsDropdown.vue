@@ -17,9 +17,9 @@
         :ripple="false">
         <custom-icon
           color="#4a4a4a"
-          height="20px"
+          :height="20"
           name="bell"
-          width="20px" />
+          :width="20" />
       </v-btn>
     </v-badge>
 

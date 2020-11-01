@@ -16,9 +16,9 @@
         <template #prepend-inner>
           <custom-icon
             fill="#4a4a4a"
-            height="20px"
+            :height="20"
             name="search"
-            width="20px" />
+            :width="20" />
         </template>
       </v-text-field>
     </div>
@@ -39,9 +39,9 @@
                 v-on="on">
                 <custom-icon
                   :fill="secondaryLight"
-                  height="20px"
+                  :height="20"
                   name="info-circle"
-                  width="20px" />
+                  :width="20" />
               </span>
             </template>
             <span>Create a new pack list or modify an existing one.</span>
@@ -53,9 +53,9 @@
           @click="createPackModalOpen = true">
           <custom-icon
             fill="#fff"
-            height="35px"
+            :height="35"
             name="plus-circle"
-            width="35px" />
+            :width="35" />
         </v-btn>
       </div>
       <v-list
@@ -101,9 +101,9 @@
                 v-on="on">
                 <custom-icon
                   :fill="secondaryLight"
-                  height="20px"
+                  :height="20"
                   name="info-circle"
-                  width="20px" />
+                  :width="20" />
               </span>
             </template>
             <span>Add a new piece of gear to your closet, or add one to the selected pack.</span>
@@ -115,9 +115,9 @@
           @click="createItemModalOpen = true">
           <custom-icon
             fill="#fff"
-            height="35px"
+            :height="35"
             name="plus-circle"
-            width="35px" />
+            :width="35" />
         </v-btn>
       </div>
       <v-list>
@@ -146,9 +146,9 @@
               <custom-icon
                 custom-class="gear-handle mr-2"
                 :fill="secondaryLight"
-                height="20px"
+                :height="20"
                 name="grip-horizontal-line"
-                width="20px" />
+                :width="20" />
               <p class="mb-0 white--text">
                 {{ item.name }}
               </p>

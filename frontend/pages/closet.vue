@@ -19,9 +19,9 @@
                 @click="shareListModalOpen = true">
                 <custom-icon
                   fill="#4a4a4a"
-                  height="20px"
+                  :height="20"
                   name="share"
-                  width="20px" />
+                  :width="20" />
                 <p class="body-2 mb-0">
                   Share
                 </p>

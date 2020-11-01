@@ -53,9 +53,9 @@
               <custom-icon
                 custom-class="mr-4"
                 :fill="primaryColor"
-                height="20px"
+                :height="20"
                 name="comment-alt-dots"
-                width="20px" />
+                :width="20" />
               {{ sub.title }}
             </nuxt-link>
           </div>

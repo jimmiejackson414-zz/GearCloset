@@ -71,8 +71,7 @@
     },
 
     data: () => ({
-      content: 'Test',
-      // Please remember to remain respectful of your fellow hikers.
+      content: '',
       submitting: false,
       title: '',
       titleRules: [
@@ -98,7 +97,8 @@
       }),
       closeModal () {
         this.show = false;
-        this.$emit('handle-reset-modal');
+        this.content = '';
+        this.title = '';
       },
       handleCreate () {
         console.log('handleCreate');
@@ -113,6 +113,7 @@
         }, 2000);
       },
       handleUpdateContent (value) {
+        console.log({ value });
         this.content = value;
       }
     },

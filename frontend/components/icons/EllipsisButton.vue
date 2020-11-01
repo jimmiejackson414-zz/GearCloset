@@ -14,9 +14,9 @@
         v-on="on">
         <custom-icon
           :fill="primaryColor"
-          height="30px"
+          :height="30"
           name="ellipsis-v"
-          width="30px" />
+          :width="30" />
       </v-btn>
     </template>
     <v-list

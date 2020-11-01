@@ -93,9 +93,9 @@
                 <custom-icon
                   class="delete-icon"
                   :fill="deleteColor"
-                  height="25px"
+                  :height="25"
                   name="trash-alt"
-                  width="25px" />
+                  :width="25" />
               </v-btn>
             </td>
           </tr>

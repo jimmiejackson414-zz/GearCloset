@@ -27,9 +27,9 @@
             <custom-icon
               color="#4a4a4a"
               custom-class="drag"
-              height="20px"
+              :height="20"
               name="grip-horizontal-line"
-              width="20px" />
+              :width="20" />
           </template>
 
           <!-- Generic Type Click To Edit -->
@@ -59,9 +59,9 @@
               text
               @click="updateBooleanItem(item, 'consumable')">
               <custom-icon
-                height="20px"
+                :height="20"
                 name="utensils-alt"
-                width="20px" />
+                :width="20" />
             </v-btn>
           </template>
 
@@ -74,9 +74,9 @@
               text
               @click="updateBooleanItem(item, 'worn')">
               <custom-icon
-                height="20px"
+                :height="20"
                 name="layer-group"
-                width="20px" />
+                :width="20" />
             </v-btn>
           </template>
 
@@ -162,9 +162,9 @@
           @click="handleAddNewItem">
           <custom-icon
             :fill="primaryColor"
-            height="18px"
+            :height="18"
             name="plus"
-            width="18px" />
+            :width="18" />
           <p class="body-2 primary--text mb-0 ml-3">
             Add New Item
           </p>
@@ -184,9 +184,9 @@
               @click="handleAddNewCategory">
               <custom-icon
                 :fill="primaryColor"
-                height="18px"
+                :height="18"
                 name="plus"
-                width="18px" />
+                :width="18" />
               <p class="body-2 primary--text mb-0 ml-3">
                 Add New Category
               </p>

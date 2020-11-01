@@ -31,9 +31,9 @@
                 <v-list-item-icon class="mr-4">
                   <custom-icon
                     :fill="primaryColor"
-                    height="24px"
+                    :height="24"
                     name="check"
-                    width="24px" />
+                    :width="24" />
                 </v-list-item-icon>
                 <v-list-item-content>
                   <p class="text-body-1 mb-0">

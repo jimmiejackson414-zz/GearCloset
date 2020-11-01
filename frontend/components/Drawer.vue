@@ -24,9 +24,9 @@
             <custom-icon
               custom-class="mr-4"
               :fill="fillColor(item)"
-              height="20px"
+              :height="20"
               :name="item.icon"
-              width="20px" />
+              :width="20" />
             {{ item.title }}
           </v-list-item-title>
         </v-list-item-content>

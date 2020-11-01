@@ -189,9 +189,9 @@
             <custom-icon
               custom-class="mr-2"
               fill="#4a4a4a"
-              height="16px"
+              :height="16"
               name="envelope-alt"
-              width="16px" />
+              :width="16" />
             <p class="subtitle-2 grey7--text mb-0">
               Still need help?&nbsp;<a href="mailto:admin@gearcloset.com">Send us an email.</a>
             </p>

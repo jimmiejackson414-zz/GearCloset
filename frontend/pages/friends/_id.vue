@@ -68,17 +68,17 @@
             <template #item.consumable="{ item }">
               <div :class="['boolean-wrapper consumable', {active: item.consumable}]">
                 <custom-icon
-                  height="20px"
+                  :height="20"
                   name="utensils-alt"
-                  width="20px" />
+                  :width="20" />
               </div>
             </template>
             <template #item.worn="{ item }">
               <div :class="['boolean-wrapper worn', {active: item.worn}]">
                 <custom-icon
-                  height="20px"
+                  :height="20"
                   name="layer-group"
-                  width="20px" />
+                  :width="20" />
               </div>
             </template>
             <template #body.append="{ items }">

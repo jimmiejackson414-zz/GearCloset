@@ -30,9 +30,9 @@
               @click="handleCopyToClipboard">
               <custom-icon
                 fill="#4a4a4a"
-                height="20px"
+                :height="20"
                 name="copy"
-                width="20px" />
+                :width="20" />
             </v-btn>
           </template>
           <span>Copy to clipboard</span>

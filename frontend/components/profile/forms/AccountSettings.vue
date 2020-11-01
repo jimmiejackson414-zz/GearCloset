@@ -27,9 +27,9 @@
             <template #prepend-inner>
               <custom-icon
                 fill="#0077be"
-                height="20px"
+                :height="20"
                 name="padlock"
-                width="20px" />
+                :width="20" />
             </template>
           </v-text-field>
         </v-col>
@@ -50,9 +50,9 @@
             <template #prepend-inner>
               <custom-icon
                 fill="#0077be"
-                height="20px"
+                :height="20"
                 name="padlock"
-                width="20px" />
+                :width="20" />
             </template>
           </v-text-field>
         </v-col>

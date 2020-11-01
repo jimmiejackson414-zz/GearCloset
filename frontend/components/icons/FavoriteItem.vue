@@ -1,5 +1,4 @@
 <template>
-  <!-- <div class="favorite-wrap"> -->
   <v-badge
     bordered
     color="grey4"
@@ -13,9 +12,9 @@
       small
       @click="toggleFavoriteItem">
       <custom-icon
-        height="16px"
+        :height="16"
         name="heart"
-        width="16px" />
+        :width="16" />
     </v-btn>
   </v-badge>
 </template>

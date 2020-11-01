@@ -9,9 +9,9 @@
     @click="handleClick">
     <custom-icon
       fill="#ffffff"
-      height="16px"
+      :height="16"
       name="plus"
-      width="16px" />
+      :width="16" />
   </v-btn>
 </template>
 

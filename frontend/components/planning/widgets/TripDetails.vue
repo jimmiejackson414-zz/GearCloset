@@ -12,9 +12,9 @@
           <h2>{{ startingPoint }}</h2>
           <custom-icon
             :fill="arrowColor"
-            height="20px"
+            :height="20"
             name="arrow-right"
-            width="40px" />
+            :width="40" />
           <h2>{{ endingPoint }}</h2>
         </div>
       </div>

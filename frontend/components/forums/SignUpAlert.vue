@@ -8,9 +8,9 @@
       <custom-icon
         custom-class="mr-4"
         :fill="primaryColor"
-        height="30px"
+        :height="30"
         name="info-circle"
-        width="30px" />
+        :width="30" />
     </template>
     <p class="body-text-1 mb-0 grey8--text">
       Posting in these forums requires a membership.

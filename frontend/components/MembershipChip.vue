@@ -7,9 +7,9 @@
     <custom-icon
       custom-class="mr-2"
       :fill="chip.icon"
-      height="20px"
+      :height="20"
       name="favorite"
-      width="20px" />
+      :width="20" />
     <span class="font-weight-bold">{{ chip.copy }}</span>
   </v-chip>
 </template>

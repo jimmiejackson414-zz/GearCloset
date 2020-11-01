@@ -34,9 +34,9 @@
       <custom-icon
         class="mr-4"
         fill="#fff"
-        height="26px"
+        :height="26"
         :name="alert.type === 'success' ? 'check-circle' : 'multiply'"
-        width="26px" />
+        :width="26" />
       {{ alert.message }}
       <template #action="{ attrs }">
         <v-btn
@@ -62,9 +62,9 @@
         @click="scrollToTop">
         <custom-icon
           fill="white"
-          height="40px"
+          :height="40"
           name="angle-up"
-          width="40px" />
+          :width="40" />
       </v-btn>
     </v-fab-transition>
   </v-app>
