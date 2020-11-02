@@ -95,7 +95,7 @@
         items: [
           { text: 'Forums', disabled: false, to: '/forums' },
           { text: convertSlugToTitle(this.$route.params.slug), disabled: false, to: `/forums/${this.$route.params.slug}` },
-          { text: 'NOT WORKING', disabled: true, to: '#' } // TODO: Figure out last breadcrumb
+          { text: convertSlugToTitle(this.$route.params.post_slug), disabled: true, to: `/forums/${this.$route.params.slug}/posts/${this.$route.params.post_slug}` }
         ],
         reportPostModalOpen: false,
         selectedPost: null
