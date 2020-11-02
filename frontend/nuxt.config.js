@@ -73,6 +73,12 @@ export default {
 
   },
 
+  loading: {
+    color: '#2368a2',
+    height: '5px',
+    failedColor: '#db3030'
+  },
+
   styleResources: {
     scss: ['./css/_colors.scss', '~/css/_breakpoints.scss', '~/css/_defaults.scss']
   },
