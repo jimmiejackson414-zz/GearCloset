@@ -61,7 +61,7 @@
             How to address moderation issues
           </p>
           <p class="body-text-1">
-            Other feedback regarding more systematic abuse of forum guidelines by a particular user, questions about moderation, or other moderation issues should be emailed to our site administrator at <a href="mailto:contact@gearcloset.com">contact@gearcloset.com</a>
+            Other feedback regarding more systematic abuse of forum guidelines by a particular user, questions about moderation, or other moderation issues should be emailed to our site administrator at <a href="mailto:contact@gearcloset.io">contact@gearcloset.io</a>
           </p>
           <p class="body-text-1">
             Please do not email moderators personally, or private message individual moderators with moderation issues (this is to ensure consistent communications about moderation issues between users and our moderation team).
@@ -150,7 +150,7 @@
             </li>
           </ol>
           <p class="body-text-1">
-            If you observe a violation of behavior by a Forum Moderator, please contact <a href="mailto:contact@gearcloset.com">contact@gearcloset.com</a>
+            If you observe a violation of behavior by a Forum Moderator, please contact <a href="mailto:contact@gearcloset.io">contact@gearcloset.io</a>
           </p>
         </section>
 
@@ -170,7 +170,7 @@
             <li>Are you a good communicator? Can you spell, use good punctuation, and write cohesive, concise, and clear sentences?</li>
           </ol>
           <p class="body-text-1">
-            If you answered yes to these questions, please send an email to <a href="mailto:admin@gearcloset.com">admin@gearcloset.com</a> expressing your interest, and let us know the following information:
+            If you answered yes to these questions, please send an email to <a href="mailto:admin@gearcloset.io">admin@gearcloset.io</a> expressing your interest, and let us know the following information:
           </p>
           <ul class="mb-2">
             <li>Tell us a little about yourself - what are your passions and where does Gear Closet fit into all of that?</li>
@@ -193,7 +193,7 @@
               name="envelope-alt"
               :width="16" />
             <p class="subtitle-2 grey7--text mb-0">
-              Still need help?&nbsp;<a href="mailto:admin@gearcloset.com">Send us an email.</a>
+              Still need help?&nbsp;<a href="mailto:admin@gearcloset.io">Send us an email.</a>
             </p>
           </div>
 
