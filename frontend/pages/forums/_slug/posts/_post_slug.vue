@@ -120,7 +120,7 @@
         this.categories.forEach(category => {
           category.subcategories.forEach(sub => {
             sub.topics.forEach(topic => {
-              if (topic.id === Number(this.$route.params.id)) {
+              if (topic.slug === this.$route.params.post_slug) {
                 found = topic;
               }
             });

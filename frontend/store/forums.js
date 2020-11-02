@@ -20,6 +20,7 @@ export const state = () => ({
               created_at: '2020-03-07 20:45:51',
               updated_at: '2020-03-07 20:45:51',
               pinned: false,
+              slug: 'fs-lightheartgear-solong-6',
               posts: [
                 { id: 1, author: 1, text: 'Selling a 2016 Lightheart Gear SoLong 6', created_at: '2020-03-07 20:45:51', updated_at: '2020-03-07 20:45:51' },
                 { id: 2, author: 2, text: 'What kind of condition is it?', created_at: '2020-03-08 20:45:51', updated_at: '2020-03-08 20:45:51' },
@@ -34,6 +35,7 @@ export const state = () => ({
               created_at: '2020-08-21 20:45:51',
               updated_at: '2020-03-07 20:45:51',
               pinned: false,
+              slug: 'fs-snow-peak-900-titanium-cookset',
               posts: [
                 { id: 4, author: 2, text: 'Selling a Snow Peak 900 Titanium Cookset. $40.', created_at: '2020-03-07 20:45:51', updated_at: '2020-03-07 20:45:51' }
               ]
@@ -46,6 +48,7 @@ export const state = () => ({
               created_at: '2020-03-07 20:45:51',
               updated_at: '2020-03-07 20:45:51',
               pinned: true,
+              slug: 'pinned-this-is-a-test-pinned-topic',
               posts: []
             }
           ]
@@ -71,6 +74,7 @@ export const state = () => ({
               created_at: '2020-03-07 20:45:51',
               updated_at: '2020-03-07 20:45:51',
               pinned: false,
+              slug: 'warbonnet-blackbird',
               posts: [
                 { id: 5, author: 3, text: 'This is a bunch of copy about the Warbonnet Blackbird.', created_at: '2020-03-07 20:45:51', updated_at: '2020-03-07 20:45:51' }
               ]
@@ -99,6 +103,7 @@ export const state = () => ({
               created_at: '2020-03-07 20:45:51',
               updated_at: '2020-03-07 20:45:51',
               pinned: false,
+              slug: 'msr-access-1-tent',
               posts: [
                 { id: 6, author: 3, text: 'This is a bunch of copy about the MSR Access 1 Tent.', created_at: '2020-03-07 20:45:51', updated_at: '2020-03-07 20:45:51' },
                 { id: 7, author: 1, text: 'Yes, I agree.', created_at: '2020-03-20 20:45:51', updated_at: '2020-03-20 20:45:51' }

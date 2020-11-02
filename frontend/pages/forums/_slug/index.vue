@@ -66,7 +66,7 @@
                 :width="20" />
               <nuxt-link
                 class="text-h6"
-                :to="`/forums/${$route.params.slug}/posts/${item.id}`">
+                :to="`/forums/${$route.params.slug}/posts/${item.slug}`">
                 {{ item.title }}
               </nuxt-link>
             </div>
