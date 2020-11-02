@@ -155,10 +155,10 @@
     },
 
     components: {
-      DeleteConfirmModal: () => import('~/components/modals/DeleteConfirmModal'),
+      DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
       PostCard,
       TipTapEditor,
-      ReportPostModal: () => import('~/components/modals/ReportPostModal'),
+      ReportPostModal: () => import(/* webpackPrefetch: true */ '~/components/modals/ReportPostModal'),
       SignUpAlert
     },
 

@@ -179,7 +179,7 @@
     },
 
     components: {
-      CreateNewTopicModal: () => import('~/components/modals/CreateNewTopicModal.vue'),
+      CreateNewTopicModal: () => import(/* webpackPrefetch: true */ '~/components/modals/CreateNewTopicModal.vue'),
       SignUpAlert
     },
 
