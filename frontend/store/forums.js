@@ -49,7 +49,9 @@ export const state = () => ({
               updated_at: '2020-03-07 20:45:51',
               pinned: true,
               slug: 'pinned-this-is-a-test-pinned-topic',
-              posts: []
+              posts: [
+                { id: 5, author: 1, text: 'This is a test of your emergency broadcast system.', created_at: '2020-03-07 20:45:51', updated_at: '2020-03-07 20:45:51' }
+              ]
             }
           ]
         },
