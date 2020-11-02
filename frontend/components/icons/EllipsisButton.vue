@@ -2,6 +2,7 @@
   <v-menu
     bottom
     class="ellipsis-menu"
+    close-on-content-click
     nudge-bottom
     offset-y
     transition="slide-y-transition">
@@ -26,6 +27,7 @@
         <v-list-item
           v-for="(item, index) in items"
           :key="index"
+          active-class="no-active"
           dense
           @click="handleEvent(item)">
           <span :class="['body-1', 'font-weight-medium', ...item.customClass]">{{ item.title }}</span>
@@ -72,5 +74,9 @@
 </script>
 
 <style lang="scss" scoped>
-
+  .no-active {
+    &:before {
+      opacity: 0;
+    }
+  }
 </style>

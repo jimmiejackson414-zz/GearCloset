@@ -37,6 +37,7 @@
           <v-list-item
             v-for="item in currentUser.notifications"
             :key="item.id"
+            active-class="no-active"
             two-line>
             <v-list-item-content>
               <v-list-item-title>{{ item.message }}</v-list-item-title>
@@ -92,5 +93,9 @@
 </script>
 
 <style lang="scss" scoped>
-
+  .no-active {
+    &:before {
+      opacity: 0;
+    }
+  }
 </style>

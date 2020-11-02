@@ -94,7 +94,7 @@
       items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
       listItems: [
         { title: 'Create trip', event: 'create-trip' },
-        { title: 'Delete trip', event: 'delete-trip', customClass: 'secondary--text' }
+        { title: 'Delete trip', event: 'delete-trip', customClass: 'error--text' }
       ]
     }),
 

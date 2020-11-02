@@ -5,8 +5,6 @@
     close-on-click
     nudge-bottom
     offset-y
-    open-on-focus
-    open-on-hover
     transition="slide-y-transition">
     <template #activator="{ on, attrs }">
       <v-btn
@@ -22,7 +20,7 @@
     <v-list
       dense
       elevation="1">
-      <v-list-item>
+      <v-list-item active-class="no-active">
         <div class="text-right">
           <v-list-item-title class="title justify-end">
             {{ currentUser | prettyName }}
@@ -37,6 +35,7 @@
         <v-list-item
           v-for="(item, i) in dropdownItems"
           :key="i"
+          active-class="no-active"
           class="justify-end"
           dense>
           <nuxt-link
@@ -75,5 +74,9 @@
 </script>
 
 <style lang="scss" scoped>
-
+  .no-active {
+    &:before {
+      opacity: 0;
+    }
+  }
 </style>
