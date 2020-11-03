@@ -176,7 +176,12 @@
     height : 100%;
 
     .content-container {
+      padding-left: 56px;
       width: 100%;
+
+      @include breakpoint(smallDisplay) {
+        padding-left: 0;
+      }
 
       .header {
         align-items    : center;

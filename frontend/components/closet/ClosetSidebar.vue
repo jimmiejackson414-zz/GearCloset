@@ -1,13 +1,13 @@
 <template>
   <v-navigation-drawer
     v-model="drawer"
+    :absolute="isMobile"
     class="primary"
     :expand-on-hover="expandOnHover"
     floating
     :mini-variant.sync="mini"
-    :permanent="!isMobile"
-    :temporary="isMobile"
-    width="400">
+    permanent
+    :width="400">
     <v-list nav>
       <v-list-item class="search-container">
         <!-- Search Container -->
@@ -255,9 +255,6 @@
       },
       handleSelectedPack (pack) {
         console.log('handleSelectedPack');
-      },
-      test (event) {
-        console.log('event: ', event);
       }
     },
 
