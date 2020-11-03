@@ -1,172 +1,53 @@
 <template>
-  <sidebar-wrapper>
-    <!-- Search Container -->
-    <div class="search-container">
-      <v-text-field
-        v-model="searchQuery"
-        background-color="#fff"
-        clearable
-        dense
-        flat
-        hide-details
-        label="Search"
-        placeholder="Search"
-        solo-inverted
-        @click:append="clearSearch">
-        <template #prepend-inner>
-          <custom-icon
-            fill="#4a4a4a"
-            :height="20"
-            name="search"
-            :width="20" />
-        </template>
-      </v-text-field>
-    </div>
-
-    <!-- Packs Container -->
-    <div class="wrapper">
-      <div class="header">
-        <div class="header-divider">
-          <h6 class="text-h6 white--text">
-            My Packs
-          </h6>
-          <v-tooltip
-            max-width="300"
-            right>
-            <template #activator="{ on, attrs }">
-              <span
-                v-bind="attrs"
-                v-on="on">
-                <custom-icon
-                  :fill="secondaryLight"
-                  :height="20"
-                  name="info-circle"
-                  :width="20" />
-              </span>
-            </template>
-            <span>Create a new pack list or modify an existing one.</span>
-          </v-tooltip>
-        </div>
-        <v-btn
-          icon
-          :ripple="false"
-          @click="createPackModalOpen = true">
-          <custom-icon
-            fill="#fff"
-            :height="35"
-            name="plus-circle"
-            :width="35" />
-        </v-btn>
-      </div>
-      <v-list
-        v-if="packs.length"
-        class="packs-list mb-4">
-        <transition-group
-          mode="in-out"
-          name="fade">
-          <v-list-item
-            v-for="pack in filteredPacks()"
-            :key="pack.id"
-            :class="[{ selected: activeSelection(pack.id) }, 'pr-8 pl-12' ]"
-            :ripple="false"
-            @click="handleSelectedPack(pack)">
-            <v-list-item-content>
-              <p class="mb-0 font-weight-medium white--text">
-                {{ pack.name }}
-              </p>
-            </v-list-item-content>
-          </v-list-item>
-        </transition-group>
-      </v-list>
-      <p v-else>
-        You haven't created any packs yet!
-      </p>
-    </div>
-
-    <!-- Items Container -->
-    <div
-      v-if="categories"
-      class="wrapper">
-      <div class="header">
-        <div class="header-divider">
-          <h6 class="text-h6 white--text">
-            My Gear
-          </h6>
-          <v-tooltip
-            max-width="300"
-            right>
-            <template #activator="{ on, attrs }">
-              <span
-                v-bind="attrs"
-                v-on="on">
-                <custom-icon
-                  :fill="secondaryLight"
-                  :height="20"
-                  name="info-circle"
-                  :width="20" />
-              </span>
-            </template>
-            <span>Add a new piece of gear to your closet, or add one to the selected pack.</span>
-          </v-tooltip>
-        </div>
-        <v-btn
-          icon
-          :ripple="false"
-          @click="createItemModalOpen = true">
-          <custom-icon
-            fill="#fff"
-            :height="35"
-            name="plus-circle"
-            :width="35" />
-        </v-btn>
-      </div>
-      <v-list>
-        <v-list-group
-          v-for="category in categories"
-          :key="category.id"
-          eager
-          :ripple="false"
-          :value="true">
-          <template #activator>
-            <v-list-item-content class="pl-8 pr-8">
-              <v-list-item-title class="font-weight-medium mb-0 white--text">
-                {{ category.name }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </template>
-          <transition-group
-            mode="in-out"
-            name="fade">
-            <v-list-item
-              v-for="item in filteredItems(category)"
-              :key="item.id"
-              class="pointer px-10"
-              dense
-              :ripple="false">
-              <custom-icon
-                custom-class="gear-handle mr-2"
-                :fill="secondaryLight"
-                :height="20"
-                name="grip-horizontal-line"
-                :width="20" />
-              <p class="mb-0 white--text">
-                {{ item.name }}
-              </p>
-            </v-list-item>
-          </transition-group>
-        </v-list-group>
-      </v-list>
-    </div>
-    <p v-else>
-      You haven't added any items or categories yet!
-    </p>
-  </sidebar-wrapper>
+  <v-navigation-drawer
+    class="primary"
+    :expand-on-hover="expandOnHover"
+    floating
+    permanent>
+    <v-list>
+      <v-list-item class="px-2">
+        <v-list-item-avatar>
+          <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
+        </v-list-item-avatar>
+      </v-list-item>
+      <v-list-item link>
+        <v-list-item-content>
+          <v-list-item-title class="title">
+            Sandra Adams
+          </v-list-item-title>
+          <v-list-item-subtitle>sandra_a88@gmail.com</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+    <v-divider />
+    <v-list
+      dense
+      nav>
+      <v-list-item link>
+        <v-list-item-icon>
+          <v-icon>mdi-folder</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>My Files</v-list-item-title>
+      </v-list-item>
+      <v-list-item link>
+        <v-list-item-icon>
+          <v-icon>mdi-account-multiple</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>Shared with me</v-list-item-title>
+      </v-list-item>
+      <v-list-item link>
+        <v-list-item-icon>
+          <v-icon>mdi-star</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>Starred</v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
 </template>
 
 <script>
   // import { sortBy } from 'lodash';
   import currentUser from '~/mixins/currentUser';
-  import SidebarWrapper from '~/components/SidebarWrapper.vue';
 
   export default {
     mixins: [currentUser],
@@ -174,6 +55,7 @@
     data: () => ({
       createItemModalOpen: false,
       createPackModalOpen: false,
+      expandOnHover: true,
       searchQuery: '',
       secondaryLight: ''
     }),
@@ -224,10 +106,6 @@
 
     mounted () {
       this.secondaryLight = $nuxt.$vuetify.theme.themes.light.secondaryLight;
-    },
-
-    components: {
-      SidebarWrapper
     }
   };
 </script>
