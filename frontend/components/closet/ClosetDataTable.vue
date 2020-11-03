@@ -16,12 +16,13 @@
         <v-data-table
           :ref="`sortableTable${index}`"
           calculate-widths
-          class="items-table-container"
+          :class="['items-table-container', {mobile: isMobile}]"
           dense
           disable-pagination
           :headers="headers"
           hide-default-footer
-          :items="category.items">
+          :items="category.items"
+          :mobile-breakpoint="0">
           <!-- Drag Handle -->
           <template #item.drag>
             <custom-icon
