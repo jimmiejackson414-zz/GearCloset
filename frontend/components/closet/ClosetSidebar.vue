@@ -1,45 +1,187 @@
 <template>
   <v-navigation-drawer
+    v-model="drawer"
     class="primary"
     :expand-on-hover="expandOnHover"
     floating
-    permanent>
-    <v-list>
-      <v-list-item class="px-2">
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
-        </v-list-item-avatar>
-      </v-list-item>
-      <v-list-item link>
-        <v-list-item-content>
-          <v-list-item-title class="title">
-            Sandra Adams
-          </v-list-item-title>
-          <v-list-item-subtitle>sandra_a88@gmail.com</v-list-item-subtitle>
-        </v-list-item-content>
+    :mini-variant.sync="mini"
+    :permanent="!isMobile"
+    :temporary="isMobile"
+    width="400">
+    <v-list nav>
+      <v-list-item class="search-container">
+        <!-- Search Container -->
+        <v-list-item-icon>
+          <custom-icon
+            fill="#fff"
+            :height="24"
+            name="search"
+            :width="24" />
+        </v-list-item-icon>
+        <v-list-item-title>
+          <v-text-field
+            v-model="searchQuery"
+            background-color="#fff"
+            clearable
+            dense
+            flat
+            hide-details
+            label="Search"
+            placeholder="Search"
+            solo-inverted
+            @click:append="clearSearch" />
+        </v-list-item-title>
       </v-list-item>
     </v-list>
-    <v-divider />
+    <v-divider color="white" />
     <v-list
-      dense
+      class="gear-container"
       nav>
-      <v-list-item link>
+      <!-- My Packs -->
+      <v-list-item>
         <v-list-item-icon>
-          <v-icon>mdi-folder</v-icon>
+          <v-icon color="white">
+            mdi-bag-personal
+          </v-icon>
         </v-list-item-icon>
-        <v-list-item-title>My Files</v-list-item-title>
+        <v-list-item-content>
+          <div class="header">
+            <div class="header-divider">
+              <h6 class="text-h6 white--text">
+                My Packs
+              </h6>
+              <v-tooltip
+                max-width="300"
+                right>
+                <template #activator="{ on, attrs }">
+                  <span
+                    v-bind="attrs"
+                    v-on="on">
+                    <custom-icon
+                      :fill="secondaryLight"
+                      :height="20"
+                      name="info-circle"
+                      :width="20" />
+                  </span>
+                </template>
+                <span>Create a new pack list or modify an existing one.</span>
+              </v-tooltip>
+            </div>
+            <v-btn
+              icon
+              :ripple="false"
+              @click="createPackModalOpen = true">
+              <custom-icon
+                fill="#fff"
+                :height="35"
+                name="plus-circle"
+                :width="35" />
+            </v-btn>
+          </div>
+          <v-list
+            v-if="packs.length"
+            class="packs-list">
+            <transition-group
+              mode="in-out"
+              name="fade">
+              <v-list-item
+                v-for="pack in filteredPacks()"
+                :key="pack.id"
+                :class="[{ selected: activeSelection(pack.id) }]"
+                :ripple="false"
+                @click="handleSelectedPack(pack)">
+                <v-list-item-content>
+                  <p class="mb-0 font-weight-medium white--text">
+                    {{ pack.name }}
+                  </p>
+                </v-list-item-content>
+              </v-list-item>
+            </transition-group>
+          </v-list>
+          <p v-else>
+            You haven't created any packs yet!
+          </p>
+        </v-list-item-content>
       </v-list-item>
-      <v-list-item link>
+
+      <!-- My Gear -->
+      <v-list-item>
         <v-list-item-icon>
-          <v-icon>mdi-account-multiple</v-icon>
+          <v-icon color="white">
+            mdi-tent
+          </v-icon>
         </v-list-item-icon>
-        <v-list-item-title>Shared with me</v-list-item-title>
-      </v-list-item>
-      <v-list-item link>
-        <v-list-item-icon>
-          <v-icon>mdi-star</v-icon>
-        </v-list-item-icon>
-        <v-list-item-title>Starred</v-list-item-title>
+        <v-list-item-content>
+          <div class="header">
+            <div class="header-divider">
+              <h6 class="text-h6 white--text">
+                My Gear
+              </h6>
+              <v-tooltip
+                max-width="300"
+                right>
+                <template #activator="{ on, attrs }">
+                  <span
+                    v-bind="attrs"
+                    v-on="on">
+                    <custom-icon
+                      :fill="secondaryLight"
+                      :height="20"
+                      name="info-circle"
+                      :width="20" />
+                  </span>
+                </template>
+                <span>Add a new piece of gear to your closet, or add one to the selected pack.</span>
+              </v-tooltip>
+            </div>
+            <v-btn
+              icon
+              :ripple="false"
+              @click="createItemModalOpen = true">
+              <custom-icon
+                fill="#fff"
+                :height="35"
+                name="plus-circle"
+                :width="35" />
+            </v-btn>
+          </div>
+          <v-list class="gear-list">
+            <v-list-group
+              v-for="category in categories"
+              :key="category.id"
+              eager
+              :ripple="false"
+              :value="true">
+              <template #activator>
+                <v-list-item-content>
+                  <v-list-item-title class="font-weight-medium mb-0 white--text">
+                    {{ category.name }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <transition-group
+                mode="in-out"
+                name="fade">
+                <v-list-item
+                  v-for="item in filteredItems(category)"
+                  :key="item.id"
+                  class="pointer"
+                  dense
+                  :ripple="false">
+                  <custom-icon
+                    custom-class="gear-handle mr-2"
+                    :fill="secondaryLight"
+                    :height="20"
+                    name="grip-horizontal-line"
+                    :width="20" />
+                  <p class="mb-0 white--text">
+                    {{ item.name }}
+                  </p>
+                </v-list-item>
+              </transition-group>
+            </v-list-group>
+          </v-list>
+        </v-list-item-content>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -47,20 +189,32 @@
 
 <script>
   // import { sortBy } from 'lodash';
+  import { mapState } from 'vuex';
   import currentUser from '~/mixins/currentUser';
 
   export default {
     mixins: [currentUser],
 
+    props: {
+      isMobile: {
+        type: Boolean,
+        default: true
+      }
+    },
+
     data: () => ({
       createItemModalOpen: false,
       createPackModalOpen: false,
-      expandOnHover: true,
+      drawer: true,
+      mini: true,
       searchQuery: '',
       secondaryLight: ''
     }),
 
     computed: {
+      ...mapState({
+        expandOnHover: state => state.closet.sidebarExpandOnHover
+      }),
       categories () {
         // TODO: will need to update this
         return this.packs[0].categories;
@@ -101,6 +255,9 @@
       },
       handleSelectedPack (pack) {
         console.log('handleSelectedPack');
+      },
+      test (event) {
+        console.log('event: ', event);
       }
     },
 
@@ -109,18 +266,6 @@
     }
   };
 </script>
-
-<style lang="scss" scoped>
-  .search-container {
-    border-bottom: 1px solid $grey8;
-    margin: 2rem 2rem 1rem;
-
-    .wrapper {
-      border-bottom: 1px solid $grey8;
-      padding-bottom: 1rem;
-    }
-  }
-</style>
 
 <style lang="scss">
   .search-container {
@@ -135,55 +280,33 @@
     }
   }
 
-  .wrapper {
-    .header {
-      align-items    : center;
-      display        : flex;
-      justify-content: space-between;
-      margin: 0 2rem;
+  .gear-container {
+    .v-list-item {
+      &__content {
+        color: #fff;
 
-      .header-divider {
-        align-items    : center;
-        display        : flex;
-        justify-content: flex-start;
+        .header {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          width: 100%;;
 
-        .text-h6 {
-          padding     : 1rem 0;
-          margin-right: 0.5rem;
-        }
-      }
-    }
+          &-divider {
+            align-items    : center;
+            display        : flex;
+            justify-content: flex-start;
 
-    .v-list {
-      background-color: transparent;
-      box-shadow: none;
-      padding: 0;
-
-      &.packs-list {
-        .v-list-item {
-          &.selected {
-            background-color: $primaryDark;
-          }
-        }
-      }
-
-      .v-list-group {
-        .v-list-group__header {
-          .v-list-item__title {
-            font-size: 1rem;
-            font-weight: 600;
-          }
-          .v-list-item__icon {
-            margin-right: 20px;
-
-            i {
-              color: $secondaryLight;
+            .text-h6 {
+              margin-right: 0.5rem;
             }
           }
         }
 
-        .v-list-group__items {
-          .v-list-item {
+        .packs-list, .gear-list {
+         .v-list-item {
+            &.selected {
+              background-color: $primaryDark;
+            }
+
             .gear-handle {
               opacity: 0;
               transition: 0.2s opacity $cubicBezier;
@@ -193,6 +316,12 @@
               .gear-handle {
                 cursor: grab;
                 opacity: 1;
+              }
+            }
+
+            &__icon {
+              i {
+                color: $secondaryLight;
               }
             }
           }

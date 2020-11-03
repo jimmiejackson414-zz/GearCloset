@@ -110,9 +110,12 @@
 
 <script>
   import CustomIcon from '~/components/icons/CustomIcon';
+  import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
 
   export default {
+    mixins: [isMobile],
+
     data: () => ({
       deleteColor: '',
       editableItem: null,
@@ -121,7 +124,6 @@
         { text: 'Quantity', align: 'center', sortable: true, value: 'quantity', width: '40%' },
         { text: '', align: 'end', sortable: false, value: 'actions', width: '1%' }
       ],
-      isMobile: false,
       items: [
         { id: 9, title: 'Smartwater Bottles', checked: 1, quantity: 2, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' },
         { id: 10, title: 'Beef Jerkey', checked: 0, quantity: 1, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' },
@@ -149,9 +151,6 @@
           updated_at: Date.now()
         });
       },
-      onResize () {
-        window.innerWidth < 769 ? this.isMobile = true : this.isMobile = false;
-      },
       removeItem (item, index) {
         this.items.splice(index, 1);
       },
@@ -177,7 +176,6 @@
 
     mounted () {
       this.deleteColor = $nuxt.$vuetify.theme.themes.light.secondary;
-      this.onResize();
     },
 
     components: {

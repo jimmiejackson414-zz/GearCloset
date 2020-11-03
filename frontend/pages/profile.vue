@@ -134,6 +134,7 @@
   import AccountSettings from '~/components/profile/forms/AccountSettings.vue';
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import isMobile from '~/mixins/isMobile';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition.vue';
   import SubscriptionSettings from '~/components/profile/forms/SubscriptionSettings.vue';
   import UserSettings from '~/components/profile/forms/UserSettings.vue';
@@ -141,13 +142,12 @@
   export default {
     name: 'Profile',
 
-    mixins: [currentUser],
+    mixins: [currentUser, isMobile],
 
     data () {
       return {
         confirm_password: '',
         iconColor: '',
-        isMobile: true,
         submitting: false,
         mobileTab: 'user',
         tabs: [
@@ -169,9 +169,6 @@
       },
       handleTabSwitch (e) {
         this.mobileTab = e;
-      },
-      onResize () {
-        window.innerWidth < 769 ? this.isMobile = true : this.isMobile = false;
       }
     },
 

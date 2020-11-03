@@ -1,7 +1,9 @@
 <template>
-  <div class="closet-page-styles">
+  <div
+    v-resize="onResize"
+    class="closet-page-styles">
     <!-- Sidebar -->
-    <closet-sidebar />
+    <closet-sidebar :is-mobile="isMobile" />
 
     <!-- Content -->
     <div class="content-container">
@@ -18,15 +20,56 @@
                 :ripple="false"
                 @click="shareListModalOpen = true">
                 <custom-icon
-                  fill="#4a4a4a"
+                  :fill="lightGrey"
                   :height="20"
                   name="share"
                   :width="20" />
-                <p class="body-2 mb-0">
+                <p class="body-2 mb-0 grey7--text">
                   Share
                 </p>
               </v-btn>
             </div>
+            <!-- Options Button -->
+            <v-menu
+              v-if="!isMobile"
+              :close-on-content-click="false"
+              nudge-bottom
+              offset-x
+              offset-y>
+              <template #activator="{ on, attrs }">
+                <v-btn
+                  v-bind="attrs"
+                  depressed
+                  icon
+                  :ripple="false"
+                  v-on="on">
+                  <custom-icon
+                    :fill="lightGrey"
+                    :height="25"
+                    name="setting"
+                    :width="25" />
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item>
+                  <v-switch
+                    class="ma-0"
+                    color="accent"
+                    flat
+                    hide-details
+                    inset
+                    :ripple="false"
+                    :value="!sidebarExpandOnHover"
+                    @change="toggleSidebarExpandOnHover">
+                    <template #label>
+                      <p class="body-text-1 mb-0">
+                        Lock sidebar
+                      </p>
+                    </template>
+                  </v-switch>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </div>
         </div>
         <v-row class="closet-pack-graph-wrapper">
@@ -49,20 +92,23 @@
 </template>
 
 <script>
+  import { mapActions, mapState } from 'vuex';
   import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
   import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
   import { convertToDollars, generateUUID } from '~/helpers/functions';
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import isMobile from '~/mixins/isMobile';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
 
   export default {
     name: 'Closet',
 
-    mixins: [currentUser],
+    mixins: [currentUser, isMobile],
 
     data: () => ({
       deleteConfirmOpen: false,
+      lightGrey: '',
       list: {
         id: 1,
         title: 'Summer',
@@ -73,12 +119,18 @@
     }),
 
     computed: {
+      ...mapState({
+        sidebarExpandOnHover: state => state.closet.sidebarExpandOnHover
+      }),
       activePack () {
         return this.currentUser.packs.find(pack => pack.active);
       }
     },
 
     methods: {
+      ...mapActions('closet', [
+        'toggleSidebarExpandOnHover'
+      ]),
       convertCurrency (amount) {
         return convertToDollars(amount);
       },
@@ -96,6 +148,10 @@
         this.update(item, action, item[action]);
       }
 
+    },
+
+    mounted () {
+      this.lightGrey = this.$nuxt.$vuetify.theme.themes.light.grey7;
     },
 
     components: {
@@ -128,10 +184,17 @@
         justify-content: space-between;
 
         .actions {
-          margin-right: 2rem;
+          align-items: center;
+          display: flex;
+          margin-right: 0;
+
+          @include breakpoint(smallDisplay) {
+            margin-right: 2rem;
+          }
 
           .share-wrapper {
             display: flex;
+            margin-right: 2rem;
 
             .share-btn {
               p, svg {
