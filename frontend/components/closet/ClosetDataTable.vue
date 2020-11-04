@@ -28,7 +28,6 @@
               <draggable
                 v-bind="dragOptions"
                 class="dragArea"
-                direction="v"
                 group="items"
                 handle=".drag"
                 :list="items"
