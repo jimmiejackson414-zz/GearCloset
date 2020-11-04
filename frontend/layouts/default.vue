@@ -80,7 +80,6 @@
 
     data: () => ({
       drawer: false,
-
       offsetTop: 0
     }),
 

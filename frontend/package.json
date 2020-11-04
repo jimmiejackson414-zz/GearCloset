@@ -26,7 +26,8 @@
     "tiptap-vuetify": "^2.24.0",
     "v-mask": "^2.2.3",
     "vue-apexcharts": "^1.6.0",
-    "vue-unicons": "^2.3.0"
+    "vue-unicons": "^2.3.0",
+    "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.1.0",

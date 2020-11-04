@@ -71,9 +71,12 @@
 <script>
   import ClickToEdit from '~/components/ClickToEdit';
   import CustomIcon from '~/components/icons/CustomIcon';
+  import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
 
   export default {
+    mixins: [isMobile],
+
     data: () => ({
       deleteColor: '',
       editableItem: null,
@@ -81,7 +84,6 @@
         { text: 'Item', value: 'title', align: 'left', sortable: true, width: '95%' },
         { text: '', value: 'delete', align: 'left', sortable: false, width: '5%' }
       ],
-      isMobile: false,
       todos: [
         { id: 28, title: 'Book Car Rental', checked: 0, created_at: '2020-03-08 11:31:27', updated_at: '2020-03-08 11:31:27' },
         { id: 29, title: 'Call hostel', checked: 1, created_at: '2020-04-08 11:31:27', updated_at: '2020-04-08 11:31:27' }
@@ -105,9 +107,6 @@
           created_at: Date.now(),
           updated_at: Date.now()
         });
-      },
-      onResize () {
-        window.innerWidth < 769 ? this.isMobile = true : this.isMobile = false;
       },
       removeTodo (todo, index) {
         this.todos.splice(index, 1);
@@ -134,7 +133,6 @@
 
     mounted () {
       this.deleteColor = $nuxt.$vuetify.theme.themes.light.secondary;
-      this.onResize();
     },
 
     components: {

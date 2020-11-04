@@ -5,7 +5,7 @@
       :flat="!isOriginalPost"
       :outlined="isOriginalPost">
       <v-row>
-        <v-col cols="12 d-flex align-center justify-space-between">
+        <v-col cols="12 d-flex align-start justify-space-between">
           <div class="left d-flex">
             <v-avatar
               color="primary"
