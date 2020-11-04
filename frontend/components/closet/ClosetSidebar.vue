@@ -159,9 +159,13 @@
                   </v-list-item-title>
                 </v-list-item-content>
               </template>
-              <transition-group
-                mode="in-out"
-                name="fade">
+              <draggable
+                class="drag-area list-group"
+                :group="{ name: 'items', pull: 'clone', put: false}"
+                handle=".gear-handle"
+                :list="filteredItems(category)"
+                :sort="false"
+                @change="log">
                 <v-list-item
                   v-for="item in filteredItems(category)"
                   :key="item.id"
@@ -178,7 +182,7 @@
                     {{ item.name }}
                   </p>
                 </v-list-item>
-              </transition-group>
+              </draggable>
             </v-list-group>
           </v-list>
         </v-list-item-content>
@@ -190,7 +194,10 @@
 <script>
   // import { sortBy } from 'lodash';
   import { mapState } from 'vuex';
+  import draggable from 'vuedraggable';
   import currentUser from '~/mixins/currentUser';
+
+  let idGlobal = 8;
 
   export default {
     mixins: [currentUser],
@@ -225,6 +232,17 @@
     },
 
     methods: {
+      cloneItem ({ id }) {
+        console.log('cloneItem id: ', id);
+        return {
+          id: idGlobal++,
+          name: `cat ${id}`
+        };
+      },
+      log (evt) {
+        console.log('sidebar log: ', evt);
+      },
+
       activeSelection (id) {
         // TODO: will need to update this
         return true;
@@ -260,6 +278,10 @@
 
     mounted () {
       this.secondaryLight = $nuxt.$vuetify.theme.themes.light.secondaryLight;
+    },
+
+    components: {
+      draggable
     }
   };
 </script>
