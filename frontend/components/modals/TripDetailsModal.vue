@@ -6,9 +6,40 @@
     <v-card>
       <v-card-title>{{ formatAction }} Detail</v-card-title>
       <v-card-text>
-        <div class="text-body-1">
-          Create or Update a detail
-        </div>
+        <v-text-field
+          color="primary"
+          dense
+          :disabled="submitting"
+          :error="isError"
+          label="Title"
+          outlined
+          placeholder="Flight 1"
+          required
+          :rules="titleRules"
+          type="text"
+          :value="detail ? detail.title : ''"
+          @input="detail = $event.target.value" />
+        <v-text-field
+          v-model="url"
+          dense
+          :disabled="submitting"
+          :error="isError"
+          label="URL"
+          outlined
+          placeholder="https://www.southwest.com"
+          required
+          type="url" />
+        <v-text-field
+          v-model="urlTitle"
+          dense
+          :disabled="submitting"
+          :error="isError"
+          label="Description"
+          outlined
+          placeholder="SW436"
+          required
+          :rules="urlTitleRules"
+          type="text" />
       </v-card-text>
       <v-card-actions class="justify-space-between">
         <v-btn
@@ -56,7 +87,17 @@
     },
 
     data: () => ({
-      submitting: false
+      isError: false,
+      submitting: false,
+      // title: this.detail ? this.detail.title : '',
+      titleRules: [
+        v => !!v || 'Title is required'
+      ],
+      url: '',
+      urlTitle: '',
+      urlTitleRules: [
+        v => !!v || 'Description is required'
+      ]
     }),
 
     computed: {

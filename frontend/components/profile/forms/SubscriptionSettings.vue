@@ -11,94 +11,12 @@
     </h6>
     <v-row>
       <!-- Cards -->
-      <v-col
+      <upgrade-card
         v-for="(card, index) in cards"
         :key="index"
-        class="col-12 col-md-6 d-flex flex-column">
-        <v-card
-          :class="[`${Object.keys(card)[0]}-card`, 'flex', 'd-flex', 'flex-column']"
-          outlined>
-          <v-card-title class="pb-0">
-            <h4 class="text-h4 card-title">
-              {{ Object.keys(card)[0] }}
-            </h4>
-          </v-card-title>
-          <v-card-text class="flex">
-            <v-list dense>
-              <v-list-item
-                v-for="(item, i) in card[Object.keys(card)[0]]"
-                :key="i">
-                <v-list-item-icon class="mr-4">
-                  <custom-icon
-                    :fill="primaryColor"
-                    :height="24"
-                    name="check"
-                    :width="24" />
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <p class="text-body-1 mb-0">
-                    {{ item }}
-                  </p>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-          <v-card-actions class="justify-center">
-            <div class="btn-wrapper text-center">
-              <!-- Upgrade Title -->
-              <div
-                v-if="shouldShow(card, 'free', 'free')"
-                class="overline text-center">
-                Downgrade Option:
-              </div>
-              <div
-                v-if="shouldShow(card, 'member', 'annual')"
-                class="overline text-center">
-                Upgrade Options:
-              </div>
-              <div
-                v-if="Object.keys(card)[0] === 'member' && currentUser.subscription_level.toLowerCase() === 'annual'"
-                class="overline text-center">
-                Downgrade Option:
-              </div>
-
-              <!-- Upgrade/Downgrade Buttons -->
-              <v-btn
-                v-if="Object.keys(card)[0] === currentUser.subscription_level.toLowerCase()"
-                color="info"
-                depressed
-                disabled
-                :ripple="false">
-                Current Plan
-              </v-btn>
-              <v-btn
-                v-if="shouldShow(card, 'free', 'free')"
-                color="accent"
-                depressed
-                :ripple="false"
-                @click="handleModalOpen">
-                Free
-              </v-btn>
-              <v-btn
-                v-if="shouldShow(card, 'member', 'monthly')"
-                color="primary"
-                depressed
-                :ripple="false"
-                @click="handleModalOpen">
-                Monthly ($0.99/mo)
-              </v-btn>
-              <v-btn
-                v-if="shouldShow(card, 'member', 'annual')"
-                color="success"
-                depressed
-                :ripple="false"
-                @click="handleModalOpen">
-                Annual ($9.99/yr)
-              </v-btn>
-            </div>
-          </v-card-actions>
-        </v-card>
-      </v-col>
+        :card="card"
+        :user="currentUser"
+        @handle-modal-open="handleModalOpen" />
     </v-row>
     <update-subscription-modal v-model="modalOpen" />
   </v-container>
@@ -106,6 +24,7 @@
 
 <script>
   import dayjs from 'dayjs';
+  import UpgradeCard from '~/components/UpgradeCard.vue';
 
   export default {
     props: {
@@ -120,7 +39,6 @@
         { free: ['Create only one pack list.', 'Plan only one trip.'] },
         { member: ['Create unlimited pack lists.', 'Collaborate on trips with your friends.', 'Access to the forums.'] }
       ],
-      primaryColor: '',
       modalOpen: false
     }),
 
@@ -136,18 +54,12 @@
     methods: {
       handleModalOpen () {
         this.modalOpen = true;
-      },
-      shouldShow (card, itemName, subscriptionLevel) {
-        return Object.keys(card)[0] === itemName && this.currentUser.subscription_level.toLowerCase() !== subscriptionLevel;
       }
     },
 
-    mounted () {
-      this.primaryColor = $nuxt.$vuetify.theme.themes.light.primary;
-    },
-
     components: {
-      UpdateSubscriptionModal: () => import(/* webpackPrefetch: true */ '~/components/modals/UpdateSubscriptionModal')
+      UpdateSubscriptionModal: () => import(/* webpackPrefetch: true */ '~/components/modals/UpdateSubscriptionModal'),
+      UpgradeCard
     }
   };
 </script>

@@ -1,6 +1,5 @@
 <template>
   <v-dialog
-
     v-model="show"
     max-width="750"
     :persistent="submitting">

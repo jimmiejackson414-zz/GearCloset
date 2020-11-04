@@ -39,17 +39,26 @@
     </v-row>
 
     <!-- Full Screen Upgrade -->
-    <full-screen-upgrade v-model="upgradeModalOpen" />
+    <full-screen-upgrade
+      v-model="upgradeModalOpen"
+      :user="currentUser"
+      @handle-modal-open="updateSubscriptionModalOpen = true" />
+
+    <update-subscription-modal v-model="updateSubscriptionModalOpen" />
   </v-container>
 </template>
 
 <script>
   import { mapState } from 'vuex';
   import CategoryBox from '~/components/forums/CategoryBox.vue';
+  import currentUser from '~/mixins/currentUser';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
+    mixins: [currentUser],
+
     data: () => ({
+      updateSubscriptionModalOpen: false,
       upgradeModalOpen: false
     }),
 
@@ -68,7 +77,8 @@
     components: {
       CategoryBox,
       FullScreenUpgrade: () => import(/* webpackPrefetch: true */'~/components/modals/FullScreenUpgrade'),
-      SignUpAlert
+      SignUpAlert,
+      UpdateSubscriptionModal: () => import(/* webpackPrefetch: true */'~/components/modals/UpdateSubscriptionModal')
     },
 
     head () {
