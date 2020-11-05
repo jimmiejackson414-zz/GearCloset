@@ -20,7 +20,9 @@
     <v-list
       dense
       elevation="1">
-      <v-list-item active-class="no-active">
+      <v-list-item
+        active-class="no-active"
+        class="py-2">
         <div class="text-right">
           <v-list-item-title class="title justify-end">
             {{ currentUser | prettyName }}
