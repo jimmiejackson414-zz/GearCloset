@@ -1,0 +1,65 @@
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type Query {
+    users: [User!]! @paginate(defaultCount: 10)
+    user(id: ID @eq): User @find
+
+    forumCategories: [ForumCategory!]! @all
+    forumCategory(id: ID @eq): ForumCategory @find
+
+    forumSubcategories: [ForumSubcategory!]! @all
+    forumSubcategory(id: ID @eq): ForumSubcategory @find
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type ForumCategory {
+    id: ID!
+    title: String!
+    description: String!
+    slug: String!
+    subcategories: [ForumSubcategory!]! @hasMany
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type ForumSubcategory {
+    id: ID!
+    title: String!
+    slug: String!
+    posts: [ForumPost!]! @hasMany
+    category: ForumCategory! @belongsTo
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type ForumPost {
+    id: ID!
+    title: String!
+    subcategory: ForumSubcategory! @belongsTo
+    user: User! @belongsTo
+    pinned: Boolean!
+    slug: String!
+    comments: [ForumComment!]! @hasMany
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type ForumComment {
+    id: ID!
+    user: User! @belongsTo
+    post: ForumPost! @belongsTo
+    text: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
