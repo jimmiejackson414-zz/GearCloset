@@ -16,8 +16,8 @@ class CreateForumPostsTable extends Migration
         Schema::create('forum_posts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->unsignedBigInteger('forum_subcategory_id');
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('forum_subcategory_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->boolean('pinned');
             $table->string('slug');
             $table->timestamps();

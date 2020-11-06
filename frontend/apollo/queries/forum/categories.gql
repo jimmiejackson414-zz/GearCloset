@@ -1,0 +1,19 @@
+query Categories {
+  categories: forumCategories {
+    id
+    title
+    description
+    slug
+
+    subcategories {
+      id
+      title
+      slug
+      postCount
+
+      posts {
+        commentCount
+      }
+    }
+  }
+}

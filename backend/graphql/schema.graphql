@@ -13,12 +13,31 @@ type Query {
 
     forumSubcategories: [ForumSubcategory!]! @all
     forumSubcategory(id: ID @eq): ForumSubcategory @find
+    forumSubcategoryBySlug(slug: String! @eq): ForumSubcategory
+
+    forumPosts: [ForumPost!]! @all
+    forumPost(id: ID @eq): ForumPost @find
+    forumPostBySlug(slug: String! @eq): ForumPost
+
+    forumComments: [ForumComment!]! @all
+    forumComment(id: ID @eq): ForumComment @find
 }
 
 type User {
     id: ID!
-    name: String!
     email: String!
+    password: String!
+    avatar_url: String!
+    address_1: String!
+    address_2: String!
+    city: String!
+    state: String!
+    country: String!
+    first_name: String!
+    last_name: String!
+    trail_name: String!
+    subscription_level: String!
+    measuring_system: String!
     created_at: DateTime!
     updated_at: DateTime!
 }
@@ -41,6 +60,8 @@ type ForumSubcategory {
     category: ForumCategory! @belongsTo
     created_at: DateTime!
     updated_at: DateTime!
+
+    postCount: Int! @count(relation: "posts")
 }
 
 type ForumPost {
@@ -53,6 +74,8 @@ type ForumPost {
     comments: [ForumComment!]! @hasMany
     created_at: DateTime!
     updated_at: DateTime!
+
+    commentCount: Int! @count(relation: "comments")
 }
 
 type ForumComment {

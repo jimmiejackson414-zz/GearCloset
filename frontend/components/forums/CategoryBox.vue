@@ -29,14 +29,14 @@
           class="pb-0 text-center"
           cols="2">
           <p class="body-text-1 font-weight-bold mb-0">
-            Topics
+            Posts
           </p>
         </v-col>
         <v-col
           class="pb-0 text-center"
           cols="2">
           <p class="body-text-1 font-weight-bold mb-0">
-            Posts
+            Comments
           </p>
         </v-col>
       </v-row>
@@ -61,10 +61,10 @@
           </div>
         </v-col>
         <v-col class="text-center">
-          {{ topicsCount(sub) }}
+          {{ sub.postCount }}
         </v-col>
         <v-col class="text-center">
-          {{ postsCount(sub) }}
+          {{ commentsCount(sub) }}
         </v-col>
       </v-row>
     </v-container>
@@ -85,11 +85,8 @@
     }),
 
     methods: {
-      postsCount (sub) {
-        return sub.topics.reduce((sum, elem) => sum + elem.posts.length, 0);
-      },
-      topicsCount (sub) {
-        return sub.topics.length;
+      commentsCount (sub) {
+        return sub.posts.reduce((sum, elem) => sum + elem.commentCount, 0);
       }
     },
 

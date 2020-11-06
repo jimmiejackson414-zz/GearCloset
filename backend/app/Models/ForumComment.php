@@ -13,11 +13,11 @@ class ForumComment extends Model
 
     public function post(): belongsTo
     {
-        return $this->belongsTo(ForumPost::class);
+        return $this->belongsTo(ForumPost::class, 'forum_post_id');
     }
 
     public function user(): belongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -1,6 +1,6 @@
 <template>
   <v-container class="category-slug-container">
-    <v-row>
+    <v-row v-if="!loading">
       <v-col
         cols="12"
         md="8"
@@ -36,7 +36,7 @@
               :width="16" />New Post
           </v-btn>
         </div>
-        <sign-up-alert />
+        <sign-up-alert @handle-open-upgrade-form="handleOpenUpgradeForm" />
 
         <!-- list of category posts -->
         <v-text-field
@@ -49,6 +49,7 @@
           outlined
           single-line />
         <v-data-table
+          v-if="items"
           class="posts-table"
           :headers="headers"
           :item-class="isPinned"
@@ -86,17 +87,25 @@
       </v-col>
     </v-row>
 
+    <loading-page v-else />
+
+    <!-- Full Screen Upgrade -->
+    <full-screen-upgrade
+      v-model="upgradeModalOpen"
+      :user="currentUser"
+      @handle-modal-open="updateSubscriptionModalOpen = true" />
+
     <!-- Create New Topic Modal -->
     <create-new-topic-modal v-model="createNewTopicModal" />
   </v-container>
 </template>
 
 <script>
-  import { mapState } from 'vuex';
   import * as dayjs from 'dayjs';
   import relativeTime from 'dayjs/plugin/relativeTime';
   import currentUser from '~/mixins/currentUser';
-  import { convertSlugToTitle } from '~/helpers/functions';
+  import LoadingPage from '~/components/LoadingPage.vue';
+  import subCategoryQuery from '~/apollo/queries/forum/subcategory.gql';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
@@ -104,68 +113,67 @@
 
     mixins: [currentUser],
 
+    apollo: {
+      subcategory: {
+        query: subCategoryQuery,
+        variables () {
+          return {
+            slug: this.$route.params.slug
+          };
+        },
+        result ({ data: { subcategory } }) {
+          this.items = subcategory.posts.sort((a, b) => b.pinned - a.pinned);
+          this.breadcrumbs[1] = { text: subcategory.title, disabled: true };
+        }
+      }
+    },
+
     data () {
       return {
         createNewTopicModal: false,
         headers: [
-          { text: 'Topic', align: 'start', sortable: false, value: 'title' },
-          { text: 'Posts', align: 'center', sortable: false, value: 'posts.length', filterable: false },
+          { text: 'Post', align: 'start', sortable: false, value: 'title' },
+          { text: 'Comments', align: 'center', sortable: false, value: 'commentCount', filterable: false },
           { text: 'Last Post', align: 'center', sortable: false, value: 'last_post', filterable: false }
         ],
         breadcrumbs: [
           { text: 'Forums', disabled: false, to: '/forums' },
-          { text: convertSlugToTitle(this.$route.params.slug), disabled: true, to: this.$route.params.slug }
+          { text: '', disabled: true }
         ],
         items: null,
+        loading: 0,
         search: '',
-        warningDarkest: ''
+        warningDarkest: '',
+        upgradeModalOpen: false
       };
     },
 
     computed: {
-      ...mapState({
-        categories: state => state.forums.categories
-      }),
       pageTitle () {
-        return convertSlugToTitle(this.$route.params.slug);
+        return this.subcategory ? this.subcategory.title : '';
       }
     },
 
     methods: {
-      determineItems () {
-        // TODO: Refactor when backend is in place
-        const slug = this.$route.params.slug;
-        const allTopics = [];
-        this.categories.forEach(cat => {
-          return cat.subcategories.forEach(s => {
-            if (s.slug === slug) {
-              allTopics.push(s.topics);
-            }
-          });
-        });
-        // Set pinned topics at start, then rest of topics sorted by descending order
-        this.items = [
-          ...allTopics[0].filter(t => t.pinned),
-          ...allTopics[0].filter(t => !t.pinned)
-            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-        ];
-      },
       handleCreateNewTopic () {
         this.createNewTopicModal = true;
       },
-      isPinned (item) {
-        return item.pinned && 'pinned';
+      handleOpenUpgradeForm () {
+        this.upgradeModalOpen = true;
       },
-      lastPost (item) {
-        // TODO: Refactor when backend is in place
+      isPinned (post) {
+        return post.pinned && 'pinned';
+      },
+      lastPost (post) {
+        const lastComment = post.comments.reduce((r, o) => o.updated_at < r.updated_at ? o : r);
+
         return {
-          date: dayjs(this.items[0].updated_at).fromNow(),
-          author: 'Hulk Hogan'
+          date: dayjs(lastComment.updated_at).fromNow(),
+          author: this.$options.filters.prettyName(lastComment.author)
         };
       },
-      postAuthor (topic) {
-        // TODO: Refactor when backend is in place
-        return 'Randy Savage';
+      postAuthor (post) {
+        return this.$options.filters.prettyName(post.author);
       },
       resetModal () {
         console.log('resetModal');
@@ -173,13 +181,14 @@
     },
 
     created () {
-      this.determineItems();
       dayjs.extend(relativeTime);
       this.warningDarkest = this.$nuxt.$vuetify.theme.themes.light.warningDarkest;
     },
 
     components: {
       CreateNewTopicModal: () => import(/* webpackPrefetch: true */ '~/components/modals/CreateNewTopicModal.vue'),
+      FullScreenUpgrade: () => import(/* webpackPrefetch: true */'~/components/modals/FullScreenUpgrade'),
+      LoadingPage,
       SignUpAlert
     },
 

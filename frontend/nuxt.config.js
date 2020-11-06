@@ -15,14 +15,32 @@ export default {
     ]
   },
 
-  env: {
-    baseUrl: process.env.VUE_APP_API_URL || 'http://localhost:3000'
+  /*
+   ** PrivateRuntimeConfig (API Secrets, etc.)
+   */
+  publicRuntimeConfig: {
+    baseUrl: process.env.NUXT_ENV_API_URL || 'http://localhost:3000',
+    apiUrl: process.env.NUXT_ENV_BACKEND_API_URL || 'http://localhost:8000/graphql'
   },
 
+  /*
+   ** PrivateRuntimeConfig (API Secrets, etc.)
+   */
+  privateRuntimeConfig: {
+
+  },
+
+  /*
+   ** Global CSS
+   */
   css: [
     '~/css/global.scss'
   ],
 
+  /*
+   ** Plugins to load before mounting the App
+   ** Icons can be found at https://antonreshetov.github.io/vue-unicons/
+   */
   plugins: [
     { src: '~/plugins/vue-unicons', mode: 'client' },
     { src: '~/plugins/v-mask', mode: 'client' },
@@ -33,19 +51,45 @@ export default {
 
   components: true,
 
+  /*
+   ** Nuxt.js dev-modules
+   */
   buildModules: [
     '@nuxtjs/eslint-module',
     '@nuxtjs/vuetify',
     '@nuxtjs/style-resources'
   ],
 
+  /*
+   ** Nuxt.js build modules
+   */
   modules: [
-    '@nuxtjs/axios',
+    '@nuxtjs/apollo',
     '@nuxtjs/auth',
-    '@nuxtjs/pwa',
-    '@nuxtjs/dayjs'
+    '@nuxtjs/dayjs',
+    '@nuxtjs/pwa'
   ],
 
+  /*
+  ** Apollo module configuration
+  */
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: process.env.NUXT_ENV_BACKEND_API_URL
+      }
+    },
+    defaultOptions: {
+      $query: {
+        loadingKey: 'loading',
+        fetchPolicy: 'network-only'
+      }
+    }
+  },
+
+  /*
+   ** Progressive Web App configuration
+   */
   pwa: {
     icon: {
       fileName: 'icon.png',
@@ -54,6 +98,9 @@ export default {
     }
   },
 
+  /*
+   ** Auth configuration to Laravel backend
+   */
   auth: {
     strategies: {
       'laravel.passport': {
@@ -64,8 +111,9 @@ export default {
     }
   },
 
-  axios: {},
-
+  /*
+  ** Dayjs module configuration
+  */
   dayjs: {
     locales: ['en'],
     defaultLocale: 'en',
@@ -73,16 +121,25 @@ export default {
 
   },
 
+  /*
+  ** Customize the progress-bar color
+  */
   loading: {
     color: '#2368a2',
     height: '5px',
     failedColor: '#db3030'
   },
 
+  /*
+  ** Enable global scss variables
+  */
   styleResources: {
     scss: ['./css/_colors.scss', '~/css/_breakpoints.scss', '~/css/_defaults.scss']
   },
 
+  /*
+   ** Vuetify configuration
+   */
   vuetify: {
     customVariables: ['~/css/variables.scss'],
     treeShake: true,
@@ -133,6 +190,9 @@ export default {
     }
   },
 
+  /*
+   ** Build configuration
+   */
   build: {
     standalone: true,
     extend (config, { isDev, isClient }) {
