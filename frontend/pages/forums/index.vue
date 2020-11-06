@@ -49,24 +49,26 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+  import categoriesQuery from '~/apollo/queries/forum/categories.gql';
   import CategoryBox from '~/components/forums/CategoryBox.vue';
   import currentUser from '~/mixins/currentUser';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
+    name: 'ForumIndex',
+
     mixins: [currentUser],
+
+    apollo: {
+      categories: {
+        query: categoriesQuery
+      }
+    },
 
     data: () => ({
       updateSubscriptionModalOpen: false,
       upgradeModalOpen: false
     }),
-
-    computed: {
-      ...mapState({
-        categories: state => state.forums.categories
-      })
-    },
 
     methods: {
       handleOpenUpgradeForm () {

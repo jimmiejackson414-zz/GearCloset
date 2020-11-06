@@ -35,7 +35,7 @@
           <post-card
             :author="topicAuthor"
             :is-original-post="isOriginalPost"
-            :post="topic.posts[0]"
+            :post="post.comments[0]"
             @toggle-delete-confirm-modal="toggleDeleteConfirmModal"
             @toggle-report-post-modal="toggleReportPostModal" />
 
@@ -85,7 +85,7 @@
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
-    name: 'Post',
+    name: 'PostSlug',
 
     mixins: [currentUser],
 
@@ -107,19 +107,19 @@
         categories: state => state.forums.categories
       }),
       isOriginalPost () {
-        return this.topic.posts.indexOf(this.topic.posts[0]) === 0;
+        return this.post.comments.indexOf(this.post.comments[0]) === 0;
       },
       pageTitle () {
-        return this.topic.title;
+        return this.post.title;
       },
       replies () {
-        return this.topic.posts.slice(1);
+        return this.post.comments.slice(1);
       },
-      topic () {
+      post () {
         let found;
         this.categories.forEach(category => {
           category.subcategories.forEach(sub => {
-            sub.topics.forEach(topic => {
+            sub.posts.forEach(topic => {
               if (topic.slug === this.$route.params.post_slug) {
                 found = topic;
               }
@@ -132,7 +132,7 @@
         return this.currentUser;
       },
       totalPosts () {
-        return this.topic.posts.length.toLocaleString();
+        return this.post.comments.length.toLocaleString();
       }
     },
 

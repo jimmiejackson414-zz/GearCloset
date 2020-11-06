@@ -10,9 +10,16 @@ type Query {
 
     forumCategories: [ForumCategory!]! @all
     forumCategory(id: ID @eq): ForumCategory @find
+    forumCategoryBySlug(slug: String! @eq): ForumCategory @find
 
     forumSubcategories: [ForumSubcategory!]! @all
     forumSubcategory(id: ID @eq): ForumSubcategory @find
+
+    forumPosts: [ForumPost!]! @all
+    forumPost(id: ID @eq): ForumPost @find
+
+    forumComments: [ForumComment!]! @all
+    forumComment(id: ID @eq): ForumComment @find
 }
 
 type User {
@@ -41,6 +48,8 @@ type ForumSubcategory {
     category: ForumCategory! @belongsTo
     created_at: DateTime!
     updated_at: DateTime!
+
+    postCount: Int! @count(relation: "posts")
 }
 
 type ForumPost {

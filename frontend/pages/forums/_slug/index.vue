@@ -48,7 +48,7 @@
           label="Search"
           outlined
           single-line />
-        <v-data-table
+        <!-- <v-data-table
           class="posts-table"
           :headers="headers"
           :item-class="isPinned"
@@ -82,7 +82,7 @@
               {{ lastPost(item).author }}
             </p>
           </template>
-        </v-data-table>
+        </v-data-table> -->
       </v-col>
     </v-row>
 
@@ -92,17 +92,34 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
   import * as dayjs from 'dayjs';
   import relativeTime from 'dayjs/plugin/relativeTime';
   import currentUser from '~/mixins/currentUser';
   import { convertSlugToTitle } from '~/helpers/functions';
+  import categoryQuery from '~/apollo/queries/forum/category.gql';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
     name: 'CategorySlug',
 
     mixins: [currentUser],
+
+    apollo: {
+      category: {
+        prefetch: false,
+        loadingKey: 'loading',
+        fetchPolicy: 'network-only',
+        query: categoryQuery,
+        variables () {
+          return {
+            slug: this.$route.params.slug
+          };
+        }
+        // update (data) {
+        // move determineItems function here and modify as needed
+        // }
+      }
+    },
 
     data () {
       return {
@@ -117,39 +134,37 @@
           { text: convertSlugToTitle(this.$route.params.slug), disabled: true, to: this.$route.params.slug }
         ],
         items: null,
+        loading: 0,
         search: '',
         warningDarkest: ''
       };
     },
 
     computed: {
-      ...mapState({
-        categories: state => state.forums.categories
-      }),
       pageTitle () {
         return convertSlugToTitle(this.$route.params.slug);
       }
     },
 
     methods: {
-      determineItems () {
-        // TODO: Refactor when backend is in place
-        const slug = this.$route.params.slug;
-        const allTopics = [];
-        this.categories.forEach(cat => {
-          return cat.subcategories.forEach(s => {
-            if (s.slug === slug) {
-              allTopics.push(s.topics);
-            }
-          });
-        });
-        // Set pinned topics at start, then rest of topics sorted by descending order
-        this.items = [
-          ...allTopics[0].filter(t => t.pinned),
-          ...allTopics[0].filter(t => !t.pinned)
-            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-        ];
-      },
+      // determineItems () {
+      //   // TODO: Refactor when backend is in place
+      //   const slug = this.$route.params.slug;
+      //   const allTopics = [];
+      //   this.categories.forEach(cat => {
+      //     return cat.subcategories.forEach(s => {
+      //       if (s.slug === slug) {
+      //         allTopics.push(s.posts);
+      //       }
+      //     });
+      //   });
+      //   // Set pinned topics at start, then rest of topics sorted by descending order
+      //   this.items = [
+      //     ...allTopics[0].filter(t => t.pinned),
+      //     ...allTopics[0].filter(t => !t.pinned)
+      //       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      //   ];
+      // },
       handleCreateNewTopic () {
         this.createNewTopicModal = true;
       },
@@ -173,7 +188,7 @@
     },
 
     created () {
-      this.determineItems();
+      // this.determineItems();
       dayjs.extend(relativeTime);
       this.warningDarkest = this.$nuxt.$vuetify.theme.themes.light.warningDarkest;
     },
