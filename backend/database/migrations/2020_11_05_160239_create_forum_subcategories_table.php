@@ -16,7 +16,7 @@ class CreateForumSubcategoriesTable extends Migration
         Schema::create('forum_subcategories', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->unsignedBigInteger('forum_category_id');
+            $table->foreignId('forum_category_id')->constrained()->onDelete('cascade');
             $table->string('slug');
             $table->timestamps();
         });

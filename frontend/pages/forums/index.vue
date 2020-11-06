@@ -1,5 +1,6 @@
 <template>
   <v-container
+    v-if="!loading"
     class="forums-container"
     grid-list-lg
     mx-auto>
@@ -46,12 +47,15 @@
 
     <update-subscription-modal v-model="updateSubscriptionModalOpen" />
   </v-container>
+
+  <loading-page v-else />
 </template>
 
 <script>
   import categoriesQuery from '~/apollo/queries/forum/categories.gql';
   import CategoryBox from '~/components/forums/CategoryBox.vue';
   import currentUser from '~/mixins/currentUser';
+  import LoadingPage from '~/components/LoadingPage.vue';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
@@ -66,6 +70,7 @@
     },
 
     data: () => ({
+      loading: 0,
       updateSubscriptionModalOpen: false,
       upgradeModalOpen: false
     }),
@@ -79,6 +84,7 @@
     components: {
       CategoryBox,
       FullScreenUpgrade: () => import(/* webpackPrefetch: true */'~/components/modals/FullScreenUpgrade'),
+      LoadingPage,
       SignUpAlert,
       UpdateSubscriptionModal: () => import(/* webpackPrefetch: true */'~/components/modals/UpdateSubscriptionModal')
     },

@@ -78,6 +78,12 @@ export default {
       default: {
         httpEndpoint: process.env.NUXT_ENV_BACKEND_API_URL
       }
+    },
+    defaultOptions: {
+      $query: {
+        loadingKey: 'loading',
+        fetchPolicy: 'network-only'
+      }
     }
   },
 

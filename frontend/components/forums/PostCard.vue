@@ -11,22 +11,22 @@
               color="primary"
               size="50">
               <img
-                v-if="author.avatar_url"
+                v-if="post.author.avatar_url"
                 alt="avatar"
-                :src="author.avatar_url">
+                :src="post.author.avatar_url">
               <span
                 v-else
-                class="white--text text-body-1 font-weight-bold">{{ author | initials }}</span>
+                class="white--text text-body-1 font-weight-bold">{{ post.author | initials }}</span>
             </v-avatar>
             <div class="author-information ml-6 d-flex flex-column">
               <div class="d-flex align-center">
                 <p class="body-text-2 mb-0 mr-2 grey7--text font-weight-bold">
-                  {{ author | prettyName('noTrailName') }}
+                  {{ post.author | prettyName('noTrailName') }}
                 </p>
-                <membership-chip :user="author" />
+                <membership-chip :user="post.author" />
               </div>
               <p class="body-text-2 mb-0 grey6--text">
-                {{ author.country }}
+                {{ post.author.country }}
               </p>
             </div>
           </div>
@@ -79,10 +79,6 @@
     mixins: [currentUser],
 
     props: {
-      author: {
-        type: Object,
-        default: () => {}
-      },
       isOriginalPost: {
         type: Boolean,
         default: false
@@ -103,8 +99,8 @@
       ellipsisItems () {
         const items = [];
 
-        if (this.post.author !== this.currentUser.id) { items.push({ title: 'Report', event: 'report-post' }); }
-        if (this.post.author === this.currentUser.id) { items.push({ title: 'Edit', event: 'edit-post' }, { title: 'Delete', event: 'delete-post', customClass: 'error--text' }); }
+        if (Number(this.post.author.id) !== this.currentUser.id) { items.push({ title: 'Report', event: 'report-post' }); }
+        if (Number(this.post.author.id) === this.currentUser.id) { items.push({ title: 'Edit', event: 'edit-post' }, { title: 'Delete', event: 'delete-post', customClass: 'error--text' }); }
 
         return items;
       },

@@ -12,21 +12,21 @@ Vue.filter('prettyName', (user, type) => {
       name = `${email}`;
     }
     return name;
-  }
-
-  if (first_name && last_name && trail_name) {
-    name = `${first_name} "${trail_name}" ${last_name}`;
-  } else if (trail_name && !first_name && !last_name) {
-    name = `${trail_name}`;
-  } else if (first_name && last_name && trail_name === '') {
-    name = `${first_name} ${last_name}`;
-  } else if (!first_name && last_name && trail_name) {
-    name = `"${trail_name}" ${last_name}`;
   } else {
-    name = `${email}`;
-  }
+    if (first_name && last_name && trail_name) {
+      name = `${first_name} "${trail_name}" ${last_name}`;
+    } else if (trail_name && !first_name && !last_name) {
+      name = `${trail_name}`;
+    } else if (first_name && last_name && trail_name === '') {
+      name = `${first_name} ${last_name}`;
+    } else if (!first_name && last_name && trail_name) {
+      name = `"${trail_name}" ${last_name}`;
+    } else {
+      name = `${email}`;
+    }
 
-  return name;
+    return name;
+  }
 });
 
 Vue.filter('initials', (user) => {

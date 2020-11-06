@@ -17,7 +17,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
         'avatar_url',
@@ -51,4 +50,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    //Relationships //TODO: Work on these, will probably need to be HasManyThrough relationships
+    public function posts(): HasMany
+    {
+        return $this->hasMany(ForumPost::class);
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(ForumComment::class);
+    }
 }

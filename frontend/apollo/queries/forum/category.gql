@@ -1,8 +1,0 @@
-query Category($slug: String!) {
-  category:forumCategoryBySlug(slug: $slug) {
-    id
-    title
-    description
-    slug
-  }
-}

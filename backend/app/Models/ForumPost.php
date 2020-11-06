@@ -12,6 +12,7 @@ class ForumPost extends Model
         'title', 'forum_subcategory_id', 'user_id', 'pinned', 'slug', 'comments'
     ];
 
+    // Relationships
     public function comments(): HasMany
     {
         return $this->hasMany(ForumComment::class);
@@ -19,11 +20,17 @@ class ForumPost extends Model
 
     public function subcategory(): BelongsTo
     {
-        return $this->belongsTo(ForumSubcategory::class);
+        return $this->belongsTo(ForumSubcategory::class, "forum_subcategory_id");
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Scopes
+    public function scopeFindBySlug($query, $slug)
+    {
+        return $query->whereSlug($slug);
     }
 }

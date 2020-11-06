@@ -3,7 +3,7 @@
     class="post-container"
     grid-list-lg
     mx-auto>
-    <v-row>
+    <v-row v-if="!loading">
       <v-col
         cols="12"
         md="8"
@@ -26,14 +26,13 @@
           {{ pageTitle }}
         </h4>
         <p class="body-text-2 grey8--text mb-8 pl-2">
-          Viewing {{ totalPosts }} Total Posts
+          Viewing {{ totalComments }} Total Comments
         </p>
-        <sign-up-alert />
+        <sign-up-alert @handle-open-upgrade-form="handleOpenUpgradeForm" />
 
         <!-- Post Wrapper -->
         <div class="post-wrapper">
           <post-card
-            :author="topicAuthor"
             :is-original-post="isOriginalPost"
             :post="post.comments[0]"
             @toggle-delete-confirm-modal="toggleDeleteConfirmModal"
@@ -42,9 +41,8 @@
           <!-- Replies Wrapper -->
           <div class="replies-wrapper">
             <post-card
-              v-for="reply in replies"
+              v-for="reply in post.comments.slice(1)"
               :key="reply.id"
-              :author="currentUser.friends[0]"
               :post="reply"
               @toggle-delete-confirm-modal="toggleDeleteConfirmModal"
               @toggle-report-post-modal="toggleReportPostModal" />
@@ -59,6 +57,14 @@
         </div>
       </v-col>
     </v-row>
+
+    <loading-page v-else />
+
+    <!-- Full Screen Upgrade -->
+    <full-screen-upgrade
+      v-model="upgradeModalOpen"
+      :user="currentUser"
+      @handle-modal-open="updateSubscriptionModalOpen = true" />
 
     <!-- Delete Confirm Modal -->
     <delete-confirm-modal
@@ -77,10 +83,10 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-  import { convertSlugToTitle } from '~/helpers/functions';
   import currentUser from '~/mixins/currentUser';
+  import LoadingPage from '~/components/LoadingPage.vue';
   import PostCard from '~/components/forums/PostCard.vue';
+  import postQuery from '~/apollo/queries/forum/post.gql';
   import TipTapEditor from '~/components/TipTapEditor';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
@@ -89,54 +95,55 @@
 
     mixins: [currentUser],
 
+    apollo: {
+      post: {
+        query: postQuery,
+        variables () {
+          return {
+            slug: this.$route.params.post_slug
+          };
+        },
+        result ({ data: { post } }) {
+          this.items[1] = { text: post.subcategory.title, disabled: false, to: `/forums/${post.subcategory.slug}` };
+          this.items[2] = { text: post.title, disabled: true };
+        }
+      }
+    },
+
     data () {
       return {
         deletePostModalOpen: false,
         items: [
           { text: 'Forums', disabled: false, to: '/forums' },
-          { text: convertSlugToTitle(this.$route.params.slug), disabled: false, to: `/forums/${this.$route.params.slug}` },
-          { text: convertSlugToTitle(this.$route.params.post_slug), disabled: true, to: `/forums/${this.$route.params.slug}/posts/${this.$route.params.post_slug}` }
+          { text: '', disabled: false, to: '' },
+          { text: '', disabled: true }
         ],
+        loading: 0,
         reportPostModalOpen: false,
-        selectedPost: null
+        selectedPost: null,
+        upgradeModalOpen: false
       };
     },
 
     computed: {
-      ...mapState({
-        categories: state => state.forums.categories
-      }),
       isOriginalPost () {
         return this.post.comments.indexOf(this.post.comments[0]) === 0;
       },
       pageTitle () {
-        return this.post.title;
+        return this.post ? this.post.title : '';
       },
-      replies () {
-        return this.post.comments.slice(1);
+      postAuthor () {
+        return this.post.author;
       },
-      post () {
-        let found;
-        this.categories.forEach(category => {
-          category.subcategories.forEach(sub => {
-            sub.posts.forEach(topic => {
-              if (topic.slug === this.$route.params.post_slug) {
-                found = topic;
-              }
-            });
-          });
-        });
-        return found;
-      },
-      topicAuthor () {
-        return this.currentUser;
-      },
-      totalPosts () {
+      totalComments () {
         return this.post.comments.length.toLocaleString();
       }
     },
 
     methods: {
+      handleOpenUpgradeForm () {
+        this.upgradeModalOpen = true;
+      },
       handleRemovePost () {
         console.log('handleRemovePost');
       },
@@ -156,6 +163,8 @@
 
     components: {
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
+      FullScreenUpgrade: () => import(/* webpackPrefetch: true */'~/components/modals/FullScreenUpgrade'),
+      LoadingPage,
       PostCard,
       TipTapEditor,
       ReportPostModal: () => import(/* webpackPrefetch: true */ '~/components/modals/ReportPostModal'),
