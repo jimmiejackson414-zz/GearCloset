@@ -106,6 +106,8 @@
 
     mixins: [currentUser, isMobile],
 
+    middleware: 'authenticated',
+
     data: () => ({
       deleteConfirmOpen: false,
       lightGrey: '',

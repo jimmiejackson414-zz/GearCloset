@@ -89,6 +89,8 @@
 
     mixins: [currentUser],
 
+    middleware: 'authenticated',
+
     data: () => ({
       deleteTripModalOpen: false,
       items: ['Foo', 'Bar', 'Fizz', 'Buzz'],

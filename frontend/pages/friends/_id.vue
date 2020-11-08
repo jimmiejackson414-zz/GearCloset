@@ -127,6 +127,8 @@
 
     mixins: [currentUser],
 
+    middleware: 'authenticated',
+
     data: () => ({
       headers: [
         { text: 'Type', align: 'left', sortable: true, value: 'generic_type', width: '25%' },

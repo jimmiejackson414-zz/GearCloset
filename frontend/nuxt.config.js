@@ -65,7 +65,6 @@ export default {
    */
   modules: [
     '@nuxtjs/apollo',
-    '@nuxtjs/auth',
     '@nuxtjs/dayjs',
     '@nuxtjs/pwa'
   ],
@@ -84,6 +83,9 @@ export default {
         loadingKey: 'loading',
         fetchPolicy: 'network-only'
       }
+    },
+    cookieAttributes: {
+      expires: 7 // optional, default 7 days
     }
   },
 
@@ -95,19 +97,6 @@ export default {
       fileName: 'icon.png',
       source: './static/icon.png',
       sizes: [64, 120, 144, 152, 192, 384, 512]
-    }
-  },
-
-  /*
-   ** Auth configuration to Laravel backend
-   */
-  auth: {
-    strategies: {
-      'laravel.passport': {
-        url: '',
-        client_id: '',
-        client_secret: ''
-      }
     }
   },
 

@@ -19,7 +19,10 @@ class AuthMutator
       $user->api_token = $token;
       $user->save();
 
-      return $token;
+      return [
+        'me' => $user,
+        'token' => $token
+      ];
     }
 
     return null;
