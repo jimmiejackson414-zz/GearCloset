@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CategoriesItem extends Model
+class CategoryItem extends Model
 {
     protected $fillable = [
         'category_id', 'item_id', 'position'

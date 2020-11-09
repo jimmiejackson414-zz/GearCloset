@@ -4,16 +4,17 @@ namespace App\GraphQL\Queries;
 
 use Illuminate\Support\Facades\Auth;
 
-class PacksQuery
+class NotificationQuery
 {
+    /**
+     * @param  null  $_
+     * @param  array<string, mixed>  $args
+     */
     public function find_by_user()
     {
         $user = Auth::guard('api')->user();
         if ($user) {
-            $packs = $user->packs()->get();
-            $packs->$items()->orderBy('position', 'desc')->get();
-            return $packs;
+            return $user->notifications()->get();
         }
-        return [];
     }
 }

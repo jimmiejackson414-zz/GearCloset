@@ -21,4 +21,9 @@ class Pack extends Model
     {
         return $this->hasMany(Category::class);
     }
+
+    // public function category_items(): HasMany
+    // {
+    //     return $this->hasMany(CategoryItem::class);
+    // }
 }

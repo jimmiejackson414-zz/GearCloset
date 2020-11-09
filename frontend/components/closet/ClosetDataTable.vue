@@ -22,7 +22,7 @@
             disable-pagination
             :headers="headers"
             hide-default-footer
-            :items="category.items"
+            :items="category.categories_items"
             :mobile-breakpoint="0">
             <template #body="{ items }">
               <draggable
@@ -190,7 +190,6 @@
 
           <!-- Add New Item Button -->
           <v-btn
-            v-if="!friend"
             :ripple="false"
             text
             @click="handleAddNewItem">
@@ -208,7 +207,6 @@
 
       <!-- Add New Category Button -->
       <v-container
-        v-if="!friend"
         class="new-category-container">
         <v-row>
           <v-col class="col-12">
@@ -244,10 +242,6 @@
       activePack: {
         type: Object,
         default: () => {}
-      },
-      friend: {
-        type: Boolean,
-        default: false
       }
     },
 

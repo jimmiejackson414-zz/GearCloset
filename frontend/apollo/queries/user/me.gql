@@ -1,5 +1,5 @@
 query Me {
-  me {
+  currentUser: me {
     id
     email
     first_name
@@ -12,7 +12,13 @@ query Me {
     country
     subscription_level
     measuring_system
-  }
 
-  token
+    notifications {
+      id
+      message
+      viewed
+      created_at
+      updated_at
+    }
+  }
 }

@@ -26,6 +26,7 @@ type Query {
     packs: [Pack!]! @field(resolver: "PacksQuery@find_by_user")
     categories: [Category!]! @field(resolver: "CategoriesQuery@find_by_user")
     items: [Item!]! @field(resolver: "ItemsQuery@find_by_user")
+    notifications: [Notification!]! @field(resolver: "NotificationQuery@find_by_user")
 }
 
 type Mutation {
@@ -71,6 +72,17 @@ type User {
     updated_at: DateTime!
 
     packs: [Pack!]! @hasMany
+    notifications: [Notification!]! @hasMany
+}
+
+type Notification {
+    id: ID!
+    message: String!
+    viewed: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    user: User @belongsTo
 }
 
 type ForumCategory {
@@ -140,11 +152,11 @@ type Category {
     updated_at: DateTime!
 
     pack: Pack! @belongsTo
-    categories_items: [CategoriesItem!]! @hasMany
+    category_items: [CategoryItem!]! @hasMany
     items: [Item!]! @hasMany
 }
 
-type CategoriesItem {
+type CategoryItem {
     id: ID!
     position: Int!
     created_at: DateTime!

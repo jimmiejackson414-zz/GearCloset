@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
@@ -17,13 +19,8 @@ class Category extends Model
         return $this->belongsTo(Pack::class);
     }
 
-    public function categories_items(): HasMany
-    {
-        return $this->hasMany(CategoriesItem::class);
-    }
-
-    public function items(): HasManyThrough
-    {
-        return $this->hasManyThrough('App\Models\Category', 'App\Models\CategoriesItem');
-    }
+    // public function items(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(Item::class);
+    // }
 }

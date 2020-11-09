@@ -11,8 +11,8 @@ class Item extends Model
         'name', 'weight', 'price', 'generic_type', 'category_id', 'consumable', 'worn', 'quantity'
     ];
 
-    public function categories_items(): HasMany
+    public function category_items(): HasMany
     {
-        return $this->hasMany(CategoriesItem::class);
+        return $this->hasMany(CategoryItem::class);
     }
 }
