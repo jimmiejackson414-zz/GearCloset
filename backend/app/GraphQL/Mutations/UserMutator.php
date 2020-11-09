@@ -14,7 +14,7 @@ class UserMutator
     $user->save();
 
     return [
-      'user' => $user,
+      'me' => $user,
       'token' => $token
     ];
   }

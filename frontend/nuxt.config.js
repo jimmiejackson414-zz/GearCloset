@@ -184,6 +184,7 @@ export default {
    */
   build: {
     standalone: true,
+    transpile: ['vee-validate/dist/rules'],
     extend (config, { isDev, isClient }) {
       // Run ESLint on save
       if (isDev && isClient) {

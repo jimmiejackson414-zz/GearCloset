@@ -23,6 +23,7 @@
     "text-mask-addons": "^3.8.0",
     "tiptap-vuetify": "^2.24.0",
     "v-mask": "^2.2.3",
+    "vee-validate": "^3.4.4",
     "vue-apexcharts": "^1.6.0",
     "vue-unicons": "^2.3.0",
     "vuedraggable": "^2.24.3"

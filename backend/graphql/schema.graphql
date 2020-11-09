@@ -26,13 +26,13 @@ type Query {
 
 type Mutation {
     login(
-        email: String! @rules(apply: ["email"]),
+        email: String! @rules(apply: ["email"])
         password: String!
     ): LoginUserPayload @field(resolver: "AuthMutator@login")
-    createUser(
+    register(
+        email: String! @rules(apply: ["email", "unique:users"])
         first_name: String!
         last_name: String!
-        email: String! @rules(apply: ["email", "unique:users"])
         password: String! @bcrypt
     ): CreateUserPayload @field(resolver: "UserMutator@create")
 }
@@ -43,7 +43,7 @@ type LoginUserPayload {
 }
 
 type CreateUserPayload {
-    user: User
+    me: User
     token: String
 }
 
