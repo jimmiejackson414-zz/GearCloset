@@ -63,6 +63,8 @@
 
     mixins: [currentUser],
 
+    middleware: 'authenticated',
+
     apollo: {
       categories: {
         query: categoriesQuery

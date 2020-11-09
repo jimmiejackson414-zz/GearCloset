@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'benny.timkins@gmail.com',
                 'email_verified_at' => \Carbon\Carbon::now(),
+                'password' => bcrypt('password'),
                 'avatar_url' => null,
                 'first_name' => 'Benny',
                 'last_name' => 'Timkins',
@@ -35,6 +36,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'michael.scott@gmail.com',
                 'email_verified_at' => \Carbon\Carbon::now(),
+                'password' => bcrypt('password'),
                 'avatar_url' => null,
                 'first_name' => 'Michael',
                 'last_name' => 'Scott',
@@ -52,6 +54,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'pam.beasley@gmail.com',
                 'email_verified_at' => \Carbon\Carbon::now(),
+                'password' => bcrypt('password'),
                 'avatar_url' => null,
                 'first_name' => 'Pam',
                 'last_name' => 'Beasley',
@@ -69,6 +72,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'dwight.schrute@gmail.com',
                 'email_verified_at' => \Carbon\Carbon::now(),
+                'password' => bcrypt('password'),
                 'avatar_url' => null,
                 'first_name' => 'Dwight',
                 'last_name' => 'Schrute',
@@ -86,6 +90,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'jim.halpert@gmail.com',
                 'email_verified_at' => \Carbon\Carbon::now(),
+                'password' => bcrypt('password'),
                 'avatar_url' => null,
                 'first_name' => 'Jim',
                 'last_name' => 'Halpert',
@@ -103,6 +108,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'holly.flax@gmail.com',
                 'email_verified_at' => \Carbon\Carbon::now(),
+                'password' => bcrypt('password'),
                 'avatar_url' => null,
                 'first_name' => 'Holly',
                 'last_name' => 'Flax',
@@ -120,6 +126,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'oscar.nunez@gmail.com',
                 'email_verified_at' => \Carbon\Carbon::now(),
+                'password' => bcrypt('password'),
                 'avatar_url' => null,
                 'first_name' => 'Oscar',
                 'last_name' => 'Nunez',
@@ -137,6 +144,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'andy.bernard@gmail.com',
                 'email_verified_at' => \Carbon\Carbon::now(),
+                'password' => bcrypt('password'),
                 'avatar_url' => null,
                 'first_name' => 'Andy',
                 'last_name' => 'Bernard',
@@ -154,6 +162,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'toby.flenderson@gmail.com',
                 'email_verified_at' => \Carbon\Carbon::now(),
+                'password' => bcrypt('password'),
                 'avatar_url' => null,
                 'first_name' => 'Toby',
                 'last_name' => 'Flenderson',

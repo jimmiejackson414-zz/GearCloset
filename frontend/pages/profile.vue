@@ -144,6 +144,8 @@
 
     mixins: [currentUser, isMobile],
 
+    middleware: 'authenticated',
+
     data () {
       return {
         confirm_password: '',

@@ -5,6 +5,7 @@ scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
 type Query {
+    me: User @auth(guard: "api")
     users: [User!]! @paginate(defaultCount: 10)
     user(id: ID @eq): User @find
 
@@ -23,8 +24,32 @@ type Query {
     forumComment(id: ID @eq): ForumComment @find
 }
 
+type Mutation {
+    login(
+        email: String! @rules(apply: ["email"])
+        password: String!
+    ): LoginUserPayload @field(resolver: "AuthMutator@login")
+    register(
+        email: String! @rules(apply: ["email", "unique:users"])
+        first_name: String!
+        last_name: String!
+        password: String! @bcrypt
+    ): CreateUserPayload @field(resolver: "UserMutator@create")
+}
+
+type LoginUserPayload {
+    me: User
+    token: String
+}
+
+type CreateUserPayload {
+    me: User
+    token: String
+}
+
 type User {
     id: ID!
+    api_token: String!
     email: String!
     password: String!
     avatar_url: String!

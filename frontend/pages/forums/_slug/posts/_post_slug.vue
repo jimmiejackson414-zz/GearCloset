@@ -95,6 +95,8 @@
 
     mixins: [currentUser],
 
+    middleware: 'authenticated',
+
     apollo: {
       post: {
         query: postQuery,

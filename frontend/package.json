@@ -10,12 +10,9 @@
   },
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.1-rc.4",
-    "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/dayjs": "^1.2.0",
     "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/pwa": "^3.0.2",
-    "@vuex-orm/core": "^0.36.3",
-    "@vuex-orm/plugin-axios": "^0.9.3",
     "apexcharts": "^3.22.0",
     "convert-units": "^2.3.4",
     "core-js": "^3.6.5",
@@ -26,6 +23,7 @@
     "text-mask-addons": "^3.8.0",
     "tiptap-vuetify": "^2.24.0",
     "v-mask": "^2.2.3",
+    "vee-validate": "^3.4.4",
     "vue-apexcharts": "^1.6.0",
     "vue-unicons": "^2.3.0",
     "vuedraggable": "^2.24.3"

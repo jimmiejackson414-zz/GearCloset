@@ -113,6 +113,8 @@
 
     mixins: [currentUser],
 
+    middleware: 'authenticated',
+
     apollo: {
       subcategory: {
         query: subCategoryQuery,
