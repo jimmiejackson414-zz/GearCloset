@@ -14,13 +14,26 @@ class Category extends Model
         'name', 'pack_id'
     ];
 
+    // automatically eager load items of a category
+    protected $with = ['items'];
+
+    // define relationships
     public function pack(): BelongsTo
     {
         return $this->belongsTo(Pack::class);
     }
 
-    // public function items(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(Item::class);
-    // }
+    public function category_items(): HasMany
+    {
+        return $this->hasMany(CategoryItem::class);
+    }
+
+    public function items(): BelongsToMany
+    {
+        return $this
+            ->belongsToMany('App\Models\Item', 'category_items', 'item_id', 'category_id')
+            ->using('App\Models\CategoryItem')
+            ->withPivot(['position'])
+            ->withTimestamps();
+    }
 }

@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class CategoryItem extends Model
+class CategoryItem extends Pivot
 {
     protected $fillable = [
         'category_id', 'item_id', 'position'
     ];
 
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
+    // public function category(): HasMany
+    // {
+    //     return $this->hasMany(Category::class);
+    // }
 
-    public function item(): BelongsTo
-    {
-        return $this->belongsTo(Item::class);
-    }
+    // public function item(): HasMany
+    // {
+    //     return $this->hasMany(Item::class);
+    // }
 }

@@ -153,7 +153,7 @@ type Category {
 
     pack: Pack! @belongsTo
     category_items: [CategoryItem!]! @hasMany
-    items: [Item!]! @hasMany
+    items: [Item!]! @belongsToMany
 }
 
 type CategoryItem {
@@ -162,8 +162,8 @@ type CategoryItem {
     created_at: DateTime!
     updated_at: DateTime!
 
-    category: Category @belongsTo
-    item: Item @belongsTo
+    categories: [Category!]! @hasMany
+    items: [Item!]! @hasMany
 }
 
 type Item {
@@ -178,5 +178,6 @@ type Item {
     created_at: DateTime!
     updated_at: DateTime!
 
-    category: Category! @belongsTo
+    categories: [Category]! @belongsToMany
+    category_item: CategoryItem! @belongsTo
 }
