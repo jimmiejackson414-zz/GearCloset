@@ -22,7 +22,7 @@
             disable-pagination
             :headers="headers"
             hide-default-footer
-            :items="category.categories_items"
+            :items="category.items"
             :mobile-breakpoint="0">
             <template #body="{ items }">
               <draggable
@@ -67,7 +67,9 @@
                   </td>
 
                   <!-- Consumable Toggle -->
-                  <td :key="`${item.id}-consumable-${i}-${index}`">
+                  <td
+                    :key="`${item.id}-consumable-${i}-${index}`"
+                    class="text-center">
                     <v-btn
                       :class="[{ active: item.consumable }, 'consumable-btn']"
                       icon
@@ -82,7 +84,9 @@
                   </td>
 
                   <!-- Worn Toggle -->
-                  <td :key="`${item.id}-worn-${i}-${index}`">
+                  <td
+                    :key="`${item.id}-worn-${i}-${index}`"
+                    class="text-center">
                     <v-btn
                       :class="[{ active: item.worn }, 'worn-btn']"
                       icon

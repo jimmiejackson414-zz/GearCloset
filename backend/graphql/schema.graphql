@@ -153,7 +153,7 @@ type Category {
 
     pack: Pack! @belongsTo
     pivot: CategoryItemPivot
-    items: [Item!]! @belongsToMany
+    items(orderBy: [OrderByClause!] @orderBy): [Item!]! @belongsToMany
 }
 
 type CategoryItemPivot {
@@ -181,4 +181,14 @@ type Item {
 
     categories: [Category!]! @belongsToMany
     pivot: CategoryItemPivot
+}
+
+input OrderByClause {
+    columns: String!
+    order: SortOrder!
+}
+
+enum SortOrder {
+    ASC
+    DESC
 }
