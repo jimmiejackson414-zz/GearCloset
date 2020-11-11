@@ -31,7 +31,7 @@ class Category extends Model
     public function items(): BelongsToMany
     {
         return $this
-            ->belongsToMany('App\Models\Item', 'category_items', 'item_id', 'category_id')
+            ->belongsToMany('App\Models\Item', 'category_item', 'item_id', 'category_id')
             ->using('App\Models\CategoryItem')
             ->withPivot(['position'])
             ->withTimestamps();

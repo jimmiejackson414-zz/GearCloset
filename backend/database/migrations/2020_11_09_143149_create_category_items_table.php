@@ -13,7 +13,7 @@ class CreateCategoryItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_items', function (Blueprint $table) {
+        Schema::create('category_item', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->onDelete('cascade');
             $table->foreignId('item_id')->onDelete('cascade');
@@ -29,6 +29,6 @@ class CreateCategoryItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_items');
+        Schema::dropIfExists('category_item');
     }
 }

@@ -12,13 +12,15 @@ class CategoryItem extends Pivot
         'category_id', 'item_id', 'position'
     ];
 
-    // public function category(): HasMany
-    // {
-    //     return $this->hasMany(Category::class);
-    // }
+    // protected $table = 'category_items';
 
-    // public function item(): HasMany
-    // {
-    //     return $this->hasMany(Item::class);
-    // }
+    public function category(): HasMany
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    public function item(): HasMany
+    {
+        return $this->hasMany(Item::class);
+    }
 }
