@@ -1,0 +1,10 @@
+type Pack {
+    id: ID!
+    name: String!
+    active: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    categories: [Category!]! @hasMany
+    user: User! @belongsTo
+}

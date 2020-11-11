@@ -1,0 +1,16 @@
+type Item {
+    id: ID!
+    name: String
+    weight: Float
+    price: Int
+    generic_type: String
+    consumable: Boolean
+    worn: Boolean
+    quantity: Int
+    created_at: DateTime!
+    updated_at: DateTime!
+    position: Int!
+
+    categories: [Category!]! @belongsToMany
+    pivot: CategoryItemPivot
+}

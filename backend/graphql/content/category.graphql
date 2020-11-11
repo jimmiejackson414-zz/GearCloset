@@ -1,0 +1,10 @@
+type Category {
+    id: ID!
+    name: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    pack: Pack! @belongsTo
+    pivot: CategoryItemPivot
+    items(orderBy: [OrderByClause!] @orderBy): [Item!]! @belongsToMany
+}

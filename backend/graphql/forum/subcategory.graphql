@@ -1,0 +1,12 @@
+type ForumSubcategory {
+    id: ID!
+    title: String!
+    slug: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    postCount: Int! @count(relation: "posts")
+
+    category: ForumCategory! @belongsTo
+    posts: [ForumPost!]! @hasMany
+}

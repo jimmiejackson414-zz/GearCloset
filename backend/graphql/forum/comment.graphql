@@ -1,0 +1,9 @@
+type ForumComment {
+    id: ID!
+    text: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    post: ForumPost! @belongsTo
+    user: User! @belongsTo
+}

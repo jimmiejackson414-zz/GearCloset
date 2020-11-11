@@ -1,0 +1,10 @@
+type ForumCategory {
+    id: ID!
+    title: String!
+    description: String!
+    slug: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    subcategories: [ForumSubcategory!]! @hasMany
+}

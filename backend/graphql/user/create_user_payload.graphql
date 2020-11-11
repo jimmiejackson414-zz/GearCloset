@@ -1,0 +1,4 @@
+type CreateUserPayload {
+    me: User
+    token: String
+}

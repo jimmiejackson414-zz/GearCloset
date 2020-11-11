@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!loading"
     v-resize="onResize"
     class="closet-page-styles">
     <!-- Sidebar -->
@@ -91,6 +92,8 @@
       </v-container>
     </div>
   </div>
+
+  <loading-page v-else />
 </template>
 
 <script>
@@ -101,6 +104,7 @@
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import isMobile from '~/mixins/isMobile';
+  import LoadingPage from '~/components/LoadingPage.vue';
   import packsQuery from '~/apollo/queries/content/packs.gql';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
 
@@ -116,13 +120,6 @@
         prefetch: false,
         fetchPolicy: 'network-only',
         query: packsQuery
-        // update ({ packs }) {
-        //   packs.forEach(pack => {
-        //     pack.categories.forEach(category => {
-        //       return category.
-        //     })
-        //   })
-        // }
       }
     },
 
@@ -134,6 +131,7 @@
         title: 'Summer',
         uuid: generateUUID()
       },
+      loading: 0,
       selectedItem: null,
       shareListModalOpen: false
     }),
@@ -181,6 +179,7 @@
       ClosetDataTable,
       ClosetSidebar,
       CustomIcon,
+      LoadingPage,
       SelectedPackGraph,
       SharePackListModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SharePackListModal.vue')
     },

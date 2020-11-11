@@ -230,12 +230,13 @@
         expandOnHover: state => state.closet.sidebarExpandOnHover
       }),
       categories () {
-        // TODO: will need to update this
-        // return this.packs[0].categories;
+        const cats = [];
         if (this.packs.length) {
-          return this.packs[0].categories;
+          this.packs.forEach(pack => {
+            cats.push(pack.categories);
+          });
         }
-        return [];
+        return cats.flat();
       }
     },
 
@@ -309,6 +310,12 @@
 
   .gear-container {
     .v-list-item {
+      &__icon {
+        &.v-list-group__header__append-icon {
+          justify-content: flex-start !important;
+        }
+      }
+
       &__content {
         color: #fff;
 

@@ -1,0 +1,14 @@
+type ForumPost {
+    id: ID!
+    title: String!
+    pinned: Boolean!
+    slug: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    commentCount: Int! @count(relation: "comments")
+
+    comments: [ForumComment!]! @hasMany
+    subcategory: ForumSubcategory! @belongsTo
+    user: User! @belongsTo
+}

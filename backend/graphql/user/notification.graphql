@@ -1,0 +1,9 @@
+type Notification {
+    id: ID!
+    message: String!
+    viewed: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    user: User @belongsTo
+}
