@@ -12,22 +12,19 @@ query Packs {
       created_at
       updated_at
 
-      categories_items {
+      item {
         id
-        position
+        name
+        weight
+        price
+        generic_type
+        consumable
+        worn
         created_at
         updated_at
 
-        item {
-          id
-          name
-          weight
-          price
-          generic_type
-          consumable
-          worn
-          created_at
-          updated_at
+        pivot {
+          position
         }
       }
     }

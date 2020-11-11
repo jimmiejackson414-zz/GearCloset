@@ -152,11 +152,11 @@ type Category {
     updated_at: DateTime!
 
     pack: Pack! @belongsTo
-    category_items: [CategoryItem!]! @hasMany
+    pivot: CategoryItemPivot
     items: [Item!]! @belongsToMany
 }
 
-type CategoryItem {
+type CategoryItemPivot {
     id: ID!
     position: Int!
     created_at: DateTime!
@@ -178,6 +178,6 @@ type Item {
     created_at: DateTime!
     updated_at: DateTime!
 
-    categories: [Category]! @belongsToMany
-    category_item: CategoryItem! @belongsTo
+    categories: [Category!]! @belongsToMany
+    pivot: CategoryItemPivot
 }

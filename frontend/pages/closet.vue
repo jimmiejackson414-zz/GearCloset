@@ -115,10 +115,14 @@
       packs: {
         prefetch: false,
         fetchPolicy: 'network-only',
-        query: packsQuery,
-        update (data) {
-          console.log({ data });
-        }
+        query: packsQuery
+        // update ({ packs }) {
+        //   packs.forEach(pack => {
+        //     pack.categories.forEach(category => {
+        //       return category.
+        //     })
+        //   })
+        // }
       }
     },
 

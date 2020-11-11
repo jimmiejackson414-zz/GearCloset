@@ -18,14 +18,8 @@ class Item extends Model
     public function categories(): BelongsToMany
     {
         return $this
-            ->belongsToMany('App\Models\Category', 'category_item', 'item_id', 'category_id')
-            ->using('App\Models\CategoryItem')
-            ->withPivot(['position'])
+            ->belongsToMany('App\Models\Category')
+            ->withPivot('position')
             ->withTimestamps();
-    }
-
-    public function category_item(): BelongsTo
-    {
-        return $this->belongsTo('App\Models\CategoryItem');
     }
 }
