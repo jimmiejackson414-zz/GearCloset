@@ -177,6 +177,7 @@ type Item {
     quantity: Int
     created_at: DateTime!
     updated_at: DateTime!
+    position: Int!
 
     categories: [Category!]! @belongsToMany
     pivot: CategoryItemPivot

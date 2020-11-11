@@ -19,7 +19,6 @@ class Item extends Model
     {
         return $this
             ->belongsToMany('App\Models\Category')
-            ->withPivot('position')
             ->withTimestamps();
     }
 }

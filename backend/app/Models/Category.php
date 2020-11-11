@@ -23,9 +23,6 @@ class Category extends Model
 
     public function items(): BelongsToMany
     {
-        return $this
-            ->belongsToMany('App\Models\Item')
-            ->withPivot('position')
-            ->withTimestamps();
+        return $this->belongsToMany('App\Models\Item')->select('items.*', 'category_item.position as position');
     }
 }
