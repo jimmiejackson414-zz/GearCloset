@@ -67,7 +67,9 @@
                   </td>
 
                   <!-- Consumable Toggle -->
-                  <td :key="`${item.id}-consumable-${i}-${index}`">
+                  <td
+                    :key="`${item.id}-consumable-${i}-${index}`"
+                    class="text-center">
                     <v-btn
                       :class="[{ active: item.consumable }, 'consumable-btn']"
                       icon
@@ -82,7 +84,9 @@
                   </td>
 
                   <!-- Worn Toggle -->
-                  <td :key="`${item.id}-worn-${i}-${index}`">
+                  <td
+                    :key="`${item.id}-worn-${i}-${index}`"
+                    class="text-center">
                     <v-btn
                       :class="[{ active: item.worn }, 'worn-btn']"
                       icon
@@ -190,7 +194,6 @@
 
           <!-- Add New Item Button -->
           <v-btn
-            v-if="!friend"
             :ripple="false"
             text
             @click="handleAddNewItem">
@@ -208,7 +211,6 @@
 
       <!-- Add New Category Button -->
       <v-container
-        v-if="!friend"
         class="new-category-container">
         <v-row>
           <v-col class="col-12">
@@ -244,10 +246,6 @@
       activePack: {
         type: Object,
         default: () => {}
-      },
-      friend: {
-        type: Boolean,
-        default: false
       }
     },
 

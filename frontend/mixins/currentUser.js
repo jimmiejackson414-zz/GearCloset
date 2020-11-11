@@ -1,9 +1,9 @@
-import { mapState } from 'vuex';
+import meQuery from '~/apollo/queries/user/me.gql';
 
 export default {
-  computed: {
-    ...mapState({
-      currentUser: state => state.user
-    })
+  apollo: {
+    currentUser: {
+      query: meQuery
+    }
   }
 };

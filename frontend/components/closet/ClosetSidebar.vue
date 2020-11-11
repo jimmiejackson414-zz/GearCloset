@@ -3,10 +3,13 @@
     v-model="drawer"
     :absolute="isMobile"
     class="primary"
+    clipped
     :expand-on-hover="expandOnHover"
+    fixed
     floating
     :mini-variant.sync="mini"
     permanent
+    :style="{ paddingTop: '64px' }"
     :width="400">
     <v-list nav>
       <v-list-item class="search-container">
@@ -206,6 +209,10 @@
       isMobile: {
         type: Boolean,
         default: true
+      },
+      packs: {
+        type: Array,
+        default: () => []
       }
     },
 
@@ -224,10 +231,11 @@
       }),
       categories () {
         // TODO: will need to update this
-        return this.packs[0].categories;
-      },
-      packs () {
-        return this.currentUser.packs;
+        // return this.packs[0].categories;
+        if (this.packs.length) {
+          return this.packs[0].categories;
+        }
+        return [];
       }
     },
 

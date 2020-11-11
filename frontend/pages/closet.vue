@@ -3,7 +3,9 @@
     v-resize="onResize"
     class="closet-page-styles">
     <!-- Sidebar -->
-    <closet-sidebar :is-mobile="isMobile" />
+    <closet-sidebar
+      :is-mobile="isMobile"
+      :packs="packs" />
 
     <!-- Content -->
     <div class="content-container">
@@ -99,6 +101,7 @@
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import isMobile from '~/mixins/isMobile';
+  import packsQuery from '~/apollo/queries/content/packs.gql';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
 
   export default {
@@ -107,6 +110,21 @@
     mixins: [currentUser, isMobile],
 
     middleware: 'authenticated',
+
+    apollo: {
+      packs: {
+        prefetch: false,
+        fetchPolicy: 'network-only',
+        query: packsQuery
+        // update ({ packs }) {
+        //   packs.forEach(pack => {
+        //     pack.categories.forEach(category => {
+        //       return category.
+        //     })
+        //   })
+        // }
+      }
+    },
 
     data: () => ({
       deleteConfirmOpen: false,
@@ -125,7 +143,10 @@
         sidebarExpandOnHover: state => state.closet.sidebarExpandOnHover
       }),
       activePack () {
-        return this.currentUser.packs.find(pack => pack.active);
+        if (this.packs?.length) {
+          return this.packs.find(pack => pack.active);
+        }
+        return {};
       }
     },
 

@@ -22,6 +22,11 @@ type Query {
 
     forumComments: [ForumComment!]! @all
     forumComment(id: ID @eq): ForumComment @find
+
+    packs: [Pack!]! @field(resolver: "PacksQuery@find_by_user")
+    categories: [Category!]! @field(resolver: "CategoriesQuery@find_by_user")
+    items: [Item!]! @field(resolver: "ItemsQuery@find_by_user")
+    notifications: [Notification!]! @field(resolver: "NotificationQuery@find_by_user")
 }
 
 type Mutation {
@@ -65,6 +70,19 @@ type User {
     measuring_system: String!
     created_at: DateTime!
     updated_at: DateTime!
+
+    packs: [Pack!]! @hasMany
+    notifications: [Notification!]! @hasMany
+}
+
+type Notification {
+    id: ID!
+    message: String!
+    viewed: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    user: User @belongsTo
 }
 
 type ForumCategory {
@@ -72,42 +90,105 @@ type ForumCategory {
     title: String!
     description: String!
     slug: String!
-    subcategories: [ForumSubcategory!]! @hasMany
     created_at: DateTime!
     updated_at: DateTime!
+
+    subcategories: [ForumSubcategory!]! @hasMany
 }
 
 type ForumSubcategory {
     id: ID!
     title: String!
     slug: String!
-    posts: [ForumPost!]! @hasMany
-    category: ForumCategory! @belongsTo
     created_at: DateTime!
     updated_at: DateTime!
 
     postCount: Int! @count(relation: "posts")
+
+    category: ForumCategory! @belongsTo
+    posts: [ForumPost!]! @hasMany
 }
 
 type ForumPost {
     id: ID!
     title: String!
-    subcategory: ForumSubcategory! @belongsTo
-    user: User! @belongsTo
     pinned: Boolean!
     slug: String!
-    comments: [ForumComment!]! @hasMany
     created_at: DateTime!
     updated_at: DateTime!
 
     commentCount: Int! @count(relation: "comments")
+
+    comments: [ForumComment!]! @hasMany
+    subcategory: ForumSubcategory! @belongsTo
+    user: User! @belongsTo
 }
 
 type ForumComment {
     id: ID!
-    user: User! @belongsTo
-    post: ForumPost! @belongsTo
     text: String!
     created_at: DateTime!
     updated_at: DateTime!
+
+    post: ForumPost! @belongsTo
+    user: User! @belongsTo
+}
+
+type Pack {
+    id: ID!
+    name: String!
+    active: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    categories: [Category!]! @hasMany
+    user: User! @belongsTo
+}
+
+type Category {
+    id: ID!
+    name: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    pack: Pack! @belongsTo
+    pivot: CategoryItemPivot
+    items(orderBy: [OrderByClause!] @orderBy): [Item!]! @belongsToMany
+}
+
+type CategoryItemPivot {
+    id: ID!
+    position: Int!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    categories: [Category!]! @hasMany
+    items: [Item!]! @hasMany
+}
+
+type Item {
+    id: ID!
+    name: String
+    weight: Float
+    price: Int
+    generic_type: String
+    consumable: Boolean
+    worn: Boolean
+    quantity: Int
+    created_at: DateTime!
+    updated_at: DateTime!
+    position: Int!
+
+    categories: [Category!]! @belongsToMany
+    pivot: CategoryItemPivot
+}
+
+input OrderByClause {
+    columns: String!
+    order: SortOrder!
+}
+
+enum SortOrder {
+    ASC
+    DESC
 }
