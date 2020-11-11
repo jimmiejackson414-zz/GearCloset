@@ -222,12 +222,14 @@
       drawer: true,
       mini: true,
       searchQuery: '',
-      secondaryLight: ''
+      secondaryLight: '',
+      selected: null
     }),
 
     computed: {
       ...mapState({
-        expandOnHover: state => state.closet.sidebarExpandOnHover
+        expandOnHover: state => state.closet.sidebarExpandOnHover,
+        selectedPack: state => state.closet.selectedPack
       }),
       categories () {
         const cats = [];
@@ -253,8 +255,7 @@
       },
 
       activeSelection (id) {
-        // TODO: will need to update this
-        return true;
+        return id === this.selectedPack.id;
       },
       clearSearch () {
         this.searchQuery = '';
@@ -281,7 +282,7 @@
         return filteredPacks;
       },
       handleSelectedPack (pack) {
-        console.log('handleSelectedPack');
+        this.$emit('handle-selected-pack', pack);
       }
     },
 

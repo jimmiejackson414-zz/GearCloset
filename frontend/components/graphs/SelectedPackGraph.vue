@@ -10,11 +10,17 @@
 </template>
 
 <script>
+  import { calculateCategoryWeight } from '~/helpers/functions';
+
   export default {
     props: {
       height: {
         type: Number,
         default: () => 300
+      },
+      selectedPack: {
+        type: Object,
+        default: () => {}
       }
     },
 
@@ -35,21 +41,13 @@
                 enabled: true,
                 speed: 350
               }
-            },
-            // doesn't work at this point
-            states: {
-              active: {
-                filter: {
-                  type: 'none'
-                }
-              }
             }
           },
-          labels: ['Kitchen', 'Big 3', 'Water', 'Clothing'],
+          labels: [],
           dataLabels: {
             enabled: true,
             formatter (value, { seriesIndex, dataPointIndex, w }) {
-              return `${w.config.series[seriesIndex]} lbs`;
+              return `${w.config.series[seriesIndex]} oz`;
             },
             style: {
               fontFamily: 'Avenir Next, Lato, Roboto, Helvetica Neue'
@@ -91,12 +89,29 @@
             enabled: false
           }
         },
-        series: [44, 55, 41, 17]
+        series: []
       };
+    },
+
+    methods: {
+      // chart doesn't load correctly when being updated
+      updateChart () {
+        if (this.selectedPack) {
+          this.series = this.selectedPack.categories.map(category => calculateCategoryWeight(category).toFixed(0));
+          this.chartOptions.labels = this.selectedPack.categories.map(category => category.name);
+        }
+      }
     },
 
     created () {
       this.chartOptions.theme.monochrome.color = this.$nuxt.$vuetify.theme.themes.light.accentDarkest;
+      this.updateChart();
+    },
+
+    watch: {
+      selectedPack () {
+        this.updateChart();
+      }
     }
   };
 </script>
