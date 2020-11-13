@@ -6,14 +6,15 @@
     <!-- Sidebar -->
     <closet-sidebar
       :is-mobile="isMobile"
-      :packs="packs" />
+      :packs="packs"
+      @handle-selected-pack="handleSelectedPack" />
 
     <!-- Content -->
     <div class="content-container">
       <v-container grid-list-lg>
         <div class="header mb-6">
           <h3 class="text-h3 font-weight-bold">
-            {{ activePack.name }}
+            {{ selectedPack ? selectedPack.name : '' }}
           </h3>
           <div class="actions">
             <div class="share-wrapper">
@@ -76,14 +77,17 @@
           </div>
         </div>
         <v-row class="closet-pack-graph-wrapper">
-          <v-col class="wrapper col-12 col-md-6 offset-md-3">
-            <selected-pack-graph :height="300" />
+          <v-col class="wrapper col-12 col-md-8 offset-md-2">
+            <selected-pack-graph
+              v-if="selectedPack"
+              :height="300"
+              :selected-pack="selectedPack" />
           </v-col>
         </v-row>
 
         <!-- Data Tables -->
         <closet-data-table
-          :active-pack="activePack" />
+          :active-pack="selectedPack" />
 
         <!-- Share Pack List Modal -->
         <share-pack-list-modal
@@ -119,7 +123,11 @@
       packs: {
         prefetch: false,
         fetchPolicy: 'network-only',
-        query: packsQuery
+        query: packsQuery,
+        update ({ packs }) {
+          this.setSelectedPack(packs[0]); // set first pack to default on page load
+          return packs;
+        }
       }
     },
 
@@ -132,32 +140,35 @@
         uuid: generateUUID()
       },
       loading: 0,
-      selectedItem: null,
+      modalItem: null,
+      selected: null,
       shareListModalOpen: false
     }),
 
     computed: {
       ...mapState({
+        selectedPack: state => state.closet.selectedPack,
         sidebarExpandOnHover: state => state.closet.sidebarExpandOnHover
       }),
-      activePack () {
-        if (this.packs?.length) {
-          return this.packs.find(pack => pack.active);
-        }
-        return {};
+      isSelected () {
+        return this.selected === this.selectedPack;
       }
     },
 
     methods: {
       ...mapActions('closet', [
+        'setSelectedPack',
         'toggleSidebarExpandOnHover'
       ]),
       convertCurrency (amount) {
         return convertToDollars(amount);
       },
       handleRemoveModalOpen (item) {
-        this.selectedItem = item;
+        this.modalItem = item;
         this.deleteConfirmOpen = true;
+      },
+      handleSelectedPack (pack) {
+        this.setSelectedPack(pack);
       },
       update (item, field, value) {
         const payload = { id: item.id, [field]: value };
