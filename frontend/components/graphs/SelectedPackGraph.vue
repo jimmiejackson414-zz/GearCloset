@@ -1,6 +1,7 @@
 <template>
   <client-only>
-    <div v-resize="resize">
+    <div
+      v-resize="resize">
       <div
         ref="currentPackChart"
         :style="chartStyles" />
@@ -37,7 +38,7 @@
         },
         chartStyles: 'width: 100%; height: 400px',
         otherChartStyles: {
-          center: ['75%', '50%']
+          center: ['50%', '50%']
         },
         windowSize: {
           x: 0,
@@ -65,11 +66,11 @@
             orient: 'vertical',
             x: 'right',
             type: 'scroll',
-            top: 20,
+            top: 50,
             bottom: 20,
             left: 0
           };
-          this.otherChartStyles.center = ['75%', '50%'];
+          this.otherChartStyles.center = ['50%', '50%'];
         }
         if (this.chartInstance) {
           this.chartInstance.resize();
@@ -81,10 +82,10 @@
         const currentPackChart = echarts.init(packRef, 'custom-theme');
         this.chartInstance = currentPackChart;
         const data = this.selectedPack.categories.map(category => ({
-          value: parseFloat(convert(calculateCategoryWeight(category)).from('g').to('lb')).toFixed(2),
-          name: this.$options.filters.truncate(category.name, 25)
+          value: parseFloat(convert(calculateCategoryWeight(category)).from('g').to('oz')).toFixed(2),
+          name: this.$options.filters.truncate(category.name, 20)
         }));
-
+        this.hasData = true;
         // specify chart configuration item and data
         const option = {
           tooltip: {
@@ -110,7 +111,15 @@
                     color: '#4a4a4a'
                   }
                 },
-                formatter: '{b}: {d}'
+                formatter: [
+                  '{b|{b}}',
+                  '{d|{d} oz}'
+                ].join('\n'),
+                rich: {
+                  d: {
+                    fontWeight: 'bold'
+                  }
+                }
               },
               labelLine: {
                 normal: {
@@ -127,7 +136,16 @@
                 emphasis: {
                   label: {
                     show: true,
-                    formatter: '{b}\n{c} lbs'
+                    formatter: [
+                      '{b|{b}}',
+                      '{c|{c} oz}'
+                    ].join('\n'),
+                    fontFamily: 'Avenir Next, Lato, Roboto, Helvetica Neue',
+                    rich: {
+                      c: {
+                        fontWeight: 'bolder'
+                      }
+                    }
                   }
                 }
               },
