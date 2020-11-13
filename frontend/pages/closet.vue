@@ -77,8 +77,9 @@
           </div>
         </div>
         <v-row class="closet-pack-graph-wrapper">
-          <v-col class="wrapper col-12 col-md-6 offset-md-3">
+          <v-col class="wrapper col-12 col-md-8 offset-md-2">
             <selected-pack-graph
+              v-if="selectedPack"
               :height="300"
               :selected-pack="selectedPack" />
           </v-col>
