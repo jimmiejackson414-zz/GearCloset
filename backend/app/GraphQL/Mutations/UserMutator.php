@@ -24,7 +24,7 @@ class UserMutator
     $user = \App\Models\User::find($args['id']);
     $file = $args['avatar'];
     $avatar_url = cloudinary()->upload($request->file($file)->getRealPath())->getSecurePath();
-    dd($avatar_url);
+    // dd($avatar_url);
     $user->avatar_url = $avatar_url;
     $user->save();
 
