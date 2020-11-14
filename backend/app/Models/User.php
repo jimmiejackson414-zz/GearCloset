@@ -32,6 +32,7 @@ class User extends Authenticatable
         'trail_name',
         'subscription_level',
         'measuring_system',
+        'has_onboarded'
     ];
 
     /**

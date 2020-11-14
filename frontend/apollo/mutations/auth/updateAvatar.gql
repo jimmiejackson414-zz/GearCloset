@@ -1,0 +1,11 @@
+mutation UpdateAvatar(
+  $id: ID!
+  $avatar: JSON!
+) {
+  updateAvatar(
+    id: $id,
+    avatar: $avatar
+  )
+  id
+  avatar_url
+}

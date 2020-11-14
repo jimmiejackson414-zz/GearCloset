@@ -18,4 +18,17 @@ class UserMutator
       'token' => $token
     ];
   }
+
+  public function updateAvatar($root, array $args)
+  {
+    $user = \App\Models\User::find($args['id']);
+    $avatar_url = Cloudinary::upload($request->file('file')->getRealPath())->getSecurePath();
+    var_dump($avatar_url);
+    $user->avatar_url = $avatar_url;
+    $user->save();
+
+    return [
+      'user' => $user
+    ];
+  }
 }

@@ -55,7 +55,9 @@ type Mutation {
         country: String
         subscription_level: String
         measuring_system: String
+        has_onboarded: Boolean
     ): User @update
+    updateAvatar(id: ID! avatar: JSON!): User @field(resolver: "UserMutator@updateAvatar")
 }
 
 input OrderByClause {

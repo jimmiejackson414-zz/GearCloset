@@ -1,52 +1,56 @@
 <template>
-  <div class="new-user-styles">
+  <div class="onboarding-styles">
     <v-container>
-      <v-stepper v-model="currentStep">
-        <v-stepper-header>
-          <!-- Step 1 -->
-          <v-stepper-step
-            :complete="currentStep > 1"
-            step="1">
-            Avatar
-          </v-stepper-step>
-          <v-divider />
+      <v-row>
+        <v-col class="col-12 col-md-10 offset-md-1">
+          <v-stepper v-model="currentStep">
+            <v-stepper-header>
+              <!-- Step 1 -->
+              <v-stepper-step
+                :complete="currentStep > 1"
+                step="1">
+                Avatar
+              </v-stepper-step>
+              <v-divider />
 
-          <!-- Step 2 -->
-          <v-stepper-step
-            :complete="currentStep > 2"
-            step="2">
-            Details
-          </v-stepper-step>
-          <v-divider />
+              <!-- Step 2 -->
+              <v-stepper-step
+                :complete="currentStep > 2"
+                step="2">
+                Details
+              </v-stepper-step>
+              <v-divider />
 
-          <!-- Step 3 -->
-          <v-stepper-step step="3">
-            Plans
-          </v-stepper-step>
-        </v-stepper-header>
+              <!-- Step 3 -->
+              <v-stepper-step step="3">
+                Plans
+              </v-stepper-step>
+            </v-stepper-header>
 
-        <v-stepper-items>
-          <v-stepper-content step="1">
-            <step-one @handle-next-step="handleNextStep" />
-          </v-stepper-content>
+            <v-stepper-items>
+              <v-stepper-content step="1">
+                <step-one @handle-change-step="handleChangeStep" />
+              </v-stepper-content>
 
-          <v-stepper-content step="2">
-            <step-two @handle-next-step="handleNextStep" />
-          </v-stepper-content>
+              <v-stepper-content step="2">
+                <step-two @handle-change-step="handleChangeStep" />
+              </v-stepper-content>
 
-          <v-stepper-content step="3">
-            <step-three @complete-onboarding="completeOnboarding" />
-          </v-stepper-content>
-        </v-stepper-items>
-      </v-stepper>
+              <v-stepper-content step="3">
+                <step-three @handle-change-step="handleChangeStep" />
+              </v-stepper-content>
+            </v-stepper-items>
+          </v-stepper>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
 
 <script>
-  import StepOne from '~/components/new-user/StepOne.vue';
-  import StepTwo from '~/components/new-user/StepTwo.vue';
-  import StepThree from '~/components/new-user/StepThree.vue';
+  import StepOne from '~/components/onboarding/StepOne.vue';
+  import StepTwo from '~/components/onboarding/StepTwo.vue';
+  import StepThree from '~/components/onboarding/StepThree.vue';
 
   export default {
     name: 'NewUser',
@@ -56,11 +60,7 @@
     }),
 
     methods: {
-      completeOnboarding () {
-        // each step sends its own mutations to update user
-        // on completion, send mutation here that sets "is_setup" to 1 in database
-      },
-      handleNextStep (step) {
+      handleChangeStep (step) {
         this.currentStep = step;
       }
     },
@@ -74,7 +74,15 @@
 </script>
 
 <style lang="scss" scoped>
-  .new-user-styles {
+  .onboarding-styles {
     margin-top: 4rem;
+
+    .v-stepper {
+      box-shadow: none;
+
+      &__header {
+        box-shadow: none;
+      }
+    }
   }
 </style>
