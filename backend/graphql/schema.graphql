@@ -57,7 +57,7 @@ type Mutation {
         measuring_system: String
         has_onboarded: Boolean
     ): User @update
-    updateAvatar(id: ID! avatar: JSON!): User @field(resolver: "UserMutator@updateAvatar")
+    updateAvatar(id: ID! avatar: String!): User @field(resolver: "UserMutator@updateAvatar")
 }
 
 input OrderByClause {
