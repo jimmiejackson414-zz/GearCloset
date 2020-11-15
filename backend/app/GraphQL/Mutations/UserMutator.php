@@ -21,10 +21,12 @@ class UserMutator
 
   public function updateAvatar($root, array $args)
   {
-    $user = \App\Models\User::find($args['id']);
-    $file = $args['avatar'];
-    $avatar_url = cloudinary()->upload($request->file($file)->getRealPath())->getSecurePath();
-    // dd($avatar_url);
+    $file = $args['file'][0];
+    // $avatar_url = cloudinary()->upload($request->file($file)->getRealPath())->getSecurePath();
+    $avatar_url = \Cloudinary\Uploader::unsigned_upload($file, env("CLOUDINARY_UPLOAD_PRESET"));
+    dd($avatar_url);
+
+    $user = App\Models\User::find($args['id']);
     $user->avatar_url = $avatar_url;
     $user->save();
 

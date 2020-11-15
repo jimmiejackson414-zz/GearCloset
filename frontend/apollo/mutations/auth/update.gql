@@ -6,6 +6,7 @@ mutation UpdateUser(
   $measuring_system: String
   $state: String
   $trail_name: String
+  $has_onboarded: Boolean
 ) {
   updateUser(
     id: $id,
@@ -15,6 +16,7 @@ mutation UpdateUser(
     measuring_system: $measuring_system,
     state: $state,
     trail_name: $trail_name
+    has_onboarded: $has_onboarded
   ) {
     id
   }

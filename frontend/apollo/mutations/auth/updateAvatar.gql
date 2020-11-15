@@ -1,11 +1,12 @@
 mutation UpdateAvatar(
   $id: ID!
-  $avatar: String!
+  $file: Upload!
 ) {
   updateAvatar(
     id: $id,
-    avatar: $avatar
-  )
-  id
-  avatar_url
+    file: $file
+  ) {
+    id
+    avatar_url
+  }
 }

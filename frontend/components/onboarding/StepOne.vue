@@ -47,10 +47,15 @@
         this.avatar = avatar;
       },
       async handleNextStep () {
-        this.submitting = true;
+        if (!this.avatar) {
+          this.$emit('handle-change-step', 2);
+          return;
+        }
 
         try {
-          const payload = { avatar: JSON.stringify(this.avatar), id: Number(this.currentUser.id) };
+          this.submitting = true;
+          const payload = { file: JSON.stringify(this.avatar), id: Number(this.currentUser.id) };
+
           const { errors } = await this.$apollo.mutate({
             mutation: updateAvatarMutation,
             variables: payload
@@ -64,6 +69,7 @@
           this.$emit('handle-change-step', 2);
           this.submitting = false;
         } catch (e) {
+          console.log({ e });
           this.isError = true;
           this.submitting = false;
         }

@@ -81,7 +81,7 @@
         this.submitting = true;
 
         try {
-          const payload = { has_onboarded: 1, id: Number(this.currentUser.id) };
+          const payload = { has_onboarded: true, id: Number(this.currentUser.id) };
           const { errors } = await this.$apollo.mutate({
             mutation: updateMutation,
             variables: payload
