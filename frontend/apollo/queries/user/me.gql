@@ -1,6 +1,7 @@
 query Me {
   currentUser: me {
     id
+    avatar_url
     email
     first_name
     last_name

@@ -29,7 +29,7 @@
               dense
               :disabled="submitting"
               :error="isError"
-              label="First Name"
+              label="First Name*"
               outlined
               required
               :rules="nameRules"
@@ -51,7 +51,7 @@
               dense
               :disabled="submitting"
               :error="isError"
-              label="Last Name"
+              label="Last Name*"
               outlined
               required
               :rules="nameRules"
@@ -73,7 +73,7 @@
               dense
               :disabled="submitting"
               :error="isError"
-              label="Email"
+              label="Email*"
               outlined
               required
               :rules="emailRules"
@@ -95,7 +95,7 @@
               dense
               :disabled="submitting"
               :error="isError"
-              label="Password"
+              label="Password*"
               outlined
               required
               :rules="passwordRules"
@@ -118,7 +118,7 @@
               dense
               :disabled="submitting"
               :error="isError"
-              label="Confirm Password"
+              label="Confirm Password*"
               outlined
               required
               :rules="passwordsMatchRules"
@@ -220,7 +220,6 @@
           last_name: '',
           email: '',
           password: ''
-          // trail_name: ''
         },
         valid: false
       };

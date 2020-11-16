@@ -9,9 +9,12 @@ use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use CloudinaryLabs\CloudinaryLaravel\MediaAlly;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    use MediaAlly;
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +35,7 @@ class User extends Authenticatable
         'trail_name',
         'subscription_level',
         'measuring_system',
+        'has_onboarded'
     ];
 
     /**

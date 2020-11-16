@@ -1,0 +1,12 @@
+mutation UpdateAvatar(
+  $id: ID!
+  $file: String!
+) {
+  updateAvatar(
+    id: $id,
+    file: $file
+  ) {
+    id
+    avatar_url
+  }
+}

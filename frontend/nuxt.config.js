@@ -75,6 +75,12 @@ export default {
     clientConfigs: {
       default: {
         httpEndpoint: process.env.NUXT_ENV_BACKEND_API_URL
+        // httpLinkOptions: {
+        //   fetchOptions: {
+        //     mode: 'no-cors' // Cors needed for external Cross origins, need to allow headers from server
+        //   },
+        //   credentials: 'omit' // must be omit to support application/json content type
+        // }
       }
     },
     defaultOptions: {

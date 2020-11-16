@@ -176,7 +176,7 @@
         <!-- Preferred System -->
         <v-col class="col-12 col-md-6">
           <v-select
-            v-model="currentUser.system"
+            v-model="currentUser.measuring_system"
             color="primary"
             dense
             :disabled="submitting"

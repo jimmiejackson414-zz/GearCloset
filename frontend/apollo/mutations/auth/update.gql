@@ -1,0 +1,23 @@
+mutation UpdateUser(
+  $id: ID!
+  $country: String
+  $first_name: String
+  $last_name: String
+  $measuring_system: String
+  $state: String
+  $trail_name: String
+  $has_onboarded: Boolean
+) {
+  updateUser(
+    id: $id,
+    country: $country,
+    first_name: $first_name,
+    last_name: $last_name,
+    measuring_system: $measuring_system,
+    state: $state,
+    trail_name: $trail_name
+    has_onboarded: $has_onboarded
+  ) {
+    id
+  }
+}
