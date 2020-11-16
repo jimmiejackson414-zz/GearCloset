@@ -9,9 +9,12 @@ use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use CloudinaryLabs\CloudinaryLaravel\MediaAlly;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    use MediaAlly;
 
     /**
      * The attributes that are mass assignable.

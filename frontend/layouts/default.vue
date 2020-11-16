@@ -5,7 +5,9 @@
     light>
     <navbar @handle-toggle-drawer="handleToggleDrawer" />
 
-    <home-drawer v-model="drawer" />
+    <home-drawer
+      v-if="shouldShow"
+      v-model="drawer" />
 
     <v-main>
       <transition
@@ -89,6 +91,9 @@
       }),
       showScrollBtn () {
         return this.offsetTop > 60;
+      },
+      shouldShow () {
+        return this.$route.name !== 'onboarding';
       }
     },
 

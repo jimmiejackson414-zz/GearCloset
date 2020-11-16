@@ -220,7 +220,6 @@
           last_name: '',
           email: '',
           password: ''
-          // trail_name: ''
         },
         valid: false
       };

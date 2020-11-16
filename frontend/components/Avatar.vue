@@ -2,20 +2,35 @@
   <v-avatar
     color="primary"
     :size="size">
-    <span class="white--text text-body-1 font-weight-bold">{{ initials }}</span>
+    <img
+      v-if="hasAvatar"
+      alt="Avatar"
+      :src="user.avatar_url">
+    <span
+      v-else
+      class="white--text text-body-1 font-weight-bold">{{ initials }}</span>
   </v-avatar>
 </template>
 
 <script>
   export default {
     props: {
-      initials: {
-        default: 'GC',
-        type: String
-      },
       size: {
         default: 56,
         type: Number
+      },
+      user: {
+        type: Object,
+        default: () => {}
+      }
+    },
+
+    computed: {
+      hasAvatar () {
+        return !!this.user?.avatar_url;
+      },
+      initials () {
+        return this.$options.filters.initials(this.user);
       }
     }
   };

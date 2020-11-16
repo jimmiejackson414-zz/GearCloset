@@ -14,6 +14,7 @@
     </v-toolbar-title>
     <v-spacer />
     <div
+      v-if="shouldShow"
       class="right-menu-wrapper d-flex align-items-center mr-4">
       <v-tabs
         class="hidden-sm-and-down"
@@ -58,8 +59,6 @@
     data: () => ({
       logoWidth: '175px',
       navItems: [
-        // { title: 'Dashboard', to: '/dashboard', badge: false, hasMenu: false },
-        // { title: 'Explore', to: '/explore', badge: false, hasMenu: false },
         { title: 'Forums', to: '/forums', badge: false, hasMenu: false },
         { title: 'Planning', to: '/planning', badge: false, hasMenu: false },
         { title: 'Closet', to: '/closet', badge: false, hasMenu: false }
@@ -67,6 +66,9 @@
     }),
 
     computed: {
+      shouldShow () {
+        return this.$route.name !== 'onboarding';
+      },
       maxWidth () {
         return this.$vuetify.breakpoint.mobile ? 296 : 320;
       },

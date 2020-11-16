@@ -1,6 +1,6 @@
 mutation UpdateAvatar(
   $id: ID!
-  $file: Upload!
+  $file: String!
 ) {
   updateAvatar(
     id: $id,

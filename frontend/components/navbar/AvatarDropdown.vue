@@ -14,7 +14,8 @@
         <avatar
           class="ml-5"
           :initials="currentUser | initials"
-          :size="40" />
+          :size="40"
+          :user="currentUser" />
       </v-btn>
     </template>
     <v-list

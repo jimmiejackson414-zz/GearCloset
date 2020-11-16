@@ -19,19 +19,20 @@ class UserMutator
     ];
   }
 
-  public function updateAvatar($root, array $args)
+  public function updateAvatar($rootValue, array $args)
   {
-    $file = $args['file'][0];
-    // $avatar_url = cloudinary()->upload($request->file($file)->getRealPath())->getSecurePath();
-    $avatar_url = \Cloudinary\Uploader::unsigned_upload($file, env("CLOUDINARY_UPLOAD_PRESET"));
-    dd($avatar_url);
+    // Set user, file, and options variables
+    $user = \App\Models\User::find($args['id']);
+    $file = $args['file'];
+    $context = array("user_id" => $user->id);
 
-    $user = App\Models\User::find($args['id']);
+    // Upload to Cloudinary/gear_closet folder, and attach user_id to metadata
+    $avatar_url = cloudinary()->upload($args['file'], array("folder" => "gear_closet", "context" => $context))->getSecurePath();
+
+    // Save returned url to database on user and save
     $user->avatar_url = $avatar_url;
     $user->save();
 
-    return [
-      'user' => $user
-    ];
+    return $user;
   }
 }
