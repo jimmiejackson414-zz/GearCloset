@@ -23,7 +23,6 @@
         </v-list-item-icon>
         <v-list-item-title>
           <v-text-field
-            v-model="searchQuery"
             background-color="#fff"
             clearable
             dense
@@ -32,7 +31,9 @@
             label="Search"
             placeholder="Search"
             solo-inverted
-            @click:append="clearSearch" />
+            :value="searchQuery"
+            @click:append="clearSearch"
+            @input="debounceSearchQuery" />
         </v-list-item-title>
       </v-list-item>
     </v-list>
@@ -88,7 +89,7 @@
               mode="in-out"
               name="fade">
               <v-list-item
-                v-for="pack in filteredPacks()"
+                v-for="pack in filteredPacks"
                 :key="pack.id"
                 :class="[{ selected: activeSelection(pack.id) }]"
                 :ripple="false"
@@ -149,44 +150,37 @@
             </v-btn>
           </div>
           <v-list class="gear-list">
-            <v-list-group
-              v-for="category in categories"
-              :key="category.id"
-              eager
-              :ripple="false"
-              :value="true">
-              <template #activator>
-                <v-list-item-content>
-                  <v-list-item-title class="font-weight-medium mb-0 white--text">
-                    {{ category.name }}
-                  </v-list-item-title>
-                </v-list-item-content>
-              </template>
+            <v-list-item-group>
               <draggable
                 class="drag-area list-group"
                 :group="{ name: 'items', pull: 'clone', put: false}"
                 handle=".gear-handle"
-                :list="filteredItems(category)"
+                :list="filteredItems"
                 :sort="false"
                 @change="log">
-                <v-list-item
-                  v-for="item in filteredItems(category)"
-                  :key="item.id"
-                  class="pointer"
-                  dense
-                  :ripple="false">
-                  <custom-icon
-                    custom-class="gear-handle mr-2"
-                    :fill="secondaryLight"
-                    :height="20"
-                    name="grip-horizontal-line"
-                    :width="20" />
-                  <p class="mb-0 white--text">
-                    {{ item.name }}
-                  </p>
-                </v-list-item>
+                <transition-group
+                  :css="false"
+                  name="staggered-fade"
+                  @before-enter="beforeEnter"
+                  @enter="enter"
+                  @leave="leave">
+                  <v-list-item
+                    v-for="(item, i) in filteredItems"
+                    :key="item.id"
+                    :data-index="i">
+                    <custom-icon
+                      custom-class="gear-handle mr-2"
+                      :fill="secondaryLight"
+                      :height="20"
+                      name="grip-horizontal-line"
+                      :width="20" />
+                    <p class="mb-0 white--text">
+                      {{ item.name }}
+                    </p>
+                  </v-list-item>
+                </transition-group>
               </draggable>
-            </v-list-group>
+            </v-list-item-group>
           </v-list>
         </v-list-item-content>
       </v-list-item>
@@ -195,7 +189,7 @@
 </template>
 
 <script>
-  // import { sortBy } from 'lodash';
+  import { debounce, sortBy } from 'lodash';
   import { mapState } from 'vuex';
   import draggable from 'vuedraggable';
   import currentUser from '~/mixins/currentUser';
@@ -239,36 +233,18 @@
           });
         }
         return cats.flat();
-      }
-    },
-
-    methods: {
-      cloneItem ({ id }) {
-        console.log('cloneItem id: ', id);
-        return {
-          id: idGlobal++,
-          name: `cat ${id}`
-        };
       },
-      log (evt) {
-        console.log('sidebar log: ', evt);
-      },
-
-      activeSelection (id) {
-        return id === this.selectedPack.id;
-      },
-      clearSearch () {
-        this.searchQuery = '';
-      },
-      filteredItems (category) {
-        let filteredItems = [];
-        if (this.searchQuery) {
-          const text = this.searchQuery.toLowerCase();
-          filteredItems = category.items.filter(item => item.name && item.name.toLowerCase().includes(text));
-        } else {
-          filteredItems = category.items;
-        }
-        return filteredItems;
+      filteredItems () {
+        const filteredItems = [];
+        this.categories.forEach(category => {
+          if (this.searchQuery) {
+            const text = this.searchQuery.toLowerCase();
+            filteredItems.push(category.items.filter(item => item.name && item.name.toLowerCase().includes(text)));
+          } else {
+            filteredItems.push(category.items);
+          }
+        });
+        return filteredItems.flat();
       },
       filteredPacks () {
         let filteredPacks = [];
@@ -278,12 +254,59 @@
         } else {
           filteredPacks = this.packs;
         }
-        // return sortBy(filteredPacks, 'name');
-        return filteredPacks;
+        return sortBy(filteredPacks, 'name');
+      }
+    },
+
+    methods: {
+      activeSelection (id) {
+        return id === this.selectedPack.id;
+      },
+      clearSearch () {
+        this.searchQuery = '';
+      },
+      cloneItem ({ id }) {
+        console.log('cloneItem id: ', id);
+        return {
+          id: idGlobal++,
+          name: `cat ${id}`
+        };
+      },
+      debounceSearchQuery: debounce(function (e) {
+        this.searchQuery = e;
+      }, 1000),
+      log (evt) {
+        console.log('sidebar log: ', evt);
       },
       handleSelectedPack (pack) {
         this.$emit('handle-selected-pack', pack);
+      },
+      // gsap methods //
+      beforeEnter (el) {
+        el.style.opacity = 0;
+        el.style.height = 0;
+      },
+      enter (el, done) {
+        const delay = el.dataset.index * 50;
+        setTimeout(() => {
+          this.$velocity(
+            el,
+            { opacity: 1, height: '1.6em', duration: 50 },
+            { complete: done }
+          );
+        }, delay);
+      },
+      leave (el, done) {
+        const delay = 0;
+        setTimeout(() => {
+          this.$velocity(
+            el,
+            { opacity: 0, height: 0, duration: 50 },
+            { complete: done }
+          );
+        }, delay);
       }
+      // end gsap methods
     },
 
     mounted () {
