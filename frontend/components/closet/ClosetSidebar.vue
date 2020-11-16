@@ -287,22 +287,21 @@
         el.style.height = 0;
       },
       enter (el, done) {
-        const delay = el.dataset.index * 150;
+        const delay = el.dataset.index * 50;
         setTimeout(() => {
           this.$velocity(
             el,
             { opacity: 1, height: '1.6em', duration: 50 },
-            [0.57, 0.06, 0, 1.06],
             { complete: done }
           );
         }, delay);
       },
       leave (el, done) {
-        const delay = el.dataset.index * 150;
+        const delay = 0;
         setTimeout(() => {
           this.$velocity(
             el,
-            { opacity: 0, height: 0 },
+            { opacity: 0, height: 0, duration: 50 },
             { complete: done }
           );
         }, delay);
