@@ -13,8 +13,9 @@ use CloudinaryLabs\CloudinaryLaravel\MediaAlly;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
-    use MediaAlly;
+    use HasFactory,
+        Notifiable,
+        MediaAlly;
 
     /**
      * The attributes that are mass assignable.
