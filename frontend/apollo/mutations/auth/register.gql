@@ -3,13 +3,20 @@ mutation Register(
   $first_name: String!,
   $last_name: String!,
   $password: String!,
+  $password_confirmation: String!
 ) {
   register(
-    email: $email,
-    first_name: $first_name,
-    last_name: $last_name,
-    password: $password,
+    input: {
+      email: $email,
+      first_name: $first_name,
+      last_name: $last_name,
+      password: $password,
+      password_confirmation: $password_confirmation
+    }
    ) {
-     token
+     tokens {
+       access_token
+     }
+     status
    }
 }

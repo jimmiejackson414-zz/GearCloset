@@ -162,7 +162,7 @@
           const password = this.password;
 
           try {
-            const { data: { login: { token } }, errors } = await this.$apollo.mutate({
+            const { data: { login }, errors } = await this.$apollo.mutate({
               mutation: loginMutation,
               variables: {
                 email,
@@ -176,7 +176,7 @@
             }
 
             // set the jwt to the this.$apolloHelpers.onLogin
-            await this.$apolloHelpers.onLogin(token);
+            await this.$apolloHelpers.onLogin(login.access_token);
             this.$router.push({ path: '/closet' });
           } catch (e) {
             console.error('login error: ', e);

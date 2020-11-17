@@ -30,6 +30,7 @@ Vue.filter('prettyName', (user, type) => {
 });
 
 Vue.filter('initials', (user) => {
+  if (!user) { return 'GC'; }
   const firstInitial = user.first_name.charAt(0);
   const lastInitial = user.last_name.charAt(0);
   return `${firstInitial}${lastInitial}`;

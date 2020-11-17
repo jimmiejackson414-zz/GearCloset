@@ -63,7 +63,11 @@
             </div>
           </v-form>
         </div>
-        <div class="submitted-wrapper">
+      </slide-fade-transition>
+      <slide-fade-transition>
+        <div
+          v-if="submitted"
+          class="submitted-wrapper">
           <div class="header">
             <logo-icon
               height="50px"
@@ -118,7 +122,7 @@
 
     methods: {
       async handleSubmit () {
-        if (this.$refs.loginForm.validate()) {
+        if (this.$refs.forgotPasswordForm.validate()) {
           this.submitting = true;
           const email = this.email;
 

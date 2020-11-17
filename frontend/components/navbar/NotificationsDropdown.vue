@@ -6,11 +6,11 @@
       bottom
       class="notification-badge"
       color="error"
-      :content="currentUser.notifications.length || 0"
+      :content="currentUser ? currentUser.notifications.length : 0"
       dot
       left
       overlap
-      :value="currentUser.notifications.length || 0">
+      :value="currentUser ? currentUser.notifications.length : 0">
       <v-btn
         depressed
         icon
@@ -33,7 +33,7 @@
       <v-list
         dense
         elevation="1">
-        <v-list-item-group>
+        <v-list-item-group v-if="currentUser">
           <v-list-item
             v-for="item in currentUser.notifications"
             :key="item.id"
@@ -42,6 +42,13 @@
             <v-list-item-content>
               <v-list-item-title>{{ item.message }}</v-list-item-title>
               <v-list-item-subtitle>{{ formatDate(item) }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+        <v-list-item-group v-else>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>You have no new notifications.</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>

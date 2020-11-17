@@ -13,7 +13,6 @@
         v-on="on">
         <avatar
           class="ml-5"
-          :initials="currentUser | initials"
           :size="40"
           :user="currentUser" />
       </v-btn>
@@ -26,10 +25,10 @@
         class="py-2">
         <div class="text-right">
           <v-list-item-title class="title justify-end">
-            {{ currentUser | prettyName }}
+            {{ formatCurrentUser.name }}
           </v-list-item-title>
           <v-list-item-subtitle>
-            {{ currentUser.email }}
+            {{ formatCurrentUser.email }}
           </v-list-item-subtitle>
         </div>
       </v-list-item>
@@ -47,6 +46,16 @@
             {{ item.title }}
           </nuxt-link>
         </v-list-item>
+        <v-list-item
+          active-class="no-active"
+          class="justify-end"
+          dense>
+          <button
+            class="body-1 font-weight-medium"
+            @click="handleLogout">
+            Logout
+          </button>
+        </v-list-item>
       </v-list-item-group>
     </v-list>
   </v-menu>
@@ -54,6 +63,7 @@
 
 <script>
   import Avatar from '~/components/Avatar.vue';
+  import logoutMutation from '~/apollo/mutations/auth/logout.gql';
 
   export default {
     props: {
@@ -65,10 +75,39 @@
 
     data: () => ({
       dropdownItems: [
-        { title: 'Profile', to: '/profile' },
-        { title: 'Logout', to: '/login' }
+        { title: 'Profile', to: '/profile' }
+        // { title: 'Logout', to: '/login' }
       ]
     }),
+
+    computed: {
+      formatCurrentUser () {
+        if (this.currentUser) {
+          return {
+            name: this.$options.filters.prettyName(this.currentUser),
+            email: this.currentUser.email
+          };
+        }
+        return {
+          name: '',
+          email: ''
+        };
+      }
+    },
+
+    methods: {
+      async handleLogout () {
+        try {
+          await this.$apollo.mutate({
+            mutation: logoutMutation
+          });
+
+          this.$router.push({ path: '/login' });
+        } catch (e) {
+
+        }
+      }
+    },
 
     components: {
       Avatar
