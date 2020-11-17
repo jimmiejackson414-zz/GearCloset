@@ -44,14 +44,14 @@
             Upgrade Options:
           </div>
           <div
-            v-if="Object.keys(card)[0] === 'member' && user.subscription_level.toLowerCase() === 'annual'"
+            v-if="user && Object.keys(card)[0] === 'member' && user.subscription_level.toLowerCase() === 'annual'"
             class="overline text-center">
             Downgrade Option:
           </div>
 
           <!-- Upgrade/Downgrade Buttons -->
           <v-btn
-            v-if="Object.keys(card)[0] === user.subscription_level.toLowerCase()"
+            v-if="user && Object.keys(card)[0] === user.subscription_level.toLowerCase()"
             color="info"
             depressed
             disabled
@@ -116,6 +116,9 @@
         this.$emit('handle-modal-open');
       },
       shouldShow (card, itemName, subscriptionLevel) {
+        if (!this.user) {
+          return true;
+        }
         return Object.keys(card)[0] === itemName && this.user.subscription_level.toLowerCase() !== subscriptionLevel;
       }
     },

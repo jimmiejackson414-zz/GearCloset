@@ -57,6 +57,7 @@ type Mutation {
         has_onboarded: Boolean
     ): User @update
     updateAvatar(id: ID! file: String!): User @field(resolver: "UserMutator@updateAvatar")
+    markAllRead(id: ID!): NotificationResponse! @field(resolver: "NotificationMutator")
 }
 
 input OrderByClause {

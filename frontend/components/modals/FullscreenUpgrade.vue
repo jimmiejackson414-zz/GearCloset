@@ -19,7 +19,7 @@
       <v-card-text>
         <v-container>
           <h6 class="font-weight-bold text-h6 text-center">
-            {{ user | prettyName }}
+            {{ formatUserName }}
           </h6>
           <h6 class="text-h6 font-weight-light text-center">
             Current Subscription: <span class="font-weight-medium primary--text">{{ subscriptionLevel }}</span>
@@ -67,6 +67,12 @@
     }),
 
     computed: {
+      formatUserName () {
+        if (this.user) {
+          return this.$options.filters.prettyName(this.user);
+        }
+        return '';
+      },
       joinDate () {
         return dayjs().format('MMM YYYY');
       },
@@ -79,7 +85,10 @@
         }
       },
       subscriptionLevel () {
-        return capitalize(this.user.subscription_level);
+        if (this.user) {
+          return capitalize(this.user.subscription_level);
+        }
+        return '';
       }
     },
 

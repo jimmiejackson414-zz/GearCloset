@@ -7,3 +7,8 @@ type Notification {
 
     user: User @belongsTo
 }
+
+type NotificationResponse {
+    status: String!
+    notifications: [Notification!]!
+}

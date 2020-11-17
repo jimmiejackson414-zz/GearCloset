@@ -5600,6 +5600,11 @@ filepond-plugin-file-encode@^2.1.9:
   resolved "https://registry.yarnpkg.com/filepond-plugin-file-encode/-/filepond-plugin-file-encode-2.1.9.tgz#e38626353f300759532949160820e7821e10292a"
   integrity sha512-HKM+ok6X6HBAg0fZt/dgA0aly7YJa2+OtWNd6cWc3D0wAXpApZp+f139g1a8uRaARsFxCBaKrzeWOFJWx3xXug==
 
+filepond-plugin-file-validate-size@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-file-validate-size/-/filepond-plugin-file-validate-size-2.2.2.tgz#a62974f7bcc6b3d2caa0ef6394b6e31ec19f4cae"
+  integrity sha512-35OH99f0poTBdldMcPOomZeXXiJC4ae5qrqZheP2wS1QDOcJa5RUgcIAwS43rixPrHNbEj9NpFei+7X15MUm9w==
+
 filepond-plugin-file-validate-type@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/filepond-plugin-file-validate-type/-/filepond-plugin-file-validate-type-1.2.5.tgz#b3588088d2b0d5dbdf706d068c0ecdf28140a8e3"

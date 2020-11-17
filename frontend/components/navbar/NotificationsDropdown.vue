@@ -3,6 +3,7 @@
     class="notifications-wrapper"
     @click="openNotificationsMenu">
     <v-badge
+      v-if="showBadge"
       bottom
       class="notification-badge"
       color="error"
@@ -23,9 +24,22 @@
       </v-btn>
     </v-badge>
 
+    <v-btn
+      v-else
+      depressed
+      icon
+      :ripple="false">
+      <custom-icon
+        color="#4a4a4a"
+        :height="20"
+        name="bell"
+        :width="20" />
+    </v-btn>
+
     <v-menu
       v-model="showMenu"
       absolute
+      :close-on-content-click="false"
       offset-y
       :position-x="menuPosition.x"
       :position-y="menuPosition.y"
@@ -33,17 +47,27 @@
       <v-list
         dense
         elevation="1">
+        <v-subheader>Notifications</v-subheader>
         <v-list-item-group v-if="currentUser">
           <v-list-item
             v-for="item in currentUser.notifications"
             :key="item.id"
             active-class="no-active"
+            :class="[item.viewed ? 'read' : 'unread']"
             two-line>
             <v-list-item-content>
               <v-list-item-title>{{ item.message }}</v-list-item-title>
               <v-list-item-subtitle>{{ formatDate(item) }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
+          <v-divider />
+          <v-btn
+            block
+            color="primary"
+            text
+            @click="handleMarkAllAsRead">
+            Mark All As Read
+          </v-btn>
         </v-list-item-group>
         <v-list-item-group v-else>
           <v-list-item>
@@ -60,6 +84,8 @@
 <script>
   import * as dayjs from 'dayjs';
   import relativeTime from 'dayjs/plugin/relativeTime';
+  import markAllReadMutation from '~/apollo/mutations/notifications/markAllRead.gql';
+  import meQuery from '~/apollo/queries/user/me.gql';
 
   export default {
     props: {
@@ -77,9 +103,28 @@
       showMenu: false
     }),
 
+    computed: {
+      showBadge () {
+        return this.currentUser && this.currentUser.notifications.some(notification => !notification.viewed);
+      }
+    },
+
     methods: {
       formatDate (item) {
         return dayjs(item.date).fromNow();
+      },
+      async handleMarkAllAsRead () {
+        await this.$apollo.mutate({
+          mutation: markAllReadMutation,
+          variables: {
+            id: this.currentUser.id
+          },
+          update (store, { data: { markAllRead } }) {
+            const data = store.readQuery({ query: meQuery });
+            data.currentUser.notifications = markAllRead.notifications;
+            store.writeQuery({ query: meQuery, data });
+          }
+        });
       },
       openNotificationsMenu (e) {
         this.showMenu = true;
@@ -103,6 +148,14 @@
   .no-active {
     &:before {
       opacity: 0;
+    }
+  }
+
+  .v-list-item {
+    transition: 0.2s background-color ease-in-out;
+
+    &.unread {
+      background-color: lighten($accent, 30%);
     }
   }
 </style>

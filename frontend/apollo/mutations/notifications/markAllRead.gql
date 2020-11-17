@@ -1,0 +1,12 @@
+mutation MarkAllRead($id: ID!) {
+  markAllRead(id: $id) {
+    status
+    notifications {
+      id
+      message
+      viewed
+      created_at
+      updated_at
+    }
+  }
+}
