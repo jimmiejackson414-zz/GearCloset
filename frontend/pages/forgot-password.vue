@@ -7,10 +7,13 @@
     </div>
     <div class="right">
       <slide-fade-transition>
-        <div class="form-wrapper">
+        <div
+          v-if="!submitted"
+          class="form-wrapper">
           <v-form
             ref="forgotPasswordForm"
-            v-model="valid">
+            v-model="valid"
+            @submit.prevent="handleSubmit">
             <div class="form-header">
               <logo-icon
                 height="50px"
@@ -49,7 +52,7 @@
                 depressed
                 :disabled="submitting"
                 :ripple="false"
-                @click="handleSubmit">
+                type="submit">
                 <loading
                   v-if="submitting"
                   color="#0077be"
@@ -59,6 +62,24 @@
               </v-btn>
             </div>
           </v-form>
+        </div>
+      </slide-fade-transition>
+      <slide-fade-transition>
+        <div
+          v-if="submitted"
+          class="submitted-wrapper">
+          <div class="header">
+            <logo-icon
+              height="50px"
+              width="50px" />
+            <div class="text-h4 text-center mb-4">
+              Submitted!
+            </div>
+
+            <p class="body-text-1 text-center">
+              Please check your email to reset your password.
+            </p>
+          </div>
         </div>
       </slide-fade-transition>
       <div class="contact-wrapper">
@@ -79,6 +100,7 @@
   import Loading from '~/components/Loading';
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
   import LogoIcon from '~/components/icons/LogoIcon';
+  import resetPasswordMutation from '~/apollo/mutations/auth/resetPassword.gql';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
 
   export default {
@@ -92,27 +114,36 @@
         emailRules: [
           v => !!v || 'Email is required'
         ],
+        submitted: false,
         submitting: false,
         valid: false
       };
     },
 
     methods: {
-      handleSubmit () {
-        console.log('user Service');
-        // if (this.$refs.loginForm.validate()) {
-        //   this.submitting = true;
-        //   const payload = { email: this.email, password: this.password };
-        //   if (payload.email && payload.password) {
-        //     const res = await userService.login(payload);
-        //     if (res.status === 401) {
-        //       this.submitting = false;
-        //     } else {
-        //       this.submitting = false;
-        //       router.push('/');
-        //     }
-        //   }
-        // }
+      async handleSubmit () {
+        if (this.$refs.forgotPasswordForm.validate()) {
+          this.submitting = true;
+          const email = this.email;
+
+          try {
+            const { errors } = await this.$apollo.mutate({
+              mutation: resetPasswordMutation,
+              variables: {
+                email
+              }
+            });
+
+            if (errors?.length) {
+              this.isError = true;
+              this.submitting = false;
+            }
+          } catch (e) {
+            console.error('reset password error: ', e);
+            this.isError = true;
+            this.submitting = false;
+          }
+        }
       }
     },
 
@@ -173,7 +204,7 @@
         flex-basis: 30%;
       }
 
-      .form-wrapper {
+      .form-wrapper, .submitted-wrapper {
         align-items: center;
         display: flex;
         flex-grow: 1;
@@ -191,6 +222,10 @@
             display: flex;
             flex-direction: column;
           }
+        }
+
+        .header {
+          text-align: center;
         }
       }
 

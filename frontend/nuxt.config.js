@@ -45,7 +45,6 @@ export default {
     { src: '~/plugins/vue-unicons', mode: 'client' },
     { src: '~/plugins/v-mask', mode: 'client' },
     { src: '~/plugins/tiptap-vuetify', mode: 'client' },
-    { src: '~/plugins/velocity', mode: 'client' },
     { src: '~/plugins/filters' }
   ],
 
@@ -191,7 +190,6 @@ export default {
   build: {
     standalone: true,
     transpile: ['vee-validate/dist/rules'],
-    vendor: ['velocity-animate'],
     extend (config, { isDev, isClient }) {
       // Run ESLint on save
       if (isDev && isClient) {

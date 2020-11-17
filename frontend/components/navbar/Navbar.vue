@@ -118,23 +118,6 @@
           max-width: 50%;
           margin: 0 auto;
         }
-
-        .nav-link {
-          &:after {
-
-          }
-        }
-        /* background-color: transparent;
-
-        .v-item-group {
-          background-color: transparent;
-
-          .v-tab {
-            &:before {
-              display: none;
-            }
-          }
-        } */
       }
 
       .notifications-wrapper {

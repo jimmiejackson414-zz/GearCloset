@@ -158,15 +158,11 @@
                 :list="filteredItems"
                 :sort="false"
                 @change="log">
-                <transition-group
-                  :css="false"
-                  name="staggered-fade"
-                  @before-enter="beforeEnter"
-                  @enter="enter"
-                  @leave="leave">
+                <transition-group name="staggered-fade">
                   <v-list-item
                     v-for="(item, i) in filteredItems"
                     :key="item.id"
+                    class="staggered-fade-item"
                     :data-index="i">
                     <custom-icon
                       custom-class="gear-handle mr-2"
@@ -280,33 +276,7 @@
       },
       handleSelectedPack (pack) {
         this.$emit('handle-selected-pack', pack);
-      },
-      // gsap methods //
-      beforeEnter (el) {
-        el.style.opacity = 0;
-        el.style.height = 0;
-      },
-      enter (el, done) {
-        const delay = el.dataset.index * 50;
-        setTimeout(() => {
-          this.$velocity(
-            el,
-            { opacity: 1, height: '1.6em', duration: 50 },
-            { complete: done }
-          );
-        }, delay);
-      },
-      leave (el, done) {
-        const delay = 0;
-        setTimeout(() => {
-          this.$velocity(
-            el,
-            { opacity: 0, height: 0, duration: 50 },
-            { complete: done }
-          );
-        }, delay);
       }
-      // end gsap methods
     },
 
     mounted () {
@@ -320,6 +290,18 @@
 </script>
 
 <style lang="scss">
+  .staggered-fade-item {
+    transition-timing-function: cubic-bezier(0.57, 0.06, 0, 1.06);
+    transition-duration: 500ms;
+    transition-property: opacity, transform;
+  }
+
+  .staggered-fade-enter,
+  .staggered-fade-leave-to {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
   .search-container {
     .v-input {
       &.v-input--is-focused {

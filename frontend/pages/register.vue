@@ -113,7 +113,7 @@
 
             <!-- Verify Password -->
             <v-text-field
-              v-model="confirm_password"
+              v-model="user.confirm_password"
               color="primary"
               dense
               :disabled="submitting"
@@ -199,7 +199,6 @@
 
     data () {
       return {
-        confirm_password: '',
         emailRules: [
           v => !!v || 'Email is required',
           v => /.+@.+/.test(v) || 'E-mail must be valid'
@@ -216,6 +215,7 @@
           v => (this.user.password === this.confirm_password) || 'Passwords must match'
         ],
         user: {
+          confirm_password: '',
           first_name: '',
           last_name: '',
           email: '',
