@@ -100,14 +100,14 @@
                   width="30px" />
                 <span v-else>Login</span>
               </v-btn>
-              <v-btn
+              <!-- <v-btn
                 class="mt-3"
                 color="primary"
                 nuxt
                 text
                 to="/forgot-password">
                 Forgot Password?
-              </v-btn>
+              </v-btn> -->
             </div>
           </v-form>
         </div>
