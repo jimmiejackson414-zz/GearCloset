@@ -143,7 +143,6 @@
           { text: '', disabled: true }
         ],
         items: null,
-        loading: 0,
         search: '',
         warningDarkest: '',
         upgradeModalOpen: false

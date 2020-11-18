@@ -139,7 +139,6 @@
         title: 'Summer',
         uuid: generateUUID()
       },
-      loading: 0,
       modalItem: null,
       selected: null,
       shareListModalOpen: false

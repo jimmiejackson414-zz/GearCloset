@@ -7,7 +7,7 @@
       <plus-button @handle-click="hikeDetailsModalOpen = true" />
     </div>
     <div class="trip-details-wrapper">
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-12 d-flex align-center">
           <h2>{{ hike.title }}</h2>
         </div>
@@ -33,9 +33,9 @@
             @delete-detail="openDelete(detail)"
             @update-detail="openUpdate(detail)" />
         </li>
-      </transition-group>
+      </transition-group> -->
 
-      <p v-else>
+      <p>
         You haven't added any details yet!
       </p>
     </div>
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-  import EllipsisButton from '~/components/icons/EllipsisButton.vue';
+  // import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import PlusButton from '~/components/icons/PlusButton.vue';
 
   export default {
@@ -102,7 +102,7 @@
 
     components: {
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal.vue'),
-      EllipsisButton,
+      // EllipsisButton,
       HikeDetailsModal: () => import(/* webpackPrefetch: true */'~/components/modals/HikeDetailsModal.vue'),
       PlusButton
     }

@@ -1,12 +1,12 @@
 <template>
   <div class="widget-wrapper">
     <div class="widget-header">
-      <div class="text-h6">
+      <!-- <div class="text-h6">
         Friends <span class="text-caption grey7--text ml-3 mb-1">({{ friendCount }})</span>
-      </div>
+      </div> -->
       <plus-button @handle-click="handleInviteFriend" />
     </div>
-    <div
+    <!-- <div
       v-if="currentUser.friends.length"
       class="friends-wrapper">
       <v-tooltip
@@ -43,8 +43,8 @@
         </template>
         <span class="text-body-2">{{ friend | prettyName }}</span>
       </v-tooltip>
-    </div>
-    <p v-else>
+    </div> -->
+    <p>
       You haven't added any friends yet! Click on the plus button in the top right to get started.
     </p>
     <invite-friend-modal v-model="modalOpen" />

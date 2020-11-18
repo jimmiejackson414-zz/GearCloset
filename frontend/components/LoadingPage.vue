@@ -1,6 +1,6 @@
 <template>
   <div class="loading-page-wrapper">
-    <img src="~/assets/loading.svg" />
+    <loading-logo :height="400" />
   </div>
 </template>
 

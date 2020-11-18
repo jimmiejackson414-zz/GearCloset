@@ -7,7 +7,7 @@
       <plus-button @handle-click="tripDetailsModalOpen = true" />
     </div>
     <div class="trip-details-wrapper">
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-12 d-flex align-center">
           <h2>{{ startingPoint }}</h2>
           <custom-icon
@@ -39,9 +39,9 @@
             @delete-detail="openDelete(detail)"
             @update-detail="openUpdate(detail)" />
         </li>
-      </transition-group>
+      </transition-group> -->
 
-      <p v-else>
+      <p>
         You haven't added any details yet!
       </p>
     </div>
@@ -60,8 +60,8 @@
 </template>
 
 <script>
-  import CustomIcon from '~/components/icons/CustomIcon';
-  import EllipsisButton from '~/components/icons/EllipsisButton';
+  // import CustomIcon from '~/components/icons/CustomIcon';
+  // import EllipsisButton from '~/components/icons/EllipsisButton';
   import PlusButton from '~/components/icons/PlusButton';
 
   export default {
@@ -107,9 +107,9 @@
     },
 
     components: {
-      CustomIcon,
+      // CustomIcon,
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
-      EllipsisButton,
+      // EllipsisButton,
       PlusButton,
       TripDetailsModal: () => import(/* webpackPrefetch: true */ '~/components/modals/TripDetailsModal')
     }

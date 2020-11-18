@@ -120,7 +120,6 @@
           { text: '', disabled: false, to: '' },
           { text: '', disabled: true }
         ],
-        loading: 0,
         reportPostModalOpen: false,
         selectedPost: null,
         upgradeModalOpen: false

@@ -6,7 +6,7 @@
       </div>
       <plus-button @handle-click="addListItem" />
     </div>
-    <v-data-table
+    <!-- <v-data-table
       v-if="items.length"
       v-resize="onResize"
       :class="['items-table', {mobile: isMobile}]"
@@ -101,15 +101,15 @@
           </tr>
         </tbody>
       </template>
-    </v-data-table>
-    <p v-else>
+    </v-data-table> -->
+    <p>
       You haven't created any items for your shopping list yet!<br>Click the plus button in the top right to get started.
     </p>
   </div>
 </template>
 
 <script>
-  import CustomIcon from '~/components/icons/CustomIcon';
+  // import CustomIcon from '~/components/icons/CustomIcon';
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
 
@@ -179,7 +179,7 @@
     },
 
     components: {
-      CustomIcon,
+      // CustomIcon,
       PlusButton
     }
   };

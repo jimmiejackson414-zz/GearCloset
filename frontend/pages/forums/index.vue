@@ -72,7 +72,6 @@
     },
 
     data: () => ({
-      loading: 0,
       updateSubscriptionModalOpen: false,
       upgradeModalOpen: false
     }),

@@ -1,5 +1,6 @@
 <template>
   <v-container
+    v-if="!loading"
     class="planning-container"
     grid-list-lg
     mx-auto>
@@ -72,6 +73,8 @@
       v-model="deleteTripModalOpen"
       item="trip" />
   </v-container>
+
+  <loading-page v-else />
 </template>
 
 <script>
@@ -79,6 +82,7 @@
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import Friends from '~/components/planning/widgets/Friends.vue';
   import HikeDetails from '~/components/planning/widgets/HikeDetails.vue';
+  import LoadingPage from '~/components/LoadingPage.vue';
   import SelectedPack from '~/components/planning/widgets/SelectedPack.vue';
   import ShoppingList from '~/components/planning/widgets/ShoppingList.vue';
   import TodoList from '~/components/planning/widgets/TodoList.vue';
@@ -126,6 +130,7 @@
       EllipsisButton,
       Friends,
       HikeDetails,
+      LoadingPage,
       SelectedPack,
       ShoppingList,
       TodoList,

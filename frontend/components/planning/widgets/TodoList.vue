@@ -6,7 +6,7 @@
       </div>
       <plus-button @handle-click="addTodo" />
     </div>
-    <v-data-table
+    <!-- <v-data-table
       v-if="todos.length"
       v-resize="onResize"
       :class="['todos-table', {mobile: isMobile}]"
@@ -61,16 +61,16 @@
           </tr>
         </tbody>
       </template>
-    </v-data-table>
-    <p v-else>
+    </v-data-table> -->
+    <p>
       You haven't created any items for your shopping list yet!<br>Click the plus button in the top right to get started.
     </p>
   </div>
 </template>
 
 <script>
-  import ClickToEdit from '~/components/ClickToEdit';
-  import CustomIcon from '~/components/icons/CustomIcon';
+  // import ClickToEdit from '~/components/ClickToEdit';
+  // import CustomIcon from '~/components/icons/CustomIcon';
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
 
@@ -136,8 +136,8 @@
     },
 
     components: {
-      ClickToEdit,
-      CustomIcon,
+      // ClickToEdit,
+      // CustomIcon,
       PlusButton
     }
   };
