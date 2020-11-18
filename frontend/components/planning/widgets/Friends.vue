@@ -1,16 +1,16 @@
 <template>
   <div class="widget-wrapper">
     <div class="widget-header">
-      <!-- <div class="text-h6">
+      <div class="text-h6">
         Friends <span class="text-caption grey7--text ml-3 mb-1">({{ friendCount }})</span>
-      </div> -->
+      </div>
       <plus-button @handle-click="handleInviteFriend" />
     </div>
-    <!-- <div
-      v-if="currentUser.friends.length"
+    <div
+      v-if="friends.length"
       class="friends-wrapper">
       <v-tooltip
-        v-for="friend in currentUser.friends"
+        v-for="friend in filteredFriends"
         :key="friend.id"
         color="dark-grey"
         nudge-top
@@ -43,8 +43,8 @@
         </template>
         <span class="text-body-2">{{ friend | prettyName }}</span>
       </v-tooltip>
-    </div> -->
-    <p>
+    </div>
+    <p v-else>
       You haven't added any friends yet! Click on the plus button in the top right to get started.
     </p>
     <invite-friend-modal v-model="modalOpen" />
@@ -52,11 +52,19 @@
 </template>
 
 <script>
-  import currentUser from '~/mixins/currentUser';
   import PlusButton from '~/components/icons/PlusButton';
 
   export default {
-    mixins: [currentUser],
+    props: {
+      currentUser: {
+        type: Object,
+        default: () => {}
+      },
+      friends: {
+        type: Array,
+        default: () => []
+      }
+    },
 
     data: () => ({
       modalOpen: false
@@ -64,7 +72,10 @@
 
     computed: {
       friendCount () {
-        return this.currentUser.friends.length;
+        return this.filteredFriends.length;
+      },
+      filteredFriends () {
+        return this.friends.filter(friend => friend.id !== this.currentUser.id);
       }
     },
 

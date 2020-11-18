@@ -60,6 +60,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // define relationships
     public function posts(): HasMany
     {
         return $this->hasMany(ForumPost::class);

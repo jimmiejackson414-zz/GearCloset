@@ -183,7 +183,7 @@
   };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .header {
     align-items: center;
     display: flex;
@@ -195,7 +195,9 @@
     display: flex;
     justify-content: center;
   }
+</style>
 
+<style lang="scss">
   .items-table-container {
     td {
       .boolean-wrapper {

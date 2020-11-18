@@ -27,7 +27,7 @@ export default {
    ** PrivateRuntimeConfig (API Secrets, etc.)
    */
   privateRuntimeConfig: {
-
+    nodeEnv: process.env.NODE_ENV || 'development'
   },
 
   /*
@@ -86,6 +86,8 @@ export default {
     cookieAttributes: {
       expires: 7 // optional, default 7 days
     }
+    // watchLoading: '~/apollo/loadingHandler',
+    // errorHandler: '~/apollo/errorHandler'
   },
 
   /*

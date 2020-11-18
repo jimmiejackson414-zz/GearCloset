@@ -6,14 +6,14 @@
       </div>
       <plus-button @handle-click="addListItem" />
     </div>
-    <!-- <v-data-table
-      v-if="items.length"
+    <v-data-table
+      v-if="shoppingListItems.length"
       v-resize="onResize"
       :class="['items-table', {mobile: isMobile}]"
       disable-pagination
       :headers="headers"
       hide-default-footer
-      :items="items"
+      :items="shoppingListItems"
       :mobile-breakpoint="0"
       show-select>
       <template #header.data-table-select>
@@ -101,20 +101,27 @@
           </tr>
         </tbody>
       </template>
-    </v-data-table> -->
-    <p>
+    </v-data-table>
+    <p v-else>
       You haven't created any items for your shopping list yet!<br>Click the plus button in the top right to get started.
     </p>
   </div>
 </template>
 
 <script>
-  // import CustomIcon from '~/components/icons/CustomIcon';
+  import CustomIcon from '~/components/icons/CustomIcon';
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
 
   export default {
     mixins: [isMobile],
+
+    props: {
+      shoppingListItems: {
+        type: Array,
+        default: () => []
+      }
+    },
 
     data: () => ({
       deleteColor: '',
@@ -123,27 +130,21 @@
         { text: 'Item', align: 'left', sortable: true, value: 'title', width: '60%' },
         { text: 'Quantity', align: 'center', sortable: true, value: 'quantity', width: '40%' },
         { text: '', align: 'end', sortable: false, value: 'actions', width: '1%' }
-      ],
-      items: [
-        { id: 9, title: 'Smartwater Bottles', checked: 1, quantity: 2, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' },
-        { id: 10, title: 'Beef Jerkey', checked: 0, quantity: 1, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' },
-        { id: 11, title: 'Clif Bars', checked: 1, quantity: 4, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' },
-        { id: 12, title: 'Ramen', checked: 0, quantity: 6, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' }
       ]
     }),
 
     computed: {
       allSelected () {
-        return this.items.every(item => item.checked);
+        return this.shoppingListItems.every(item => item.checked);
       }
     },
 
     methods: {
       addListItem () {
         console.log('addListItem');
-        const hasItems = !!this.items[this.items.length - 1];
+        const hasItems = !!this.shoppingListItems[this.items.length - 1];
         this.items.push({
-          id: hasItems ? this.items[this.items.length - 1].id + 1 : 1,
+          id: hasItems ? this.shoppingListItems[this.shoppingListItems.length - 1].id + 1 : 1,
           title: 'Test',
           checked: 0,
           quantity: 0,
@@ -152,14 +153,14 @@
         });
       },
       removeItem (item, index) {
-        this.items.splice(index, 1);
+        this.shoppingListItems.splice(index, 1);
       },
       setEditing (ref) {
         this.editableItem = ref;
         this.$nextTick(() => document.querySelector(`#${ref}`).focus());
       },
       updateAllItems (value) {
-        this.items.forEach(i => this.updateItem(value, i, 'checked'));
+        this.shoppingListItems.forEach(i => this.updateItem(value, i, 'checked'));
       },
       updateItem (event, item, field) {
         // TODO: Need to handle editing better overall (or edit in modal)
@@ -179,7 +180,7 @@
     },
 
     components: {
-      // CustomIcon,
+      CustomIcon,
       PlusButton
     }
   };

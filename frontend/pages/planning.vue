@@ -15,7 +15,7 @@
           :items="items"
           label="Pick a Trip"
           outlined
-          value="Foo"
+          :value="selectedTrip.name"
           @change="handleUpdateList($event)" />
         <ellipsis-button
           class="ellipsis"
@@ -38,7 +38,9 @@
       <v-flex
         md6
         xs12>
-        <friends />
+        <friends
+          :current-user="currentUser"
+          :friends="selectedTrip.friends" />
       </v-flex>
 
       <!-- Trip Details Widget -->
@@ -58,14 +60,14 @@
       <v-flex
         md6
         xs12>
-        <todo-list />
+        <todo-list :todos="selectedTrip.todos" />
       </v-flex>
 
       <!-- Shopping List Widget -->
       <v-flex
         md6
         xs12>
-        <shopping-list />
+        <shopping-list :shopping-list-items="selectedTrip.shopping_list_items" />
       </v-flex>
     </v-layout>
 
@@ -92,24 +94,39 @@
   export default {
     name: 'Planning',
 
-    mixins: [currentUser],
-
     middleware: 'authenticated',
+
+    mixins: [currentUser],
 
     apollo: {
       trips: {
-        query: tripsQuery
+        $loadingKey: 'loading',
+        query: tripsQuery,
+        update ({ trips }) {
+          this.selectedTrip = trips[0];
+        }
       }
     },
 
     data: () => ({
       deleteTripModalOpen: false,
-      items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+      // items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+      loading: 0,
       listItems: [
         { title: 'Create trip', event: 'create-trip' },
         { title: 'Delete trip', event: 'delete-trip', customClass: 'error--text' }
-      ]
+      ],
+      selectedTrip: null
     }),
+
+    computed: {
+      items () {
+        if (this.trips?.length) {
+          return this.trips.map(trip => trip.name);
+        }
+        return [];
+      }
+    },
 
     methods: {
       handleCreateTrip () {

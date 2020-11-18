@@ -6,7 +6,7 @@
       </div>
       <plus-button @handle-click="addTodo" />
     </div>
-    <!-- <v-data-table
+    <v-data-table
       v-if="todos.length"
       v-resize="onResize"
       :class="['todos-table', {mobile: isMobile}]"
@@ -61,21 +61,28 @@
           </tr>
         </tbody>
       </template>
-    </v-data-table> -->
-    <p>
+    </v-data-table>
+    <p v-else>
       You haven't created any items for your shopping list yet!<br>Click the plus button in the top right to get started.
     </p>
   </div>
 </template>
 
 <script>
-  // import ClickToEdit from '~/components/ClickToEdit';
-  // import CustomIcon from '~/components/icons/CustomIcon';
+  import ClickToEdit from '~/components/ClickToEdit';
+  import CustomIcon from '~/components/icons/CustomIcon';
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
 
   export default {
     mixins: [isMobile],
+
+    props: {
+      todos: {
+        type: Array,
+        default: () => []
+      }
+    },
 
     data: () => ({
       deleteColor: '',
@@ -83,10 +90,6 @@
       headers: [
         { text: 'Item', value: 'title', align: 'left', sortable: true, width: '95%' },
         { text: '', value: 'delete', align: 'left', sortable: false, width: '5%' }
-      ],
-      todos: [
-        { id: 28, title: 'Book Car Rental', checked: 0, created_at: '2020-03-08 11:31:27', updated_at: '2020-03-08 11:31:27' },
-        { id: 29, title: 'Call hostel', checked: 1, created_at: '2020-04-08 11:31:27', updated_at: '2020-04-08 11:31:27' }
       ]
     }),
 
@@ -136,8 +139,8 @@
     },
 
     components: {
-      // ClickToEdit,
-      // CustomIcon,
+      ClickToEdit,
+      CustomIcon,
       PlusButton
     }
   };
