@@ -54,7 +54,8 @@
             :key="item.id"
             active-class="no-active"
             :class="[item.viewed ? 'read' : 'unread']"
-            two-line>
+            two-line
+            @click="handleShowNotification(item)">
             <v-list-item-content>
               <v-list-item-title>{{ item.message }}</v-list-item-title>
               <v-list-item-subtitle>{{ formatDate(item) }}</v-list-item-subtitle>
@@ -78,6 +79,10 @@
         </v-list-item-group>
       </v-list>
     </v-menu>
+
+    <notification-modal
+      v-model="showNotification"
+      :notification="activeNotification" />
   </div>
 </template>
 
@@ -96,11 +101,13 @@
     },
 
     data: () => ({
+      activeNotification: null,
       menuPosition: {
         x: 0,
         y: 0
       },
-      showMenu: false
+      showMenu: false,
+      showNotification: false
     }),
 
     computed: {
@@ -123,6 +130,10 @@
           }
         });
       },
+      handleShowNotification (item) {
+        this.activeNotification = item;
+        this.showNotification = true;
+      },
       openNotificationsMenu (e) {
         this.showMenu = true;
         this.menuPosition.x = e.clientX - 250;
@@ -136,6 +147,10 @@
 
     created () {
       dayjs.extend(relativeTime);
+    },
+
+    components: {
+      NotificationModal: () => import(/* webpackPrefetch: true */ '~/components/modals/NotificationModal')
     }
 
   };

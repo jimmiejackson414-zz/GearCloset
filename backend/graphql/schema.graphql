@@ -30,6 +30,7 @@ type Query {
 }
 
 type Mutation {
+    # User/Auth Mutations
     login(input: LoginInput @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Login@resolve")
     refreshToken(input: RefreshTokenInput @spread): RefreshTokenPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\RefreshToken@resolve")
     logout: LogoutResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Logout@resolve")
@@ -57,7 +58,10 @@ type Mutation {
         has_onboarded: Boolean
     ): User @update
     updateAvatar(id: ID! file: String!): User @field(resolver: "UserMutator@updateAvatar")
+
+    # Notifications Mutations
     markAllRead: NotificationResponse! @field(resolver: "NotificationMutator")
+    markAsRead(id: ID!, viewed: Boolean!): Notification! @update
 }
 
 input OrderByClause {
