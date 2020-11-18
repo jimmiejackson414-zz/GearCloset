@@ -87,6 +87,7 @@
   import ShoppingList from '~/components/planning/widgets/ShoppingList.vue';
   import TodoList from '~/components/planning/widgets/TodoList.vue';
   import TripDetails from '~/components/planning/widgets/TripDetails.vue';
+  import tripsQuery from '~/apollo/queries/content/trips.gql';
 
   export default {
     name: 'Planning',
@@ -94,6 +95,12 @@
     mixins: [currentUser],
 
     middleware: 'authenticated',
+
+    apollo: {
+      trips: {
+        query: tripsQuery
+      }
+    },
 
     data: () => ({
       deleteTripModalOpen: false,
@@ -103,14 +110,6 @@
         { title: 'Delete trip', event: 'delete-trip', customClass: 'error--text' }
       ]
     }),
-
-    computed: {
-      // TODO: Need to create db table to tie all of a trip's elements
-      // together (selectedPack, friends, details, etc) and return here
-      // trips () {
-      //   return this.currentUser.trips;
-      // }
-    },
 
     methods: {
       handleCreateTrip () {

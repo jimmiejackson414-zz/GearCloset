@@ -1,0 +1,9 @@
+type ShoppingListItem {
+    id: ID!
+    title: String
+    checked: Boolean!
+    trip: Trip! @belongsTo
+    quantity: Int
+    created_at: DateTime!
+    updated_at: DateTime!
+}

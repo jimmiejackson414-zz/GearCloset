@@ -23,10 +23,14 @@ type Query {
     forumComments: [ForumComment!]! @all
     forumComment(id: ID @eq): ForumComment @find
 
-    packs: [Pack!]! @field(resolver: "PacksQuery@find_by_user")
     categories: [Category!]! @field(resolver: "CategoriesQuery@find_by_user")
     items: [Item!]! @field(resolver: "ItemsQuery@find_by_user")
     notifications: [Notification]! @field(resolver: "NotificationQuery@find_by_user")
+    packs: [Pack!]! @field(resolver: "PacksQuery@find_by_user")
+    trips: [Trip]! @field(resolver: "TripsQuery@find_by_user")
+    trip(id: ID! @eq): Trip! @find
+    todos: [Todo]! @all
+    shopping_list_items: [ShoppingListItem]! @all
 }
 
 type Mutation {

@@ -1,0 +1,41 @@
+query Trips {
+  trips {
+    id
+    name
+    description
+
+    owner {
+      id
+      email
+      first_name
+      last_name
+      trail_name
+    }
+
+    todos {
+      id
+      title
+      checked
+      created_at
+      updated_at
+    }
+
+    shopping_list_items {
+      id
+      title
+      checked
+      quantity
+      created_at
+      updated_at
+    }
+
+    friends: users {
+      id
+      avatar_url
+      first_name
+      last_name
+      trail_name
+      email
+    }
+  }
+}

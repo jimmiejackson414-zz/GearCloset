@@ -1,0 +1,8 @@
+type Todo {
+    id: ID!
+    title: String
+    checked: Boolean!
+    trip: Trip! @belongsTo
+    created_at: DateTime!
+    updated_at: DateTime!
+}

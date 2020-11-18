@@ -1,0 +1,12 @@
+type Trip {
+    id: ID!
+    name: String
+    description: String
+    owner: User! @belongsTo
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    todos: [Todo]! @hasMany
+    shopping_list_items: [ShoppingListItem]! @hasMany
+    users: [User]! @hasMany
+}

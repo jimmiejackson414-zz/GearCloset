@@ -20,4 +20,5 @@ type User {
 
     packs: [Pack!]! @hasMany
     notifications: [Notification!]! @hasMany
+    trips: [Trip]! @hasMany
 }

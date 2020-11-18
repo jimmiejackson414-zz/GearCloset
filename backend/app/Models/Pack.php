@@ -14,7 +14,9 @@ class Pack extends Model
     ];
 
     // automatically eager load categories of a pack
-    protected $with = ['categories'];
+    protected $with = [
+        'categories'
+    ];
 
     // define relationships
     public function user(): BelongsTo

@@ -60,7 +60,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    //Relationships //TODO: Work on these, will probably need to be HasManyThrough relationships
     public function posts(): HasMany
     {
         return $this->hasMany(ForumPost::class);
@@ -79,5 +78,10 @@ class User extends Authenticatable
     public function notifications(): HasMany
     {
         return $this->hasMany(Notification::class);
+    }
+
+    public function trips(): HasMany
+    {
+        return $this->hasMany(Trip::class, 'owner_id');
     }
 }
