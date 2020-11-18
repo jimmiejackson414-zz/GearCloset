@@ -2,17 +2,14 @@
 
 namespace App\GraphQL\Queries;
 
-use Illuminate\Support\Facades\Auth;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use GraphQL\Type\Definition\ResolveInfo;
 
 class CategoriesQuery
 {
-    /**
-     * @param  null  $_
-     * @param  array<string, mixed>  $args
-     */
-    public function find_by_user()
+    public function find_by_user($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $user = Auth::guard('api')->user();
+        $user = $context->user();
         if ($user) {
             return $user->packs()->categories()->get();
         }

@@ -26,7 +26,7 @@ type Query {
     packs: [Pack!]! @field(resolver: "PacksQuery@find_by_user")
     categories: [Category!]! @field(resolver: "CategoriesQuery@find_by_user")
     items: [Item!]! @field(resolver: "ItemsQuery@find_by_user")
-    notifications: [Notification!]! @field(resolver: "NotificationQuery@find_by_user")
+    notifications: [Notification]! @field(resolver: "NotificationQuery@find_by_user")
 }
 
 type Mutation {
@@ -57,7 +57,7 @@ type Mutation {
         has_onboarded: Boolean
     ): User @update
     updateAvatar(id: ID! file: String!): User @field(resolver: "UserMutator@updateAvatar")
-    markAllRead(id: ID!): NotificationResponse! @field(resolver: "NotificationMutator")
+    markAllRead: NotificationResponse! @field(resolver: "NotificationMutator")
 }
 
 input OrderByClause {

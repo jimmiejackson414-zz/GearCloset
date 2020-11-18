@@ -2,19 +2,14 @@
 
 namespace App\GraphQL\Mutations;
 
-use Illuminate\Support\Facades\Auth;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use GraphQL\Type\Definition\ResolveInfo;
 
 class NotificationMutator
 {
-    /**
-     * @param  null  $_
-     * @param  array<string, mixed>  $args
-     */
-    public function __invoke($_, array $args)
+    public function __invoke($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $user = \App\Models\User::find($args['id']);
-        // $user = auth('api')->user();
-        // $user = Auth::guard('api')->user();
+        $user = $context->user();
 
         foreach ($user->notifications as $notification) {
             $notification->viewed = true;

@@ -2,13 +2,14 @@
 
 namespace App\GraphQL\Queries;
 
-use Illuminate\Support\Facades\Auth;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use GraphQL\Type\Definition\ResolveInfo;
 
 class UserQuery
 {
-  public function me()
+  public function me($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
   {
-    return Auth::guard('api')->user();
+    return $context->user();
   }
 
   public function paginate($root, array $args)

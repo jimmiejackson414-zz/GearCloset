@@ -36,7 +36,8 @@ return [
             \Nuwave\Lighthouse\Support\Http\Middleware\AttemptAuthentication::class,
 
             // Logs every incoming GraphQL query.
-            // \Nuwave\Lighthouse\Support\Http\Middleware\LogGraphQLQueries::class,
+            \Nuwave\Lighthouse\Support\Http\Middleware\LogGraphQLQueries::class,
+            \Joselfonseca\LighthouseGraphQLPassport\Http\Middleware\AuthenticateWithApiGuard::class
         ],
 
         /*
