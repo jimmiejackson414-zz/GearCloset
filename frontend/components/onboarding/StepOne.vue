@@ -54,7 +54,7 @@
 
         try {
           this.submitting = true;
-          const payload = { file: this.avatar, id: Number(this.currentUser.id) };
+          const payload = { file: this.avatar };
 
           const { errors } = await this.$apollo.mutate({
             mutation: updateAvatarMutation,

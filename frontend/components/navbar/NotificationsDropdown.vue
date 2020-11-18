@@ -116,9 +116,6 @@
       async handleMarkAllAsRead () {
         await this.$apollo.mutate({
           mutation: markAllReadMutation,
-          variables: {
-            id: this.currentUser.id
-          },
           update (store, { data: { markAllRead } }) {
             const data = store.readQuery({ query: meQuery });
             data.currentUser.notifications = markAllRead.notifications;

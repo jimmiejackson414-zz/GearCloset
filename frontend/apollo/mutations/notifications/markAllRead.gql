@@ -1,5 +1,5 @@
-mutation MarkAllRead($id: ID!) {
-  markAllRead(id: $id) {
+mutation MarkAllRead {
+  markAllRead {
     status
     notifications {
       id
