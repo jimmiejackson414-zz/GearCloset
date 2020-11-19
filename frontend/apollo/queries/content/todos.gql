@@ -1,0 +1,9 @@
+query Todos($trip_id: ID!) {
+  todos(trip_id: $trip_id) {
+    id
+    title
+    checked
+    created_at
+    updated_at
+  }
+}

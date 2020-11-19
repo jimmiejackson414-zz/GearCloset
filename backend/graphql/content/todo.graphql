@@ -1,3 +1,12 @@
+extend type Mutation @guard(with: ["api"]) {
+    createTodo(input: CreateTodoInput! @spread): Todo @create
+    updateTodo(id: ID! title: String checked: Boolean): Todo @update
+}
+
+extend type Query {
+    todos(trip_id: ID! @where(operator: "=", key: "trip_id")): [Todo]! @all
+}
+
 type Todo {
     id: ID!
     title: String
@@ -5,4 +14,10 @@ type Todo {
     trip: Trip! @belongsTo
     created_at: DateTime!
     updated_at: DateTime!
+}
+
+input CreateTodoInput {
+    title: String
+    checked: Boolean
+    trip: CreateUserBelongsTo
 }

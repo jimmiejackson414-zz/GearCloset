@@ -1,3 +1,8 @@
+extend type Mutation @guard(with: ["api"]) {
+    markAllRead: NotificationResponse! @field(resolver: "NotificationMutator")
+    markAsRead(id: ID!, viewed: Boolean!): Notification! @update
+}
+
 type Notification {
     id: ID
     message: String

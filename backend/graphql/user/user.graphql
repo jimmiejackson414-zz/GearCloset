@@ -22,3 +22,7 @@ type User {
     notifications: [Notification!]! @hasMany
     trips: [Trip]! @hasMany
 }
+
+input CreateUserBelongsTo {
+    connect: ID
+}

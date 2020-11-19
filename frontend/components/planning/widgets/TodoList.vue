@@ -74,7 +74,6 @@
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
   import { todoService } from '~/services';
-  // import updateTodo from '~/apollo/mutations/planning/updateTodo.gql';
 
   export default {
     mixins: [isMobile],
@@ -104,19 +103,11 @@
     methods: {
       addTodo () {
         const payload = {
-          data: { title: 'Test', checked: false, trip: this.trip.id },
+          fields: { title: 'New Todo', checked: false, trip: this.trip.id },
           apollo: this.$apollo
         };
 
         todoService.createTodo(payload);
-        // const hasTodos = !!this.todos[this.todos.length - 1];
-        // this.todos.push({
-        //   id: hasTodos ? this.todos[this.todos.length - 1].id + 1 : 1,
-        //   title: 'Test',
-        //   checked: 0,
-        //   created_at: Date.now(),
-        //   updated_at: Date.now()
-        // });
       },
       removeTodo (todo, index) {
         this.trip.todos.splice(index, 1);
