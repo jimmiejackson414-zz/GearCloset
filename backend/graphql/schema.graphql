@@ -66,6 +66,10 @@ type Mutation {
     # Notifications Mutations
     markAllRead: NotificationResponse! @field(resolver: "NotificationMutator")
     markAsRead(id: ID!, viewed: Boolean!): Notification! @update
+
+    # Planning Page Mutations
+    createTodo(title: String checked: Boolean, trip: Int!): Todo @create
+    updateTodo(id: ID! title: String checked: Boolean): Todo @update
 }
 
 input OrderByClause {

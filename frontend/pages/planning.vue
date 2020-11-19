@@ -60,7 +60,7 @@
       <v-flex
         md6
         xs12>
-        <todo-list :todos="selectedTrip.todos" />
+        <todo-list :trip="selectedTrip" />
       </v-flex>
 
       <!-- Shopping List Widget -->

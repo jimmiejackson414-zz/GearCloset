@@ -1,0 +1,10 @@
+mutation CreateTodo($checked: Boolean = false, $title: String, $trip: Int!) {
+  createTodo(checked: $checked, title: $title, trip: $trip) {
+    id
+    checked
+    title
+    trip_id
+    created_at
+    updated_at
+  }
+}

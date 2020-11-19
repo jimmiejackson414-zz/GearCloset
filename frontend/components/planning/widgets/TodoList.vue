@@ -7,13 +7,13 @@
       <plus-button @handle-click="addTodo" />
     </div>
     <v-data-table
-      v-if="todos.length"
+      v-if="trip.todos.length"
       v-resize="onResize"
       :class="['todos-table', {mobile: isMobile}]"
       disable-pagination
       :headers="headers"
       hide-default-footer
-      :items="todos"
+      :items="trip.todos"
       :mobile-breakpoint="0"
       show-select>
       <template #header.data-table-select>
@@ -73,14 +73,16 @@
   import CustomIcon from '~/components/icons/CustomIcon';
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
+  import { todoService } from '~/services';
+  // import updateTodo from '~/apollo/mutations/planning/updateTodo.gql';
 
   export default {
     mixins: [isMobile],
 
     props: {
-      todos: {
-        type: Array,
-        default: () => []
+      trip: {
+        type: Object,
+        default: () => {}
       }
     },
 
@@ -95,42 +97,48 @@
 
     computed: {
       allSelected () {
-        return this.todos.every(item => item.checked);
+        return this.trip.todos.every(item => item.checked);
       }
     },
 
     methods: {
       addTodo () {
-        console.log('addTodo');
-        const hasTodos = !!this.todos[this.todos.length - 1];
-        this.todos.push({
-          id: hasTodos ? this.todos[this.todos.length - 1].id + 1 : 1,
-          title: 'Test',
-          checked: 0,
-          created_at: Date.now(),
-          updated_at: Date.now()
-        });
+        const payload = {
+          data: { title: 'Test', checked: false, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+
+        todoService.createTodo(payload);
+        // const hasTodos = !!this.todos[this.todos.length - 1];
+        // this.todos.push({
+        //   id: hasTodos ? this.todos[this.todos.length - 1].id + 1 : 1,
+        //   title: 'Test',
+        //   checked: 0,
+        //   created_at: Date.now(),
+        //   updated_at: Date.now()
+        // });
       },
       removeTodo (todo, index) {
-        this.todos.splice(index, 1);
+        this.trip.todos.splice(index, 1);
       },
       setEditing (ref) {
         this.editableItem = ref;
         this.$nextTick(() => document.querySelector(`#${ref}`).focus());
       },
       updateAllItems (value) {
-        this.todos.forEach(i => this.updateItem(value, i, 'checked'));
+        this.trip.todos.forEach(i => this.updateItem(value, i, 'checked'));
       },
       updateItem (value, todo, field) {
-        if (value === String(todo[field])) {
-          // return if value hasn't changed
-          return;
-        } else {
-          todo[field] = value;
+        // return if value hasn't changed
+        if (value !== String(todo[field])) {
+          const payload = {
+            data: { id: todo.id, [field]: value },
+            field,
+            value,
+            apollo: this.$apollo
+          };
+          todoService.updateTodo(payload);
         }
-
-        console.log('updateItem');
-        // await todoService.update(todo);
       }
     },
 
