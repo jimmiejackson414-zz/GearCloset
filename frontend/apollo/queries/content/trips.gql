@@ -3,6 +3,8 @@ query Trips {
     id
     name
     description
+    starting_point
+    ending_point
 
     owner {
       id

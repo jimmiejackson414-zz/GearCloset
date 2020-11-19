@@ -3,6 +3,8 @@ type Trip {
     name: String
     description: String
     owner: User! @belongsTo
+    starting_point: String
+    ending_point: String
     created_at: DateTime!
     updated_at: DateTime!
 

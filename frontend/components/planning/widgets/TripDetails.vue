@@ -9,22 +9,22 @@
     <div class="trip-details-wrapper">
       <div class="row">
         <div class="col-12 d-flex align-center">
-          <h2>{{ startingPoint }}</h2>
+          <h2>{{ trip.starting_point }}</h2>
           <custom-icon
             :fill="arrowColor"
             :height="20"
             name="arrow-right"
             :width="40" />
-          <h2>{{ endingPoint }}</h2>
+          <h2>{{ trip.ending_point }}</h2>
         </div>
       </div>
       <transition-group
-        v-if="details.length"
+        v-if="trip.trip_details.length"
         class="trip-details"
         name="list"
         tag="ul">
         <li
-          v-for="detail in details"
+          v-for="detail in trip.trip_details"
           :key="detail.id"
           class="detail">
           <span class="font-weight-bold">{{ detail.title }}</span>
@@ -66,9 +66,13 @@
 
   export default {
     props: {
-      details: {
-        type: Array,
-        default: () => []
+      // details: {
+      //   type: Array,
+      //   default: () => []
+      // },
+      trip: {
+        type: Object,
+        default: () => {}
       }
     },
 
@@ -78,10 +82,8 @@
         { title: 'Update', event: 'update-detail' },
         { title: 'Delete', event: 'delete-detail' }
       ],
-      endingPoint: 'Mt. Whitney',
       removeDetailModalOpen: false,
       selectedDetail: null,
-      startingPoint: 'Yosemite',
       tripDetailsModalOpen: false
     }),
 
