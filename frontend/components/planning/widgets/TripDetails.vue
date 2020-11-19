@@ -7,7 +7,7 @@
       <plus-button @handle-click="tripDetailsModalOpen = true" />
     </div>
     <div class="trip-details-wrapper">
-      <!-- <div class="row">
+      <div class="row">
         <div class="col-12 d-flex align-center">
           <h2>{{ startingPoint }}</h2>
           <custom-icon
@@ -32,16 +32,16 @@
             class="value"
             :href="`${detail.url}`"
             rel="noopener noreferrer"
-            target="_blank">{{ detail.url_title }}</a>
+            target="_blank">{{ detail.value }}</a>
           <ellipsis-button
             class="ellipsis"
             :items="ellipsisItems"
             @delete-detail="openDelete(detail)"
             @update-detail="openUpdate(detail)" />
         </li>
-      </transition-group> -->
+      </transition-group>
 
-      <p>
+      <p v-else>
         You haven't added any details yet!
       </p>
     </div>
@@ -60,20 +60,20 @@
 </template>
 
 <script>
-  // import CustomIcon from '~/components/icons/CustomIcon';
-  // import EllipsisButton from '~/components/icons/EllipsisButton';
+  import CustomIcon from '~/components/icons/CustomIcon';
+  import EllipsisButton from '~/components/icons/EllipsisButton';
   import PlusButton from '~/components/icons/PlusButton';
 
   export default {
+    props: {
+      details: {
+        type: Array,
+        default: () => []
+      }
+    },
+
     data: () => ({
       arrowColor: '',
-      details: [
-        { id: 1, title: 'Flight 1', url: 'https://www.southwest.com', url_title: 'SW436', created_at: '2020-03-09 17:08:21', updated_at: '2020-03-09 17:08:21' },
-        { id: 2, title: 'Flight 2', url: 'https://www.southwest.com', url_title: 'SW38', created_at: '2020-03-09 17:08:21', updated_at: '2020-03-09 17:08:21' },
-        { id: 3, title: 'Car Rental', url: 'https://www.avis.com', url_title: 'Avis', created_at: '2020-03-09 17:08:21', updated_at: '2020-03-09 17:08:21' },
-        { id: 4, title: 'Food Drop', url: 'https://www.standingbearhostel.com', url_title: 'Standing Bear Hostel', created_at: '2020-03-09 17:08:21', updated_at: '2020-03-09 17:08:21' },
-        { id: 5, title: 'Hostel', url: 'https://www.blackrockhostel.com', url_title: 'Black Rock Hostel', created_at: '2020-03-09 17:08:21', updated_at: '2020-03-09 17:08:21' }
-      ],
       ellipsisItems: [
         { title: 'Update', event: 'update-detail' },
         { title: 'Delete', event: 'delete-detail' }
@@ -107,9 +107,9 @@
     },
 
     components: {
-      // CustomIcon,
+      CustomIcon,
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
-      // EllipsisButton,
+      EllipsisButton,
       PlusButton,
       TripDetailsModal: () => import(/* webpackPrefetch: true */ '~/components/modals/TripDetailsModal')
     }

@@ -47,13 +47,13 @@
       <v-flex
         md6
         xs12>
-        <trip-details />
+        <trip-details :details="selectedTrip.trip_details" />
       </v-flex>
 
       <v-flex
         md6
         xs12>
-        <hike-details />
+        <hike-details :trip="selectedTrip" />
       </v-flex>
 
       <!-- Todo List Widget -->
@@ -104,13 +104,13 @@
         query: tripsQuery,
         update ({ trips }) {
           this.selectedTrip = trips[0];
+          return trips;
         }
       }
     },
 
     data: () => ({
       deleteTripModalOpen: false,
-      // items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
       loading: 0,
       listItems: [
         { title: 'Create trip', event: 'create-trip' },
@@ -121,7 +121,7 @@
 
     computed: {
       items () {
-        if (this.trips?.length) {
+        if (this.trips && this.trips.length) {
           return this.trips.map(trip => trip.name);
         }
         return [];

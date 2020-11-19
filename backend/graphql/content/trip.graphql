@@ -6,7 +6,8 @@ type Trip {
     created_at: DateTime!
     updated_at: DateTime!
 
-    todos: [Todo]! @hasMany
     shopping_list_items: [ShoppingListItem]! @hasMany
+    todos: [Todo]! @hasMany
+    trip_details(type: String! @where(operator: "=", key: "type")): [TripDetail]! @hasMany
     users: [User]! @hasMany
 }

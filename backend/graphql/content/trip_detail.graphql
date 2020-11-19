@@ -1,0 +1,10 @@
+type TripDetail {
+    id: ID!
+    title: String
+    url: String
+    value: String
+    type: String
+    trip: Trip! @belongsTo
+    created_at: DateTime!
+    updated_at: DateTime!
+}

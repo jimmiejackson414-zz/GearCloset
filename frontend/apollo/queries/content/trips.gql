@@ -29,6 +29,26 @@ query Trips {
       updated_at
     }
 
+    trip_details(type: "trip") {
+			id
+			title
+			url
+			value
+			type
+			created_at
+			updated_at
+    }
+
+    hike_details: trip_details(type: "hike") {
+      id
+      title
+      url
+      value
+      type
+			created_at
+      updated_at
+    }
+
     friends: users {
       id
       avatar_url
