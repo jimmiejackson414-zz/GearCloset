@@ -123,7 +123,7 @@
         // return if value hasn't changed
         if (value !== String(todo[field])) {
           const payload = {
-            data: { id: todo.id, [field]: value },
+            data: { id: todo.id, [field]: value, trip: this.trip.id },
             field,
             value,
             apollo: this.$apollo

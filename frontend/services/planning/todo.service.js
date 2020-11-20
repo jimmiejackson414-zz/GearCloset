@@ -30,13 +30,24 @@ async function updateTodo ({ data, field, value, apollo }) {
   return await apollo.mutate({
     mutation: updateTodoMutation,
     variables: data,
-    optimisticResponse: {
-      __typename: 'Mutation',
-      updateTodo: {
-        __typename: 'Todo',
-        id: -1,
-        [field]: value
-      }
+    update: (store, { data: { updateTodo } }) => {
+      // read query
+      const readQuery = store.readQuery({ query: tripsQuery });
+
+      // modify todo
+      const trip = readQuery.trips.find(trip => trip.id === data.trip);
+      const todo = trip.todos.find(todo => todo.id === data.id);
+      todo[field] = value;
+
+      const otherTrips = readQuery.trips.filter(t => t !== trip);
+
+      // write query
+      store.writeQuery({
+        query: tripsQuery,
+        data: {
+          trips: [trip, ...otherTrips]
+        }
+      });
     }
   });
 }
