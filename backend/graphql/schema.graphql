@@ -29,7 +29,6 @@ type Query {
     packs: [Pack!]! @field(resolver: "PacksQuery@find_by_user")
     trips: [Trip]! @field(resolver: "TripsQuery@find_by_user")
     trip(id: ID! @eq): Trip! @find
-    shopping_list_items: [ShoppingListItem]! @all
 }
 
 type Mutation {

@@ -7,13 +7,13 @@
       <plus-button @handle-click="addListItem" />
     </div>
     <v-data-table
-      v-if="shoppingListItems.length"
+      v-if="trip.shopping_list_items.length"
       v-resize="onResize"
       :class="['items-table', {mobile: isMobile}]"
       disable-pagination
       :headers="headers"
       hide-default-footer
-      :items="shoppingListItems"
+      :items="trip.shopping_list_items"
       :mobile-breakpoint="0"
       show-select>
       <template #header.data-table-select>
@@ -112,14 +112,15 @@
   import CustomIcon from '~/components/icons/CustomIcon';
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
+  import { shoppingListItemService } from '~/services';
 
   export default {
     mixins: [isMobile],
 
     props: {
-      shoppingListItems: {
-        type: Array,
-        default: () => []
+      trip: {
+        type: Object,
+        default: () => {}
       }
     },
 
@@ -135,43 +136,42 @@
 
     computed: {
       allSelected () {
-        return this.shoppingListItems.every(item => item.checked);
+        return this.trip.shopping_list_items.every(item => item.checked);
       }
     },
 
     methods: {
       addListItem () {
-        console.log('addListItem');
-        const hasItems = !!this.shoppingListItems[this.items.length - 1];
-        this.items.push({
-          id: hasItems ? this.shoppingListItems[this.shoppingListItems.length - 1].id + 1 : 1,
-          title: 'Test',
-          checked: 0,
-          quantity: 0,
-          created_at: Date.now(),
-          updated_at: Date.now()
-        });
+        const payload = {
+          fields: { title: 'New Item', checked: false, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+
+        shoppingListItemService.createShoppingListItem(payload);
       },
       removeItem (item, index) {
-        this.shoppingListItems.splice(index, 1);
+        this.trip.shopping_list_items.splice(index, 1);
       },
       setEditing (ref) {
         this.editableItem = ref;
         this.$nextTick(() => document.querySelector(`#${ref}`).focus());
       },
       updateAllItems (value) {
-        this.shoppingListItems.forEach(i => this.updateItem(value, i, 'checked'));
+        this.trip.shopping_list_items.forEach(i => this.updateItem(value, i, 'checked'));
       },
       updateItem (event, item, field) {
-        // TODO: Need to handle editing better overall (or edit in modal)
         this.editableItem = null;
 
         // return if value hasn't changed
         if (event === String(item[field])) { return; }
-        item[field] = event;
 
-        console.log('updateItem');
-        // await shoppingListService.update(item);
+        const payload = {
+          data: { id: item.id, [field]: event, trip: this.trip.id },
+          field,
+          value: event,
+          apollo: this.$apollo
+        };
+        shoppingListItemService.updateShoppingListItem(payload);
       }
     },
 

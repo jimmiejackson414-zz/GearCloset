@@ -67,7 +67,7 @@
       <v-flex
         md6
         xs12>
-        <shopping-list :shopping-list-items="selectedTrip.shopping_list_items" />
+        <shopping-list :trip="selectedTrip" />
       </v-flex>
     </v-layout>
 

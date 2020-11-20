@@ -14,6 +14,6 @@ class ShoppingListItem extends Model
     // define relationships
     public function trip(): BelongsTo
     {
-        $this->belongsTo(Trip::class);
+        return $this->belongsTo(Trip::class);
     }
 }
