@@ -4,7 +4,7 @@
     :ref="uniqueIdentifier"
     v-focus
     v-mask="mask"
-    :class="[ 'click-to-edit', active ? 'active' : 'b-none', ...customClass ]"
+    :class="[ 'click-to-edit', active ? 'active' : 'b-none', customClass ]"
     color="primary"
     dense
     hide-details
@@ -42,7 +42,7 @@
         default: () => ''
       },
       value: {
-        type: String,
+        type: [String, Number],
         default: () => ''
       }
     },

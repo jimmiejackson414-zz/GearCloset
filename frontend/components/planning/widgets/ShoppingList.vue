@@ -44,44 +44,16 @@
                 @input="updateItem($event, item, 'checked')" />
             </td>
             <td class="text-start">
-              <span
-                v-if="editableItem !== `title${item.id}Ref`"
-                @click="setEditing(`title${item.id}Ref`)">
-                {{ item.title }}
-              </span>
-              <v-text-field
-                v-else
-                :id="`title${item.id}Ref`"
-                :ref="`title${item.id}Ref`"
-                color="primary"
-                dense
-                hide-details
-                outlined
-                type="text"
+              <click-to-edit
+                :unique-identifier="`shoppingItemTitle${item.id}Ref`"
                 :value="item.title"
-                @blur="updateItem($event, item, 'title')"
-                @change="updateItem($event, item, 'title')"
-                @keyup.enter="updateItem($event, item, 'title')" />
+                @handle-update-item="updateItem($event, item, 'title')" />
             </td>
-            <td class="text-center">
-              <span
-                v-if="editableItem !== `quantity${item.id}Ref`"
-                @click="setEditing(`quantity${item.id}Ref`)">
-                {{ item.quantity }}
-              </span>
-              <v-text-field
-                v-else
-                :id="`quantity${item.id}Ref`"
-                :ref="`quantity${item.id}Ref`"
-                color="primary"
-                dense
-                hide-details
-                outlined
-                type="text"
+            <td class="text-center quantity">
+              <click-to-edit
+                :unique-identifier="`shoppingItemQuantity${item.id}Ref`"
                 :value="item.quantity"
-                @blur="updateItem($event, item, 'quantity')"
-                @change="updateItem($event, item, 'quantity')"
-                @keyup.enter="updateItem($event, item, 'quantity')" />
+                @handle-update-item="updateItem($event, item, 'quantity')" />
             </td>
             <td class="text-end">
               <v-btn
@@ -109,9 +81,10 @@
 </template>
 
 <script>
-  import CustomIcon from '~/components/icons/CustomIcon';
+  import ClickToEdit from '~/components/ClickToEdit.vue';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import isMobile from '~/mixins/isMobile';
-  import PlusButton from '~/components/icons/PlusButton';
+  import PlusButton from '~/components/icons/PlusButton.vue';
   import { shoppingListItemService } from '~/services';
 
   export default {
@@ -128,8 +101,8 @@
       deleteColor: '',
       editableItem: null,
       headers: [
-        { text: 'Item', align: 'left', sortable: true, value: 'title', width: '60%' },
-        { text: 'Quantity', align: 'center', sortable: true, value: 'quantity', width: '40%' },
+        { text: 'Item', align: 'left', sortable: true, value: 'title', width: '80%' },
+        { text: 'Quantity', align: 'center', sortable: true, value: 'quantity', width: '19%' },
         { text: '', align: 'end', sortable: false, value: 'actions', width: '1%' }
       ]
     }),
@@ -184,6 +157,7 @@
     },
 
     components: {
+      ClickToEdit,
       CustomIcon,
       PlusButton
     }
@@ -211,6 +185,12 @@
 
         td.text-start {
           padding: 0 8px;
+        }
+
+        td.text-center.quantity {
+          input {
+            text-align: center;
+          }
         }
 
         td.text-end {
