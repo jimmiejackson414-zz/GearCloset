@@ -121,20 +121,20 @@
       },
       updateItem (value, todo, field) {
         // return if value hasn't changed
-        if (value !== String(todo[field])) {
-          const payload = {
-            data: { id: todo.id, [field]: value, trip: this.trip.id },
-            field,
-            value,
-            apollo: this.$apollo
-          };
-          todoService.updateTodo(payload);
-        }
+        if (value === String(todo[field])) { return; }
+
+        const payload = {
+          data: { id: todo.id, [field]: value, trip: this.trip.id },
+          field,
+          value,
+          apollo: this.$apollo
+        };
+        todoService.updateTodo(payload);
       }
     },
 
     mounted () {
-      this.deleteColor = $nuxt.$vuetify.theme.themes.light.secondary;
+      this.deleteColor = $nuxt.$vuetify.theme.themes.light.error;
     },
 
     components: {

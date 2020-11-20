@@ -176,7 +176,7 @@
     },
 
     mounted () {
-      this.deleteColor = $nuxt.$vuetify.theme.themes.light.secondary;
+      this.deleteColor = $nuxt.$vuetify.theme.themes.light.error;
     },
 
     components: {

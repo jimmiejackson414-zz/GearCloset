@@ -48,6 +48,18 @@ async function updateTodo ({ data, field, value, apollo }) {
           trips: [trip, ...otherTrips]
         }
       });
+    },
+    optimisticResponse: {
+      __typename: 'Mutation',
+      updateTodo: {
+        __typename: 'todos',
+        id: data.id,
+        checked: false,
+        title: '',
+        [field]: value,
+        created_at: Date.now(),
+        updated_at: Date.now()
+      }
     }
   });
 }

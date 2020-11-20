@@ -3,7 +3,6 @@ import updateShoppingListItemMutation from '~/apollo/mutations/planning/updateSh
 import tripsQuery from '~/apollo/queries/content/trips.gql';
 
 async function createShoppingListItem ({ fields, apollo }) {
-  console.log({ fields });
   return await apollo.mutate({
     mutation: createShoppingListItemMutation,
     variables: fields,
@@ -49,6 +48,19 @@ async function updateShoppingListItem ({ data, field, value, apollo }) {
           trips: [trip, ...otherTrips]
         }
       });
+    },
+    optimisticResponse: {
+      __typename: 'Mutation',
+      updateShoppingListItem: {
+        __typename: 'shopping_list_items',
+        id: data.id,
+        checked: false,
+        title: '',
+        quantity: 0,
+        [field]: value,
+        created_at: Date.now(),
+        updated_at: Date.now()
+      }
     }
   });
 }
