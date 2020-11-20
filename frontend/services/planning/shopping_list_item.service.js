@@ -1,4 +1,6 @@
+import { remove } from 'lodash';
 import createShoppingListItemMutation from '~/apollo/mutations/planning/createShoppingListItem.gql';
+import deleteShoppingListItemMutation from '~/apollo/mutations/planning/deleteShoppingListItem.gql';
 import updateShoppingListItemMutation from '~/apollo/mutations/planning/updateShoppingListItem.gql';
 import tripsQuery from '~/apollo/queries/content/trips.gql';
 
@@ -22,6 +24,43 @@ async function createShoppingListItem ({ fields, apollo }) {
           trips: [trip, ...otherTrips]
         }
       });
+    }
+  });
+}
+
+async function deleteShoppingListItem ({ fields, apollo }) {
+  return await apollo.mutate({
+    mutation: deleteShoppingListItemMutation,
+    variables: {
+      id: fields.id
+    },
+    update: (store, { data: { deleteShoppingListItem } }) => {
+      // read query
+      const data = store.readQuery({ query: tripsQuery });
+
+      // filter from shopping list items
+      const trip = data.trips.find(trip => trip.id === fields.trip);
+      remove(trip.shopping_list_items, item => item.id === deleteShoppingListItem.id);
+      const otherTrips = data.trips.filter(t => t !== trip);
+
+      // write query
+      store.writeQuery({
+        query: tripsQuery,
+        data: {
+          trips: [trip, ...otherTrips]
+        }
+      });
+    },
+    optimisticResponse: {
+      __typename: 'Mutation',
+      deleteShoppingListItem: {
+        __typename: 'shopping_list_items',
+        id: fields.id,
+        checked: false,
+        quantity: 0,
+        created_at: Date.now(),
+        updated_at: Date.now()
+      }
     }
   });
 }
@@ -67,5 +106,6 @@ async function updateShoppingListItem ({ data, field, value, apollo }) {
 
 export const shoppingListItemService = {
   createShoppingListItem,
+  deleteShoppingListItem,
   updateShoppingListItem
 };

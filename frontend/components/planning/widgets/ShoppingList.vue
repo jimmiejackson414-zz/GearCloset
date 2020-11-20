@@ -150,7 +150,11 @@
         shoppingListItemService.createShoppingListItem(payload);
       },
       removeItem (item, index) {
-        this.trip.shopping_list_items.splice(index, 1);
+        const payload = {
+          fields: { id: item.id, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        shoppingListItemService.deleteShoppingListItem(payload);
       },
       setEditing (ref) {
         this.editableItem = ref;

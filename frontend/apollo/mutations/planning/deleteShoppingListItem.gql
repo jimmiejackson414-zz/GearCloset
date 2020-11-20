@@ -1,0 +1,9 @@
+mutation DeleteShoppingListItem($id: ID!) {
+  deleteShoppingListItem(id:$id) {
+    id
+    checked
+    quantity
+    created_at
+    updated_at
+  }
+}

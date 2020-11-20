@@ -1,4 +1,6 @@
+import { remove } from 'lodash';
 import createTodoMutation from '~/apollo/mutations/planning/createTodo.gql';
+import deleteTodoMutation from '~/apollo/mutations/planning/deleteTodo.gql';
 import updateTodoMutation from '~/apollo/mutations/planning/updateTodo.gql';
 import tripsQuery from '~/apollo/queries/content/trips.gql';
 
@@ -22,6 +24,42 @@ async function createTodo ({ fields, apollo }) {
           trips: [trip, ...otherTrips]
         }
       });
+    }
+  });
+}
+
+async function deleteTodo ({ fields, apollo }) {
+  return await apollo.mutate({
+    mutation: deleteTodoMutation,
+    variables: {
+      id: fields.id
+    },
+    update: (store, { data: { deleteTodo } }) => {
+      // read query
+      const data = store.readQuery({ query: tripsQuery });
+
+      // filter from todos
+      const trip = data.trips.find(trip => trip.id === fields.trip);
+      remove(trip.todos, todo => todo.id === deleteTodo.id);
+      const otherTrips = data.trips.filter(t => t !== trip);
+
+      // write query
+      store.writeQuery({
+        query: tripsQuery,
+        data: {
+          trips: [trip, ...otherTrips]
+        }
+      });
+    },
+    optimisticResponse: {
+      __typename: 'Mutation',
+      deleteTodo: {
+        __typename: 'todos',
+        id: fields.id,
+        checked: false,
+        created_at: Date.now(),
+        updated_at: Date.now()
+      }
     }
   });
 }
@@ -66,5 +104,6 @@ async function updateTodo ({ data, field, value, apollo }) {
 
 export const todoService = {
   createTodo,
+  deleteTodo,
   updateTodo
 };

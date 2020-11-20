@@ -110,7 +110,11 @@
         todoService.createTodo(payload);
       },
       removeTodo (todo, index) {
-        this.trip.todos.splice(index, 1);
+        const payload = {
+          fields: { id: todo.id, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        todoService.deleteTodo(payload);
       },
       setEditing (ref) {
         this.editableItem = ref;
