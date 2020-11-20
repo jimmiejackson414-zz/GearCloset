@@ -1,38 +1,27 @@
 import createTodoMutation from '~/apollo/mutations/planning/createTodo.gql';
 import updateTodoMutation from '~/apollo/mutations/planning/updateTodo.gql';
-import todosQuery from '~/apollo/queries/content/todos.gql';
+import tripsQuery from '~/apollo/queries/content/trips.gql';
 
 async function createTodo ({ fields, apollo }) {
   return await apollo.mutate({
     mutation: createTodoMutation,
     variables: fields,
     update: (store, { data: { createTodo } }) => {
-      console.log({ createTodo });
-      const data = store.readQuery({
-        query: todosQuery,
-        variables: {
-          trip_id: fields.trip
-        }
-      });
-      console.log({ data });
+      // read query
+      const data = store.readQuery({ query: tripsQuery });
+
+      // modify todos
       const trip = data.trips.find(trip => trip.id === fields.trip);
       trip.todos.push(createTodo);
-      console.log({ trip });
+      const otherTrips = data.trips.filter(t => t !== trip);
+
+      // write query
       store.writeQuery({
-        query: todosQuery,
-        data
+        query: tripsQuery,
+        data: {
+          trips: [trip, ...otherTrips]
+        }
       });
-    },
-    optimisticResponse: {
-      __typename: 'Mutation',
-      createTodo: {
-        __typename: 'Todo',
-        id: -1,
-        title: 'New Todo',
-        checked: false,
-        created_at: Date.now(),
-        updated_at: Date.now()
-      }
     }
   });
 }

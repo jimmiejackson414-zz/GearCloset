@@ -102,7 +102,7 @@
       trips: {
         $loadingKey: 'loading',
         query: tripsQuery,
-        update ({ trips }) {
+        result ({ data: { trips } }) {
           this.selectedTrip = trips[0];
           return trips;
         }
