@@ -1,0 +1,11 @@
+mutation UpdateTripDetail($id: ID!, $title: String, $url: String, $value: String, $type: String) {
+  updateTripDetail(id: $id, title: $title, url: $url, value: $value, type: $type) {
+    id
+    title
+    url
+    value
+    type
+    created_at
+    updated_at
+  }
+}

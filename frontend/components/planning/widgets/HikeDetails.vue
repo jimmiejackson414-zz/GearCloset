@@ -83,17 +83,17 @@
     }),
 
     methods: {
-      handleAddDetail () {
-        console.log('addDetail');
-      },
       openDelete (detail) {
         this.selectedDetail = detail;
         this.removeDetailModalOpen = true;
       },
       openUpdate (detail) {
-        console.log('openUpdate', detail);
         this.selectedDetail = detail;
-        this.hikeDetailsModalOpen = true;
+        console.log('openUpdate');
+        this.$nextTick(() => {
+          console.log('nextTick');
+          this.hikeDetailsModalOpen = true;
+        });
       },
       removeDetail () {
         console.log('removeDetail');
