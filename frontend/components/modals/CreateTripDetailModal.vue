@@ -5,7 +5,7 @@
     max-width="750"
     :persistent="submitting">
     <v-card>
-      <v-card-title>Create {{ detailType }} Detail</v-card-title>
+      <v-card-title>Create {{ formattedDetailType }} Detail</v-card-title>
       <v-card-text>
         <v-container>
           <v-row>
@@ -90,6 +90,7 @@
 </template>
 
 <script>
+  import { capitalize } from '~/helpers/functions';
   import Loading from '~/components/Loading.vue';
   import { tripDetailService } from '~/services/planning/trip_detail.service';
 
@@ -120,6 +121,9 @@
           return { ...this.detail };
         }
         return { title: '', url: '', value: '' };
+      },
+      formattedDetailType () {
+        return capitalize(this.detailType);
       },
       show: {
         get () {

@@ -4,7 +4,7 @@
       <div class="text-h6">
         Trip Details
       </div>
-      <plus-button @handle-click="tripDetailsModalOpen = true" />
+      <plus-button @handle-click="openCreate" />
     </div>
     <div class="trip-details-wrapper">
       <div class="row">
@@ -46,16 +46,24 @@
       </p>
     </div>
 
-    <trip-details-modal
-      v-model="tripDetailsModalOpen"
+    <create-trip-detail-modal
+      v-model="createTripDetailModalOpen"
+      detail-type="trip"
+      :trip="trip"
+      @handle-reset-modal="resetModal" />
+
+    <update-trip-detail-modal
+      v-model="updateTripDetailModalOpen"
       :detail="selectedDetail"
+      :trip="trip"
       @handle-reset-modal="resetModal" />
 
     <delete-confirm-modal
       v-model="removeDetailModalOpen"
       item="detail"
-      :selected-detail="selectedDetail"
-      @handle-remove-item="removeDetail" />
+      :selected-item="selectedDetail"
+      @handle-remove-item="removeDetail"
+      @handle-reset-modal="resetModal" />
   </div>
 </template>
 
@@ -63,6 +71,7 @@
   import CustomIcon from '~/components/icons/CustomIcon';
   import EllipsisButton from '~/components/icons/EllipsisButton';
   import PlusButton from '~/components/icons/PlusButton';
+  import { tripDetailService } from '~/services/planning/trip_detail.service';
 
   export default {
     props: {
@@ -74,13 +83,15 @@
 
     data: () => ({
       arrowColor: '',
+      createTripDetailModalOpen: false,
       ellipsisItems: [
         { title: 'Update', event: 'update-detail' },
         { title: 'Delete', event: 'delete-detail' }
       ],
       removeDetailModalOpen: false,
       selectedDetail: null,
-      tripDetailsModalOpen: false
+      updateTripDetailModalOpen: false
+
     }),
 
     computed: {
@@ -93,18 +104,31 @@
     },
 
     methods: {
+      openCreate () {
+        this.selectedDetail = { type: 'trip' };
+        this.$nextTick(() => {
+          this.createTripDetailModalOpen = true;
+        });
+      },
       openDelete (detail) {
         this.selectedDetail = detail;
-        this.removeDetailModalOpen = true;
+        this.$nextTick(() => {
+          this.removeDetailModalOpen = true;
+        });
       },
       openUpdate (detail) {
         this.selectedDetail = detail;
-        this.tripDetailsModalOpen = true;
+        this.$nextTick(() => {
+          this.updateTripDetailModalOpen = true;
+        });
       },
-      removeDetail () {
-        console.log('removeDetail');
+      removeDetail (detail) {
+        const payload = { fields: { id: detail.id, trip: this.trip.id }, apollo: this.$apollo };
+        tripDetailService.deleteTripDetail(payload);
       },
       resetModal () {
+        this.createTripDetailModalOpen = false;
+        this.updateTripDetailModalOpen = false;
         this.selectedDetail = null;
       }
     },
@@ -114,11 +138,12 @@
     },
 
     components: {
+      CreateTripDetailModal: () => import(/* webpackPrefetch: true */'~/components/modals/CreateTripDetailModal.vue'),
       CustomIcon,
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
       EllipsisButton,
       PlusButton,
-      TripDetailsModal: () => import(/* webpackPrefetch: true */ '~/components/modals/TripDetailsModal')
+      UpdateTripDetailModal: () => import(/* webpackPrefetch: true */'~/components/modals/UpdateTripDetailModal.vue')
     }
   };
 </script>

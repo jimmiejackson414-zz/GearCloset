@@ -86,9 +86,9 @@
         { title: 'Update', event: 'update-detail' },
         { title: 'Delete', event: 'delete-detail' }
       ],
-      updateTripDetailModalOpen: false,
       removeDetailModalOpen: false,
-      selectedDetail: null
+      selectedDetail: null,
+      updateTripDetailModalOpen: false
     }),
 
     computed: {
