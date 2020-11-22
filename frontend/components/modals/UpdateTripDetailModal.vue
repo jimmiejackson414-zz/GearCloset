@@ -5,7 +5,7 @@
     max-width="750"
     :persistent="submitting">
     <v-card>
-      <v-card-title>{{ formatAction }} Detail</v-card-title>
+      <v-card-title>Update {{ detailType }} Detail</v-card-title>
       <v-card-text>
         <v-container>
           <v-row>
@@ -35,12 +35,15 @@
             </v-col>
             <v-col cols="12">
               <v-checkbox
-                v-model="hasUrl"
                 class="mt-0"
                 color="primary"
+                :false-value="false"
                 hide-details
                 label="Link to external URL?"
-                :ripple="false" />
+                :ripple="false"
+                :true-value="true"
+                :value="hasUrl"
+                @click="handleCheckbox" />
             </v-col>
             <v-col
               v-if="hasUrl"
@@ -73,13 +76,13 @@
           depressed
           :disabled="submitting"
           :ripple="false"
-          @click="directClick">
+          @click="handleUpdate">
           <loading
             v-if="submitting"
             color="#fff"
             height="30px"
             width="30px" />
-          <span v-else>{{ formatAction }}</span>
+          <span v-else>Update</span>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -89,12 +92,17 @@
 <script>
   import { capitalize } from '~/helpers/functions';
   import Loading from '~/components/Loading.vue';
+  import { tripDetailService } from '~/services/planning/trip_detail.service';
 
   export default {
     props: {
       detail: {
         type: Object,
         required: false,
+        default: () => {}
+      },
+      trip: {
+        type: Object,
         default: () => {}
       },
       value: {
@@ -104,25 +112,19 @@
     },
 
     data: () => ({
+      hasUrl: false,
       submitting: false
     }),
 
     computed: {
-      createOrUpdate () {
-        return this.detail ? 'update' : 'create';
-      },
       details () {
         if (this.detail) {
           return { ...this.detail };
         }
         return { title: '', url: '', value: '' };
       },
-      hasUrl () {
-        // TODO: works initially, but if user unchecks, should hide url text field
-        return !!this.detail?.url;
-      },
-      formatAction () {
-        return capitalize(this.createOrUpdate) || '';
+      detailType () {
+        return this.detail ? capitalize(this.detail?.type) : '';
       },
       show: {
         get () {
@@ -139,28 +141,22 @@
         this.show = false;
         this.$emit('handle-reset-modal');
       },
-      directClick () {
-        return this.createOrUpdate === 'update' ? this.handleUpdate : this.handleCreate;
+      handleCheckbox () {
+        this.hasUrl = !this.hasUrl;
       },
-      handleCreate () {
-        console.log('handleCreate');
+      async handleUpdate () {
         this.submitting = true;
 
-        setTimeout(() => {
-          this.closeModal();
-          this.submitting = false;
-          this.$emit('handle-reset-modal');
-        }, 2000);
-      },
-      handleUpdate () {
-        console.log('handleUpdate');
-        this.submitting = true;
+        const payload = { data: { ...this.details, trip: this.trip.id }, apollo: this.$apollo };
+        await tripDetailService.updateTripDetail(payload);
+        this.submitting = false;
+        this.$emit('handle-reset-modal');
+      }
+    },
 
-        setTimeout(() => {
-          this.closeModal();
-          this.submitting = false;
-          this.$emit('handle-reset-modal');
-        }, 2000);
+    watch: {
+      detail () {
+        this.hasUrl = !!this.detail?.url;
       }
     },
 

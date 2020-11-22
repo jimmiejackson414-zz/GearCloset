@@ -31,7 +31,7 @@ query Trips {
       updated_at
     }
 
-    trip_details(type: "trip") {
+    trip_details {
 			id
 			title
 			url
@@ -39,16 +39,6 @@ query Trips {
 			type
 			created_at
 			updated_at
-    }
-
-    hike_details: trip_details(type: "hike") {
-      id
-      title
-      url
-      value
-      type
-			created_at
-      updated_at
     }
 
     friends: users {

@@ -10,6 +10,6 @@ type Trip {
 
     shopping_list_items: [ShoppingListItem]! @hasMany
     todos: [Todo]! @hasMany
-    trip_details(type: String! @where(operator: "=", key: "type")): [TripDetail]! @hasMany
+    trip_details(type: String @where(operator: "=", key: "type")): [TripDetail]! @hasMany
     users: [User]! @hasMany
 }

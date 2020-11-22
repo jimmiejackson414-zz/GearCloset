@@ -4,7 +4,7 @@
       <div class="text-h6">
         Hike Details
       </div>
-      <plus-button @handle-click="hikeDetailsModalOpen = true" />
+      <plus-button @handle-click="openCreate" />
     </div>
     <div class="trip-details-wrapper">
       <div class="row">
@@ -13,12 +13,12 @@
         </div>
       </div>
       <transition-group
-        v-if="trip.hike_details.length"
+        v-if="hikeDetails.length"
         class="trip-details"
         name="list"
         tag="ul">
         <li
-          v-for="detail in trip.hike_details"
+          v-for="detail in hikeDetails"
           :key="detail.id"
           class="detail">
           <span class="font-weight-bold">{{ detail.title }}</span>
@@ -46,15 +46,22 @@
       </p>
     </div>
 
-    <hike-details-modal
-      v-model="hikeDetailsModalOpen"
+    <create-trip-detail-modal
+      v-model="createTripDetailModalOpen"
+      detail-type="hike"
+      :trip="trip"
+      @handle-reset-modal="resetModal" />
+
+    <update-trip-detail-modal
+      v-model="updateTripDetailModalOpen"
       :detail="selectedDetail"
+      :trip="trip"
       @handle-reset-modal="resetModal" />
 
     <delete-confirm-modal
       v-model="removeDetailModalOpen"
       item="detail"
-      :selected-detail="selectedDetail"
+      :selected-item="selectedDetail"
       @handle-remove-item="removeDetail"
       @handle-reset-modal="resetModal" />
   </div>
@@ -63,6 +70,7 @@
 <script>
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import PlusButton from '~/components/icons/PlusButton.vue';
+  import { tripDetailService } from '~/services/planning/trip_detail.service';
 
   export default {
     props: {
@@ -73,40 +81,58 @@
     },
 
     data: () => ({
+      createTripDetailModalOpen: false,
       ellipsisItems: [
         { title: 'Update', event: 'update-detail' },
         { title: 'Delete', event: 'delete-detail' }
       ],
-      hikeDetailsModalOpen: false,
+      updateTripDetailModalOpen: false,
       removeDetailModalOpen: false,
       selectedDetail: null
     }),
 
+    computed: {
+      hikeDetails () {
+        if (this.trip?.trip_details) {
+          return this.trip.trip_details.filter(detail => detail.type === 'hike');
+        }
+        return [];
+      }
+    },
+
     methods: {
+      openCreate () {
+        this.selectedDetail = { type: 'hike' };
+        this.$nextTick(() => {
+          this.createTripDetailModalOpen = true;
+        });
+      },
       openDelete (detail) {
         this.selectedDetail = detail;
         this.removeDetailModalOpen = true;
       },
       openUpdate (detail) {
         this.selectedDetail = detail;
-        console.log('openUpdate');
         this.$nextTick(() => {
-          console.log('nextTick');
-          this.hikeDetailsModalOpen = true;
+          this.updateTripDetailModalOpen = true;
         });
       },
-      removeDetail () {
-        console.log('removeDetail');
+      removeDetail (detail) {
+        const payload = { fields: { id: detail.id, trip: this.trip.id }, apollo: this.$apollo };
+        tripDetailService.deleteTripDetail(payload);
       },
       resetModal () {
+        this.createTripDetailModalOpen = false;
+        this.updateTripDetailModalOpen = false;
         this.selectedDetail = null;
       }
     },
 
     components: {
+      CreateTripDetailModal: () => import(/* webpackPrefetch: true */'~/components/modals/CreateTripDetailModal.vue'),
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal.vue'),
       EllipsisButton,
-      HikeDetailsModal: () => import(/* webpackPrefetch: true */'~/components/modals/HikeDetailsModal.vue'),
+      UpdateTripDetailModal: () => import(/* webpackPrefetch: true */'~/components/modals/UpdateTripDetailModal.vue'),
       PlusButton
     }
   };

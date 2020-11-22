@@ -19,12 +19,12 @@
         </div>
       </div>
       <transition-group
-        v-if="trip.trip_details.length"
+        v-if="tripDetails.length"
         class="trip-details"
         name="list"
         tag="ul">
         <li
-          v-for="detail in trip.trip_details"
+          v-for="detail in tripDetails"
           :key="detail.id"
           class="detail">
           <span class="font-weight-bold">{{ detail.title }}</span>
@@ -66,10 +66,6 @@
 
   export default {
     props: {
-      // details: {
-      //   type: Array,
-      //   default: () => []
-      // },
       trip: {
         type: Object,
         default: () => {}
@@ -86,6 +82,15 @@
       selectedDetail: null,
       tripDetailsModalOpen: false
     }),
+
+    computed: {
+      tripDetails () {
+        if (this.trip?.trip_details) {
+          return this.trip.trip_details.filter(detail => detail.type === 'trip');
+        }
+        return [];
+      }
+    },
 
     methods: {
       openDelete (detail) {

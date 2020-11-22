@@ -1,4 +1,4 @@
-import { remove } from 'lodash';
+import { findIndex, remove } from 'lodash';
 import createTripDetailMutation from '~/apollo/mutations/planning/createTripDetail.gql';
 import deleteTripDetailMutation from '~/apollo/mutations/planning/deleteTripDetail.gql';
 import updateTripDetailMutation from '~/apollo/mutations/planning/updateTripDetail.gql';
@@ -67,7 +67,7 @@ async function deleteTripDetail ({ fields, apollo }) {
   });
 }
 
-async function updateTripDetail ({ data, field, value, apollo }) {
+async function updateTripDetail ({ data, apollo }) {
   return await apollo.mutate({
     mutation: updateTripDetailMutation,
     variables: data,
@@ -78,7 +78,8 @@ async function updateTripDetail ({ data, field, value, apollo }) {
       // modify trip detail
       const trip = readQuery.trips.find(trip => trip.id === data.trip);
       const detail = trip.trip_details.find(d => d.id === data.id);
-      detail[field] = value;
+      const index = findIndex(trip.trip_details, detail);
+      trip.trip_details.splice(index, 1, data);
 
       const otherTrips = readQuery.trips.filter(t => t !== trip);
 
@@ -99,7 +100,6 @@ async function updateTripDetail ({ data, field, value, apollo }) {
         url: '',
         value: '',
         type: '',
-        [field]: value,
         created_at: Date.now(),
         updated_at: Date.now()
       }

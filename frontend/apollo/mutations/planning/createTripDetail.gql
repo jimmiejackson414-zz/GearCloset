@@ -1,5 +1,5 @@
-mutation CreateTripDetail($title: String, $url: String, $value: String, $type: String, $trip: ID!) {
-  createTripDetail(input: { title: $title, url: $url, value: $value, type: $type, trip: { connect: $trip }}) {
+mutation CreateTripDetail($url:String $title:String $value:String $type:String $trip: ID!) {
+  createTripDetail(input: {title:$title url:$url value:$value type:$type trip: { connect: $trip}}) {
     id
     title
     url
