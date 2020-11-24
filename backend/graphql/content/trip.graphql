@@ -13,6 +13,7 @@ type Trip {
     created_at: DateTime!
     updated_at: DateTime!
 
+    pack: Pack @hasOne
     shopping_list_items: [ShoppingListItem]! @hasMany
     todos: [Todo]! @hasMany
     trip_details(type: String @where(operator: "=", key: "type")): [TripDetail]! @hasMany

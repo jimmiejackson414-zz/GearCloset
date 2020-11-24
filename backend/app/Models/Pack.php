@@ -33,4 +33,9 @@ class Pack extends Model
     {
         return $this->hasManyThrough('App\Models\Item', 'App\Models\Category');
     }
+
+    public function trip(): BelongsTo
+    {
+        return $this->belongsTo(Trip::class);
+    }
 }

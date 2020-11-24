@@ -33,7 +33,7 @@
       <v-flex
         md6
         xs12>
-        <selected-pack />
+        <selected-pack :trip="selectedTrip" />
       </v-flex>
 
       <!-- Friends Widget -->

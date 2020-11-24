@@ -6,5 +6,6 @@ type Pack {
     updated_at: DateTime!
 
     categories: [Category!]! @hasMany
+    trip: [Trip]! @belongsToMany
     user: User! @belongsTo
 }

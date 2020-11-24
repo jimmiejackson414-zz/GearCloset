@@ -50,5 +50,34 @@ query Trips {
       email
       pending_invite
     }
+
+    pack {
+      id
+      name
+      active
+      created_at
+      updated_at
+
+      categories {
+        id
+        name
+        created_at
+        updated_at
+
+        items(orderBy: [{ columns: "position", order: ASC }]) {
+          id
+          name
+          weight
+          price
+          position
+          generic_type
+          consumable
+          worn
+          quantity
+          created_at
+          updated_at
+        }
+      }
+    }
   }
 }
