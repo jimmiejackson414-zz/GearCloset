@@ -51,7 +51,7 @@
       v-model="modalOpen"
       :friends="filteredFriends"
       :trip="trip"
-      @handl-reset-modal="resetModal" />
+      @handle-reset-modal="resetModal" />
   </div>
 </template>
 

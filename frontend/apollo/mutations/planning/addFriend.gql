@@ -1,5 +1,5 @@
-mutation AddFriends($friends: [AddFriendsInput]! $trip_id:ID!) {
-  addFriends(input: $friends, trip: {connect: $trip_id}) {
+mutation AddFriends($tripId: ID! $friends: [AddFriendsInput]!) {
+  addFriends(trip_id: $tripId input: $friends) {
     id
     first_name
     last_name

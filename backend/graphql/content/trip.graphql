@@ -18,3 +18,7 @@ type Trip {
     trip_details(type: String @where(operator: "=", key: "type")): [TripDetail]! @hasMany
     users: [User]! @hasMany
 }
+
+input CreateTripBelongsTo {
+    connect: ID
+}

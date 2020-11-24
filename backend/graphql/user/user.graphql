@@ -17,7 +17,7 @@ extend type Mutation @guard(with: ["api"]) {
         has_onboarded: Boolean
     ): User @update
     updateAvatar(id: ID! file: String!): User @field(resolver: "UserMutator@updateAvatar")
-    addFriends(input: [AddFriendsInput]! @spread): [User]! @field(resolver: "UserMutator@addFriends")
+    addFriends(trip_id: ID! input: [AddFriendsInput]! @spread): [User]! @field(resolver: "UserMutator@addFriends")
 }
 
 extend type Query {
@@ -58,6 +58,12 @@ input CreateUserBelongsTo {
 }
 
 input AddFriendsInput {
+    id: ID
     email: String!
-    trip_id: CreateUserBelongsTo!
+    first_name: String
+    last_name: String
+    avatar_url: String
+    trail_name: String
+    created_at: DateTime
+    updated_at: DateTime
 }

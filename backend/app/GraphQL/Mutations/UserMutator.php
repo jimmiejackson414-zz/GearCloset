@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use GraphQL\Type\Definition\ResolveInfo;
 use App\Models\TripUser;
+use App\Models\Trip;
 
 class UserMutator
 {
@@ -29,33 +30,27 @@ class UserMutator
   public function addFriends($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
   {
     $user = $context->user();
-    dd($args['input'][0]['trip_id']['connect']); #returns trip_id but in a shitty way
 
     if (!$user) {
       return null;
     }
 
-    foreach ($args as $friend) {
+    foreach ($args['input'] as $friend) {
       # if $friend is already a connection
-      if (gettype($friend) === object) {
-        $trip_user = new TripUser;
-        $trip_user->trip_id = $args['trip_id'];
-        $trip_user->user_id = $friend->id;
-        $trip_user->save();
+      if (gettype($friend) === 'array') {
+        TripUser::firstOrCreate(['trip_id' => $args['trip_id'], 'user_id' => $friend['id']]);
+        // $trip_user = new TripUser;
+        // $trip_user->trip_id = $args['trip_id'];
+        // $trip_user->user_id = $friend['id'];
+        // $trip_user->save();
 
       # if $friend is someone new to invite via email
       } else {
-        # Create Friend
-        // $new_friend = new User;
-
-        #Create Friend User
-        // $friend_user = new FriendUser;
-        // $friend_user->user_id = $user->id;
-        // $friend_user->friend_id = $friend->id;
-
         # TODO: Send Email to user(s)
       }
     }
-    return $user->friends()->get();
+
+    $trip = Trip::find($args['trip_id']);
+    return $trip->users()->get();
   }
 }

@@ -122,17 +122,16 @@
         const text = this.$options.filters.prettyName(item, 'noTrailName');
         return text.toLowerCase().includes(queryText.toLowerCase());
       },
-      handleInviteFriend () {
+      async handleInviteFriend () {
         this.submitting = true;
-        const numFriends = `${this.chosenFriends.length} ${this.chosenFriends.length === 1 ? 'friend' : 'friends'}`;
+        const numFriends = `${this.chosenFriends.length - this.friends.length} ${this.chosenFriends.length === 1 ? 'friend' : 'friends'}`;
 
         const payload = {
-          data: { friends: this.chosenFriends, trip_id: this.trip.id },
+          data: { tripId: Number(this.trip.id), friends: this.chosenFriends },
           apollo: this.$apollo
         };
-        console.log({ payload });
 
-        // await friendService.addFriend(payload);
+        await friendService.addFriend(payload);
 
         this.submitting = false;
         this.$emit('handle-reset-modal');
@@ -142,6 +141,7 @@
         this.isLoading = true;
         const payload = { apollo: this.$apollo };
         const { data } = await friendService.getFriends(payload);
+        data.friends.forEach(friend => delete friend.__typename);
         this.existingFriends = data.friends;
         this.isLoading = false;
       },
@@ -152,6 +152,7 @@
 
     mounted () {
       if (this.friends.length) {
+        this.friends.forEach(friend => delete friend.__typename);
         this.chosenFriends = this.friends;
       }
     },
