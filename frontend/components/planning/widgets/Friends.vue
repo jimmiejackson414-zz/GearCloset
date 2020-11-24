@@ -42,7 +42,6 @@
                 v-else
                 class="white--text text-body-1 font-weight-bold">{{ friend | initials }}</span>
             </v-avatar>
-            <v-badge></v-badge>
             <div
               v-if="isPendingInvite(friend)"
               class="pending-wrapper">
