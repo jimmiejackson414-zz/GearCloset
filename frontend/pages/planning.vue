@@ -40,7 +40,7 @@
         xs12>
         <friends
           :current-user="currentUser"
-          :friends="selectedTrip.friends" />
+          :trip="selectedTrip" />
       </v-flex>
 
       <!-- Trip Details Widget -->

@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 use CloudinaryLabs\CloudinaryLaravel\MediaAlly;
 
@@ -84,5 +85,10 @@ class User extends Authenticatable
     public function trips(): HasMany
     {
         return $this->hasMany(Trip::class, 'owner_id');
+    }
+
+    public function friends(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'friend_user', 'user_id', 'friend_id');
     }
 }

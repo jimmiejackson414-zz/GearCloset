@@ -7,7 +7,7 @@
       <plus-button @handle-click="handleInviteFriend" />
     </div>
     <div
-      v-if="friends.length"
+      v-if="trip.friends.length"
       class="friends-wrapper">
       <v-tooltip
         v-for="friend in filteredFriends"
@@ -47,7 +47,11 @@
     <p v-else>
       You haven't added any friends yet! Click on the plus button in the top right to get started.
     </p>
-    <invite-friend-modal v-model="modalOpen" />
+    <invite-friend-modal
+      v-model="modalOpen"
+      :friends="filteredFriends"
+      :trip="trip"
+      @handl-reset-modal="resetModal" />
   </div>
 </template>
 
@@ -60,9 +64,13 @@
         type: Object,
         default: () => {}
       },
-      friends: {
-        type: Array,
-        default: () => []
+      // friends: {
+      //   type: Array,
+      //   default: () => []
+      // },
+      trip: {
+        type: Object,
+        default: () => {}
       }
     },
 
@@ -75,13 +83,16 @@
         return this.filteredFriends.length;
       },
       filteredFriends () {
-        return this.friends.filter(friend => friend.id !== this.currentUser.id);
+        return this.trip.friends.filter(friend => friend.id !== this.currentUser.id);
       }
     },
 
     methods: {
       handleInviteFriend () {
         this.modalOpen = true;
+      },
+      resetModal () {
+        this.modalOpen = false;
       }
     },
 

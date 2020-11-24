@@ -1,3 +1,8 @@
+extend type Query @guard(with: ["api"]) {
+    trip(id: ID! @eq): Trip! @find
+    trips: [Trip]! @field(resolver: "TripsQuery@find_by_user")
+}
+
 type Trip {
     id: ID!
     name: String

@@ -1,0 +1,11 @@
+mutation AddFriends($friends: [AddFriendsInput]! $trip_id:ID!) {
+  addFriends(input: $friends, trip: {connect: $trip_id}) {
+    id
+    first_name
+    last_name
+    email
+    avatar_url
+    created_at
+    updated_at
+  }
+}
