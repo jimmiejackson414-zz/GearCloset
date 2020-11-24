@@ -6,9 +6,20 @@
     <v-card>
       <v-card-title>Select a Pack</v-card-title>
       <v-card-text>
-        <div class="text-body-1">
-          Select a pack to bring on this trip.
-        </div>
+        <v-autocomplete
+          v-model="selectedPack"
+          cache-items
+          dense
+          hide-details
+          item-text="name"
+          item-value="id"
+          :items="packs"
+          label="Choose a pack for this trip"
+          :loading="isLoading"
+          outlined
+          return-object
+          :search-input.sync="search"
+          @click="populatePacks" />
       </v-card-text>
       <v-card-actions class="justify-space-between">
         <v-btn
@@ -40,9 +51,14 @@
 <script>
   import { mapActions } from 'vuex';
   import Loading from '~/components/Loading.vue';
+  import { packService } from '~/services';
 
   export default {
     props: {
+      trip: {
+        type: Object,
+        default: () => {}
+      },
       value: {
         type: Boolean,
         default: false
@@ -50,6 +66,10 @@
     },
 
     data: () => ({
+      isLoading: false,
+      packs: [],
+      search: null,
+      selectedPack: null,
       submitting: false
     }),
 
@@ -72,14 +92,24 @@
       closeModal () {
         this.show = false;
       },
-      handleSelectPack () {
+      async handleSelectPack () {
         this.submitting = true;
 
-        setTimeout(() => {
-          this.closeModal();
-          this.submitting = false;
-          this.success('Pack successfully added to trip.');
-        }, 2000);
+        const payload = {
+          fields: { pack_id: this.selectedPack.id, trip_id: this.trip.id },
+          apollo: this.$apollo
+        };
+        await packService.setSelectedPack(payload);
+        this.submitting = false;
+        this.$emit('handle-reset-modal');
+      },
+      async populatePacks () {
+        this.isLoading = true;
+        const payload = { apollo: this.$apollo };
+        const { data } = await packService.getPacks(payload);
+        // data.packs.forEach(pack => delete pack.__typename);
+        this.packs = data.packs;
+        this.isLoading = false;
       }
     },
 

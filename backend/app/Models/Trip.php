@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Trip extends Model
 {
@@ -45,8 +44,8 @@ class Trip extends Model
         return $this->hasMany(TripDetail::class);
     }
 
-    public function pack(): HasOne
+    public function pack(): BelongsTo
     {
-        return $this->hasOne(Pack::class);
+        return $this->belongsTo(Pack::class);
     }
 }

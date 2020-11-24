@@ -136,7 +136,7 @@
       }
 
       .pending-wrapper {
-        background-color: $primary;
+        background-color: $accentDarkest;
         border-radius: 5px;
         bottom: 0;
         padding: 5px;

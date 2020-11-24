@@ -3,6 +3,10 @@ extend type Query @guard(with: ["api"]) {
     trips: [Trip]! @field(resolver: "TripsQuery@find_by_user")
 }
 
+extend type Mutation @guard(with: ["api"]) {
+    setSelectedPack(input: SelectedPackInput @spread): Trip! @field(resolver: "TripMutator@setSelectedPack")
+}
+
 type Trip {
     id: ID!
     name: String
@@ -13,7 +17,7 @@ type Trip {
     created_at: DateTime!
     updated_at: DateTime!
 
-    pack: Pack @hasOne
+    pack: Pack @belongsTo
     shopping_list_items: [ShoppingListItem]! @hasMany
     todos: [Todo]! @hasMany
     trip_details(type: String @where(operator: "=", key: "type")): [TripDetail]! @hasMany
@@ -22,4 +26,9 @@ type Trip {
 
 input CreateTripBelongsTo {
     connect: ID
+}
+
+input SelectedPackInput {
+    trip_id: ID!
+    pack_id: ID!
 }

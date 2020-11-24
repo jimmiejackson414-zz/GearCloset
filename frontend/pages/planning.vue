@@ -105,6 +105,7 @@
         $loadingKey: 'loading',
         query: tripsQuery,
         result ({ data: { trips } }) {
+          console.log('runs again');
           this.selectedTrip = trips[0];
           return trips;
         }

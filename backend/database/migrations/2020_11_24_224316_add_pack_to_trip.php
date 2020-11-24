@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTripIdToPacksTable extends Migration
+class AddPackToTrip extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddTripIdToPacksTable extends Migration
      */
     public function up()
     {
-        Schema::table('packs', function (Blueprint $table) {
-            $table->foreignId('trip_id')->constrained();
+        Schema::table('trips', function (Blueprint $table) {
+            $table->foreignId('pack_id')->default(null);
         });
     }
 
@@ -25,7 +25,7 @@ class AddTripIdToPacksTable extends Migration
      */
     public function down()
     {
-        Schema::table('packs', function (Blueprint $table) {
+        Schema::table('trips', function (Blueprint $table) {
             //
         });
     }

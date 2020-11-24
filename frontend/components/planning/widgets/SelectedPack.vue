@@ -31,7 +31,10 @@
         You haven't added a pack to this trip yet! Click on the dots in the top right to get started.
       </p>
     </div>
-    <select-pack-modal v-model="modalOpen" />
+    <select-pack-modal
+      v-model="modalOpen"
+      :trip="trip"
+      @handle-reset-modal="resetModal" />
   </div>
 </template>
 
@@ -68,18 +71,15 @@
           return 'ADD_CATEGORIES';
         }
         return 'SHOW_GRAPH';
-        // if (this.activePack?.categories?.length) {
-        //   return 'SHOW_GRAPH';
-        // } else if (!this.activePack?.categories?.length) {
-        //   return 'ADD_CATEGORIES';
-        // }
-        // return 'ADD_PACK';
       }
     },
 
     methods: {
       onResize () {
         window.innerWidth < 769 ? this.chartHeight = 200 : this.chartHeight = 300;
+      },
+      resetModal () {
+        this.modalOpen = false;
       }
     },
 

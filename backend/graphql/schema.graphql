@@ -22,7 +22,6 @@ type Query {
     categories: [Category!]! @field(resolver: "CategoriesQuery@find_by_user")
     items: [Item!]! @field(resolver: "ItemsQuery@find_by_user")
     notifications: [Notification]! @field(resolver: "NotificationQuery@find_by_user")
-    packs: [Pack!]! @field(resolver: "PacksQuery@find_by_user")
 }
 
 type Mutation {
