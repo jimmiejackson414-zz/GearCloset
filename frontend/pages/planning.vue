@@ -10,13 +10,15 @@
       </div>
       <div class="actions d-flex mt-8 mb-4">
         <v-select
+          v-model="selectedTrip"
           dense
           hide-details
-          :items="items"
+          item-text="name"
+          item-value="id"
+          :items="trips"
           label="Pick a Trip"
           outlined
-          :value="selectedTrip.name"
-          @change="handleUpdateList($event)" />
+          return-object />
         <ellipsis-button
           class="ellipsis"
           :items="listItems"
@@ -119,15 +121,6 @@
       selectedTrip: null
     }),
 
-    computed: {
-      items () {
-        if (this.trips && this.trips.length) {
-          return this.trips.map(trip => trip.name);
-        }
-        return [];
-      }
-    },
-
     methods: {
       handleCreateTrip () {
         console.log('createTrip');
@@ -135,9 +128,6 @@
       handleDeleteTrip () {
         console.log('deleteTrip');
         this.deleteTripModalOpen = true;
-      },
-      handleUpdateList (e) {
-        console.log('handleUpdateList', e);
       }
     },
 
