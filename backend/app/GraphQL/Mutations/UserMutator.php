@@ -7,9 +7,13 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use GraphQL\Type\Definition\ResolveInfo;
 use App\Models\TripUser;
 use App\Models\Trip;
+use App\Models\User;
 
 class UserMutator
 {
+  /*
+  * Update user avatar
+  */
   public function updateAvatar($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
   {
     // Set user, file, and options variables
@@ -27,6 +31,9 @@ class UserMutator
     return $user;
   }
 
+  /*
+  * Invite array of friends to a trip from the planning page
+  */
   public function addFriends($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
   {
     $user = $context->user();
@@ -37,16 +44,25 @@ class UserMutator
 
     foreach ($args['input'] as $friend) {
       # if $friend is already a connection
-      if (gettype($friend) === 'array') {
-        TripUser::firstOrCreate(['trip_id' => $args['trip_id'], 'user_id' => $friend['id']]);
-        // $trip_user = new TripUser;
-        // $trip_user->trip_id = $args['trip_id'];
-        // $trip_user->user_id = $friend['id'];
-        // $trip_user->save();
+      if (isset($friend['id'])) {
+        TripUser::firstOrCreate([
+          'trip_id' => $args['trip_id'],
+          'user_id' => $friend['id']
+        ]);
 
       # if $friend is someone new to invite via email
       } else {
         # TODO: Send Email to user(s)
+        $new_user = new User;
+        $new_user->email = $friend['email'];
+        $new_user->pending_invite = true;
+        $new_user->save();
+
+        # TODO: Create new TripUser when invited user registers
+        // $new_trip_user = new TripUser;
+        // $new_trip_user->trip_id = $args['trip_id'];
+        // $new_trip_user->user_id = $new_user->id;
+        // $new_trip_user->save();
       }
     }
 

@@ -3,6 +3,7 @@ mutation AddFriends($tripId: ID! $friends: [AddFriendsInput]!) {
     id
     first_name
     last_name
+    trail_name
     email
     avatar_url
     created_at

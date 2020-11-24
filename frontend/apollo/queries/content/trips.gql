@@ -48,6 +48,7 @@ query Trips {
       last_name
       trail_name
       email
+      pending_invite
     }
   }
 }

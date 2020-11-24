@@ -36,9 +36,18 @@
                 alt="avatar"
                 :src="friend.avatar_url">
               <span
+                v-if="isPendingInvite(friend)"
+                class="white--text text-h5 font-weight-regular">@</span>
+              <span
                 v-else
                 class="white--text text-body-1 font-weight-bold">{{ friend | initials }}</span>
             </v-avatar>
+            <v-badge></v-badge>
+            <div
+              v-if="isPendingInvite(friend)"
+              class="pending-wrapper">
+              <p>Pending</p>
+            </div>
           </v-btn>
         </template>
         <span class="text-body-2">{{ friend | prettyName }}</span>
@@ -91,6 +100,9 @@
       handleInviteFriend () {
         this.modalOpen = true;
       },
+      isPendingInvite (friend) {
+        return friend.pending_invite;
+      },
       resetModal () {
         this.modalOpen = false;
       }
@@ -115,11 +127,26 @@
       .v-avatar {
         transition: transform 0.15s $cubicBezier;
       }
+
       &:hover {
         box-shadow: 0 15px 20px 0 rgba(42, 51, 83, 0.12), 0 5px 15px rgba(0, 0, 0, 0.06) !important;
 
         .v-avatar {
           transform: scale(1.1);
+        }
+      }
+
+      .pending-wrapper {
+        background-color: $primary;
+        border-radius: 5px;
+        bottom: 0;
+        padding: 5px;
+        position: absolute;
+
+        p {
+          color: white;
+          font-size: 0.7rem;
+          margin: 0;
         }
       }
     }

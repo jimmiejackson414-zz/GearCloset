@@ -44,6 +44,7 @@ type User {
     subscription_level: String
     measuring_system: String
     has_onboarded: Boolean
+    pending_invite: Boolean
     created_at: DateTime!
     updated_at: DateTime!
 

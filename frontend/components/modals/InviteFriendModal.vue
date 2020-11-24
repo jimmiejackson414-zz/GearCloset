@@ -29,7 +29,9 @@
             multiple
             open-on-clear
             outlined
+            return-object
             :search-input.sync="search"
+            @change="handleChange"
             @click="populateFriends">
             <template #item="{ item }">
               <span>
@@ -70,6 +72,7 @@
 </template>
 
 <script>
+  import { findIndex } from 'lodash';
   import { mapActions } from 'vuex';
   import Avatar from '~/components/Avatar';
   import { friendService } from '~/services';
@@ -121,6 +124,14 @@
       filter (item, queryText, itemText) {
         const text = this.$options.filters.prettyName(item, 'noTrailName');
         return text.toLowerCase().includes(queryText.toLowerCase());
+      },
+      handleChange (e) {
+        // convert newly added email to an object for easier backend processing
+        const item = e[e.length - 1];
+        if (typeof item === 'string') {
+          const index = findIndex(this.chosenFriends, item);
+          this.chosenFriends.splice(index, 1, { email: item });
+        }
       },
       async handleInviteFriend () {
         this.submitting = true;
