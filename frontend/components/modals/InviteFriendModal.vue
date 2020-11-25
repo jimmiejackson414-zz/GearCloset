@@ -152,7 +152,7 @@
         this.isLoading = true;
         const payload = { apollo: this.$apollo };
         const { data } = await friendService.getFriends(payload);
-        data.friends.forEach(friend => delete friend.__typename);
+        // data.friends.forEach(friend => delete friend.__typename);
         this.existingFriends = data.friends;
         this.isLoading = false;
       },

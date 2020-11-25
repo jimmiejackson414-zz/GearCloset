@@ -107,7 +107,6 @@
         this.isLoading = true;
         const payload = { apollo: this.$apollo };
         const { data } = await packService.getPacks(payload);
-        // data.packs.forEach(pack => delete pack.__typename);
         this.packs = data.packs;
         this.isLoading = false;
       }

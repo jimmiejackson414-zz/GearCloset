@@ -108,7 +108,7 @@
     },
 
     components: {
-      InviteFriendModal: () => import(/* webpackPrefetch: true */ '~/components/modals/InviteFriendModal'),
+      InviteFriendModal: () => import(/* webpackPrefetch: true */ '~/components/modals/InviteFriendModal.vue'),
       PlusButton
     }
   };
