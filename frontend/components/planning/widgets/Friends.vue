@@ -2,15 +2,15 @@
   <div class="widget-wrapper">
     <div class="widget-header">
       <div class="text-h6">
-        Friends <span class="text-caption grey7--text ml-3 mb-1">({{ friendCount }})</span>
+        Friends <span class="text-caption grey7--text ml-3">({{ friendCount }})</span>
       </div>
       <plus-button @handle-click="handleInviteFriend" />
     </div>
     <div
-      v-if="trip.friends.length"
+      v-if="friends.length"
       class="friends-wrapper">
       <v-tooltip
-        v-for="friend in filteredFriends"
+        v-for="friend in friends"
         :key="friend.id"
         color="dark-grey"
         nudge-top
@@ -57,7 +57,7 @@
     </p>
     <invite-friend-modal
       v-model="modalOpen"
-      :friends="filteredFriends"
+      :friends="friends"
       :trip="trip"
       @handle-reset-modal="resetModal" />
   </div>
@@ -65,6 +65,7 @@
 
 <script>
   import PlusButton from '~/components/icons/PlusButton';
+  import Trip from '~/data/models/trip';
 
   export default {
     props: {
@@ -72,10 +73,6 @@
         type: Object,
         default: () => {}
       },
-      // friends: {
-      //   type: Array,
-      //   default: () => []
-      // },
       trip: {
         type: Object,
         default: () => {}
@@ -87,11 +84,15 @@
     }),
 
     computed: {
-      friendCount () {
-        return this.filteredFriends.length;
+      friends () {
+        if (!this.trip) { return []; }
+        const t = Trip.query().whereId(this.trip.id).with('users', query => {
+          query.where(value => value.id !== this.currentUser.id);
+        }).first();
+        return t.users;
       },
-      filteredFriends () {
-        return this.trip.friends.filter(friend => friend.id !== this.currentUser.id);
+      friendCount () {
+        return this.friends.length;
       }
     },
 

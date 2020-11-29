@@ -8,6 +8,7 @@ type Pack {
     active: Boolean!
     created_at: DateTime!
     updated_at: DateTime!
+    user_id: ID
 
     categories: [Category!]! @hasMany
     trips: [Trip]! @hasMany

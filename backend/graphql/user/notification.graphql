@@ -9,6 +9,7 @@ type Notification {
     viewed: Boolean
     created_at: DateTime
     updated_at: DateTime
+    user_id: ID
 
     user: User @belongsTo
 }

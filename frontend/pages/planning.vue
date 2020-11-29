@@ -91,7 +91,7 @@
   import ShoppingList from '~/components/planning/widgets/ShoppingList.vue';
   import TodoList from '~/components/planning/widgets/TodoList.vue';
   import TripDetails from '~/components/planning/widgets/TripDetails.vue';
-  import tripsQuery from '~/apollo/queries/content/trips.gql';
+  import Trip from '~/data/models/trip';
 
   export default {
     name: 'Planning',
@@ -100,27 +100,24 @@
 
     mixins: [currentUser],
 
-    apollo: {
-      trips: {
-        $loadingKey: 'loading',
-        query: tripsQuery,
-        result ({ data: { trips } }) {
-          console.log('planning page initial query');
-          this.selectedTrip = trips[0];
-          return trips;
-        }
-      }
-    },
-
     data: () => ({
       deleteTripModalOpen: false,
-      loading: 0,
+      loading: 1,
       listItems: [
         { title: 'Create trip', event: 'create-trip' },
         { title: 'Delete trip', event: 'delete-trip', customClass: 'error--text' }
       ],
       selectedTrip: null
     }),
+
+    computed: {
+      trips () {
+        return Trip.query().where('owner_id', this.currentUser.id).all();
+      },
+      test () {
+        return Trip.query().with('pack').where('owner_id', this.currentUser.id).first().pack;
+      }
+    },
 
     methods: {
       handleCreateTrip () {
@@ -130,6 +127,12 @@
         console.log('deleteTrip');
         this.deleteTripModalOpen = true;
       }
+    },
+
+    async mounted () {
+      const res = await Trip.fetch();
+      this.selectedTrip = res.trips[0];
+      this.loading = 0;
     },
 
     components: {

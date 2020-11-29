@@ -10,6 +10,7 @@ type Item {
     created_at: DateTime!
     updated_at: DateTime!
     position: Int!
+    category_id: ID
 
     categories: [Category!]! @belongsToMany
     pivot: CategoryItemPivot

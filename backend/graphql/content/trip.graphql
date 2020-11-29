@@ -16,6 +16,8 @@ type Trip {
     ending_point: String
     created_at: DateTime!
     updated_at: DateTime!
+    owner_id: ID
+    pack_id: ID
 
     pack: Pack @belongsTo
     shopping_list_items: [ShoppingListItem]! @hasMany

@@ -9,7 +9,7 @@
     <div class="trip-details-wrapper">
       <div class="row">
         <div class="col-12 d-flex align-center">
-          <h2>{{ trip.name }}</h2>
+          <h2>{{ trip && trip.name }}</h2>
         </div>
       </div>
       <transition-group
@@ -71,6 +71,7 @@
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import PlusButton from '~/components/icons/PlusButton.vue';
   import { tripDetailService } from '~/services/planning/trip_detail.service';
+  import TripDetail from '~/data/models/tripDetail';
 
   export default {
     props: {
@@ -93,10 +94,10 @@
 
     computed: {
       hikeDetails () {
-        if (this.trip?.trip_details) {
-          return this.trip.trip_details.filter(detail => detail.type === 'hike');
-        }
-        return [];
+        if (!this.trip) { return []; }
+        return TripDetail.query().where(detail => {
+          return detail.trip_id === this.trip.id && detail.type === 'hike';
+        }).get();
       }
     },
 

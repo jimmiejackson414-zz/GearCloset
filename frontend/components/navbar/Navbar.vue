@@ -91,6 +91,7 @@
 
     mounted () {
       this.onResize();
+      this.loading = false;
     },
 
     components: {

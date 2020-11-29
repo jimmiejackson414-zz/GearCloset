@@ -112,7 +112,7 @@
 
     computed: {
       showBadge () {
-        return this.currentUser.notifications.some(notification => !notification.viewed);
+        return this.currentUser?.notifications.some(notification => !notification.viewed);
       }
     },
 

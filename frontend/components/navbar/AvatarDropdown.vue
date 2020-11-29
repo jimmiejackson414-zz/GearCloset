@@ -76,7 +76,6 @@
     data: () => ({
       dropdownItems: [
         { title: 'Profile', to: '/profile' }
-        // { title: 'Logout', to: '/login' }
       ]
     }),
 

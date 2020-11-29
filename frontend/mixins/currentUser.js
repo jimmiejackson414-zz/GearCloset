@@ -1,13 +1,16 @@
-import meQuery from '~/apollo/queries/user/me.gql';
+import User from '~/data/models/user';
 
 export default {
-  apollo: {
-    currentUser: {
-      query: meQuery
-    }
+  data: () => ({
+    loading: 1
+  }),
+
+  computed: {
+    currentUser: () => User.query().with(['notifications']).first()
   },
 
-  data: () => ({
-    loading: 0
-  })
+  async mounted () {
+    await User.customQuery({ name: 'me' });
+    this.loading = false;
+  }
 };

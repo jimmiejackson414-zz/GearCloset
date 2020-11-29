@@ -9,13 +9,13 @@
     <div class="trip-details-wrapper">
       <div class="row">
         <div class="col-12 d-flex align-center">
-          <h2>{{ trip.starting_point }}</h2>
+          <h2>{{ trip && trip.starting_point }}</h2>
           <custom-icon
             :fill="arrowColor"
             :height="20"
             name="arrow-right"
             :width="40" />
-          <h2>{{ trip.ending_point }}</h2>
+          <h2>{{ trip && trip.ending_point }}</h2>
         </div>
       </div>
       <transition-group
@@ -71,6 +71,7 @@
   import CustomIcon from '~/components/icons/CustomIcon';
   import EllipsisButton from '~/components/icons/EllipsisButton';
   import PlusButton from '~/components/icons/PlusButton';
+  import TripDetail from '~/data/models/tripDetail';
   import { tripDetailService } from '~/services/planning/trip_detail.service';
 
   export default {
@@ -96,10 +97,10 @@
 
     computed: {
       tripDetails () {
-        if (this.trip?.trip_details) {
-          return this.trip.trip_details.filter(detail => detail.type === 'trip');
-        }
-        return [];
+        if (!this.trip) { return []; }
+        return TripDetail.query().where(detail => {
+          return detail.trip_id === this.trip.id && detail.type === 'trip';
+        }).get();
       }
     },
 

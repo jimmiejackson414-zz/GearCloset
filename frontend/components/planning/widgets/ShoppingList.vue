@@ -7,13 +7,13 @@
       <plus-button @handle-click="addListItem" />
     </div>
     <v-data-table
-      v-if="trip.shopping_list_items.length"
+      v-if="shoppingListItems.length"
       v-resize="onResize"
       :class="['items-table', {mobile: isMobile}]"
       disable-pagination
       :headers="headers"
       hide-default-footer
-      :items="trip.shopping_list_items"
+      :items="shoppingListItems"
       :mobile-breakpoint="0"
       show-select>
       <template #header.data-table-select>
@@ -86,6 +86,7 @@
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton.vue';
   import { shoppingListItemService } from '~/services';
+  import ShoppingListItem from '~/data/models/shoppingListItem';
 
   export default {
     mixins: [isMobile],
@@ -109,7 +110,13 @@
 
     computed: {
       allSelected () {
-        return this.trip.shopping_list_items.every(item => item.checked);
+        return this.shoppingListItems.every(item => item.checked);
+      },
+      shoppingListItems () {
+        if (!this.trip) {
+          return [];
+        }
+        return ShoppingListItem.query().where('trip_id', this.trip.id).all();
       }
     },
 

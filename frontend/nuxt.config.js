@@ -42,6 +42,8 @@ export default {
    ** Icons can be found at https://antonreshetov.github.io/vue-unicons/
    */
   plugins: [
+    '~/plugins/graphql',
+    '~/plugins/vuex-orm',
     { src: '~/plugins/vue-unicons', mode: 'client' },
     { src: '~/plugins/v-mask', mode: 'client' },
     { src: '~/plugins/tiptap-vuetify', mode: 'client' },
@@ -79,8 +81,8 @@ export default {
     },
     defaultOptions: {
       $query: {
-        loadingKey: 'loading',
-        fetchPolicy: 'cache-and-network'
+        loadingKey: 'loading'
+        // fetchPolicy: 'no-cache'
       }
     },
     cookieAttributes: {
@@ -179,6 +181,8 @@ export default {
       }
     }
   },
+
+  modulesDir: ['../node_modules'],
 
   /*
    ** Build configuration

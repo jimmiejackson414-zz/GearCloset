@@ -7,13 +7,13 @@
       <plus-button @handle-click="addTodo" />
     </div>
     <v-data-table
-      v-if="trip.todos.length"
+      v-if="todos.length"
       v-resize="onResize"
       :class="['todos-table', {mobile: isMobile}]"
       disable-pagination
       :headers="headers"
       hide-default-footer
-      :items="trip.todos"
+      :items="todos"
       :mobile-breakpoint="0"
       show-select>
       <template #header.data-table-select>
@@ -74,6 +74,7 @@
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
   import { todoService } from '~/services';
+  import Todo from '~/data/models/todo';
 
   export default {
     mixins: [isMobile],
@@ -96,7 +97,13 @@
 
     computed: {
       allSelected () {
-        return this.trip.todos.every(item => item.checked);
+        return this.todos.every(item => item.checked);
+      },
+      todos () {
+        if (!this.trip) {
+          return [];
+        }
+        return Todo.query().where('trip_id', this.trip.id).all();
       }
     },
 

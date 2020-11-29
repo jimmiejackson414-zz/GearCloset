@@ -198,9 +198,6 @@
       top: 175px;
       width: 200px;
 
-      .category-name {
-      }
-
       .category-weight {
         font-weight: bold;
       }
