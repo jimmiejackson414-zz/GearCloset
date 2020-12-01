@@ -10,3 +10,8 @@ type ForumSubcategory {
     category: ForumCategory! @belongsTo
     posts: [ForumPost!]! @hasMany
 }
+
+input ForumSubcategoryInput {
+    title: String
+    slug: String
+}

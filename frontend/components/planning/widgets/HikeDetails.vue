@@ -71,7 +71,6 @@
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import PlusButton from '~/components/icons/PlusButton.vue';
   import { tripDetailService } from '~/services/planning/trip_detail.service';
-  import TripDetail from '~/data/models/tripDetail';
 
   export default {
     props: {
@@ -95,9 +94,7 @@
     computed: {
       hikeDetails () {
         if (!this.trip) { return []; }
-        return TripDetail.query().where(detail => {
-          return detail.trip_id === this.trip.id && detail.type === 'hike';
-        }).get();
+        return this.trip.tripDetails.filter(detail => detail.type === 'hike');
       }
     },
 

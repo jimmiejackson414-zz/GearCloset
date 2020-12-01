@@ -2,7 +2,8 @@ import { Model } from '@vuex-orm/core';
 import Trip from './trip';
 
 export default class TripDetail extends Model {
-  static entity = 'trip_details';
+  // static entity = 'trip_details';
+  static entity = 'tripDetails';
 
   static fields () {
     return {

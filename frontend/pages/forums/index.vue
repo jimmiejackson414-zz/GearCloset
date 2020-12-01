@@ -1,6 +1,6 @@
 <template>
   <v-container
-    v-if="!loading"
+    v-if="!loading && !userLoading"
     class="forums-container"
     grid-list-lg
     mx-auto>
@@ -55,6 +55,7 @@
   import categoriesQuery from '~/apollo/queries/forum/categories.gql';
   import CategoryBox from '~/components/forums/CategoryBox.vue';
   import currentUser from '~/mixins/currentUser';
+  import ForumCategory from '~/data/models/forumCategory';
   import LoadingPage from '~/components/LoadingPage.vue';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
@@ -65,21 +66,32 @@
 
     middleware: 'authenticated',
 
-    apollo: {
-      categories: {
-        query: categoriesQuery
-      }
-    },
-
     data: () => ({
+      loading: 1,
       updateSubscriptionModalOpen: false,
       upgradeModalOpen: false
     }),
+
+    computed: {
+      categories: () => ForumCategory.query().with('subcategories').all()
+    },
 
     methods: {
       handleOpenUpgradeForm () {
         this.upgradeModalOpen = true;
       }
+    },
+
+    async mounted () {
+      const { forumCategories } = await this.$store.dispatch('entities/simpleQuery', {
+        query: categoriesQuery,
+        variables: {},
+        bypassCache: false
+      });
+      ForumCategory.insert({
+        data: [...forumCategories]
+      });
+      this.loading = 0;
     },
 
     components: {

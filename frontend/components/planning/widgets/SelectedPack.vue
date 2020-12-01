@@ -40,7 +40,6 @@
 
 <script>
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
-  import Pack from '~/data/models/pack';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
 
   export default {
@@ -60,10 +59,11 @@
 
     computed: {
       activePack () {
-        return Pack.query().with('categories.items').whereId(this.trip.pack_id).first();
+        if (!this.trip) { return null; }
+        return this.trip.pack;
       },
       packName () {
-        return this.pack?.name || 'None selected';
+        return this.trip?.pack?.name || 'None selected';
       },
       packState () {
         if (!this.activePack) {

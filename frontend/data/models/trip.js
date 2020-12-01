@@ -8,7 +8,7 @@ import User from './user';
 
 export default class Trip extends Model {
   static entity = 'trips';
-  static eagerLoad = ['todos', 'shopping_list_items', 'trip_details', 'users', 'pack'];
+  static eagerLoad = ['todos', 'shoppingListItems', 'tripDetails', 'users', 'pack'];
 
   static fields () {
     return {
@@ -22,8 +22,8 @@ export default class Trip extends Model {
 
       // relationships
       pack: this.belongsTo(Pack, 'pack_id'),
-      shopping_list_items: this.hasMany(ShoppingListItem, 'trip_id'),
-      trip_details: this.hasMany(TripDetail, 'trip_id'),
+      shoppingListItems: this.hasMany(ShoppingListItem, 'trip_id'),
+      tripDetails: this.hasMany(TripDetail, 'trip_id'),
       todos: this.hasMany(Todo, 'trip_id'),
       users: this.belongsToMany(User, TripUser, 'trip_id', 'user_id')
     };

@@ -20,10 +20,20 @@ type Trip {
     pack_id: ID
 
     pack: Pack @belongsTo
-    shopping_list_items: [ShoppingListItem]! @hasMany
+    shoppingListItems: [ShoppingListItem]! @hasMany
     todos: [Todo]! @hasMany
-    trip_details(type: String @where(operator: "=", key: "type")): [TripDetail]! @hasMany
+    tripDetails(type: String @where(operator: "=", key: "type")): [TripDetail]! @hasMany
     users: [User]! @hasMany
+}
+
+input TripInput {
+    name: String
+    description: String
+    owner: User @belongsTo
+    starting_point: String
+    ending_point: String
+    owner_id: ID
+    pack_id: ID
 }
 
 input CreateTripBelongsTo {

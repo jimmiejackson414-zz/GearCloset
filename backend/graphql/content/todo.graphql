@@ -1,5 +1,5 @@
 extend type Mutation @guard(with: ["api"]) {
-    createTodo(input: CreateTodoInput! @spread): Todo @create
+    createTodo(input: TodoInput! @spread): Todo @create
     deleteTodo(id: ID!): Todo @delete
     updateTodo(id: ID! title: String checked: Boolean): Todo @update
 }
@@ -18,7 +18,7 @@ type Todo {
     trip_id: ID
 }
 
-input CreateTodoInput {
+input TodoInput {
     title: String
     checked: Boolean
     trip: CreateUserBelongsTo

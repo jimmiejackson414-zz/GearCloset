@@ -1,7 +1,8 @@
 import { Model } from '@vuex-orm/core';
 
 export default class FriendUser extends Model {
-  static entity = 'friend_user';
+  // static entity = 'friend_user';
+  static entity = 'friendUser';
 
   static primaryKey = ['user_id', 'friend_id'];
 

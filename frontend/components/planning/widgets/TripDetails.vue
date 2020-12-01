@@ -71,7 +71,6 @@
   import CustomIcon from '~/components/icons/CustomIcon';
   import EllipsisButton from '~/components/icons/EllipsisButton';
   import PlusButton from '~/components/icons/PlusButton';
-  import TripDetail from '~/data/models/tripDetail';
   import { tripDetailService } from '~/services/planning/trip_detail.service';
 
   export default {
@@ -98,9 +97,7 @@
     computed: {
       tripDetails () {
         if (!this.trip) { return []; }
-        return TripDetail.query().where(detail => {
-          return detail.trip_id === this.trip.id && detail.type === 'trip';
-        }).get();
+        return this.trip.tripDetails.filter(detail => detail.type === 'trip');
       }
     },
 

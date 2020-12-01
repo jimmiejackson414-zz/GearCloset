@@ -1,6 +1,6 @@
 <template>
   <v-app-bar
-    v-if="!loading"
+    v-if="!userLoading"
     id="home-app-bar"
     v-resize="onResize"
     app

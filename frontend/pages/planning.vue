@@ -1,6 +1,6 @@
 <template>
   <v-container
-    v-if="!loading"
+    v-if="!loading && !userLoading"
     class="planning-container"
     grid-list-lg
     mx-auto>
@@ -69,7 +69,7 @@
       <v-flex
         md6
         xs12>
-        <shopping-list :trip="selectedTrip" />
+        <shopping-list :trip-id="selectedTrip.id" />
       </v-flex>
     </v-layout>
 
@@ -92,6 +92,7 @@
   import TodoList from '~/components/planning/widgets/TodoList.vue';
   import TripDetails from '~/components/planning/widgets/TripDetails.vue';
   import Trip from '~/data/models/trip';
+  import tripsQuery from '~/apollo/queries/content/trips.gql';
 
   export default {
     name: 'Planning',
@@ -113,9 +114,6 @@
     computed: {
       trips () {
         return Trip.query().where('owner_id', this.currentUser.id).all();
-      },
-      test () {
-        return Trip.query().with('pack').where('owner_id', this.currentUser.id).first().pack;
       }
     },
 
@@ -130,8 +128,13 @@
     },
 
     async mounted () {
-      const res = await Trip.fetch();
-      this.selectedTrip = res.trips[0];
+      const { trips } = await this.$store.dispatch('entities/simpleQuery', {
+        query: tripsQuery,
+        variables: {},
+        bypassCache: false
+      });
+      Trip.insert({ data: [...trips] });
+      this.selectedTrip = trips.length ? trips[0] : null;
       this.loading = 0;
     },
 

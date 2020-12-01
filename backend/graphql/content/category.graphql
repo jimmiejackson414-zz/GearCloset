@@ -9,3 +9,8 @@ type Category {
     pivot: CategoryItemPivot
     items(orderBy: [OrderByClause!] @orderBy): [Item!]! @belongsToMany
 }
+
+input CategoryInput {
+    name: String
+    pack_id: ID
+}

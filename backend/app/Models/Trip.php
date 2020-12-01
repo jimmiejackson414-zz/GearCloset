@@ -15,7 +15,7 @@ class Trip extends Model
 
     // automatically eager load todos and shopping_list_items
     protected $with = [
-        'todos', 'shopping_list_items', 'trip_details', 'users'
+        'todos', 'shoppingListItems', 'tripDetails', 'users'
     ];
 
     // define relationships
@@ -29,7 +29,7 @@ class Trip extends Model
         return $this->belongsToMany(User::class);
     }
 
-    public function shopping_list_items(): HasMany
+    public function shoppingListItems(): HasMany
     {
         return $this->hasMany(ShoppingListItem::class);
     }
@@ -39,7 +39,7 @@ class Trip extends Model
         return $this->hasMany(Todo::class);
     }
 
-    public function trip_details(): HasMany
+    public function tripDetails(): HasMany
     {
         return $this->hasMany(TripDetail::class);
     }

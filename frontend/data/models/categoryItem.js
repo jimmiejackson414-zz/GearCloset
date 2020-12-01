@@ -1,7 +1,8 @@
 import { Model } from '@vuex-orm/core';
 
 export default class CategoryItem extends Model {
-  static entity = 'categories_items';
+  // static entity = 'categories_items';
+  static entity = 'categoriesItems';
 
   static primaryKey = ['category_id', 'item_id'];
 

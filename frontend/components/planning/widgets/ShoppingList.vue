@@ -85,16 +85,15 @@
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton.vue';
-  import { shoppingListItemService } from '~/services';
   import ShoppingListItem from '~/data/models/shoppingListItem';
 
   export default {
     mixins: [isMobile],
 
     props: {
-      trip: {
-        type: Object,
-        default: () => {}
+      tripId: {
+        type: String,
+        default: ''
       }
     },
 
@@ -113,49 +112,41 @@
         return this.shoppingListItems.every(item => item.checked);
       },
       shoppingListItems () {
-        if (!this.trip) {
-          return [];
-        }
-        return ShoppingListItem.query().where('trip_id', this.trip.id).all();
+        return ShoppingListItem.query().where('trip_id', this.tripId).get();
       }
     },
 
     methods: {
-      addListItem () {
-        const payload = {
-          fields: { title: 'New Item', checked: false, trip: this.trip.id },
-          apollo: this.$apollo
-        };
-
-        shoppingListItemService.createShoppingListItem(payload);
+      async addListItem () {
+        const payload = { title: 'New Item', checked: false, trip: this.tripId, quantity: 0 };
+        const { shoppingListItems } = await ShoppingListItem.insert({ data: { ...payload } });
+        console.log({ shoppingListItems });
+        shoppingListItems[0].$persist();
       },
-      removeItem (item, index) {
-        const payload = {
-          fields: { id: item.id, trip: this.trip.id },
-          apollo: this.$apollo
-        };
-        shoppingListItemService.deleteShoppingListItem(payload);
+      removeItem (item) {
+        item.$deleteAndDestroy();
       },
       setEditing (ref) {
         this.editableItem = ref;
         this.$nextTick(() => document.querySelector(`#${ref}`).focus());
       },
       updateAllItems (value) {
+        console.log('need to update');
         this.trip.shopping_list_items.forEach(i => this.updateItem(value, i, 'checked'));
       },
-      updateItem (event, item, field) {
+      async updateItem (event, item, field) {
         this.editableItem = null;
 
         // return if value hasn't changed
         if (event === String(item[field])) { return; }
 
-        const payload = {
-          data: { id: item.id, [field]: event, trip: this.trip.id },
-          field,
-          value: event,
-          apollo: this.$apollo
-        };
-        shoppingListItemService.updateShoppingListItem(payload);
+        const newItem = await ShoppingListItem.update({
+          where: Number(item.id),
+          data: {
+            [field]: event
+          }
+        });
+        newItem.$push();
       }
     },
 

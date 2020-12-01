@@ -1,5 +1,8 @@
 import { Model } from '@vuex-orm/core';
+import ForumComment from './forumComment';
+import ForumPost from './forumPost';
 import Notification from './notification';
+import Pack from './pack';
 import Trip from './trip';
 
 export default class User extends Model {
@@ -26,7 +29,10 @@ export default class User extends Model {
       has_onboarded: this.boolean(false),
 
       // relationships
+      comments: this.hasMany(ForumComment, 'user_id'),
+      posts: this.hasMany(ForumPost, 'user_id'),
       notifications: this.hasMany(Notification, 'user_id'),
+      packs: this.hasMany(Pack, 'user_id'),
       trips: this.hasMany(Trip, 'owner_id')
     };
   }

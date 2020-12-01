@@ -36,11 +36,10 @@
                 alt="avatar"
                 :src="friend.avatar_url">
               <span
-                v-if="isPendingInvite(friend)"
-                class="white--text text-h5 font-weight-regular">@</span>
-              <span
                 v-else
-                class="white--text text-body-1 font-weight-bold">{{ friend | initials }}</span>
+                class="white--text text-body-1 font-weight-bold">
+                {{ friendInitials(friend) }}
+              </span>
             </v-avatar>
             <div
               v-if="isPendingInvite(friend)"
@@ -65,7 +64,6 @@
 
 <script>
   import PlusButton from '~/components/icons/PlusButton';
-  import Trip from '~/data/models/trip';
 
   export default {
     props: {
@@ -86,17 +84,18 @@
     computed: {
       friends () {
         if (!this.trip) { return []; }
-        const t = Trip.query().whereId(this.trip.id).with('users', query => {
-          query.where(value => value.id !== this.currentUser.id);
-        }).first();
-        return t.users;
+        return this.trip.friends.filter(friend => friend.id !== this.currentUser.id);
       },
       friendCount () {
-        return this.friends.length;
+        return this.friends?.length;
       }
+
     },
 
     methods: {
+      friendInitials (friend) {
+        return this.isPendingInvite(friend) ? '@' : `${this.$options.filters.initials(friend)}`;
+      },
       handleInviteFriend () {
         this.modalOpen = true;
       },

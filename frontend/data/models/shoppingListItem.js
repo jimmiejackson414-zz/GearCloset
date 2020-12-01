@@ -2,12 +2,12 @@ import { Model } from '@vuex-orm/core';
 import Trip from './trip';
 
 export default class ShoppingListItem extends Model {
-  static entity = 'shopping_list_items';
+  static entity = 'shoppingListItems';
 
   static fields () {
     return {
-      id: this.attr(null),
-      title: this.string(''),
+      id: this.attr(0),
+      title: this.string('New Item'),
       checked: this.boolean(false),
       trip_id: this.attr(null),
       quantity: this.number(0),

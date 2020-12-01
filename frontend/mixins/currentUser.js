@@ -2,7 +2,7 @@ import User from '~/data/models/user';
 
 export default {
   data: () => ({
-    loading: 1
+    userLoading: 1
   }),
 
   computed: {
@@ -10,7 +10,9 @@ export default {
   },
 
   async mounted () {
-    await User.customQuery({ name: 'me' });
-    this.loading = false;
+    if (!User.exists()) {
+      await User.customQuery({ name: 'me' });
+    }
+    this.userLoading = 0;
   }
 };

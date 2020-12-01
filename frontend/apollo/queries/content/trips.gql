@@ -5,6 +5,7 @@ query Trips {
     description
     starting_point
     ending_point
+    owner_id
 
     owner {
       id
@@ -22,7 +23,7 @@ query Trips {
       updated_at
     }
 
-    shopping_list_items {
+    shoppingListItems {
       id
       title
       checked
@@ -31,7 +32,7 @@ query Trips {
       updated_at
     }
 
-    trip_details {
+    tripDetails {
 			id
 			title
 			url

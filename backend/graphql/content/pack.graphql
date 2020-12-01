@@ -14,3 +14,9 @@ type Pack {
     trips: [Trip]! @hasMany
     user: User! @belongsTo
 }
+
+input PackInput {
+    name: String!
+    active: Boolean!
+    user_id: ID
+}

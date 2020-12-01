@@ -20,7 +20,8 @@ export default class Item extends Model {
       updated_at: this.attr(''),
 
       // relationships
-      categories_items: this.hasMany(CategoryItem, 'item_id'),
+      // categories_items: this.hasMany(CategoryItem, 'item_id'),
+      categoriesItem: this.hasMany(CategoryItem, 'item_id'),
       categories: this.belongsToMany(Category, CategoryItem, 'item_id', 'category_id')
     };
   }

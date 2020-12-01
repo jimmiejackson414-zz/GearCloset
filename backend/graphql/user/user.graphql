@@ -48,14 +48,25 @@ type User {
     created_at: DateTime!
     updated_at: DateTime!
 
-    packs: [Pack!]! @hasMany
-    notifications: [Notification!]! @hasMany
-    trips: [Trip]! @hasMany
+    comments: [ForumComment]! @hasMany
     friends: [User]! @belongsToMany(relation: "friends")
+    notifications: [Notification!]! @hasMany
+    packs: [Pack!]! @hasMany
+    posts: [ForumPost]! @hasMany
+    trips: [Trip]! @hasMany
 }
 
 input CreateUserBelongsTo {
     connect: ID
+    create: UserInput
+}
+
+input UserInput {
+    email: String!
+    first_name: String
+    last_name: String
+    avatar_url: String
+    trail_name: String
 }
 
 input AddFriendsInput {

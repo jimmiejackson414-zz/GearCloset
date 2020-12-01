@@ -182,24 +182,24 @@ export default {
     }
   },
 
-  modulesDir: ['../node_modules'],
+  // modulesDir: ['../node_modules'],
 
   /*
    ** Build configuration
    */
   build: {
     standalone: true,
-    transpile: ['vee-validate/dist/rules'],
-    extend (config, { isDev, isClient }) {
-      // Run ESLint on save
-      if (isDev && isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        });
-      }
-    }
+    transpile: ['vee-validate/dist/rules']
+    // extend (config, { isDev, isClient }) {
+    //   // Run ESLint on save
+    //   if (isDev && isClient) {
+    //     config.module.rules.push({
+    //       enforce: 'pre',
+    //       test: /\.(js|vue)$/,
+    //       loader: 'eslint-loader',
+    //       exclude: /(node_modules)/
+    //     });
+    //   }
+    // }
   }
 };

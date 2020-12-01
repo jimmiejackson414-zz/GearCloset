@@ -74,7 +74,6 @@
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
   import { todoService } from '~/services';
-  import Todo from '~/data/models/todo';
 
   export default {
     mixins: [isMobile],
@@ -100,10 +99,8 @@
         return this.todos.every(item => item.checked);
       },
       todos () {
-        if (!this.trip) {
-          return [];
-        }
-        return Todo.query().where('trip_id', this.trip.id).all();
+        if (!this.trip) { return []; }
+        return this.trip.todos;
       }
     },
 

@@ -15,3 +15,14 @@ type Item {
     categories: [Category!]! @belongsToMany
     pivot: CategoryItemPivot
 }
+
+input ItemInput {
+    name: String
+    weight: Float
+    price: Int
+    generic_type: String
+    consumable: Boolean
+    worn: Boolean
+    quantity: Int
+    category_id: ID
+}

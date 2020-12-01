@@ -1,7 +1,7 @@
 extend type Mutation @guard(with: ["api"]) {
-    createShoppingListItem(input: CreateItemInput! @spread): ShoppingListItem @create
+    createShoppingListItem(shoppingListItem: ShoppingListItemInput! @spread): ShoppingListItem @create
     deleteShoppingListItem(id: ID!): ShoppingListItem @delete
-    updateShoppingListItem(id: ID! title: String checked: Boolean quantity: Int): ShoppingListItem @update
+    updateShoppingListItem(id: ID! shoppingListItem: ShoppingListItemInput! @spread): ShoppingListItem @update
 }
 
 extend type Query @guard(with: ["api"]) {
@@ -18,9 +18,9 @@ type ShoppingListItem {
     updated_at: DateTime!
 }
 
-input CreateItemInput {
+input ShoppingListItemInput {
     title: String
     checked: Boolean
     quantity: Int
-    trip: CreateUserBelongsTo
+    trip_id: Int
 }
