@@ -73,15 +73,15 @@
   import CustomIcon from '~/components/icons/CustomIcon';
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton';
-  import { todoService } from '~/services';
+  import Todo from '~/data/models/todo';
 
   export default {
     mixins: [isMobile],
 
     props: {
-      trip: {
-        type: Object,
-        default: () => {}
+      tripId: {
+        type: String,
+        default: ''
       }
     },
 
@@ -99,45 +99,46 @@
         return this.todos.every(item => item.checked);
       },
       todos () {
-        if (!this.trip) { return []; }
-        return this.trip.todos;
+        return Todo.query().where('trip_id', this.tripId).get();
       }
     },
 
     methods: {
-      addTodo () {
-        const payload = {
-          fields: { title: 'New Todo', checked: false, trip: this.trip.id },
-          apollo: this.$apollo
-        };
-
-        todoService.createTodo(payload);
+      async addTodo () {
+        const payload = { title: 'New Todo', checked: false, trip: this.tripId };
+        const { todos } = await Todo.insert({ data: { ...payload } });
+        todos[0].$persist();
       },
       removeTodo (todo, index) {
-        const payload = {
-          fields: { id: todo.id, trip: this.trip.id },
-          apollo: this.$apollo
-        };
-        todoService.deleteTodo(payload);
+        todo.$deleteAndDestroy();
       },
       setEditing (ref) {
         this.editableItem = ref;
         this.$nextTick(() => document.querySelector(`#${ref}`).focus());
       },
-      updateAllItems (value) {
-        this.trip.todos.forEach(i => this.updateItem(value, i, 'checked'));
+      async updateAllItems (value) {
+        const { todos } = await Todo.update({
+          data: this.todos.map(todo => {
+            return {
+              id: todo.id,
+              checked: value
+            };
+          })
+        });
+        todos.forEach(todo => todo.$push());
       },
-      updateItem (value, todo, field) {
+      async updateItem (value, todo, field) {
+        this.editableItem = null;
         // return if value hasn't changed
         if (value === String(todo[field])) { return; }
 
-        const payload = {
-          data: { id: todo.id, [field]: value, trip: this.trip.id },
-          field,
-          value,
-          apollo: this.$apollo
-        };
-        todoService.updateTodo(payload);
+        const newItem = await Todo.update({
+          where: Number(todo.id),
+          data: {
+            [field]: value
+          }
+        });
+        newItem.$push();
       }
     },
 
@@ -153,10 +154,12 @@
   };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'widget-styles';
   @import '~/css/list-transition';
+</style>
 
+<style lang="scss">
   .v-data-table.todos-table {
     background: transparent;
 

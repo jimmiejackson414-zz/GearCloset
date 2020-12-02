@@ -120,7 +120,6 @@
       async addListItem () {
         const payload = { title: 'New Item', checked: false, trip: this.tripId, quantity: 0 };
         const { shoppingListItems } = await ShoppingListItem.insert({ data: { ...payload } });
-        console.log({ shoppingListItems });
         shoppingListItems[0].$persist();
       },
       removeItem (item) {
@@ -130,9 +129,16 @@
         this.editableItem = ref;
         this.$nextTick(() => document.querySelector(`#${ref}`).focus());
       },
-      updateAllItems (value) {
-        console.log('need to update');
-        this.trip.shopping_list_items.forEach(i => this.updateItem(value, i, 'checked'));
+      async updateAllItems (value) {
+        const { shoppingListItems } = await ShoppingListItem.update({
+          data: this.shoppingListItems.map(item => {
+            return {
+              id: item.id,
+              checked: value
+            };
+          })
+        });
+        shoppingListItems.forEach(item => item.$push());
       },
       async updateItem (event, item, field) {
         this.editableItem = null;
@@ -162,10 +168,12 @@
   };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'widget-styles';
   @import '~/css/list-transition';
+</style>
 
+<style lang="scss">
   .v-data-table.items-table {
     background: transparent;
 
