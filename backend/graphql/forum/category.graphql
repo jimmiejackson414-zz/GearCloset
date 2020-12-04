@@ -9,8 +9,8 @@ type ForumCategory {
     subcategories: [ForumSubcategory!]! @hasMany
 }
 
-input ForumCategoryInput {
-    title: String
-    description: String
-    slug: String
-}
+# input ForumCategoryInput {
+#     title: String
+#     description: String
+#     slug: String
+# }

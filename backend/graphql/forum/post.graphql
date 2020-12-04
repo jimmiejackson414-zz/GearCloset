@@ -13,8 +13,8 @@ type ForumPost {
     user: User! @belongsTo
 }
 
-input ForumPostInput {
-    title: String
-    pinned: Boolean
-    slug: String
-}
+# input ForumPostInput {
+#     title: String
+#     pinned: Boolean
+#     slug: String
+# }

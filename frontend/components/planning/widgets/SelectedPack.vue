@@ -8,15 +8,19 @@
         </div>
         <ellipsis-button
           :items="ellipsisItems"
-          @change-pack="modalOpen = true" />
+          @change-pack="modalOpen = true"
+          @change-theme="packThemeModalOpen = true" />
       </div>
       <div
-        v-if="packState === 'SHOW_GRAPH'"
+        v-if="packState === 'SHOW_GRAPH' && chartData.labels && chartData.datasets"
         class="selected-pack-wrapper">
         <selected-pack-graph
           v-resize="onResize"
-          :height="chartHeight"
-          :selected-pack="activePack" />
+          :chart-data="chartData"
+          :is-mobile="isMobile"
+          :options="chartOptions"
+          :styles="graphStyles"
+          :theme="localTheme" />
       </div>
       <p
         v-else-if="packState === 'ADD_CATEGORIES'"
@@ -31,16 +35,28 @@
         You haven't added a pack to this trip yet! Click on the dots in the top right to get started.
       </p>
     </div>
+
     <select-pack-modal
       v-model="modalOpen"
       :trip="trip"
       @handle-reset-modal="resetModal" />
+
+    <pack-theme-modal
+      v-model="packThemeModalOpen"
+      :theme="localTheme"
+      :theme-options="themeOptions"
+      @handle-update="handleUpdatePackTheme" />
   </div>
 </template>
 
 <script>
+  import convert from 'convert-units';
+  import { calculateCategoryWeight } from '~/helpers/functions';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
+  // import Pack from '~/data/models/pack';
+  import PackThemeModal from '~/components/modals/PackThemeModal.vue';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
+  import { generateThemeOptions } from '~/helpers';
 
   export default {
     props: {
@@ -50,17 +66,56 @@
       }
     },
 
-    data: () => ({
-      chartHeight: 300,
-      ellipsisItems: [{ title: 'Change Selected Pack', event: 'change-pack' }],
-      loading: 0,
-      modalOpen: false
-    }),
+    data () {
+      return {
+        chartData: {
+          labels: null,
+          datasets: null
+        },
+        chartHeight: 300,
+        chartOptions: {
+          cutoutPercentage: 75,
+          legend: {
+            display: true,
+            position: 'right'
+          },
+          plugins: {
+            colorschemes: {
+              scheme: this.localTheme,
+              override: true
+            }
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          tooltips: {
+            enabled: false
+          }
+        },
+        chartWidth: 500,
+        ellipsisItems: [
+          { title: 'Change Selected Pack', event: 'change-pack' },
+          { title: 'Change Pack Theme Colors', event: 'change-theme' }
+        ],
+        isMobile: true,
+        loading: 0,
+        localTheme: '',
+        modalOpen: false,
+        packThemeModalOpen: false
+      };
+    },
 
     computed: {
       activePack () {
         if (!this.trip) { return null; }
         return this.trip.pack;
+      },
+      graphStyles () {
+        return {
+          height: `${this.chartHeight}px`,
+          margin: '0 auto',
+          position: 'relative',
+          width: `${this.chartWidth}px`
+        };
       },
       packName () {
         return this.trip?.pack?.name || 'None selected';
@@ -72,24 +127,66 @@
           return 'ADD_CATEGORIES';
         }
         return 'SHOW_GRAPH';
+      },
+      themeOptions () {
+        return generateThemeOptions();
       }
     },
 
     methods: {
-      onResize () {
-        window.innerWidth < 769 ? this.chartHeight = 200 : this.chartHeight = 300;
+      handleUpdatePackTheme (theme) {
+        this.localTheme = theme;
+        this.packThemeModalOpen = false;
+        // const pack = await Pack.update({
+        //   where: Number(this.activePack.id),
+        //   data: {
+        //     theme: this.localTheme
+        //   }
+        // });
+        // pack.$push();
       },
       resetModal () {
         this.modalOpen = false;
+      },
+      onResize () {
+        const width = window.innerWidth;
+        if ((width < 560) || (width < 1264 && width > 959)) {
+          this.chartWidth = 400;
+          this.isMobile = true;
+        } else {
+          this.chartWidth = 500;
+          this.isMobile = false;
+        }
       }
     },
 
     mounted () {
       this.onResize();
+      if (this.activePack) {
+        this.localTheme = this.activePack.theme;
+        this.chartData.labels = this.activePack.categories.map(category => {
+          return this.$options.filters.truncate(category.name, 20);
+        });
+        this.chartData.datasets = [{
+          label: 'Selected Pack Graph',
+          data: this.activePack.categories.map(category => {
+            return parseFloat(convert(calculateCategoryWeight(category)).from('g').to('oz')).toFixed(2);
+          })
+        }];
+      }
+    },
+
+    watch: {
+      localTheme (val) {
+        if (val) {
+          this.chartOptions.plugins.colorschemes.scheme = val;
+        }
+      }
     },
 
     components: {
       EllipsisButton,
+      PackThemeModal,
       SelectedPackGraph,
       SelectPackModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SelectPackModal')
     }

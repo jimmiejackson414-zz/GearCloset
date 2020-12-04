@@ -1,4 +1,4 @@
-type CreateUserPayload {
-    me: User
-    token: String
-}
+# type CreateUserPayload {
+#     me: User
+#     token: String
+# }

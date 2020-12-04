@@ -11,7 +11,7 @@ type ForumSubcategory {
     posts: [ForumPost!]! @hasMany
 }
 
-input ForumSubcategoryInput {
-    title: String
-    slug: String
-}
+# input ForumSubcategoryInput {
+#     title: String
+#     slug: String
+# }

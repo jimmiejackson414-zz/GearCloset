@@ -14,6 +14,7 @@ export default class Pack extends Model {
       name: this.string(''),
       user_id: this.attr(null),
       active: this.boolean(false),
+      theme: this.string('office.BlueGreen6'),
       created_at: this.attr(null),
       updated_at: this.attr(null),
 

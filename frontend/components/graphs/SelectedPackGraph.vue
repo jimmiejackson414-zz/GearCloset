@@ -1,207 +1,141 @@
-<template>
-  <client-only>
-    <div
-      v-resize="resize">
-      <div
-        ref="currentPackChart"
-        :style="chartStyles" />
-    </div>
-  </client-only>
-</template>
-
 <script>
-  import convert from 'convert-units';
-  import echarts from 'echarts';
-  import theme from './chart-theme.json';
-  import { calculateCategoryWeight } from '~/helpers/functions';
-
-  echarts.registerTheme('custom-theme', theme);
+  import { Doughnut, mixins } from 'vue-chartjs';
+  // import Chart from 'chart.js';
+  import 'chartjs-plugin-colorschemes';
+  const { reactiveProp } = mixins;
 
   export default {
+    extends: Doughnut,
+
+    mixins: [reactiveProp],
+
     props: {
-      selectedPack: {
+      chartData: {
         type: Object,
         default: () => {}
-      }
-    },
-
-    data () {
-      return {
-        chartInstance: null,
-        chartLegend: {
-          orient: 'vertical',
-          x: 'right',
-          type: 'scroll',
-          top: 20,
-          bottom: 20,
-          left: 0
-        },
-        chartStyles: 'width: 100%; height: 400px',
-        otherChartStyles: {
-          center: ['50%', '50%']
-        },
-        windowSize: {
-          x: 0,
-          y: 0
-        }
-      };
-    },
-
-    methods: {
-      resize () {
-        this.windowSize = { x: window.innerWidth, y: window.innerHeight };
-        if (this.windowSize.x < 850) {
-          this.chartLegend = {
-            orient: 'horizontal',
-            x: 'center',
-            type: 'scroll',
-            top: 0,
-            bottom: 0,
-            left: 0
-          };
-          this.otherChartStyles.center = ['50%', '50%'];
-          this.chartStyles = 'width: 100%; height: 200px';
-        } else {
-          this.chartLegend = {
-            orient: 'vertical',
-            x: 'right',
-            type: 'scroll',
-            top: 50,
-            bottom: 20,
-            left: 0
-          };
-          this.otherChartStyles.center = ['50%', '50%'];
-        }
-        if (this.chartInstance) {
-          this.chartInstance.resize();
-          this.setChart();
-        }
       },
-      setChart () {
-        const packRef = this.$refs.currentPackChart;
-        const currentPackChart = echarts.init(packRef, 'custom-theme');
-        this.chartInstance = currentPackChart;
-        const data = this.selectedPack.categories.map(category => ({
-          value: parseFloat(convert(calculateCategoryWeight(category)).from('g').to('oz')).toFixed(2),
-          name: this.$options.filters.truncate(category.name, 20)
-        }));
-        this.hasData = true;
-        // specify chart configuration item and data
-        const option = {
-          tooltip: {
-            show: false
-          },
-          legend: this.chartLegend,
-          series: [
-            {
-              name: 'Category',
-              type: 'pie',
-              center: this.otherChartStyles.center,
-              radius: ['50%', '70%'],
-              avoidLabelOverlap: true,
-              label: {
-                normal: {
-                  show: false,
-                  position: 'center'
-                },
-                emphasis: {
-                  show: true,
-                  textStyle: {
-                    fontSize: '15',
-                    color: '#4a4a4a'
-                  }
-                },
-                formatter: [
-                  '{b|{b}}',
-                  '{d|{d} oz}'
-                ].join('\n'),
-                rich: {
-                  d: {
-                    fontWeight: 'bold'
-                  }
-                }
-              },
-              labelLine: {
-                normal: {
-                  show: false
-                }
-              },
-              data,
-              itemStyle: {
-                normal: {
-                  labelLine: {
-                    show: false
-                  }
-                },
-                emphasis: {
-                  label: {
-                    show: true,
-                    formatter: [
-                      '{b|{b}}',
-                      '{c|{c} oz}'
-                    ].join('\n'),
-                    fontFamily: 'Avenir Next, Lato, Roboto, Helvetica Neue',
-                    rich: {
-                      c: {
-                        fontWeight: 'bolder'
-                      }
-                    }
-                  }
-                }
-              },
-              selectedMode: true
-            }
-          ]
-        };
-
-        // use configuration item and data specified to show chart
-        currentPackChart.setOption(option);
+      isMobile: {
+        type: Boolean,
+        default: true
+      },
+      options: {
+        type: Object,
+        default: () => {}
+      },
+      theme: {
+        type: String,
+        default: ''
       }
     },
+
+    // data () {
+    // const vm = this;
+    // return {
+    //   options: {
+    //     cutoutPercentage: 75,
+    //     legend: {
+    //       display: true,
+    //       position: 'right'
+    //     },
+    //     plugins: {
+    //       colorschemes: {
+    //         scheme: this.theme
+    //       }
+    //     },
+    //     responsive: true,
+    //     maintainAspectRatio: false,
+    //     tooltips: {
+    //       enabled: false
+    //     },
+    //     onHover (e, element) {
+    //       if (element.length) {
+    //         const i = element[0]._index;
+    //         const label = vm.chartData.labels[i];
+    //         const value = vm.chartData.datasets[0].data[i];
+    //         const data = { label, value };
+    //         vm.textCenter(data);
+    //       } else {
+    //         vm.textCenter(null);
+    //       }
+    //     }
+    //   }
+    // };
+    // },
+
+    // methods: {
+    //   textCenter (data) {
+    //     Chart.pluginService.register({
+    //       beforeDraw (chart) {
+    //         const { ctx, currentDevicePixelRatio: ratio, height, width } = chart.chart;
+    //         const legendWidth = chart.legend.width;
+
+    //         if (data) {
+    //           const { label, value } = data;
+    //           ctx.clearRect(0, 0, width, height);
+
+    //           for (let index = 0; index < 2; index++) {
+    //             const isTopText = index === 0;
+    //             ctx.font = `${isTopText ? '' : 'bold'} 16px 'Avenir Next', 'Lato', Roboto, 'Helvetica Neue', sans-serif`;
+    //             ctx.fillStyle = 'rgba(73, 79, 87, 1)';
+    //             ctx.textBaseline = 'middle';
+    //             ctx.textAlign = 'center';
+
+    //             const text = isTopText ? label : `${value}lbs`;
+    //             const textX = ((width - legendWidth) * ratio) / 2;
+    //             const yVal = ((height * ratio) / 2);
+    //             const textY = isTopText ? yVal - 10 : yVal + 10;
+    //             ctx.fillText(text, textX, textY, width);
+    //           }
+    //           ctx.save();
+    //         } else {
+    //           ctx.restore();
+    //           ctx.clearRect(0, 0, height, width);
+    //           ctx.save();
+    //         }
+    //       }
+    //     });
+    //   }
+    // },
 
     mounted () {
-      this.$nextTick(() => {
-        this.resize();
-        this.setChart();
-      });
+      this.renderChart(this.chartData, this.options);
     },
 
     watch: {
-      selectedPack () {
-        this.setChart();
+      isMobile (val) {
+        const chart = this.$data._chart;
+        if (val) {
+          chart.options.legend.position = 'bottom';
+          chart.update();
+        } else {
+          chart.options.legend.position = 'right';
+          chart.update();
+        }
+      },
+      options: {
+        deep: true,
+        handler (val) {
+          // console.log({ val });
+          // console.log(this.$data);
+          this.$data._chart.options = val;
+          this.$data._chart.update();
+        }
       }
-    },
-
-    components: {
+      // theme (newVal, oldVal) {
+      //   console.log({ newVal });
+      //   console.log('data: ', this.$data);
+      //   const { _chart } = this.$data;
+      //   console.log({ _chart });
+      //   this.$data.options.plugins.colorschemes.scheme = newVal;
+      // _chart.options.plugins.colorschemes.scheme = newVal;
+      // _chart.update();
+      // console.log({ newVal });
+      // const chart = this.$data._chart;
+      // chart.options.plugins.colorschemes.scheme = newVal;
+      // this.options.plugins.colorschemes.scheme = newVal;
+      // chart.update();
+      // this.renderChart(this.chartData, this.options);
+      // }
     }
   };
 </script>
-
-<style lang="scss">
-  .chart-wrapper {
-    position: relative;
-
-    .selected-pack-graph {
-      svg {
-        g {
-          cursor: pointer;
-        }
-      }
-
-    }
-
-    .overlay-label {
-      height: 200px;
-      left: 188px;
-      position: absolute;
-      text-align: center;
-      top: 175px;
-      width: 200px;
-
-      .category-weight {
-        font-weight: bold;
-      }
-    }
-  }
-
-</style>

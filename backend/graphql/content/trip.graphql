@@ -26,19 +26,19 @@ type Trip {
     users: [User]! @hasMany
 }
 
-input TripInput {
-    name: String
-    description: String
-    owner: User @belongsTo
-    starting_point: String
-    ending_point: String
-    owner_id: ID
-    pack_id: ID
-}
+# input TripInput {
+#     name: String
+#     description: String
+#     owner: User @belongsTo
+#     starting_point: String
+#     ending_point: String
+#     owner_id: ID
+#     pack_id: ID
+# }
 
-input CreateTripBelongsTo {
-    connect: ID
-}
+# input CreateTripBelongsTo {
+#     connect: ID
+# }
 
 input SelectedPackInput {
     trip_id: ID!

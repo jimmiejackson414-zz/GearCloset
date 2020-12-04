@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 class Pack extends Model
 {
     protected $fillable = [
-        'name', 'user_id', 'active', 'created_at', 'updated_at'
+        'name', 'user_id', 'active', 'theme', 'created_at', 'updated_at'
     ];
 
     // automatically eager load categories of a pack
