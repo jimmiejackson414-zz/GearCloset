@@ -18,7 +18,6 @@
           v-resize="onResize"
           :chart-data="chartData"
           :is-mobile="isMobile"
-          :options="chartOptions"
           :styles="graphStyles"
           :theme="localTheme" />
       </div>
@@ -53,8 +52,7 @@
   import convert from 'convert-units';
   import { calculateCategoryWeight } from '~/helpers/functions';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
-  // import Pack from '~/data/models/pack';
-  import PackThemeModal from '~/components/modals/PackThemeModal.vue';
+  import Pack from '~/data/models/pack';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
   import { generateThemeOptions } from '~/helpers';
 
@@ -73,24 +71,6 @@
           datasets: null
         },
         chartHeight: 300,
-        chartOptions: {
-          cutoutPercentage: 75,
-          legend: {
-            display: true,
-            position: 'right'
-          },
-          plugins: {
-            colorschemes: {
-              scheme: this.localTheme,
-              override: true
-            }
-          },
-          responsive: true,
-          maintainAspectRatio: false,
-          tooltips: {
-            enabled: false
-          }
-        },
         chartWidth: 500,
         ellipsisItems: [
           { title: 'Change Selected Pack', event: 'change-pack' },
@@ -134,16 +114,16 @@
     },
 
     methods: {
-      handleUpdatePackTheme (theme) {
+      async handleUpdatePackTheme (theme) {
         this.localTheme = theme;
         this.packThemeModalOpen = false;
-        // const pack = await Pack.update({
-        //   where: Number(this.activePack.id),
-        //   data: {
-        //     theme: this.localTheme
-        //   }
-        // });
-        // pack.$push();
+        const pack = await Pack.update({
+          where: Number(this.activePack.id),
+          data: {
+            theme: this.localTheme
+          }
+        });
+        pack.$push();
       },
       resetModal () {
         this.modalOpen = false;
@@ -176,17 +156,9 @@
       }
     },
 
-    watch: {
-      localTheme (val) {
-        if (val) {
-          this.chartOptions.plugins.colorschemes.scheme = val;
-        }
-      }
-    },
-
     components: {
       EllipsisButton,
-      PackThemeModal,
+      PackThemeModal: () => import(/* webpackPrefetch: true */ '~/components/modals/PackThemeModal'),
       SelectedPackGraph,
       SelectPackModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SelectPackModal')
     }
