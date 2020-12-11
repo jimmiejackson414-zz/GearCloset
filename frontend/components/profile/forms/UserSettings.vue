@@ -220,6 +220,7 @@
 
 <script>
   import { countries } from '~/helpers';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import MembershipChip from '~/components/MembershipChip';
 
   export default {
@@ -260,6 +261,12 @@
     methods: {
       handleSubmit () {
         this.$emit('handle-submit');
+      },
+      removeAvatar () {
+        console.log('removeAvatar still need to write');
+      },
+      toggleUppyOpen () {
+        console.log('toggleUppyOpen still need to write');
       }
     },
 
@@ -269,6 +276,7 @@
     },
 
     components: {
+      CustomIcon,
       MembershipChip
     }
   };

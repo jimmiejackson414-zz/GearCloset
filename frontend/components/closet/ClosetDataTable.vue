@@ -240,6 +240,7 @@
   import draggable from 'vuedraggable';
   import ClickToEdit from '~/components/ClickToEdit.vue';
   import { convertToDollars } from '~/helpers/functions';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     props: {
@@ -351,6 +352,7 @@
 
     components: {
       ClickToEdit,
+      CustomIcon,
       draggable
     }
   };

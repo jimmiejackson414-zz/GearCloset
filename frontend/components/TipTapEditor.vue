@@ -5,10 +5,6 @@
       :card-props="{ outlined: true }"
       :extensions="extensions"
       :placeholder="placeholder" />
-
-    <template #placeholder>
-      Loading...
-    </template>
   </client-only>
 </template>
 

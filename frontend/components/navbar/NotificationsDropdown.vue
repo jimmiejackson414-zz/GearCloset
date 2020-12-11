@@ -89,6 +89,7 @@
 <script>
   import * as dayjs from 'dayjs';
   import relativeTime from 'dayjs/plugin/relativeTime';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import markAllReadMutation from '~/apollo/mutations/notifications/markAllRead.gql';
   import meQuery from '~/apollo/queries/user/me.gql';
 
@@ -150,6 +151,7 @@
     },
 
     components: {
+      CustomIcon,
       NotificationModal: () => import(/* webpackPrefetch: true */ '~/components/modals/NotificationModal')
     }
 

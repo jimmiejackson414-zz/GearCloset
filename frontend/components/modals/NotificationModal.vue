@@ -32,6 +32,7 @@
 </template>
 
 <script>
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import markAsReadMutation from '~/apollo/mutations/notifications/markAsRead.gql';
 
   export default {
@@ -72,6 +73,10 @@
         });
         this.show = false;
       }
+    },
+
+    components: {
+      CustomIcon
     }
   };
 </script>

@@ -36,6 +36,8 @@
 </template>
 
 <script>
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+
   export default {
     name: 'HomeDrawer',
 
@@ -57,6 +59,10 @@
         }
         return this.$nuxt.$vuetify.theme.themes.light['dark-grey'];
       }
+    },
+
+    components: {
+      CustomIcon
     }
   };
 </script>

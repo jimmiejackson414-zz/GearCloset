@@ -7,7 +7,6 @@
       <v-card-title class="pb-0">
         <h4 class="text-h4 card-title">
           {{ formatTitle(card) }}
-          <!-- {{ Object.keys(card)[0] }} -->
         </h4>
       </v-card-title>
       <v-card-text class="flex">
@@ -90,6 +89,7 @@
 
 <script>
   import { capitalize } from '~/helpers/functions';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     props: {
@@ -122,8 +122,11 @@
 
     mounted () {
       this.primaryColor = $nuxt.$vuetify.theme.themes.light.primary;
-    }
+    },
 
+    components: {
+      CustomIcon
+    }
   };
 </script>
 

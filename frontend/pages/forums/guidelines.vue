@@ -209,8 +209,12 @@
 </template>
 
 <script>
-  export default {
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
+  export default {
+    components: {
+      CustomIcon
+    }
   };
 </script>
 

@@ -3,9 +3,9 @@
     ref="tripsQueryRef"
     :query="require('~/apollo/queries/content/trips.gql')"
     @result="handleData">
-    <template v-slot="{ result: { data, error, loading }}">
+    <template v-slot="{ result: { data, error, loading }, isLoading}">
       <v-container
-        v-if="!loading"
+        v-if="!isLoading"
         class="planning-container"
         grid-list-lg
         mx-auto>
@@ -127,7 +127,6 @@
         console.log('createTrip');
       },
       handleDeleteTrip () {
-        console.log('deleteTrip');
         this.deleteTripModalOpen = true;
       },
       refetchTrips () {

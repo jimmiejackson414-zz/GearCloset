@@ -74,6 +74,7 @@
   import currentUser from '~/mixins/currentUser';
   import EllipsisButton from '~/components/icons/EllipsisButton';
   import FavoriteItem from '~/components/icons/FavoriteItem';
+  import MembershipChip from '~/components/MembershipChip.vue';
 
   export default {
     mixins: [currentUser],
@@ -126,7 +127,8 @@
 
     components: {
       EllipsisButton,
-      FavoriteItem
+      FavoriteItem,
+      MembershipChip
     }
   };
 </script>

@@ -16,11 +16,17 @@
 </template>
 
 <script>
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+
   export default {
     methods: {
       handleClick () {
         this.$emit('handle-click');
       }
+    },
+
+    components: {
+      CustomIcon
     }
   };
 </script>

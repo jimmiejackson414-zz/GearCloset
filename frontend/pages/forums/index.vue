@@ -1,58 +1,63 @@
 <template>
-  <v-container
-    v-if="!loading"
-    class="forums-container"
-    grid-list-lg
-    mx-auto>
-    <v-row>
-      <v-col
-        cols="12"
-        md="8"
-        offset-md="2">
-        <div class="header">
-          <div class="page-title text-h4 text-center mt-8 mb-4">
-            Forums
-          </div>
-          <div class="disclaimer text-center mb-6">
-            Gear Closet forums are moderated, frequented by people from all over the world, and here primarily
-            to foster helpful and positive discussions about backpacking.
-            <span class="font-weight-bold">
-              Please be respectful and review our
-              <nuxt-link to="/forums/guidelines">
-                Forum Guidelines
-              </nuxt-link>
-              prior to posting.</span>
-          </div>
-          <sign-up-alert @handle-open-upgrade-form="handleOpenUpgradeForm" />
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col
-        cols="12"
-        md="8"
-        offset-md="2">
-        <category-box
-          v-for="category in categories"
-          :key="category.id"
-          :category="category" />
-      </v-col>
-    </v-row>
+  <ApolloQuery
+    :query="require('~/apollo/queries/forum/categories.gql')"
+    @result="setCategories">
+    <template v-slot="{ result: { data, error, loading }, isLoading}">
+      <v-container
+        v-if="!isLoading"
+        class="forums-container"
+        grid-list-lg
+        mx-auto>
+        <v-row>
+          <v-col
+            cols="12"
+            md="8"
+            offset-md="2">
+            <div class="header">
+              <div class="page-title text-h4 text-center mt-8 mb-4">
+                Forums
+              </div>
+              <div class="disclaimer text-center mb-6">
+                Gear Closet forums are moderated, frequented by people from all over the world, and here primarily
+                to foster helpful and positive discussions about backpacking.
+                <span class="font-weight-bold">
+                  Please be respectful and review our
+                  <nuxt-link to="/forums/guidelines">
+                    Forum Guidelines
+                  </nuxt-link>
+                  prior to posting.</span>
+              </div>
+              <sign-up-alert @handle-open-upgrade-form="handleOpenUpgradeForm" />
+            </div>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col
+            cols="12"
+            md="8"
+            offset-md="2">
+            <category-box
+              v-for="category in categories"
+              :key="category.id"
+              :category="category" />
+          </v-col>
+        </v-row>
 
-    <!-- Full Screen Upgrade -->
-    <full-screen-upgrade
-      v-model="upgradeModalOpen"
-      :user="currentUser"
-      @handle-modal-open="updateSubscriptionModalOpen = true" />
+        <!-- Full Screen Upgrade -->
+        <full-screen-upgrade
+          v-model="upgradeModalOpen"
+          :user="currentUser"
+          @handle-modal-open="updateSubscriptionModalOpen = true" />
 
-    <update-subscription-modal v-model="updateSubscriptionModalOpen" />
-  </v-container>
+        <update-subscription-modal v-model="updateSubscriptionModalOpen" />
+      </v-container>
 
-  <loading-page v-else />
+      <loading-page v-else />
+    </template>
+  </ApolloQuery>
 </template>
 
 <script>
-  // import categoriesQuery from '~/apollo/queries/forum/categories.gql';
   import CategoryBox from '~/components/forums/CategoryBox.vue';
   import currentUser from '~/mixins/currentUser';
   import LoadingPage from '~/components/LoadingPage.vue';
@@ -66,31 +71,18 @@
     middleware: 'authenticated',
 
     data: () => ({
-      loading: 1,
+      categories: null,
       updateSubscriptionModalOpen: false,
       upgradeModalOpen: false
     }),
 
-    computed: {
-      categories: () => []
-    },
-
     methods: {
       handleOpenUpgradeForm () {
         this.upgradeModalOpen = true;
+      },
+      setCategories ({ data: { forumCategories } }) {
+        this.categories = forumCategories;
       }
-    },
-
-    async mounted () {
-      // const { forumCategories } = await this.$store.dispatch('entities/simpleQuery', {
-      //   query: categoriesQuery,
-      //   variables: {},
-      //   bypassCache: false
-      // });
-      // ForumCategory.insert({
-      //   data: [...forumCategories]
-      // });
-      // this.loading = 0;
     },
 
     components: {

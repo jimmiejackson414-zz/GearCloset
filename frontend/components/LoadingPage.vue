@@ -5,8 +5,12 @@
 </template>
 
 <script>
-  export default {
+  import LoadingLogo from '~/components/icons/LoadingLogo.vue';
 
+  export default {
+    components: {
+      LoadingLogo
+    }
   };
 </script>
 

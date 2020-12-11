@@ -48,8 +48,6 @@ export default {
     { src: '~/plugins/filters' }
   ],
 
-  components: true,
-
   /*
    ** Nuxt.js dev-modules
    */

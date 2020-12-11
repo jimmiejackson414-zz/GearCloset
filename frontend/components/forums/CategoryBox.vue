@@ -72,6 +72,8 @@
 </template>
 
 <script>
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+
   export default {
     props: {
       category: {
@@ -92,6 +94,10 @@
 
     created () {
       this.primaryColor = this.$nuxt.$vuetify.theme.themes.light.primary;
+    },
+
+    components: {
+      CustomIcon
     }
   };
 </script>

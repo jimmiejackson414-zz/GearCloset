@@ -20,6 +20,8 @@
 </template>
 
 <script>
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+
   export default {
     // props: {
     //   item: {
@@ -39,12 +41,13 @@
 
     methods: {
       toggleFavoriteItem (e) {
-        console.log({ e });
-        console.log('toggleFavoriteItem');
         this.item.favorite.active = !this.item.favorite.active;
-
         this.item.favorite.active ? this.item.favorite.likes++ : this.item.favorite.likes--;
       }
+    },
+
+    components: {
+      CustomIcon
     }
   };
 </script>

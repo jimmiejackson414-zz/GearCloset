@@ -26,6 +26,7 @@
 
 <script>
   import currentUser from '~/mixins/currentUser';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     mixins: [currentUser],
@@ -48,6 +49,10 @@
 
     created () {
       this.primaryColor = this.$nuxt.$vuetify.theme.themes.light.primary;
+    },
+
+    components: {
+      CustomIcon
     }
   };
 </script>
