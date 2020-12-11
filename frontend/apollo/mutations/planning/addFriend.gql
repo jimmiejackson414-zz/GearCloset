@@ -1,11 +1,12 @@
-mutation AddFriends($tripId: ID! $friends: [AddFriendsInput]!) {
-  addFriends(trip_id: $tripId input: $friends) {
+mutation AddFriends($trip: ID! $friends: [AddFriendsInput]!) {
+  addFriends(trip_id: $trip input: $friends) {
     id
     first_name
     last_name
     trail_name
     email
     avatar_url
+    pending_invite
     created_at
     updated_at
   }

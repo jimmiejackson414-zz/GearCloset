@@ -1,5 +1,6 @@
 <template>
   <ApolloQuery
+    ref="tripsQueryRef"
     :query="require('~/apollo/queries/content/trips.gql')"
     @result="handleData">
     <template v-slot="{ result: { data, error, loading }}">
@@ -37,7 +38,9 @@
           <v-flex
             md6
             xs12>
-            <selected-pack :trip="selectedTrip" />
+            <selected-pack
+              :trip="selectedTrip"
+              @handle-refetch-trips="refetchTrips" />
           </v-flex>
 
           <!-- Friends Widget -->
@@ -97,7 +100,6 @@
   import ShoppingList from '~/components/planning/widgets/ShoppingList.vue';
   import TodoList from '~/components/planning/widgets/TodoList.vue';
   import TripDetails from '~/components/planning/widgets/TripDetails.vue';
-  // import tripsQuery from '~/apollo/queries/content/trips.gql';
 
   export default {
     name: 'Planning',
@@ -127,6 +129,9 @@
       handleDeleteTrip () {
         console.log('deleteTrip');
         this.deleteTripModalOpen = true;
+      },
+      refetchTrips () {
+        this.$refs.tripsQueryRef.getApolloQuery().refetch();
       }
     },
 

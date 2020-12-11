@@ -69,3 +69,7 @@ export const totalItemsInPack = pack => {
   });
   return total;
 };
+
+export const validateEmail = email => {
+  return /\S+@\S+\.\S+/.test(email);
+};

@@ -38,6 +38,7 @@
     <select-pack-modal
       v-model="modalOpen"
       :trip="trip"
+      @handle-refetch-trips="refetchTrips"
       @handle-reset-modal="resetModal" />
 
     <pack-theme-modal
@@ -52,8 +53,9 @@
   import convert from 'convert-units';
   import { calculateCategoryWeight } from '~/helpers/functions';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
-  import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
   import { generateThemeOptions } from '~/helpers';
+  import { packService } from '~/services';
+  import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
 
   export default {
     props: {
@@ -114,16 +116,17 @@
 
     methods: {
       handleUpdatePackTheme (theme) {
-        // this.localTheme = theme;
-        // this.packThemeModalOpen = false;
-        // const pack = await Pack.update({
-        //   where: Number(this.activePack.id),
-        //   data: {
-        //     theme: this.localTheme
-        //   }
-        // });
-        // pack.$push();
-        console.log('handleUpdatePackTheme');
+        this.localTheme = theme;
+        this.packThemeModalOpen = false;
+
+        const payload = {
+          fields: { id: this.activePack.id, theme },
+          apollo: this.$apollo
+        };
+        packService.update(payload);
+      },
+      refetchTrips () {
+        this.$emit('handle-refetch-trips');
       },
       resetModal () {
         this.modalOpen = false;
@@ -137,12 +140,8 @@
           this.chartWidth = 500;
           this.isMobile = false;
         }
-      }
-    },
-
-    mounted () {
-      this.onResize();
-      if (this.activePack) {
+      },
+      setChartData () {
         this.localTheme = this.activePack.theme;
         this.chartData.labels = this.activePack.categories.map(category => {
           return this.$options.filters.truncate(category.name, 20);
@@ -153,6 +152,13 @@
             return parseFloat(convert(calculateCategoryWeight(category)).from('g').to('oz')).toFixed(2);
           })
         }];
+      }
+    },
+
+    mounted () {
+      this.onResize();
+      if (this.activePack) {
+        this.setChartData();
       }
     },
 

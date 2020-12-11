@@ -51,7 +51,7 @@
 <script>
   import { mapActions } from 'vuex';
   import Loading from '~/components/Loading.vue';
-  import { packService } from '~/services';
+  import { packService, tripService } from '~/services';
 
   export default {
     props: {
@@ -96,11 +96,12 @@
         this.submitting = true;
 
         const payload = {
-          fields: { pack_id: this.selectedPack.id, trip_id: this.trip.id },
+          fields: { pack_id: this.selectedPack.id, id: this.trip.id },
           apollo: this.$apollo
         };
-        await packService.setSelectedPack(payload);
+        await tripService.update(payload);
         this.submitting = false;
+        this.$emit('handle-refetch-trips');
         this.$emit('handle-reset-modal');
       },
       async populatePacks () {

@@ -87,7 +87,7 @@
         return this.trip.users.filter(friend => friend.id !== this.currentUser.id);
       },
       friendCount () {
-        return this.users?.length;
+        return this.friends.length;
       }
 
     },

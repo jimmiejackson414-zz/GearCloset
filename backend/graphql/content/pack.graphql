@@ -1,7 +1,7 @@
 extend type Mutation @guard(with: ["api"]) {
-    createPack(pack: PackInput! @spread): Pack @create
+    createPack(input: PackInput! @spread): Pack @create
     deletePack(id: ID!): Pack @delete
-    updatePack(id: ID! pack: PackInput! @spread): Pack @update
+    updatePack(id: ID! input: PackInput! @spread): Pack @update
 }
 
 extend type Query @guard(with: ["api"]) {

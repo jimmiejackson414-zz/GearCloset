@@ -59,10 +59,10 @@ class UserMutator
         $new_user->save();
 
         # TODO: Create new TripUser when invited user registers
-        // $new_trip_user = new TripUser;
-        // $new_trip_user->trip_id = $args['trip_id'];
-        // $new_trip_user->user_id = $new_user->id;
-        // $new_trip_user->save();
+        $new_trip_user = new TripUser;
+        $new_trip_user->trip_id = $args['trip_id'];
+        $new_trip_user->user_id = $new_user->id;
+        $new_trip_user->save();
       }
     }
 
