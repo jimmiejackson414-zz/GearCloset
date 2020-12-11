@@ -4,12 +4,13 @@
     :ref="uniqueIdentifier"
     v-focus
     v-mask="mask"
-    :class="[ 'click-to-edit', active ? 'active' : 'b-none', ...customClass ]"
+    :class="[ 'click-to-edit', active ? 'active' : 'b-none', customClass ]"
     color="primary"
     dense
+    :full-width="false"
     hide-details
     outlined
-    :style="{...customStyle}"
+    :style="{...customStyle, ...localStyle}"
     :type="type"
     :value="localValue"
     @blur="handleUpdateItem($event)"
@@ -42,7 +43,7 @@
         default: () => ''
       },
       value: {
-        type: String,
+        type: [String, Number],
         default: () => ''
       }
     },
@@ -52,6 +53,15 @@
         active: false,
         localValue: this.value
       };
+    },
+
+    computed: {
+      localStyle () {
+        const inputWidth = this.value.length * 18;
+        return {
+          width: `${inputWidth > 325 ? 325 : inputWidth}px`
+        };
+      }
     },
 
     methods: {

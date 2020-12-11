@@ -84,3 +84,7 @@ span, div, input {
 .v-ripple__container {
   display: none !important;
 }
+
+.text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6, .text-p, span, div {
+  letter-spacing: 1px;
+}

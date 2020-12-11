@@ -6,14 +6,14 @@
       </div>
       <plus-button @handle-click="addListItem" />
     </div>
-    <!-- <v-data-table
-      v-if="items.length"
+    <v-data-table
+      v-if="shoppingListItems.length"
       v-resize="onResize"
       :class="['items-table', {mobile: isMobile}]"
       disable-pagination
       :headers="headers"
       hide-default-footer
-      :items="items"
+      :items="shoppingListItems"
       :mobile-breakpoint="0"
       show-select>
       <template #header.data-table-select>
@@ -36,54 +36,34 @@
           <tr
             v-for="(item, index) in items"
             :key="item.id">
-            <td class="text-start">
+            <td
+              class="text-start"
+              style="width: 10%">
               <v-simple-checkbox
                 color="primary"
                 :ripple="false"
                 :value="Boolean(item.checked)"
                 @input="updateItem($event, item, 'checked')" />
             </td>
-            <td class="text-start">
-              <span
-                v-if="editableItem !== `title${item.id}Ref`"
-                @click="setEditing(`title${item.id}Ref`)">
-                {{ item.title }}
-              </span>
-              <v-text-field
-                v-else
-                :id="`title${item.id}Ref`"
-                :ref="`title${item.id}Ref`"
-                color="primary"
-                dense
-                hide-details
-                outlined
-                type="text"
+            <td
+              class="text-start"
+              style="width: 70%">
+              <click-to-edit
+                :unique-identifier="`shoppingItemTitle${item.id}Ref`"
                 :value="item.title"
-                @blur="updateItem($event, item, 'title')"
-                @change="updateItem($event, item, 'title')"
-                @keyup.enter="updateItem($event, item, 'title')" />
+                @handle-update-item="updateItem($event, item, 'title')" />
             </td>
-            <td class="text-center">
-              <span
-                v-if="editableItem !== `quantity${item.id}Ref`"
-                @click="setEditing(`quantity${item.id}Ref`)">
-                {{ item.quantity }}
-              </span>
-              <v-text-field
-                v-else
-                :id="`quantity${item.id}Ref`"
-                :ref="`quantity${item.id}Ref`"
-                color="primary"
-                dense
-                hide-details
-                outlined
-                type="text"
+            <td
+              class="text-center quantity"
+              style="width: 10%">
+              <click-to-edit
+                :unique-identifier="`shoppingItemQuantity${item.id}Ref`"
                 :value="item.quantity"
-                @blur="updateItem($event, item, 'quantity')"
-                @change="updateItem($event, item, 'quantity')"
-                @keyup.enter="updateItem($event, item, 'quantity')" />
+                @handle-update-item="updateItem($event, item, 'quantity')" />
             </td>
-            <td class="text-end">
+            <td
+              class="text-end"
+              style="width: 10%">
               <v-btn
                 class="deleteItem"
                 color="error"
@@ -101,96 +81,111 @@
           </tr>
         </tbody>
       </template>
-    </v-data-table> -->
-    <p>
+    </v-data-table>
+    <p v-else>
       You haven't created any items for your shopping list yet!<br>Click the plus button in the top right to get started.
     </p>
   </div>
 </template>
 
 <script>
-  // import CustomIcon from '~/components/icons/CustomIcon';
+  import ClickToEdit from '~/components/ClickToEdit.vue';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import isMobile from '~/mixins/isMobile';
-  import PlusButton from '~/components/icons/PlusButton';
+  import PlusButton from '~/components/icons/PlusButton.vue';
+  import { shoppingListItemService } from '~/services';
 
   export default {
     mixins: [isMobile],
+
+    props: {
+      trip: {
+        type: Object,
+        default: () => {}
+      }
+    },
 
     data: () => ({
       deleteColor: '',
       editableItem: null,
       headers: [
-        { text: 'Item', align: 'left', sortable: true, value: 'title', width: '60%' },
-        { text: 'Quantity', align: 'center', sortable: true, value: 'quantity', width: '40%' },
-        { text: '', align: 'end', sortable: false, value: 'actions', width: '1%' }
-      ],
-      items: [
-        { id: 9, title: 'Smartwater Bottles', checked: 1, quantity: 2, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' },
-        { id: 10, title: 'Beef Jerkey', checked: 0, quantity: 1, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' },
-        { id: 11, title: 'Clif Bars', checked: 1, quantity: 4, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' },
-        { id: 12, title: 'Ramen', checked: 0, quantity: 6, created_at: '2020-03-08 11:31:45', updated_at: '2020-03-08 11:31:45' }
+        { text: 'Item', align: 'left', sortable: true, value: 'title', width: '70%' },
+        { text: 'Quantity', align: 'center', sortable: true, value: 'quantity', width: '10%' },
+        { text: '', align: 'end', sortable: false, value: 'actions', width: '10%' }
       ]
     }),
 
     computed: {
       allSelected () {
-        return this.items.every(item => item.checked);
+        return this.shoppingListItems.every(item => item.checked);
+      },
+      shoppingListItems () {
+        if (this.trip) {
+          return this.trip.shoppingListItems;
+        }
+        return [];
       }
     },
 
     methods: {
       addListItem () {
-        console.log('addListItem');
-        const hasItems = !!this.items[this.items.length - 1];
-        this.items.push({
-          id: hasItems ? this.items[this.items.length - 1].id + 1 : 1,
-          title: 'Test',
-          checked: 0,
-          quantity: 0,
-          created_at: Date.now(),
-          updated_at: Date.now()
-        });
+        const payload = {
+          fields: { title: 'New Item', checked: false, trip: this.trip.id, quantity: 0 },
+          apollo: this.$apollo
+        };
+
+        shoppingListItemService.create(payload);
       },
-      removeItem (item, index) {
-        this.items.splice(index, 1);
+      removeItem (item) {
+        const payload = {
+          fields: { id: item.id, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        shoppingListItemService.destroy(payload);
       },
       setEditing (ref) {
         this.editableItem = ref;
         this.$nextTick(() => document.querySelector(`#${ref}`).focus());
       },
       updateAllItems (value) {
-        this.items.forEach(i => this.updateItem(value, i, 'checked'));
+        // TODO: Come up with batch update mutation instead
+        this.trip.shoppingListItems.forEach(i => this.updateItem(value, i, 'checked'));
       },
       updateItem (event, item, field) {
-        // TODO: Need to handle editing better overall (or edit in modal)
         this.editableItem = null;
 
         // return if value hasn't changed
         if (event === String(item[field])) { return; }
-        item[field] = event;
 
-        console.log('updateItem');
-        // await shoppingListService.update(item);
+        const payload = {
+          fields: { id: item.id, [field]: event, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        shoppingListItemService.update(payload);
       }
     },
 
     mounted () {
-      this.deleteColor = $nuxt.$vuetify.theme.themes.light.secondary;
+      this.deleteColor = $nuxt.$vuetify.theme.themes.light.error;
     },
 
     components: {
-      // CustomIcon,
+      ClickToEdit,
+      CustomIcon,
       PlusButton
     }
   };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'widget-styles';
   @import '~/css/list-transition';
+</style>
 
+<style lang="scss">
   .v-data-table.items-table {
     background: transparent;
+    overflow-y: scroll;
 
     thead {
       th.text-start, th.text-left, th.text-center {
@@ -206,6 +201,12 @@
 
         td.text-start {
           padding: 0 8px;
+        }
+
+        td.text-center.quantity {
+          input {
+            text-align: center;
+          }
         }
 
         td.text-end {

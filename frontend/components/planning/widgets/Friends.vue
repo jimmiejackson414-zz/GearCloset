@@ -1,16 +1,16 @@
 <template>
   <div class="widget-wrapper">
     <div class="widget-header">
-      <!-- <div class="text-h6">
-        Friends <span class="text-caption grey7--text ml-3 mb-1">({{ friendCount }})</span>
-      </div> -->
+      <div class="text-h6">
+        Friends <span class="text-caption grey7--text ml-3">({{ friendCount }})</span>
+      </div>
       <plus-button @handle-click="handleInviteFriend" />
     </div>
-    <!-- <div
-      v-if="currentUser.friends.length"
+    <div
+      v-if="friends.length"
       class="friends-wrapper">
       <v-tooltip
-        v-for="friend in currentUser.friends"
+        v-for="friend in friends"
         :key="friend.id"
         color="dark-grey"
         nudge-top
@@ -37,45 +37,78 @@
                 :src="friend.avatar_url">
               <span
                 v-else
-                class="white--text text-body-1 font-weight-bold">{{ friend | initials }}</span>
+                class="white--text text-body-1 font-weight-bold">
+                {{ friendInitials(friend) }}
+              </span>
             </v-avatar>
+            <div
+              v-if="isPendingInvite(friend)"
+              class="pending-wrapper">
+              <p>Pending</p>
+            </div>
           </v-btn>
         </template>
         <span class="text-body-2">{{ friend | prettyName }}</span>
       </v-tooltip>
-    </div> -->
-    <p>
+    </div>
+    <p v-else>
       You haven't added any friends yet! Click on the plus button in the top right to get started.
     </p>
-    <invite-friend-modal v-model="modalOpen" />
+    <invite-friend-modal
+      v-model="modalOpen"
+      :friends="friends"
+      :trip="trip"
+      @handle-reset-modal="resetModal" />
   </div>
 </template>
 
 <script>
-  import currentUser from '~/mixins/currentUser';
   import PlusButton from '~/components/icons/PlusButton';
 
   export default {
-    mixins: [currentUser],
+    props: {
+      currentUser: {
+        type: Object,
+        default: () => {}
+      },
+      trip: {
+        type: Object,
+        default: () => {}
+      }
+    },
 
     data: () => ({
       modalOpen: false
     }),
 
     computed: {
+      friends () {
+        if (!this.trip) { return []; }
+        return this.trip.users.filter(friend => friend.id !== this.currentUser.id);
+      },
       friendCount () {
-        return this.currentUser.friends.length;
+        return this.friends.length;
       }
+
     },
 
     methods: {
+      friendInitials (friend) {
+        return this.isPendingInvite(friend) ? '@' : `${this.$options.filters.initials(friend)}`;
+      },
       handleInviteFriend () {
         this.modalOpen = true;
+      },
+      isPendingInvite (friend) {
+        return friend.pending_invite;
+      },
+      resetModal () {
+        this.modalOpen = false;
       }
     },
 
     components: {
-      InviteFriendModal: () => import(/* webpackPrefetch: true */ '~/components/modals/InviteFriendModal'),
+      InviteFriendModal: () => import(/* webpackPrefetch: true */ '~/components/modals/InviteFriendModal.vue'),
       PlusButton
     }
   };
@@ -93,11 +126,26 @@
       .v-avatar {
         transition: transform 0.15s $cubicBezier;
       }
+
       &:hover {
         box-shadow: 0 15px 20px 0 rgba(42, 51, 83, 0.12), 0 5px 15px rgba(0, 0, 0, 0.06) !important;
 
         .v-avatar {
           transform: scale(1.1);
+        }
+      }
+
+      .pending-wrapper {
+        background-color: $accentDarkest;
+        border-radius: 5px;
+        bottom: 0;
+        padding: 5px;
+        position: absolute;
+
+        p {
+          color: white;
+          font-size: 0.7rem;
+          margin: 0;
         }
       }
     }

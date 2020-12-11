@@ -5,9 +5,9 @@ export default {
     currentUser: {
       query: meQuery
     }
-  },
+  }
 
-  data: () => ({
-    loading: 0
-  })
+  // data: () => ({
+  //   loading: 1
+  // })
 };

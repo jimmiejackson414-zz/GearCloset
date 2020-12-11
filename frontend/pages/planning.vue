@@ -1,80 +1,93 @@
 <template>
-  <v-container
-    v-if="!loading"
-    class="planning-container"
-    grid-list-lg
-    mx-auto>
-    <div class="header">
-      <div class="page-title text-h4 text-center mt-8 mb-4">
-        Planning
-      </div>
-      <div class="actions d-flex mt-8 mb-4">
-        <v-select
-          dense
-          hide-details
-          :items="items"
-          label="Pick a Trip"
-          outlined
-          value="Foo"
-          @change="handleUpdateList($event)" />
-        <ellipsis-button
-          class="ellipsis"
-          :items="listItems"
-          @create-trip="handleCreateTrip"
-          @delete-trip="handleDeleteTrip" />
-      </div>
-    </div>
-    <v-layout
-      row
-      wrap>
-      <!-- Selected Pack Widget -->
-      <v-flex
-        md6
-        xs12>
-        <selected-pack />
-      </v-flex>
+  <ApolloQuery
+    ref="tripsQueryRef"
+    :query="require('~/apollo/queries/content/trips.gql')"
+    @result="handleData">
+    <template v-slot="{ result: { data, error, loading }}">
+      <v-container
+        v-if="!loading"
+        class="planning-container"
+        grid-list-lg
+        mx-auto>
+        <div class="header">
+          <div class="page-title text-h4 text-center mt-8 mb-4">
+            Planning
+          </div>
+          <div class="actions d-flex mt-8 mb-4">
+            <v-select
+              v-model="selectedTrip"
+              dense
+              hide-details
+              item-text="name"
+              item-value="id"
+              :items="trips"
+              label="Pick a Trip"
+              outlined
+              return-object />
+            <ellipsis-button
+              class="ellipsis"
+              :items="listItems"
+              @create-trip="handleCreateTrip"
+              @delete-trip="handleDeleteTrip" />
+          </div>
+        </div>
+        <v-layout
+          row
+          wrap>
+          <!-- Selected Pack Widget -->
+          <v-flex
+            md6
+            xs12>
+            <selected-pack
+              :trip="selectedTrip"
+              @handle-refetch-trips="refetchTrips" />
+          </v-flex>
 
-      <!-- Friends Widget -->
-      <v-flex
-        md6
-        xs12>
-        <friends />
-      </v-flex>
+          <!-- Friends Widget -->
+          <v-flex
+            md6
+            xs12>
+            <friends
+              :current-user="currentUser"
+              :trip="selectedTrip" />
+          </v-flex>
 
-      <!-- Trip Details Widget -->
-      <v-flex
-        md6
-        xs12>
-        <trip-details />
-      </v-flex>
+          <!-- Trip Details Widget -->
+          <v-flex
+            md6
+            xs12>
+            <trip-details :trip="selectedTrip" />
+          </v-flex>
 
-      <v-flex
-        md6
-        xs12>
-        <hike-details />
-      </v-flex>
+          <v-flex
+            md6
+            xs12>
+            <hike-details :trip="selectedTrip" />
+          </v-flex>
 
-      <!-- Todo List Widget -->
-      <v-flex
-        md6
-        xs12>
-        <todo-list />
-      </v-flex>
+          <!-- Todo List Widget -->
+          <v-flex
+            md6
+            xs12>
+            <todo-list :trip="selectedTrip" />
+          </v-flex>
 
-      <!-- Shopping List Widget -->
-      <v-flex
-        md6
-        xs12>
-        <shopping-list />
-      </v-flex>
-    </v-layout>
+          <!-- Shopping List Widget -->
+          <v-flex
+            md6
+            xs12>
+            <shopping-list :trip="selectedTrip" />
+          </v-flex>
+        </v-layout>
 
-    <delete-confirm-modal
-      v-model="deleteTripModalOpen"
-      item="trip" />
-  </v-container>
+        <delete-confirm-modal
+          v-model="deleteTripModalOpen"
+          item="trip" />
+      </v-container>
 
-  <loading-page v-else />
+      <loading-page v-else />
+    </template>
+  </ApolloQuery>
 </template>
 
 <script>
@@ -91,28 +104,25 @@
   export default {
     name: 'Planning',
 
-    mixins: [currentUser],
-
     middleware: 'authenticated',
+
+    mixins: [currentUser],
 
     data: () => ({
       deleteTripModalOpen: false,
-      items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
       listItems: [
         { title: 'Create trip', event: 'create-trip' },
         { title: 'Delete trip', event: 'delete-trip', customClass: 'error--text' }
-      ]
+      ],
+      selectedTrip: null,
+      trips: null
     }),
 
-    computed: {
-      // TODO: Need to create db table to tie all of a trip's elements
-      // together (selectedPack, friends, details, etc) and return here
-      // trips () {
-      //   return this.currentUser.trips;
-      // }
-    },
-
     methods: {
+      handleData ({ data: { trips } }) {
+        this.selectedTrip = trips[0];
+        this.trips = trips;
+      },
       handleCreateTrip () {
         console.log('createTrip');
       },
@@ -120,8 +130,8 @@
         console.log('deleteTrip');
         this.deleteTripModalOpen = true;
       },
-      handleUpdateList (e) {
-        console.log('handleUpdateList', e);
+      refetchTrips () {
+        this.$refs.tripsQueryRef.getApolloQuery().refetch();
       }
     },
 

@@ -10,7 +10,19 @@ type Item {
     created_at: DateTime!
     updated_at: DateTime!
     position: Int!
+    category_id: ID
 
     categories: [Category!]! @belongsToMany
     pivot: CategoryItemPivot
 }
+
+# input ItemInput {
+#     name: String
+#     weight: Float
+#     price: Int
+#     generic_type: String
+#     consumable: Boolean
+#     worn: Boolean
+#     quantity: Int
+#     category_id: ID
+# }

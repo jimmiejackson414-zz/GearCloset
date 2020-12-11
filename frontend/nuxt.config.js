@@ -27,7 +27,7 @@ export default {
    ** PrivateRuntimeConfig (API Secrets, etc.)
    */
   privateRuntimeConfig: {
-
+    nodeEnv: process.env.NODE_ENV || 'development'
   },
 
   /*
@@ -74,18 +74,22 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: process.env.NUXT_ENV_BACKEND_API_URL
+        httpEndpoint: process.env.NUXT_ENV_BACKEND_API_URL,
+        inMemoryCacheOptions: {
+          addTypename: true
+        }
       }
     },
     defaultOptions: {
       $query: {
-        loadingKey: 'loading',
-        fetchPolicy: 'cache-and-network'
+        loadingKey: 'loading'
       }
     },
     cookieAttributes: {
       expires: 7 // optional, default 7 days
-    }
+    },
+    // watchLoading: '~/apollo/loadingHandler',
+    errorHandler: '~/apollo/errorHandler'
   },
 
   /*
@@ -178,22 +182,27 @@ export default {
     }
   },
 
+  // modulesDir: ['../node_modules'],
+
   /*
    ** Build configuration
    */
   build: {
     standalone: true,
     transpile: ['vee-validate/dist/rules'],
-    extend (config, { isDev, isClient }) {
-      // Run ESLint on save
-      if (isDev && isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        });
-      }
+    externals: {
+      moment: 'moment'
     }
+    // extend (config, { isDev, isClient }) {
+    //   // Run ESLint on save
+    //   if (isDev && isClient) {
+    //     config.module.rules.push({
+    //       enforce: 'pre',
+    //       test: /\.(js|vue)$/,
+    //       loader: 'eslint-loader',
+    //       exclude: /(node_modules)/
+    //     });
+    //   }
+    // }
   }
 };

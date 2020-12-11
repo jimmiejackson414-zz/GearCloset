@@ -17,6 +17,7 @@ class Notification extends Model
         'messaged', 'viewed'
     ];
 
+    // define relationships
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

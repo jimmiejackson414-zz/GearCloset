@@ -6,7 +6,7 @@
       </div>
       <plus-button @handle-click="addTodo" />
     </div>
-    <!-- <v-data-table
+    <v-data-table
       v-if="todos.length"
       v-resize="onResize"
       :class="['todos-table', {mobile: isMobile}]"
@@ -28,7 +28,7 @@
           is="transition-group"
           name="list">
           <tr
-            v-for="(item, index) in items"
+            v-for="item in items"
             :key="item.id">
             <td class="text-start">
               <v-simple-checkbox
@@ -49,7 +49,7 @@
                 color="error"
                 icon
                 :ripple="false"
-                @click="removeTodo(item, index)">
+                @click="removeTodo(item)">
                 <custom-icon
                   class="delete-icon"
                   :fill="deleteColor"
@@ -61,21 +61,29 @@
           </tr>
         </tbody>
       </template>
-    </v-data-table> -->
-    <p>
+    </v-data-table>
+    <p v-else>
       You haven't created any items for your shopping list yet!<br>Click the plus button in the top right to get started.
     </p>
   </div>
 </template>
 
 <script>
-  // import ClickToEdit from '~/components/ClickToEdit';
-  // import CustomIcon from '~/components/icons/CustomIcon';
+  import ClickToEdit from '~/components/ClickToEdit';
+  import CustomIcon from '~/components/icons/CustomIcon';
   import isMobile from '~/mixins/isMobile';
+  import { todoService } from '~/services';
   import PlusButton from '~/components/icons/PlusButton';
 
   export default {
     mixins: [isMobile],
+
+    props: {
+      trip: {
+        type: Object,
+        default: () => {}
+      }
+    },
 
     data: () => ({
       deleteColor: '',
@@ -83,72 +91,79 @@
       headers: [
         { text: 'Item', value: 'title', align: 'left', sortable: true, width: '95%' },
         { text: '', value: 'delete', align: 'left', sortable: false, width: '5%' }
-      ],
-      todos: [
-        { id: 28, title: 'Book Car Rental', checked: 0, created_at: '2020-03-08 11:31:27', updated_at: '2020-03-08 11:31:27' },
-        { id: 29, title: 'Call hostel', checked: 1, created_at: '2020-04-08 11:31:27', updated_at: '2020-04-08 11:31:27' }
       ]
     }),
 
     computed: {
       allSelected () {
         return this.todos.every(item => item.checked);
+      },
+      todos () {
+        if (this.trip) {
+          return this.trip.todos;
+        }
+        return [];
       }
     },
 
     methods: {
       addTodo () {
-        console.log('addTodo');
-        const hasTodos = !!this.todos[this.todos.length - 1];
-        this.todos.push({
-          id: hasTodos ? this.todos[this.todos.length - 1].id + 1 : 1,
-          title: 'Test',
-          checked: 0,
-          created_at: Date.now(),
-          updated_at: Date.now()
-        });
+        const payload = {
+          fields: { title: 'New Todo', checked: false, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+
+        todoService.create(payload);
       },
-      removeTodo (todo, index) {
-        this.todos.splice(index, 1);
+      removeTodo (todo) {
+        const payload = {
+          fields: { id: todo.id, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        todoService.destroy(payload);
       },
       setEditing (ref) {
         this.editableItem = ref;
         this.$nextTick(() => document.querySelector(`#${ref}`).focus());
       },
       updateAllItems (value) {
-        this.todos.forEach(i => this.updateItem(value, i, 'checked'));
+        // TODO: Come up with batch update mutation instead
+        this.trip.todos.forEach(t => this.updateItem(value, t, 'checked'));
       },
       updateItem (value, todo, field) {
-        if (value === String(todo[field])) {
-          // return if value hasn't changed
-          return;
-        } else {
-          todo[field] = value;
-        }
+        this.editableItem = null;
+        // return if value hasn't changed
+        if (value === String(todo[field])) { return; }
 
-        console.log('updateItem');
-        // await todoService.update(todo);
+        const payload = {
+          fields: { id: todo.id, [field]: value, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        todoService.update(payload);
       }
     },
 
     mounted () {
-      this.deleteColor = $nuxt.$vuetify.theme.themes.light.secondary;
+      this.deleteColor = $nuxt.$vuetify.theme.themes.light.error;
     },
 
     components: {
-      // ClickToEdit,
-      // CustomIcon,
+      ClickToEdit,
+      CustomIcon,
       PlusButton
     }
   };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'widget-styles';
   @import '~/css/list-transition';
+</style>
 
+<style lang="scss">
   .v-data-table.todos-table {
     background: transparent;
+    overflow-y: scroll;
 
     thead {
       th.text-start {

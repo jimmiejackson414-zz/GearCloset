@@ -44,6 +44,10 @@
         type: String,
         default: ''
       },
+      selectedItem: {
+        type: Object,
+        default: () => {}
+      },
       value: {
         type: Boolean,
         default: false

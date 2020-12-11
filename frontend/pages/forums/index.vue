@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  import categoriesQuery from '~/apollo/queries/forum/categories.gql';
+  // import categoriesQuery from '~/apollo/queries/forum/categories.gql';
   import CategoryBox from '~/components/forums/CategoryBox.vue';
   import currentUser from '~/mixins/currentUser';
   import LoadingPage from '~/components/LoadingPage.vue';
@@ -65,21 +65,32 @@
 
     middleware: 'authenticated',
 
-    apollo: {
-      categories: {
-        query: categoriesQuery
-      }
-    },
-
     data: () => ({
+      loading: 1,
       updateSubscriptionModalOpen: false,
       upgradeModalOpen: false
     }),
+
+    computed: {
+      categories: () => []
+    },
 
     methods: {
       handleOpenUpgradeForm () {
         this.upgradeModalOpen = true;
       }
+    },
+
+    async mounted () {
+      // const { forumCategories } = await this.$store.dispatch('entities/simpleQuery', {
+      //   query: categoriesQuery,
+      //   variables: {},
+      //   bypassCache: false
+      // });
+      // ForumCategory.insert({
+      //   data: [...forumCategories]
+      // });
+      // this.loading = 0;
     },
 
     components: {
@@ -99,5 +110,10 @@
 </script>
 
 <style lang="scss" scoped>
-
+  .header {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 </style>

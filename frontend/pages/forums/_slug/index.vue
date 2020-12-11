@@ -1,6 +1,8 @@
 <template>
-  <v-container class="category-slug-container">
-    <v-row v-if="!loading">
+  <v-container
+    v-if="!loading"
+    class="category-slug-container">
+    <v-row>
       <v-col
         cols="12"
         md="8"
@@ -87,8 +89,6 @@
       </v-col>
     </v-row>
 
-    <loading-page v-else />
-
     <!-- Full Screen Upgrade -->
     <full-screen-upgrade
       v-model="upgradeModalOpen"
@@ -98,6 +98,8 @@
     <!-- Create New Topic Modal -->
     <create-new-topic-modal v-model="createNewTopicModal" />
   </v-container>
+
+  <loading-page v-else />
 </template>
 
 <script>
@@ -105,7 +107,7 @@
   import relativeTime from 'dayjs/plugin/relativeTime';
   import currentUser from '~/mixins/currentUser';
   import LoadingPage from '~/components/LoadingPage.vue';
-  import subCategoryQuery from '~/apollo/queries/forum/subcategory.gql';
+  // import subCategoryQuery from '~/apollo/queries/forum/subcategory.gql';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
@@ -115,33 +117,34 @@
 
     middleware: 'authenticated',
 
-    apollo: {
-      subcategory: {
-        query: subCategoryQuery,
-        variables () {
-          return {
-            slug: this.$route.params.slug
-          };
-        },
-        result ({ data: { subcategory } }) {
-          this.items = subcategory.posts.sort((a, b) => b.pinned - a.pinned);
-          this.breadcrumbs[1] = { text: subcategory.title, disabled: true };
-        }
-      }
-    },
+    // apollo: {
+    //   subcategory: {
+    //     query: subCategoryQuery,
+    //     variables () {
+    //       return {
+    //         slug: this.$route.params.slug
+    //       };
+    //     },
+    //     result ({ data: { subcategory } }) {
+    //       this.items = subcategory.posts.sort((a, b) => b.pinned - a.pinned);
+    //       this.breadcrumbs[1] = { text: subcategory.title, disabled: true };
+    //     }
+    //   }
+    // },
 
     data () {
       return {
+        breadcrumbs: [
+          { text: 'Forums', disabled: false, to: '/forums' },
+          { text: '', disabled: true }
+        ],
         createNewTopicModal: false,
         headers: [
           { text: 'Post', align: 'start', sortable: false, value: 'title' },
           { text: 'Comments', align: 'center', sortable: false, value: 'commentCount', filterable: false },
           { text: 'Last Post', align: 'center', sortable: false, value: 'last_post', filterable: false }
         ],
-        breadcrumbs: [
-          { text: 'Forums', disabled: false, to: '/forums' },
-          { text: '', disabled: true }
-        ],
+        loading: 1,
         items: null,
         search: '',
         warningDarkest: '',
@@ -152,7 +155,8 @@
     computed: {
       pageTitle () {
         return this.subcategory ? this.subcategory.title : '';
-      }
+      },
+      subcategory: () => []
     },
 
     methods: {
@@ -184,6 +188,29 @@
     created () {
       dayjs.extend(relativeTime);
       this.warningDarkest = this.$nuxt.$vuetify.theme.themes.light.warningDarkest;
+    },
+
+    async mounted () {
+      // const { subcategory } = await this.$store.dispatch('entities/simpleQuery', {
+      //   query: subCategoryQuery,
+      //   variables: {
+      //     slug: this.$route.params.slug
+      //   },
+      //   bypassCache: false
+      // });
+      // ForumSubcategory.insert({
+      //   data: subcategory
+      // });
+      // this.loading = 0;
+    },
+
+    watch: {
+      subcategory (val) {
+        if (val) {
+          this.items = this.subcategory.posts.sort((a, b) => b.pinned - a.pinned);
+          this.breadcrumbs[1] = { text: this.subcategory.title, disabled: true };
+        }
+      }
     },
 
     components: {

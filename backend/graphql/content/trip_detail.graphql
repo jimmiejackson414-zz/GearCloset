@@ -1,0 +1,26 @@
+extend type Mutation @guard(with: ["api"]) {
+    createTripDetail(input: TripDetailInput! @spread): TripDetail @create
+    deleteTripDetail(id: ID!): TripDetail @delete
+    updateTripDetail(id: ID! input: TripDetailInput! @spread): TripDetail @update
+}
+
+type TripDetail {
+    id: ID!
+    title: String
+    url: String
+    value: String
+    type: String
+    created_at: DateTime!
+    updated_at: DateTime!
+    trip_id: ID
+
+    trip: Trip! @belongsTo
+}
+
+input TripDetailInput {
+    title: String
+    url: String
+    value: String
+    type: String
+    trip_id: ID
+}

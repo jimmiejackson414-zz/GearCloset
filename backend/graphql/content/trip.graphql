@@ -1,0 +1,46 @@
+extend type Query @guard(with: ["api"]) {
+    trip(id: ID! @eq): Trip! @find
+    trips: [Trip]! @field(resolver: "TripsQuery@find_by_user")
+}
+
+extend type Mutation @guard(with: ["api"]) {
+    setSelectedPack(input: SelectedPackInput @spread): Trip! @field(resolver: "TripMutator@setSelectedPack")
+    updateTrip(id: ID! input: TripInput! @spread): Trip @update
+}
+
+type Trip {
+    id: ID!
+    name: String
+    description: String
+    starting_point: String
+    ending_point: String
+    created_at: DateTime!
+    updated_at: DateTime!
+    owner_id: ID
+    pack_id: ID
+
+    pack: Pack @belongsTo
+    shoppingListItems(orderBy: _ @orderBy(columnsEnum: "CreatedAtColumn")): [ShoppingListItem]! @hasMany
+    todos(orderBy: _ @orderBy(columnsEnum: "CreatedAtColumn")): [Todo]! @hasMany
+    tripDetails(type: String @where(operator: "=", key: "type") orderBy: _ @orderBy(columnsEnum: "CreatedAtColumn")): [TripDetail]! @hasMany
+    owner: User! @belongsTo
+    users: [User]! @hasMany
+}
+
+input TripInput {
+    name: String
+    description: String
+    starting_point: String
+    ending_point: String
+    owner_id: ID
+    pack_id: ID
+}
+
+# input CreateTripBelongsTo {
+#     connect: ID
+# }
+
+input SelectedPackInput {
+    trip_id: ID!
+    pack_id: ID!
+}

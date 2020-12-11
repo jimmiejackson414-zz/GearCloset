@@ -1,5 +1,5 @@
 query Subcategory($slug: String!) {
-  subcategory:forumSubcategoryBySlug(slug: $slug) {
+  subcategory: forumSubcategoryBySlug(slug: $slug) {
     id
     title
     slug
@@ -23,7 +23,7 @@ query Subcategory($slug: String!) {
         created_at
         updated_at
 
-        author:user {
+        author: user {
           id
           first_name
           last_name

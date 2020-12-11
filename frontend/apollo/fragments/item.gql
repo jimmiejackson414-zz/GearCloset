@@ -1,0 +1,13 @@
+fragment item on Item {
+  id
+  name
+  weight
+  price
+  position
+  generic_type
+  consumable
+  worn
+  quantity
+  created_at
+  updated_at
+}

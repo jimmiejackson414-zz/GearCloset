@@ -1,10 +1,30 @@
+extend type Mutation @guard(with: ["api"]) {
+    createPack(input: PackInput! @spread): Pack @create
+    deletePack(id: ID!): Pack @delete
+    updatePack(id: ID! input: PackInput! @spread): Pack @update
+}
+
+extend type Query @guard(with: ["api"]) {
+    packs: [Pack!]! @field(resolver: "PacksQuery@find_by_user")
+}
+
 type Pack {
     id: ID!
     name: String!
     active: Boolean!
+    theme: String!
     created_at: DateTime!
     updated_at: DateTime!
+    user_id: ID
 
     categories: [Category!]! @hasMany
+    trips: [Trip]! @hasMany
     user: User! @belongsTo
+}
+
+input PackInput {
+    name: String
+    active: Boolean
+    theme: String
+    user_id: ID
 }

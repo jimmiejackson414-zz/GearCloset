@@ -3,7 +3,13 @@ type ForumComment {
     text: String!
     created_at: DateTime!
     updated_at: DateTime!
+    user_id: ID
+    forum_post_id: ID
 
     post: ForumPost! @belongsTo
     user: User! @belongsTo
 }
+
+# input ForumCommentInput {
+#     text: String
+# }

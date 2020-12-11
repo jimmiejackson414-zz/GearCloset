@@ -4,27 +4,35 @@
       <div class="text-h6">
         Trip Details
       </div>
-      <plus-button @handle-click="tripDetailsModalOpen = true" />
+      <plus-button @handle-click="openCreate" />
     </div>
     <div class="trip-details-wrapper">
-      <!-- <div class="row">
-        <div class="col-12 d-flex align-center">
-          <h2>{{ startingPoint }}</h2>
+      <div class="row d-inline-flex">
+        <div class="col-12 d-flex align-center pl-0">
+          <click-to-edit
+            :custom-style="tripPointsStyles"
+            unique-identifier="tripStartingPointRef"
+            :value="trip ? trip.starting_point : ''"
+            @handle-update-item="updateTrip($event, 'starting_point')" />
           <custom-icon
             :fill="arrowColor"
             :height="20"
             name="arrow-right"
             :width="40" />
-          <h2>{{ endingPoint }}</h2>
+          <click-to-edit
+            :custom-style="tripPointsStyles"
+            unique-identifier="tripEndingPointRef"
+            :value="trip ? trip.ending_point: ''"
+            @handle-update-item="updateTrip($event, 'ending_point')" />
         </div>
       </div>
       <transition-group
-        v-if="details.length"
+        v-if="tripDetails.length"
         class="trip-details"
         name="list"
         tag="ul">
         <li
-          v-for="detail in details"
+          v-for="detail in tripDetails"
           :key="detail.id"
           class="detail">
           <span class="font-weight-bold">{{ detail.title }}</span>
@@ -32,73 +40,128 @@
             class="value"
             :href="`${detail.url}`"
             rel="noopener noreferrer"
-            target="_blank">{{ detail.url_title }}</a>
+            target="_blank">{{ detail.value }}</a>
           <ellipsis-button
             class="ellipsis"
             :items="ellipsisItems"
             @delete-detail="openDelete(detail)"
             @update-detail="openUpdate(detail)" />
         </li>
-      </transition-group> -->
+      </transition-group>
 
-      <p>
+      <p v-else>
         You haven't added any details yet!
       </p>
     </div>
 
-    <trip-details-modal
-      v-model="tripDetailsModalOpen"
+    <create-trip-detail-modal
+      v-model="createTripDetailModalOpen"
+      detail-type="trip"
+      :trip="trip"
+      @handle-reset-modal="resetModal" />
+
+    <update-trip-detail-modal
+      v-model="updateTripDetailModalOpen"
       :detail="selectedDetail"
+      :trip="trip"
       @handle-reset-modal="resetModal" />
 
     <delete-confirm-modal
       v-model="removeDetailModalOpen"
       item="detail"
-      :selected-detail="selectedDetail"
-      @handle-remove-item="removeDetail" />
+      :selected-item="selectedDetail"
+      @handle-remove-item="removeDetail"
+      @handle-reset-modal="resetModal" />
   </div>
 </template>
 
 <script>
-  // import CustomIcon from '~/components/icons/CustomIcon';
-  // import EllipsisButton from '~/components/icons/EllipsisButton';
+  import ClickToEdit from '~/components/ClickToEdit.vue';
+  import CustomIcon from '~/components/icons/CustomIcon';
+  import EllipsisButton from '~/components/icons/EllipsisButton';
   import PlusButton from '~/components/icons/PlusButton';
+  import { tripDetailService, tripService } from '~/services';
 
   export default {
+    props: {
+      trip: {
+        type: Object,
+        default: () => {}
+      }
+    },
+
     data: () => ({
       arrowColor: '',
-      details: [
-        { id: 1, title: 'Flight 1', url: 'https://www.southwest.com', url_title: 'SW436', created_at: '2020-03-09 17:08:21', updated_at: '2020-03-09 17:08:21' },
-        { id: 2, title: 'Flight 2', url: 'https://www.southwest.com', url_title: 'SW38', created_at: '2020-03-09 17:08:21', updated_at: '2020-03-09 17:08:21' },
-        { id: 3, title: 'Car Rental', url: 'https://www.avis.com', url_title: 'Avis', created_at: '2020-03-09 17:08:21', updated_at: '2020-03-09 17:08:21' },
-        { id: 4, title: 'Food Drop', url: 'https://www.standingbearhostel.com', url_title: 'Standing Bear Hostel', created_at: '2020-03-09 17:08:21', updated_at: '2020-03-09 17:08:21' },
-        { id: 5, title: 'Hostel', url: 'https://www.blackrockhostel.com', url_title: 'Black Rock Hostel', created_at: '2020-03-09 17:08:21', updated_at: '2020-03-09 17:08:21' }
-      ],
+      createTripDetailModalOpen: false,
       ellipsisItems: [
         { title: 'Update', event: 'update-detail' },
-        { title: 'Delete', event: 'delete-detail' }
+        { title: 'Delete', event: 'delete-detail', customClass: 'error--text' }
       ],
-      endingPoint: 'Mt. Whitney',
       removeDetailModalOpen: false,
       selectedDetail: null,
-      startingPoint: 'Yosemite',
-      tripDetailsModalOpen: false
+      updateTripDetailModalOpen: false
+
     }),
 
+    computed: {
+      tripDetails () {
+        if (!this.trip) { return []; }
+        return this.trip.tripDetails.filter(detail => detail.type === 'trip');
+      },
+      tripPointsStyles () {
+        return {
+          fontSize: '1.5em',
+          fontWeight: 'bold',
+          letterSpacing: '1px'
+        };
+      }
+    },
+
     methods: {
+      openCreate () {
+        this.selectedDetail = { type: 'trip' };
+        this.$nextTick(() => {
+          this.createTripDetailModalOpen = true;
+        });
+      },
       openDelete (detail) {
         this.selectedDetail = detail;
-        this.removeDetailModalOpen = true;
+        this.$nextTick(() => {
+          this.removeDetailModalOpen = true;
+        });
       },
       openUpdate (detail) {
         this.selectedDetail = detail;
-        this.tripDetailsModalOpen = true;
+        this.$nextTick(() => {
+          this.updateTripDetailModalOpen = true;
+        });
       },
-      removeDetail () {
-        console.log('removeDetail');
+      removeDetail (detail) {
+        const payload = {
+          fields: { id: detail.id, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        tripDetailService.destroy(payload);
       },
       resetModal () {
+        this.createTripDetailModalOpen = false;
+        this.updateTripDetailModalOpen = false;
         this.selectedDetail = null;
+      },
+      updateTrip (e, field) {
+        console.log({ e });
+        console.log({ field });
+        // return if value hasn't changed
+        if (e === this.trip[field]) { return; }
+
+        const payload = {
+          fields: {
+            id: this.trip.id,
+            [field]: e
+          },
+          apollo: this.$apollo
+        };
+        tripService.update(payload);
       }
     },
 
@@ -107,11 +170,13 @@
     },
 
     components: {
-      // CustomIcon,
+      ClickToEdit,
+      CreateTripDetailModal: () => import(/* webpackPrefetch: true */'~/components/modals/CreateTripDetailModal.vue'),
+      CustomIcon,
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
-      // EllipsisButton,
+      EllipsisButton,
       PlusButton,
-      TripDetailsModal: () => import(/* webpackPrefetch: true */ '~/components/modals/TripDetailsModal')
+      UpdateTripDetailModal: () => import(/* webpackPrefetch: true */'~/components/modals/UpdateTripDetailModal.vue')
     }
   };
 </script>

@@ -1,9 +1,10 @@
 <template>
   <v-container
+    v-if="!loading"
     class="post-container"
     grid-list-lg
     mx-auto>
-    <v-row v-if="!loading">
+    <v-row>
       <v-col
         cols="12"
         md="8"
@@ -58,8 +59,6 @@
       </v-col>
     </v-row>
 
-    <loading-page v-else />
-
     <!-- Full Screen Upgrade -->
     <full-screen-upgrade
       v-model="upgradeModalOpen"
@@ -80,13 +79,15 @@
       :selected-item="selectedPost"
       @handle-reset-modal="handleResetModal" />
   </v-container>
+
+  <loading-page v-else />
 </template>
 
 <script>
   import currentUser from '~/mixins/currentUser';
   import LoadingPage from '~/components/LoadingPage.vue';
   import PostCard from '~/components/forums/PostCard.vue';
-  import postQuery from '~/apollo/queries/forum/post.gql';
+  // import postQuery from '~/apollo/queries/forum/post.gql';
   import TipTapEditor from '~/components/TipTapEditor';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
@@ -97,21 +98,6 @@
 
     middleware: 'authenticated',
 
-    apollo: {
-      post: {
-        query: postQuery,
-        variables () {
-          return {
-            slug: this.$route.params.post_slug
-          };
-        },
-        result ({ data: { post } }) {
-          this.items[1] = { text: post.subcategory.title, disabled: false, to: `/forums/${post.subcategory.slug}` };
-          this.items[2] = { text: post.title, disabled: true };
-        }
-      }
-    },
-
     data () {
       return {
         deletePostModalOpen: false,
@@ -120,6 +106,7 @@
           { text: '', disabled: false, to: '' },
           { text: '', disabled: true }
         ],
+        loading: 1,
         reportPostModalOpen: false,
         selectedPost: null,
         upgradeModalOpen: false
@@ -133,8 +120,9 @@
       pageTitle () {
         return this.post ? this.post.title : '';
       },
+      post: () => [],
       postAuthor () {
-        return this.post.author;
+        return this.post?.author;
       },
       totalComments () {
         return this.post.comments.length.toLocaleString();
@@ -156,9 +144,31 @@
         this.deletePostModalOpen = true;
       },
       toggleReportPostModal (post) {
-        console.log({ post });
         this.selectedPost = post;
         this.reportPostModalOpen = true;
+      }
+    },
+
+    async mounted () {
+      // const { post } = await this.$store.dispatch('entities/simpleQuery', {
+      //   query: postQuery,
+      //   variables: {
+      //     slug: this.$route.params.post_slug
+      //   },
+      //   bypassCache: false
+      // });
+      // ForumPost.insert({
+      //   data: post
+      // });
+      // this.loading = 0;
+    },
+
+    watch: {
+      post (val) {
+        if (val) {
+          this.items[1] = { text: this.post.subcategory.title, disabled: false, to: `/forums/${this.post.subcategory.slug}` };
+          this.items[2] = { text: val.title, disabled: true };
+        }
       }
     },
 
