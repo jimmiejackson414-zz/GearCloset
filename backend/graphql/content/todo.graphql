@@ -1,7 +1,7 @@
 extend type Mutation @guard(with: ["api"]) {
-    createTodo(todo: TodoInput! @spread): Todo @create
+    createTodo(input: TodoInput! @spread): Todo @create
     deleteTodo(id: ID!): Todo @delete
-    updateTodo(id: ID! todo: TodoInput! @spread): Todo @update
+    updateTodo(id: ID! input: TodoInput! @spread): Todo @update
 }
 
 extend type Query @guard(with: ["api"]) {
@@ -21,5 +21,5 @@ type Todo {
 input TodoInput {
     title: String
     checked: Boolean
-    trip_id: Int
+    trip_id: ID
 }

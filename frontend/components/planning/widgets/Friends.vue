@@ -84,10 +84,10 @@
     computed: {
       friends () {
         if (!this.trip) { return []; }
-        return this.trip.friends.filter(friend => friend.id !== this.currentUser.id);
+        return this.trip.users.filter(friend => friend.id !== this.currentUser.id);
       },
       friendCount () {
-        return this.friends?.length;
+        return this.users?.length;
       }
 
     },

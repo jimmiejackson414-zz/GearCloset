@@ -36,26 +36,34 @@
           <tr
             v-for="(item, index) in items"
             :key="item.id">
-            <td class="text-start">
+            <td
+              class="text-start"
+              style="width: 10%">
               <v-simple-checkbox
                 color="primary"
                 :ripple="false"
                 :value="Boolean(item.checked)"
                 @input="updateItem($event, item, 'checked')" />
             </td>
-            <td class="text-start">
+            <td
+              class="text-start"
+              style="width: 70%">
               <click-to-edit
                 :unique-identifier="`shoppingItemTitle${item.id}Ref`"
                 :value="item.title"
                 @handle-update-item="updateItem($event, item, 'title')" />
             </td>
-            <td class="text-center quantity">
+            <td
+              class="text-center quantity"
+              style="width: 10%">
               <click-to-edit
                 :unique-identifier="`shoppingItemQuantity${item.id}Ref`"
                 :value="item.quantity"
                 @handle-update-item="updateItem($event, item, 'quantity')" />
             </td>
-            <td class="text-end">
+            <td
+              class="text-end"
+              style="width: 10%">
               <v-btn
                 class="deleteItem"
                 color="error"
@@ -85,15 +93,15 @@
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton.vue';
-  import ShoppingListItem from '~/data/models/shoppingListItem';
+  import { shoppingListItemService } from '~/services';
 
   export default {
     mixins: [isMobile],
 
     props: {
-      tripId: {
-        type: String,
-        default: ''
+      trip: {
+        type: Object,
+        default: () => {}
       }
     },
 
@@ -101,9 +109,9 @@
       deleteColor: '',
       editableItem: null,
       headers: [
-        { text: 'Item', align: 'left', sortable: true, value: 'title', width: '80%' },
-        { text: 'Quantity', align: 'center', sortable: true, value: 'quantity', width: '19%' },
-        { text: '', align: 'end', sortable: false, value: 'actions', width: '1%' }
+        { text: 'Item', align: 'left', sortable: true, value: 'title', width: '70%' },
+        { text: 'Quantity', align: 'center', sortable: true, value: 'quantity', width: '10%' },
+        { text: '', align: 'end', sortable: false, value: 'actions', width: '10%' }
       ]
     }),
 
@@ -112,47 +120,48 @@
         return this.shoppingListItems.every(item => item.checked);
       },
       shoppingListItems () {
-        return ShoppingListItem.query().where('trip_id', this.tripId).get();
+        if (this.trip) {
+          return this.trip.shoppingListItems;
+        }
+        return [];
       }
     },
 
     methods: {
-      async addListItem () {
-        const payload = { title: 'New Item', checked: false, trip: this.tripId, quantity: 0 };
-        const { shoppingListItems } = await ShoppingListItem.insert({ data: { ...payload } });
-        shoppingListItems[0].$persist();
+      addListItem () {
+        const payload = {
+          fields: { title: 'New Item', checked: false, trip: this.trip.id, quantity: 0 },
+          apollo: this.$apollo
+        };
+
+        shoppingListItemService.create(payload);
       },
       removeItem (item) {
-        item.$deleteAndDestroy();
+        const payload = {
+          fields: { id: item.id, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        shoppingListItemService.destroy(payload);
       },
       setEditing (ref) {
         this.editableItem = ref;
         this.$nextTick(() => document.querySelector(`#${ref}`).focus());
       },
-      async updateAllItems (value) {
-        const { shoppingListItems } = await ShoppingListItem.update({
-          data: this.shoppingListItems.map(item => {
-            return {
-              id: item.id,
-              checked: value
-            };
-          })
-        });
-        shoppingListItems.forEach(item => item.$push());
+      updateAllItems (value) {
+        // TODO: Come up with batch update mutation instead
+        this.trip.shoppingListItems.forEach(i => this.updateItem(value, i, 'checked'));
       },
-      async updateItem (event, item, field) {
+      updateItem (event, item, field) {
         this.editableItem = null;
 
         // return if value hasn't changed
         if (event === String(item[field])) { return; }
 
-        const newItem = await ShoppingListItem.update({
-          where: Number(item.id),
-          data: {
-            [field]: event
-          }
-        });
-        newItem.$push();
+        const payload = {
+          fields: { id: item.id, [field]: event, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        shoppingListItemService.update(payload);
       }
     },
 
@@ -176,6 +185,7 @@
 <style lang="scss">
   .v-data-table.items-table {
     background: transparent;
+    overflow-y: scroll;
 
     thead {
       th.text-start, th.text-left, th.text-center {

@@ -1,5 +1,5 @@
 mutation UpdateTodo($id: ID!, $checked: Boolean, $title: String) {
-  updateTodo(id: $id, checked: $checked, title: $title) {
+  updateTodo(id: $id, input: { checked: $checked, title: $title }) {
     id
     checked
     title

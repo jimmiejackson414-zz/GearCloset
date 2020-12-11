@@ -1,6 +1,6 @@
 <template>
   <v-container
-    v-if="!loading && !userLoading"
+    v-if="!loading"
     class="post-container"
     grid-list-lg
     mx-auto>
@@ -85,10 +85,9 @@
 
 <script>
   import currentUser from '~/mixins/currentUser';
-  import ForumPost from '~/data/models/forumPost';
   import LoadingPage from '~/components/LoadingPage.vue';
   import PostCard from '~/components/forums/PostCard.vue';
-  import postQuery from '~/apollo/queries/forum/post.gql';
+  // import postQuery from '~/apollo/queries/forum/post.gql';
   import TipTapEditor from '~/components/TipTapEditor';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
@@ -121,7 +120,7 @@
       pageTitle () {
         return this.post ? this.post.title : '';
       },
-      post: () => ForumPost.query().with(['author', 'comments.author', 'subcategory']).first(),
+      post: () => [],
       postAuthor () {
         return this.post?.author;
       },
@@ -151,17 +150,17 @@
     },
 
     async mounted () {
-      const { post } = await this.$store.dispatch('entities/simpleQuery', {
-        query: postQuery,
-        variables: {
-          slug: this.$route.params.post_slug
-        },
-        bypassCache: false
-      });
-      ForumPost.insert({
-        data: post
-      });
-      this.loading = 0;
+      // const { post } = await this.$store.dispatch('entities/simpleQuery', {
+      //   query: postQuery,
+      //   variables: {
+      //     slug: this.$route.params.post_slug
+      //   },
+      //   bypassCache: false
+      // });
+      // ForumPost.insert({
+      //   data: post
+      // });
+      // this.loading = 0;
     },
 
     watch: {

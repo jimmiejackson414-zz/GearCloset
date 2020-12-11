@@ -1,5 +1,5 @@
 mutation UpdateShoppingListItem($id: ID!, $checked: Boolean, $title: String, $quantity: Int) {
-  updateShoppingListItem(id: $id, checked: $checked, title: $title, quantity: $quantity) {
+  updateShoppingListItem(id: $id, input: { checked: $checked, title: $title, quantity: $quantity }) {
     id
     checked
     title

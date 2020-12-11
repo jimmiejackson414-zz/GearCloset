@@ -28,7 +28,7 @@
           is="transition-group"
           name="list">
           <tr
-            v-for="(item, index) in items"
+            v-for="item in items"
             :key="item.id">
             <td class="text-start">
               <v-simple-checkbox
@@ -49,7 +49,7 @@
                 color="error"
                 icon
                 :ripple="false"
-                @click="removeTodo(item, index)">
+                @click="removeTodo(item)">
                 <custom-icon
                   class="delete-icon"
                   :fill="deleteColor"
@@ -72,16 +72,16 @@
   import ClickToEdit from '~/components/ClickToEdit';
   import CustomIcon from '~/components/icons/CustomIcon';
   import isMobile from '~/mixins/isMobile';
+  import { todoService } from '~/services';
   import PlusButton from '~/components/icons/PlusButton';
-  import Todo from '~/data/models/todo';
 
   export default {
     mixins: [isMobile],
 
     props: {
-      tripId: {
-        type: String,
-        default: ''
+      trip: {
+        type: Object,
+        default: () => {}
       }
     },
 
@@ -99,46 +99,47 @@
         return this.todos.every(item => item.checked);
       },
       todos () {
-        return Todo.query().where('trip_id', this.tripId).get();
+        if (this.trip) {
+          return this.trip.todos;
+        }
+        return [];
       }
     },
 
     methods: {
-      async addTodo () {
-        const payload = { title: 'New Todo', checked: false, trip: this.tripId };
-        const { todos } = await Todo.insert({ data: { ...payload } });
-        todos[0].$persist();
+      addTodo () {
+        const payload = {
+          fields: { title: 'New Todo', checked: false, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+
+        todoService.create(payload);
       },
-      removeTodo (todo, index) {
-        todo.$deleteAndDestroy();
+      removeTodo (todo) {
+        const payload = {
+          fields: { id: todo.id, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        todoService.destroy(payload);
       },
       setEditing (ref) {
         this.editableItem = ref;
         this.$nextTick(() => document.querySelector(`#${ref}`).focus());
       },
-      async updateAllItems (value) {
-        const { todos } = await Todo.update({
-          data: this.todos.map(todo => {
-            return {
-              id: todo.id,
-              checked: value
-            };
-          })
-        });
-        todos.forEach(todo => todo.$push());
+      updateAllItems (value) {
+        // TODO: Come up with batch update mutation instead
+        this.trip.todos.forEach(t => this.updateItem(value, t, 'checked'));
       },
-      async updateItem (value, todo, field) {
+      updateItem (value, todo, field) {
         this.editableItem = null;
         // return if value hasn't changed
         if (value === String(todo[field])) { return; }
 
-        const newItem = await Todo.update({
-          where: Number(todo.id),
-          data: {
-            [field]: value
-          }
-        });
-        newItem.$push();
+        const payload = {
+          fields: { id: todo.id, [field]: value, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        todoService.update(payload);
       }
     },
 
@@ -162,6 +163,7 @@
 <style lang="scss">
   .v-data-table.todos-table {
     background: transparent;
+    overflow-y: scroll;
 
     thead {
       th.text-start {

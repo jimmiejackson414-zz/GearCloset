@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Trip extends Model
 {
     protected $fillable = [
-        'name', 'description', 'owner_id'
+        'name', 'description', 'owner_id', 'pack_id', 'starting_point', 'ending_point'
     ];
 
     // automatically eager load todos and shopping_list_items

@@ -11,7 +11,7 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="details.title"
+                v-model="detail.title"
                 color="primary"
                 dense
                 :disabled="submitting"
@@ -23,7 +23,7 @@
             </v-col>
             <v-col cols="12">
               <v-text-field
-                v-model="details.value"
+                v-model="detail.value"
                 color="primary"
                 dense
                 :disabled="submitting"
@@ -49,7 +49,7 @@
               v-if="hasUrl"
               cols="12">
               <v-text-field
-                v-model="details.url"
+                v-model="detail.url"
                 color="primary"
                 dense
                 :disabled="submitting"
@@ -90,9 +90,9 @@
 </template>
 
 <script>
-  import { capitalize } from '~/helpers/functions';
+  import { capitalize, prependProtocol } from '~/helpers/functions';
   import Loading from '~/components/Loading.vue';
-  import { tripDetailService } from '~/services/planning/trip_detail.service';
+  import { tripDetailService } from '~/services';
 
   export default {
     props: {
@@ -110,18 +110,20 @@
       }
     },
 
-    data: () => ({
-      hasUrl: false,
-      submitting: false
-    }),
+    data () {
+      return {
+        detail: {
+          title: '',
+          url: '',
+          value: '',
+          type: this.detailType || 'hike'
+        },
+        hasUrl: false,
+        submitting: false
+      };
+    },
 
     computed: {
-      details () {
-        if (this.detail) {
-          return { ...this.detail };
-        }
-        return { title: '', url: '', value: '' };
-      },
       formattedDetailType () {
         return capitalize(this.detailType);
       },
@@ -138,21 +140,36 @@
     methods: {
       closeModal () {
         this.show = false;
+        this.detail = { title: '', url: '', value: '', type: '' };
         this.$emit('handle-reset-modal');
       },
       handleCheckbox () {
         this.hasUrl = !this.hasUrl;
       },
-      async handleCreate () {
+      handleCreate () {
         this.submitting = true;
 
         const payload = {
-          fields: { ...this.details, trip: this.trip.id, type: this.detailType },
+          fields: {
+            title: this.detail.title,
+            type: this.detail.type,
+            url: this.hasUrl ? prependProtocol(this.detail.url) : null,
+            value: this.detail.value,
+            trip: this.trip.id
+          },
           apollo: this.$apollo
         };
-        await tripDetailService.createTripDetail(payload);
+
+        tripDetailService.create(payload);
+
         this.submitting = false;
-        this.$emit('handle-reset-modal');
+        this.closeModal();
+      }
+    },
+
+    watch: {
+      detail (val) {
+        this.hasUrl = !!val.url;
       }
     },
 

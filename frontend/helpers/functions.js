@@ -50,6 +50,14 @@ export const convertSlugToTitle = (slug) => {
   return words.join(' ');
 };
 
+export const prependProtocol = url => {
+  const pattern = /^((http|https):\/\/)/;
+  if (!pattern.test(url)) {
+    url = 'https://' + url;
+  }
+  return url;
+};
+
 export const totalItemsInPack = pack => {
   let total = 0;
   if (!pack.categories) { return total; }

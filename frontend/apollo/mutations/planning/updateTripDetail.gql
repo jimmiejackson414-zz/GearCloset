@@ -1,5 +1,5 @@
 mutation UpdateTripDetail($id: ID! $title: String $url: String $value: String $type: String) {
-  updateTripDetail(id: $id title: $title url: $url value: $value type: $type) {
+  updateTripDetail(id: $id input: { title: $title url: $url value: $value type: $type }) {
     id
     title
     url

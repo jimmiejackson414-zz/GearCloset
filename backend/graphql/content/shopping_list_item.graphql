@@ -1,11 +1,11 @@
 extend type Mutation @guard(with: ["api"]) {
-    createShoppingListItem(shoppingListItem: ShoppingListItemInput! @spread): ShoppingListItem @create
+    createShoppingListItem(input: ShoppingListItemInput! @spread): ShoppingListItem @create
     deleteShoppingListItem(id: ID!): ShoppingListItem @delete
-    updateShoppingListItem(id: ID! shoppingListItem: ShoppingListItemInput! @spread): ShoppingListItem @update
+    updateShoppingListItem(id: ID! input: ShoppingListItemInput! @spread): ShoppingListItem @update
 }
 
 extend type Query @guard(with: ["api"]) {
-    shopping_list_items(trip_id: ID! @where(operator: "=", key: "trip_id")): [ShoppingListItem]! @all
+    shoppingListItems(trip_id: ID! @where(operator: "=", key: "trip_id")): [ShoppingListItem]! @all
 }
 
 type ShoppingListItem {
@@ -13,14 +13,16 @@ type ShoppingListItem {
     title: String
     checked: Boolean!
     quantity: Int
-    trip: Trip! @belongsTo
+    trip_id: ID
     created_at: DateTime!
     updated_at: DateTime!
+
+    trip: Trip! @belongsTo
 }
 
 input ShoppingListItemInput {
     title: String
     checked: Boolean
     quantity: Int
-    trip_id: Int
+    trip_id: ID
 }

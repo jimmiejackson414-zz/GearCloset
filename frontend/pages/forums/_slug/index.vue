@@ -1,6 +1,6 @@
 <template>
   <v-container
-    v-if="!loading && !userLoading"
+    v-if="!loading"
     class="category-slug-container">
     <v-row>
       <v-col
@@ -106,9 +106,8 @@
   import * as dayjs from 'dayjs';
   import relativeTime from 'dayjs/plugin/relativeTime';
   import currentUser from '~/mixins/currentUser';
-  import ForumSubcategory from '~/data/models/forumSubcategory';
   import LoadingPage from '~/components/LoadingPage.vue';
-  import subCategoryQuery from '~/apollo/queries/forum/subcategory.gql';
+  // import subCategoryQuery from '~/apollo/queries/forum/subcategory.gql';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
@@ -157,8 +156,7 @@
       pageTitle () {
         return this.subcategory ? this.subcategory.title : '';
       },
-      // subcategory: () => ForumSubcategory.query().with('posts.author|comments.author').first()
-      subcategory: () => ForumSubcategory.query().with(['posts.author', 'posts.comments.author']).first()
+      subcategory: () => []
     },
 
     methods: {
@@ -193,17 +191,17 @@
     },
 
     async mounted () {
-      const { subcategory } = await this.$store.dispatch('entities/simpleQuery', {
-        query: subCategoryQuery,
-        variables: {
-          slug: this.$route.params.slug
-        },
-        bypassCache: false
-      });
-      ForumSubcategory.insert({
-        data: subcategory
-      });
-      this.loading = 0;
+      // const { subcategory } = await this.$store.dispatch('entities/simpleQuery', {
+      //   query: subCategoryQuery,
+      //   variables: {
+      //     slug: this.$route.params.slug
+      //   },
+      //   bypassCache: false
+      // });
+      // ForumSubcategory.insert({
+      //   data: subcategory
+      // });
+      // this.loading = 0;
     },
 
     watch: {

@@ -1,11 +1,14 @@
+#import "~/apollo/fragments/category.gql"
+#import "~/apollo/fragments/item.gql"
+#import "~/apollo/fragments/pack.gql"
+#import "~/apollo/fragments/shoppingListItem.gql"
+#import "~/apollo/fragments/trip.gql"
+#import "~/apollo/fragments/tripDetail.gql"
+#import "~/apollo/fragments/todo.gql"
+
 query Trips {
   trips {
-    id
-    name
-    description
-    starting_point
-    ending_point
-    owner_id
+    ...trip
 
     owner {
       id
@@ -15,34 +18,19 @@ query Trips {
       trail_name
     }
 
-    todos {
-      id
-      title
-      checked
-      created_at
-      updated_at
+    todos(orderBy: [{ columns: CREATED_AT, order: DESC }]) {
+      ...todo
     }
 
-    shoppingListItems {
-      id
-      title
-      checked
-      quantity
-      created_at
-      updated_at
+    shoppingListItems(orderBy: [{ columns: CREATED_AT, order: DESC }]) {
+      ...shoppingListItem
     }
 
-    tripDetails {
-			id
-			title
-			url
-			value
-			type
-			created_at
-			updated_at
+    tripDetails(orderBy: [{ columns: CREATED_AT, order: DESC }]) {
+			...tripDetail
     }
 
-    friends: users {
+    users {
       id
       avatar_url
       first_name
@@ -53,31 +41,13 @@ query Trips {
     }
 
     pack {
-      id
-      name
-      active
-      theme
-      created_at
-      updated_at
+      ...pack
 
       categories {
-        id
-        name
-        created_at
-        updated_at
+        ...category
 
         items(orderBy: [{ columns: "position", order: ASC }]) {
-          id
-          name
-          weight
-          price
-          position
-          generic_type
-          consumable
-          worn
-          quantity
-          created_at
-          updated_at
+          ...item
         }
       }
     }

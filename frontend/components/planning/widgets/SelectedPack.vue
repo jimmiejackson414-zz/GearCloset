@@ -52,7 +52,6 @@
   import convert from 'convert-units';
   import { calculateCategoryWeight } from '~/helpers/functions';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
-  import Pack from '~/data/models/pack';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
   import { generateThemeOptions } from '~/helpers';
 
@@ -114,16 +113,17 @@
     },
 
     methods: {
-      async handleUpdatePackTheme (theme) {
-        this.localTheme = theme;
-        this.packThemeModalOpen = false;
-        const pack = await Pack.update({
-          where: Number(this.activePack.id),
-          data: {
-            theme: this.localTheme
-          }
-        });
-        pack.$push();
+      handleUpdatePackTheme (theme) {
+        // this.localTheme = theme;
+        // this.packThemeModalOpen = false;
+        // const pack = await Pack.update({
+        //   where: Number(this.activePack.id),
+        //   data: {
+        //     theme: this.localTheme
+        //   }
+        // });
+        // pack.$push();
+        console.log('handleUpdatePackTheme');
       },
       resetModal () {
         this.modalOpen = false;

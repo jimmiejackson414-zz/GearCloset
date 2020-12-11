@@ -42,8 +42,6 @@ export default {
    ** Icons can be found at https://antonreshetov.github.io/vue-unicons/
    */
   plugins: [
-    '~/plugins/graphql',
-    '~/plugins/vuex-orm',
     { src: '~/plugins/vue-unicons', mode: 'client' },
     { src: '~/plugins/v-mask', mode: 'client' },
     { src: '~/plugins/tiptap-vuetify', mode: 'client' },
@@ -76,20 +74,22 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: process.env.NUXT_ENV_BACKEND_API_URL
+        httpEndpoint: process.env.NUXT_ENV_BACKEND_API_URL,
+        inMemoryCacheOptions: {
+          addTypename: true
+        }
       }
     },
     defaultOptions: {
       $query: {
         loadingKey: 'loading'
-        // fetchPolicy: 'no-cache'
       }
     },
     cookieAttributes: {
       expires: 7 // optional, default 7 days
-    }
+    },
     // watchLoading: '~/apollo/loadingHandler',
-    // errorHandler: '~/apollo/errorHandler'
+    errorHandler: '~/apollo/errorHandler'
   },
 
   /*

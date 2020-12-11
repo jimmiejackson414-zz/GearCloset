@@ -1,5 +1,5 @@
 mutation CreateTodo($title: String $checked: Boolean = false, $trip:ID!) {
-  createTodo(input: {title:$title checked:$checked trip:{ connect: $trip}}) {
+  createTodo(input: {title:$title checked:$checked trip_id: $trip}) {
     id
     checked
     title

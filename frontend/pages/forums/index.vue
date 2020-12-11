@@ -1,6 +1,6 @@
 <template>
   <v-container
-    v-if="!loading && !userLoading"
+    v-if="!loading"
     class="forums-container"
     grid-list-lg
     mx-auto>
@@ -52,10 +52,9 @@
 </template>
 
 <script>
-  import categoriesQuery from '~/apollo/queries/forum/categories.gql';
+  // import categoriesQuery from '~/apollo/queries/forum/categories.gql';
   import CategoryBox from '~/components/forums/CategoryBox.vue';
   import currentUser from '~/mixins/currentUser';
-  import ForumCategory from '~/data/models/forumCategory';
   import LoadingPage from '~/components/LoadingPage.vue';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
@@ -73,7 +72,7 @@
     }),
 
     computed: {
-      categories: () => ForumCategory.query().with('subcategories').all()
+      categories: () => []
     },
 
     methods: {
@@ -83,15 +82,15 @@
     },
 
     async mounted () {
-      const { forumCategories } = await this.$store.dispatch('entities/simpleQuery', {
-        query: categoriesQuery,
-        variables: {},
-        bypassCache: false
-      });
-      ForumCategory.insert({
-        data: [...forumCategories]
-      });
-      this.loading = 0;
+      // const { forumCategories } = await this.$store.dispatch('entities/simpleQuery', {
+      //   query: categoriesQuery,
+      //   variables: {},
+      //   bypassCache: false
+      // });
+      // ForumCategory.insert({
+      //   data: [...forumCategories]
+      // });
+      // this.loading = 0;
     },
 
     components: {

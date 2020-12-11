@@ -8,8 +8,12 @@
     </div>
     <div class="trip-details-wrapper">
       <div class="row">
-        <div class="col-12 d-flex align-center">
-          <h2>{{ trip && trip.name }}</h2>
+        <div class="col-12 d-flex align-center pl-0">
+          <click-to-edit
+            :custom-style="hikeNameStyles"
+            unique-identifier="hikeNameRef"
+            :value="trip ? trip.name : ''"
+            @handle-update-item="updateTrip($event, 'name')" />
         </div>
       </div>
       <transition-group
@@ -68,9 +72,10 @@
 </template>
 
 <script>
+  import ClickToEdit from '~/components/ClickToEdit.vue';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import PlusButton from '~/components/icons/PlusButton.vue';
-  import { tripDetailService } from '~/services/planning/trip_detail.service';
+  import { tripDetailService, tripService } from '~/services';
 
   export default {
     props: {
@@ -84,7 +89,7 @@
       createTripDetailModalOpen: false,
       ellipsisItems: [
         { title: 'Update', event: 'update-detail' },
-        { title: 'Delete', event: 'delete-detail' }
+        { title: 'Delete', event: 'delete-detail', customClass: 'error--text' }
       ],
       removeDetailModalOpen: false,
       selectedDetail: null,
@@ -93,8 +98,17 @@
 
     computed: {
       hikeDetails () {
-        if (!this.trip) { return []; }
-        return this.trip.tripDetails.filter(detail => detail.type === 'hike');
+        if (this.trip) {
+          return this.trip.tripDetails.filter(detail => detail.type === 'hike');
+        }
+        return [];
+      },
+      hikeNameStyles () {
+        return {
+          fontSize: '1.5em',
+          fontWeight: 'bold',
+          letterSpacing: '1px'
+        };
       }
     },
 
@@ -116,17 +130,34 @@
         });
       },
       removeDetail (detail) {
-        const payload = { fields: { id: detail.id, trip: this.trip.id }, apollo: this.$apollo };
-        tripDetailService.deleteTripDetail(payload);
+        const payload = {
+          fields: { id: detail.id, trip: this.trip.id },
+          apollo: this.$apollo
+        };
+        tripDetailService.destroy(payload);
       },
       resetModal () {
         this.createTripDetailModalOpen = false;
         this.updateTripDetailModalOpen = false;
         this.selectedDetail = null;
+      },
+      updateTrip (e, field) {
+        // return if value hasn't changed
+        if (e === this.trip.name) { return; }
+
+        const payload = {
+          fields: {
+            id: this.trip.id,
+            [field]: e
+          },
+          apollo: this.$apollo
+        };
+        tripService.update(payload);
       }
     },
 
     components: {
+      ClickToEdit,
       CreateTripDetailModal: () => import(/* webpackPrefetch: true */'~/components/modals/CreateTripDetailModal.vue'),
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal.vue'),
       EllipsisButton,
@@ -134,13 +165,16 @@
       PlusButton
     }
   };
-</script>
+</script>,
+        ClickToEdit
 
 <style lang="scss" scoped>
   @import 'widget-styles';
   @import '~/css/list-transition';
 
   .trip-details-wrapper {
+    overflow-y: scroll;
+
     .trip-details {
       display        : grid;
       list-style-type: none;
@@ -148,13 +182,13 @@
       text-decoration: none;
 
       .detail {
-        align-items: center;
-        display: grid;
+        align-items          : center;
+        display              : grid;
         grid-template-columns: 1fr repeat(2, auto);
-        overflow: hidden;
-        padding: 0.75rem 0 0;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        overflow             : hidden;
+        padding              : 0.75rem 0 0;
+        text-overflow        : ellipsis;
+        white-space          : nowrap;
       }
     }
   }

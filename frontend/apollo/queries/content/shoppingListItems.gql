@@ -1,0 +1,10 @@
+query ShoppingListItems {
+  shoppingListItems {
+    id
+    checked
+    quantity
+    title
+    created_at
+    updated_at
+  }
+}

@@ -1,7 +1,7 @@
 extend type Mutation @guard(with: ["api"]) {
-    createTripDetail(tripDetail: TripDetailInput! @spread): TripDetail @create
+    createTripDetail(input: TripDetailInput! @spread): TripDetail @create
     deleteTripDetail(id: ID!): TripDetail @delete
-    updateTripDetail(id: ID! tripDetail: TripDetailInput! @spread): TripDetail @update
+    updateTripDetail(id: ID! input: TripDetailInput! @spread): TripDetail @update
 }
 
 type TripDetail {
@@ -10,9 +10,11 @@ type TripDetail {
     url: String
     value: String
     type: String
-    trip: Trip! @belongsTo
     created_at: DateTime!
     updated_at: DateTime!
+    trip_id: ID
+
+    trip: Trip! @belongsTo
 }
 
 input TripDetailInput {
@@ -20,5 +22,5 @@ input TripDetailInput {
     url: String
     value: String
     type: String
-    trip: CreateUserBelongsTo
+    trip_id: ID
 }

@@ -11,7 +11,7 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="details.title"
+                v-model="localDetail.title"
                 color="primary"
                 dense
                 :disabled="submitting"
@@ -23,7 +23,7 @@
             </v-col>
             <v-col cols="12">
               <v-text-field
-                v-model="details.value"
+                v-model="localDetail.value"
                 color="primary"
                 dense
                 :disabled="submitting"
@@ -35,21 +35,20 @@
             </v-col>
             <v-col cols="12">
               <v-checkbox
+                v-model="hasUrl"
                 class="mt-0"
                 color="primary"
                 :false-value="false"
                 hide-details
                 label="Link to external URL?"
                 :ripple="false"
-                :true-value="true"
-                :value="hasUrl"
-                @click="handleCheckbox" />
+                :true-value="true" />
             </v-col>
             <v-col
               v-if="hasUrl"
               cols="12">
               <v-text-field
-                v-model="details.url"
+                v-model="localDetail.url"
                 color="primary"
                 dense
                 :disabled="submitting"
@@ -90,15 +89,14 @@
 </template>
 
 <script>
-  import { capitalize } from '~/helpers/functions';
+  import { capitalize, prependProtocol } from '~/helpers/functions';
   import Loading from '~/components/Loading.vue';
-  import { tripDetailService } from '~/services/planning/trip_detail.service';
+  import { tripDetailService } from '~/services';
 
   export default {
     props: {
       detail: {
         type: Object,
-        required: false,
         default: () => {}
       },
       trip: {
@@ -112,19 +110,19 @@
     },
 
     data: () => ({
+      localDetail: {
+        title: '',
+        type: '',
+        url: '',
+        value: ''
+      },
       hasUrl: false,
       submitting: false
     }),
 
     computed: {
-      details () {
-        if (this.detail) {
-          return { ...this.detail };
-        }
-        return { title: '', url: '', value: '' };
-      },
       detailType () {
-        return this.detail ? capitalize(this.detail?.type) : '';
+        return this.localDetail ? capitalize(this.localDetail?.type) : '';
       },
       show: {
         get () {
@@ -141,22 +139,44 @@
         this.show = false;
         this.$emit('handle-reset-modal');
       },
-      handleCheckbox () {
-        this.hasUrl = !this.hasUrl;
-      },
-      async handleUpdate () {
+      handleUpdate () {
         this.submitting = true;
 
-        const payload = { data: { ...this.details, trip: this.trip.id }, apollo: this.$apollo };
-        await tripDetailService.updateTripDetail(payload);
+        const payload = {
+          fields: {
+            id: this.detail.id,
+            title: this.localDetail.title,
+            type: this.localDetail.type,
+            url: this.hasUrl ? prependProtocol(this.localDetail.url) : null,
+            value: this.localDetail.value,
+            trip: this.trip.id
+          },
+          apollo: this.$apollo
+        };
+
+        tripDetailService.update(payload);
+
         this.submitting = false;
-        this.$emit('handle-reset-modal');
+        this.closeModal();
       }
     },
 
     watch: {
-      detail () {
-        this.hasUrl = !!this.detail?.url;
+      detail (val) {
+        if (val) {
+          this.localDetail = {
+            title: val.title,
+            type: val.type,
+            url: val.url,
+            value: val.value
+          };
+        }
+      },
+      localDetail: {
+        deep: true,
+        handler (val) {
+          this.hasUrl = !!val.url;
+        }
       }
     },
 

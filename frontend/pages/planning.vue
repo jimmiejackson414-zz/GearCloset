@@ -1,84 +1,90 @@
 <template>
-  <v-container
-    v-if="!loading && !userLoading"
-    class="planning-container"
-    grid-list-lg
-    mx-auto>
-    <div class="header">
-      <div class="page-title text-h4 text-center mt-8 mb-4">
-        Planning
-      </div>
-      <div class="actions d-flex mt-8 mb-4">
-        <v-select
-          v-model="selectedTrip"
-          dense
-          hide-details
-          item-text="name"
-          item-value="id"
-          :items="trips"
-          label="Pick a Trip"
-          outlined
-          return-object />
-        <ellipsis-button
-          class="ellipsis"
-          :items="listItems"
-          @create-trip="handleCreateTrip"
-          @delete-trip="handleDeleteTrip" />
-      </div>
-    </div>
-    <v-layout
-      row
-      wrap>
-      <!-- Selected Pack Widget -->
-      <v-flex
-        md6
-        xs12>
-        <selected-pack :trip="selectedTrip" />
-      </v-flex>
+  <ApolloQuery
+    :query="require('~/apollo/queries/content/trips.gql')"
+    @result="handleData">
+    <template v-slot="{ result: { data, error, loading }}">
+      <v-container
+        v-if="!loading"
+        class="planning-container"
+        grid-list-lg
+        mx-auto>
+        <div class="header">
+          <div class="page-title text-h4 text-center mt-8 mb-4">
+            Planning
+          </div>
+          <div class="actions d-flex mt-8 mb-4">
+            <v-select
+              v-model="selectedTrip"
+              dense
+              hide-details
+              item-text="name"
+              item-value="id"
+              :items="trips"
+              label="Pick a Trip"
+              outlined
+              return-object />
+            <ellipsis-button
+              class="ellipsis"
+              :items="listItems"
+              @create-trip="handleCreateTrip"
+              @delete-trip="handleDeleteTrip" />
+          </div>
+        </div>
+        <v-layout
+          row
+          wrap>
+          <!-- Selected Pack Widget -->
+          <v-flex
+            md6
+            xs12>
+            <selected-pack :trip="selectedTrip" />
+          </v-flex>
 
-      <!-- Friends Widget -->
-      <v-flex
-        md6
-        xs12>
-        <friends
-          :current-user="currentUser"
-          :trip="selectedTrip" />
-      </v-flex>
+          <!-- Friends Widget -->
+          <v-flex
+            md6
+            xs12>
+            <friends
+              :current-user="currentUser"
+              :trip="selectedTrip" />
+          </v-flex>
 
-      <!-- Trip Details Widget -->
-      <v-flex
-        md6
-        xs12>
-        <trip-details :trip="selectedTrip" />
-      </v-flex>
+          <!-- Trip Details Widget -->
+          <v-flex
+            md6
+            xs12>
+            <trip-details :trip="selectedTrip" />
+          </v-flex>
 
-      <v-flex
-        md6
-        xs12>
-        <hike-details :trip="selectedTrip" />
-      </v-flex>
+          <v-flex
+            md6
+            xs12>
+            <hike-details :trip="selectedTrip" />
+          </v-flex>
 
-      <!-- Todo List Widget -->
-      <v-flex
-        md6
-        xs12>
-        <todo-list :trip-id="selectedTrip.id" />
-      </v-flex>
+          <!-- Todo List Widget -->
+          <v-flex
+            md6
+            xs12>
+            <todo-list :trip="selectedTrip" />
+          </v-flex>
 
-      <!-- Shopping List Widget -->
-      <v-flex
-        md6
-        xs12>
-        <shopping-list :trip-id="selectedTrip.id" />
-      </v-flex>
-    </v-layout>
+          <!-- Shopping List Widget -->
+          <v-flex
+            md6
+            xs12>
+            <shopping-list :trip="selectedTrip" />
+          </v-flex>
+        </v-layout>
 
-    <delete-confirm-modal
-      v-model="deleteTripModalOpen"
-      item="trip" />
-  </v-container>
+        <delete-confirm-modal
+          v-model="deleteTripModalOpen"
+          item="trip" />
+      </v-container>
 
-  <loading-page v-else />
+      <loading-page v-else />
+    </template>
+  </ApolloQuery>
 </template>
 
 <script>
@@ -91,8 +97,7 @@
   import ShoppingList from '~/components/planning/widgets/ShoppingList.vue';
   import TodoList from '~/components/planning/widgets/TodoList.vue';
   import TripDetails from '~/components/planning/widgets/TripDetails.vue';
-  import Trip from '~/data/models/trip';
-  import tripsQuery from '~/apollo/queries/content/trips.gql';
+  // import tripsQuery from '~/apollo/queries/content/trips.gql';
 
   export default {
     name: 'Planning',
@@ -103,21 +108,19 @@
 
     data: () => ({
       deleteTripModalOpen: false,
-      loading: 1,
       listItems: [
         { title: 'Create trip', event: 'create-trip' },
         { title: 'Delete trip', event: 'delete-trip', customClass: 'error--text' }
       ],
-      selectedTrip: null
+      selectedTrip: null,
+      trips: null
     }),
 
-    computed: {
-      trips () {
-        return Trip.query().where('owner_id', this.currentUser.id).all();
-      }
-    },
-
     methods: {
+      handleData ({ data: { trips } }) {
+        this.selectedTrip = trips[0];
+        this.trips = trips;
+      },
       handleCreateTrip () {
         console.log('createTrip');
       },
@@ -125,17 +128,6 @@
         console.log('deleteTrip');
         this.deleteTripModalOpen = true;
       }
-    },
-
-    async mounted () {
-      const { trips } = await this.$store.dispatch('entities/simpleQuery', {
-        query: tripsQuery,
-        variables: {},
-        bypassCache: false
-      });
-      Trip.insert({ data: [...trips] });
-      this.selectedTrip = trips.length ? trips[0] : null;
-      this.loading = 0;
     },
 
     components: {

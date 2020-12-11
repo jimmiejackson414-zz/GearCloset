@@ -38,8 +38,12 @@ type Mutation {
 }
 
 input OrderByClause {
-    columns: String!
+    columns: DateTime
     order: SortOrder!
+}
+
+enum CreatedAtColumn {
+    CREATED_AT @enum(value: "created_at")
 }
 
 enum SortOrder {
