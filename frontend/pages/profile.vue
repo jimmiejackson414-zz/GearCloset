@@ -138,6 +138,7 @@
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition.vue';
   import SubscriptionSettings from '~/components/profile/forms/SubscriptionSettings.vue';
   import UserSettings from '~/components/profile/forms/UserSettings.vue';
+  // import { userService } from '~/services';
 
   export default {
     name: 'Profile',
@@ -161,13 +162,20 @@
     },
 
     methods: {
-      handleSubmit () {
+      handleSubmit (data) {
+        console.log({ data });
         this.submitting = true;
-        console.log('handleSubmit');
 
-        setTimeout(() => {
-          this.submitting = false;
-        }, 3000);
+        const payload = {
+          fields: {
+            id: this.currentUser.id
+          },
+          apollo: this.$apollo
+        };
+        console.log({ payload });
+        // await userService.update(payload);
+
+        this.submitting = false;
       },
       handleTabSwitch (e) {
         this.mobileTab = e;
@@ -176,7 +184,6 @@
 
     mounted () {
       this.iconColor = $nuxt.$vuetify.theme.themes.light['dark-grey'];
-      this.onResize();
     },
 
     components: {

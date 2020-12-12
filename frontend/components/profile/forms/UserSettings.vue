@@ -1,7 +1,8 @@
 <template>
   <v-form
     ref="userSettingsForm"
-    v-model="valid">
+    v-model="valid"
+    @submit.prevent="handleSubmit">
     <v-container class="pt-0">
       <v-row class="justify-center align-center mb-6">
         <div class="avatar-container">
@@ -66,7 +67,7 @@
         <!-- First Name -->
         <v-col class="col-12 col-md-6">
           <v-text-field
-            v-model="currentUser.first_name"
+            v-model="localUser.first_name"
             color="primary"
             dense
             :disabled="submitting"
@@ -88,7 +89,7 @@
         <!-- Last Name -->
         <v-col class="col-12 col-md-6">
           <v-text-field
-            v-model="currentUser.last_name"
+            v-model="localUser.last_name"
             color="primary"
             dense
             :disabled="submitting"
@@ -110,7 +111,7 @@
         <!-- Trail Name -->
         <v-col class="col-12 col-md-6">
           <v-text-field
-            v-model="currentUser.trail_name"
+            v-model="localUser.trail_name"
             color="primary"
             dense
             :disabled="submitting"
@@ -132,7 +133,7 @@
         <!-- Country -->
         <v-col class="col-12 col-md-6">
           <v-select
-            v-model="currentUser.country"
+            v-model="localUser.country"
             color="primary"
             dense
             :disabled="submitting"
@@ -154,7 +155,7 @@
         <!-- Email -->
         <v-col class="col-12 col-md-6">
           <v-text-field
-            v-model="currentUser.email"
+            v-model="localUser.email"
             color="primary"
             dense
             :disabled="submitting"
@@ -176,7 +177,7 @@
         <!-- Preferred System -->
         <v-col class="col-12 col-md-6">
           <v-select
-            v-model="currentUser.measuring_system"
+            v-model="localUser.measuring_system"
             color="primary"
             dense
             :disabled="submitting"
@@ -204,7 +205,7 @@
             depressed
             :disabled="submitting"
             :ripple="false"
-            @click="handleSubmit">
+            type="submit">
             <loading
               v-if="submitting"
               color="#fff"
@@ -219,6 +220,7 @@
 </template>
 
 <script>
+  /* eslint-disable camelcase */
   import { countries } from '~/helpers';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import MembershipChip from '~/components/MembershipChip';
@@ -241,6 +243,7 @@
         v => /.+@.+/.test(v) || 'E-mail must be valid'
       ],
       iconColor: '',
+      localUser: null,
       nameRules: [
         v => !!v || 'This is a required field.'
       ],
@@ -260,7 +263,7 @@
 
     methods: {
       handleSubmit () {
-        this.$emit('handle-submit');
+        this.$emit('handle-submit', this.localUser);
       },
       removeAvatar () {
         console.log('removeAvatar still need to write');
@@ -271,6 +274,15 @@
     },
 
     mounted () {
+      const { first_name, last_name, trail_name, country, email, measuring_system } = this.currentUser;
+      this.localUser = {
+        first_name,
+        last_name,
+        trail_name,
+        country,
+        email,
+        measuring_system
+      };
       this.iconColor = $nuxt.$vuetify.theme.themes.light['dark-grey'];
       this.primaryColor = $nuxt.$vuetify.theme.themes.light.primary;
     },
@@ -284,6 +296,9 @@
 
 <style lang="scss" scoped>
   .avatar-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
     margin-bottom: 1rem;
     margin-right: 0;
 

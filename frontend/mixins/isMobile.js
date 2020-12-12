@@ -5,8 +5,7 @@ export default {
 
   methods: {
     onResize () {
-      // console.log('mobile: ', this.$vuetify.breakpoint.mobile);
-      this.isMobile = this.$vuetify.breakpoint.mobile;
+      this.isMobile = window.innerWidth < 768;
     }
   },
 
