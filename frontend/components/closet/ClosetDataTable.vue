@@ -1,7 +1,7 @@
 <template>
   <div class="items-list-styles">
     <div class="items-list-container">
-      <h2 class="text-h6">
+      <h2 class="text-h6 ml-3">
         Pack Items
       </h2>
       <client-only>

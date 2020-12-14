@@ -1,115 +1,125 @@
 <template>
-  <div
-    v-if="!loading"
-    v-resize="onResize"
-    class="closet-page-styles">
-    <!-- Sidebar -->
-    <closet-sidebar
-      :is-mobile="isMobile"
-      :packs="packs"
-      @handle-selected-pack="handleSelectedPack" />
+  <ApolloQuery
+    ref="closetQueryRef"
+    :query="require('~/apollo/queries/content/packs.gql')"
+    @result="handleData">
+    <template v-slot="{ result: { data, error, loading }, isLoading}">
+      <div
+        v-if="!isLoading && selectedPack"
+        v-resize="onResize"
+        class="closet-page-styles">
+        <!-- Sidebar -->
+        <closet-sidebar
+          :is-mobile="isMobile"
+          :packs="packs"
+          @handle-selected-pack="handleSelectedPack" />
 
-    <!-- Content -->
-    <div class="content-container">
-      <v-container grid-list-lg>
-        <div class="header mb-6">
-          <h3 class="text-h3 font-weight-bold">
-            {{ selectedPack ? selectedPack.name : '' }}
-          </h3>
-          <div class="actions">
-            <div class="share-wrapper">
-              <v-btn
-                class="share-btn"
-                icon
-                :ripple="false"
-                @click="shareListModalOpen = true">
-                <custom-icon
-                  :fill="lightGrey"
-                  :height="20"
-                  name="share"
-                  :width="20" />
-                <p class="body-2 mb-0 grey7--text">
-                  Share
-                </p>
-              </v-btn>
-            </div>
-            <!-- Options Button -->
-            <v-menu
-              v-if="!isMobile"
-              :close-on-content-click="false"
-              nudge-bottom
-              offset-x
-              offset-y>
-              <template #activator="{ on, attrs }">
-                <v-btn
-                  v-bind="attrs"
-                  depressed
-                  icon
-                  :ripple="false"
-                  v-on="on">
-                  <custom-icon
-                    :fill="lightGrey"
-                    :height="25"
-                    name="setting"
-                    :width="25" />
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item>
-                  <v-switch
-                    class="ma-0"
-                    color="accent"
-                    flat
-                    hide-details
-                    inset
+        <!-- Content -->
+        <div class="content-container">
+          <v-container grid-list-lg>
+            <div class="header mb-6">
+              <h3 class="text-h3 font-weight-bold">
+                {{ selectedPack ? selectedPack.name : '' }}
+              </h3>
+              <div class="actions">
+                <div class="share-wrapper">
+                  <v-btn
+                    class="share-btn"
+                    icon
                     :ripple="false"
-                    :value="!sidebarExpandOnHover"
-                    @change="toggleSidebarExpandOnHover">
-                    <template #label>
-                      <p class="body-text-1 mb-0">
-                        Lock sidebar
-                      </p>
-                    </template>
-                  </v-switch>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </div>
+                    @click="shareListModalOpen = true">
+                    <custom-icon
+                      :fill="lightGrey"
+                      :height="20"
+                      name="share"
+                      :width="20" />
+                    <p class="body-2 mb-0 grey7--text">
+                      Share
+                    </p>
+                  </v-btn>
+                </div>
+                <!-- Options Button -->
+                <v-menu
+                  v-if="!isMobile"
+                  :close-on-content-click="false"
+                  nudge-bottom
+                  offset-x
+                  offset-y>
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      v-bind="attrs"
+                      depressed
+                      icon
+                      :ripple="false"
+                      v-on="on">
+                      <custom-icon
+                        :fill="lightGrey"
+                        :height="25"
+                        name="setting"
+                        :width="25" />
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item>
+                      <v-switch
+                        class="ma-0"
+                        color="accent"
+                        flat
+                        hide-details
+                        inset
+                        :ripple="false"
+                        :value="!sidebarExpandOnHover"
+                        @change="toggleSidebarExpandOnHover">
+                        <template #label>
+                          <p class="body-text-1 mb-0">
+                            Lock sidebar
+                          </p>
+                        </template>
+                      </v-switch>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </div>
+            </div>
+            <v-row class="closet-pack-graph-wrapper">
+              <v-col class="wrapper col-12 col-md-8 offset-md-2">
+                <selected-pack-graph
+                  v-if="selectedPack"
+                  v-resize="onResize"
+                  :chart-data="chartData"
+                  :is-mobile="isMobile"
+                  :styles="graphStyles"
+                  :theme="selectedPack.theme" />
+              </v-col>
+            </v-row>
+
+            <!-- Data Tables -->
+            <closet-data-table
+              :active-pack="selectedPack" />
+
+            <!-- Share Pack List Modal -->
+            <share-pack-list-modal
+              v-model="shareListModalOpen"
+              :list="list" />
+          </v-container>
         </div>
-        <v-row class="closet-pack-graph-wrapper">
-          <v-col class="wrapper col-12 col-md-8 offset-md-2">
-            <selected-pack-graph
-              v-if="selectedPack"
-              :height="300"
-              :selected-pack="selectedPack" />
-          </v-col>
-        </v-row>
+      </div>
 
-        <!-- Data Tables -->
-        <closet-data-table
-          :active-pack="selectedPack" />
-
-        <!-- Share Pack List Modal -->
-        <share-pack-list-modal
-          v-model="shareListModalOpen"
-          :list="list" />
-      </v-container>
-    </div>
-  </div>
-
-  <loading-page v-else />
+      <loading-page v-else />
+    </template>
+  </ApolloQuery>
 </template>
 
 <script>
   import { mapActions, mapState } from 'vuex';
+  import convert from 'convert-units';
+  import { calculateCategoryWeight, convertToDollars, generateUUID } from '~/helpers/functions';
   import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
   import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
-  import { convertToDollars, generateUUID } from '~/helpers/functions';
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import isMobile from '~/mixins/isMobile';
   import LoadingPage from '~/components/LoadingPage.vue';
-  import packsQuery from '~/apollo/queries/content/packs.gql';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
 
   export default {
@@ -119,20 +129,16 @@
 
     middleware: 'authenticated',
 
-    apollo: {
-      packs: {
-        prefetch: false,
-        fetchPolicy: 'network-only',
-        query: packsQuery,
-        update ({ packs }) {
-          this.setSelectedPack(packs[0]); // set first pack to default on page load
-          return packs;
-        }
-      }
-    },
-
     data: () => ({
+      chartData: {
+        labels: null,
+        datasets: null
+      },
+      chartHeight: 300,
+      chartWidth: 500,
       deleteConfirmOpen: false,
+      isMobile: true,
+      localTheme: '',
       lightGrey: '',
       list: {
         id: 1,
@@ -140,6 +146,7 @@
         uuid: generateUUID()
       },
       modalItem: null,
+      packs: null,
       selected: null,
       shareListModalOpen: false
     }),
@@ -149,6 +156,14 @@
         selectedPack: state => state.closet.selectedPack,
         sidebarExpandOnHover: state => state.closet.sidebarExpandOnHover
       }),
+      graphStyles () {
+        return {
+          height: `${this.chartHeight}px`,
+          margin: '0 auto',
+          position: 'relative',
+          width: `${this.chartWidth}px`
+        };
+      },
       isSelected () {
         return this.selected === this.selectedPack;
       }
@@ -162,12 +177,38 @@
       convertCurrency (amount) {
         return convertToDollars(amount);
       },
+      handleData ({ data: { packs } }) {
+        this.packs = packs;
+        this.setSelectedPack(packs[0]);
+      },
       handleRemoveModalOpen (item) {
         this.modalItem = item;
         this.deleteConfirmOpen = true;
       },
       handleSelectedPack (pack) {
         this.setSelectedPack(pack);
+      },
+      onResize () {
+        const width = window.innerWidth;
+        if ((width < 560) || (width < 1264 && width > 959)) {
+          this.chartWidth = 400;
+          this.isMobile = true;
+        } else {
+          this.chartWidth = 500;
+          this.isMobile = false;
+        }
+      },
+      setChartData () {
+        this.localTheme = this.selectedPack.theme;
+        this.chartData.labels = this.selectedPack.categories.map(category => {
+          return this.$options.filters.truncate(category.name, 20);
+        });
+        this.chartData.datasets = [{
+          label: 'Selected Pack Graph',
+          data: this.selectedPack.categories.map(category => {
+            return parseFloat(convert(calculateCategoryWeight(category)).from('g').to('oz')).toFixed(2);
+          })
+        }];
       },
       update (item, field, value) {
         const payload = { id: item.id, [field]: value };
@@ -183,6 +224,13 @@
 
     mounted () {
       this.lightGrey = this.$nuxt.$vuetify.theme.themes.light.grey7;
+      this.onResize();
+    },
+
+    watch: {
+      selectedPack (val) {
+        this.setChartData();
+      }
     },
 
     components: {
