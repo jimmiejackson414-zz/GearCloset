@@ -3,7 +3,9 @@
 namespace App\GraphQL\Mutations;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Joselfonseca\LighthouseGraphQLPassport\Events\PasswordUpdated;
 use GraphQL\Type\Definition\ResolveInfo;
 use App\Models\TripUser;
 use App\Models\Trip;
@@ -18,11 +20,22 @@ class UserMutator
   {
     // Set user, file, and options variables
     $user = $context->user();
-    $file = $args['file'];
-    $options = array("user_id" => $user->id);
 
-    // Upload to Cloudinary/gear_closet folder, and attach user_id to metadata
-    $avatar_url = cloudinary()->upload($args['file'], array("folder" => "gear_closet", "context" => $options))->getSecurePath();
+    $file = $args['file'];
+
+    // destroy cloudinary image and set to null in db
+    if (!$file) {
+      $public_id = $user->avatar_url;
+      $res = cloudinary()->destroy($public_id);
+
+      $avatar_url = null;
+    } else {
+      // Upload to Cloudinary/gear_closet folder, and attach user_id to metadata
+      $options = array("user_id" => $user->id);
+
+      $response = cloudinary()->upload($args['file'], array("folder" => "gear_closet", "context" => $options))->getPublicId();
+      $avatar_url = $response;
+    }
 
     // Save returned url to database on user and save
     $user->avatar_url = $avatar_url;
@@ -68,5 +81,22 @@ class UserMutator
 
     $trip = Trip::find($args['trip_id']);
     return $trip->users()->get();
+  }
+
+  /*
+  * Update password
+  */
+  public function updatePassword($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+  {
+    $user = $context->user();
+
+    $user->password = Hash::make($args['password']);
+    $user->save();
+    event(new PasswordUpdated($user));
+
+    return [
+      'status' => 'PASSWORD_UPDATED',
+      'message' => __('Your password has been updated')
+    ];
   }
 }

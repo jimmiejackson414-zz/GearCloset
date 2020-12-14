@@ -45,8 +45,8 @@
     labelIdle: 'Drag & Drop your picture<br/>or <span class="filepond--label-action">Browse</span>',
     imagePreviewHeight: 170,
     imageCropAspectRatio: '1:1',
-    imageResizeTargetWidth: 200,
-    imageResizeTargetHeight: 200,
+    imageResizeTargetWidth: 250,
+    imageResizeTargetHeight: 250,
     stylePanelLayout: 'compact circle',
     styleLoadIndicatorPosition: 'center bottom',
     styleButtonRemoveItemPosition: 'center bottom'
@@ -81,15 +81,19 @@
 </script>
 
 <style lang="scss">
-  .filepond--wrapper {
-    .filepond--root {
-      max-height: 20rem;
-      max-width: 20rem;
-      margin: 0 auto;
-    }
-  }
+  .uploader-wrapper {
+    cursor: pointer;
 
-  .filepond--credits {
-    display: none;
+    .filepond--wrapper {
+      .filepond--root {
+        max-height: 20rem;
+        max-width: 20rem;
+        margin: 0 auto;
+      }
+    }
+
+    .filepond--credits {
+      display: none;
+    }
   }
 </style>

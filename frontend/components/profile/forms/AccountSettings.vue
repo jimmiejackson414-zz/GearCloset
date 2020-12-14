@@ -8,17 +8,37 @@
           <h6 class="text-h6 text-left">
             Password
           </h6>
+          <v-alert
+            v-if="hasError"
+            border="top"
+            class="mt-4"
+            color="error"
+            dense
+            dismissible
+            outlined>
+            <template #prepend>
+              <custom-icon
+                custom-class="mr-4"
+                :fill="errorColor"
+                :height="30"
+                name="exclamation-triangle"
+                :width="30" />
+              <p class="body-text-1 mb-0 error--text">
+                {{ hasError }}
+              </p>
+            </template>
+          </v-alert>
         </v-col>
       </v-row>
       <v-row class="justify-center align-center">
-        <!-- Password -->
+        <!-- New Password -->
         <v-col class="col-12 col-md-6">
           <v-text-field
-            v-model="currentUser.password"
+            v-model="new_password"
             color="primary"
             dense
             :disabled="submitting"
-            label="Password"
+            label="New Password"
             outlined
             required
             :rules="passwordRules"
@@ -81,37 +101,61 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import CustomIcon from '~/components/icons/CustomIcon';
   import Loading from '~/components/Loading';
+  import { userService } from '~/services';
 
   export default {
     props: {
       currentUser: {
         type: Object,
         default: () => {}
-      },
-      submitting: {
-        type: Boolean,
-        default: false
       }
     },
 
     data () {
       return {
         confirm_password: '',
+        errorColor: '',
+        hasError: null,
+        new_password: '',
         passwordRules: [v => !!v || 'Password is required'],
         passwordsMatchRules: [
           v => !!v || 'Password confirmation is required',
-          v => (this.currentUser.password === this.confirm_password) || 'Passwords must match'
+          v => (this.new_password === this.confirm_password) || 'Passwords must match'
         ],
+        submitting: false,
         valid: false
       };
     },
 
     methods: {
-      handleSubmit () {
-        this.$emit('handle-submit');
+      ...mapActions({
+        success: 'alert/success'
+      }),
+      async handleSubmit () {
+        if (this.$refs.accountSettingsForm.validate()) {
+          this.submitting = true;
+          const payload = {
+            fields: { password: this.new_password, password_confirmation: this.confirm_password },
+            apollo: this.$apollo
+          };
+          const res = await userService.updatePassword(payload);
+
+          if (!res.data) {
+            this.hasError = 'There was an error updating your password. Please check all values are correct.';
+            this.submitting = false;
+          } else {
+            this.success('Password successfully updated');
+            this.submitting = false;
+          }
+        }
       }
+    },
+
+    mounted () {
+      this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
     },
 
     components: {

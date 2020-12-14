@@ -1,15 +1,23 @@
 <template>
-  <v-avatar
-    color="primary"
-    :size="size">
-    <img
-      v-if="hasAvatar"
-      alt="Avatar"
-      :src="user.avatar_url">
-    <span
-      v-else
-      class="white--text text-body-1 font-weight-bold">{{ initials }}</span>
-  </v-avatar>
+  <client-only>
+    <v-avatar
+      color="primary"
+      :size="size">
+      <cld-image
+        v-if="hasAvatar"
+        class="d-flex"
+        crop="fill"
+        fetch-format="auto"
+        gravity="auto:subject"
+        height="40"
+        :public-id="user.avatar_url"
+        quality="auto"
+        width="40" />
+      <span
+        v-else
+        class="white--text text-body-1 font-weight-bold">{{ initials }}</span>
+    </v-avatar>
+  </client-only>
 </template>
 
 <script>

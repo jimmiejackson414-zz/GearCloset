@@ -6,37 +6,28 @@
     <v-container class="pt-0">
       <v-row class="justify-center align-center mb-6">
         <div class="avatar-container">
-          <v-avatar
+          <div
             v-if="!currentUser || !currentUser.avatar_url"
-            color="primary"
-            size="200">
-            <h1 class="white--text">
-              {{ currentUser | initials }}
-            </h1>
-            <div class="overlay">
-              <v-btn
-                color="#fff"
-                outlined
-                :ripple="false">
-                Change
-              </v-btn>
-            </div>
-          </v-avatar>
+            class="image-wrapper">
+            <image-uploader @handle-image-upload="handleImageUpload" />
+          </div>
+
           <v-avatar
             v-else
             size="250">
-            <img
-              alt="User Avatar"
-              :src="currentUser.avatar_url">
-            <div class="overlay">
-              <v-btn
-                color="#fff"
-                outlined
-                :ripple="false"
-                @click="toggleUppyOpen">
-                Change
-              </v-btn>
-            </div>
+            <client-only>
+              <cld-image
+                crop="fill"
+                fetch-format="auto"
+                gravity="auto:subject"
+                height="250"
+                :public-id="currentUser.avatar_url"
+                quality="auto"
+                radius="max"
+                width="250">
+                <cld-placeholder type="pixelate" />
+              </cld-image>
+            </client-only>
           </v-avatar>
           <v-btn
             v-if="currentUser && currentUser.avatar_url"
@@ -63,7 +54,7 @@
             :user="currentUser" />
         </div>
       </v-row>
-      <v-row>
+      <v-row v-if="localUser">
         <!-- First Name -->
         <v-col class="col-12 col-md-6">
           <v-text-field
@@ -215,6 +206,7 @@
           </v-btn>
         </v-col>
       </v-row>
+      </v-row>
     </v-container>
   </v-form>
 </template>
@@ -223,17 +215,16 @@
   /* eslint-disable camelcase */
   import { countries } from '~/helpers';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import ImageUploader from '~/components/ImageUploader.vue';
+  import Loading from '~/components/Loading.vue';
   import MembershipChip from '~/components/MembershipChip';
+  import { userService } from '~/services';
 
   export default {
     props: {
       currentUser: {
         type: Object,
         default: () => {}
-      },
-      submitting: {
-        type: Boolean,
-        default: false
       }
     },
 
@@ -248,6 +239,7 @@
         v => !!v || 'This is a required field.'
       ],
       primaryColor: '',
+      submitting: false,
       systems: [
         { text: 'Imperial (oz, lb)', value: 'Imperial' },
         { text: 'Metric (g, kg)', value: 'Metric' }
@@ -262,14 +254,26 @@
     },
 
     methods: {
-      handleSubmit () {
-        this.$emit('handle-submit', this.localUser);
+      async handleImageUpload (avatar) {
+        const payload = { fields: { file: avatar }, apollo: this.$apollo };
+        await userService.updateAvatar(payload);
       },
-      removeAvatar () {
-        console.log('removeAvatar still need to write');
+      async handleSubmit () {
+        if (this.$refs.userSettingsForm.validate()) {
+          this.submitting = true;
+
+          const payload = {
+            fields: { id: this.currentUser.id, ...this.localUser },
+            apollo: this.$apollo
+          };
+          await userService.update(payload);
+
+          this.submitting = false;
+        }
       },
-      toggleUppyOpen () {
-        console.log('toggleUppyOpen still need to write');
+      async removeAvatar () {
+        const payload = { fields: { file: null }, apollo: this.$apollo };
+        await userService.updateAvatar(payload);
       }
     },
 
@@ -289,6 +293,8 @@
 
     components: {
       CustomIcon,
+      ImageUploader,
+      Loading,
       MembershipChip
     }
   };
@@ -301,6 +307,11 @@
     flex-direction: column;
     margin-bottom: 1rem;
     margin-right: 0;
+
+    .image-wrapper {
+      height: 200px;
+      width: 200px;
+    }
 
     @include breakpoint(laptop) {
       margin-bottom: 0;

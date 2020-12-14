@@ -171,6 +171,7 @@
 <script>
   import { countries } from '~/helpers/countries';
   import currentUser from '~/mixins/currentUser';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import Loading from '~/components/Loading.vue';
   import updateMutation from '~/apollo/mutations/auth/update.gql';
 
@@ -246,6 +247,7 @@
     },
 
     components: {
+      CustomIcon,
       Loading
     }
   };

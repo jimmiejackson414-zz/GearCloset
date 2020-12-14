@@ -3,11 +3,15 @@ import meQuery from '~/apollo/queries/user/me.gql';
 export default {
   apollo: {
     currentUser: {
-      query: meQuery
+      query: meQuery,
+      result ({ data: { currentUser } }) {
+        this.loading = false;
+        return currentUser;
+      }
     }
-  }
+  },
 
-  // data: () => ({
-  //   loading: 1
-  // })
+  data: () => ({
+    loading: true
+  })
 };

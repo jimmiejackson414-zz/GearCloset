@@ -20,7 +20,8 @@ export default {
    */
   publicRuntimeConfig: {
     baseUrl: process.env.NUXT_ENV_API_URL || 'http://localhost:3000',
-    apiUrl: process.env.NUXT_ENV_BACKEND_API_URL || 'http://localhost:8000/graphql'
+    apiUrl: process.env.NUXT_ENV_BACKEND_API_URL || 'http://localhost:8000/graphql',
+    cloudinaryFolder: process.env.CLOUDINARY_FOLDER
   },
 
   /*
@@ -62,9 +63,20 @@ export default {
    */
   modules: [
     '@nuxtjs/apollo',
+    '@nuxtjs/cloudinary',
     '@nuxtjs/dayjs',
     '@nuxtjs/pwa'
   ],
+
+  /*
+  ** Cloudinary module configuration
+  */
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_NAME,
+    apiKey: process.env.CLOUDINARY_API_KEY,
+    apiSecret: process.env.CLOUDINARY_API_SECRET,
+    useComponent: true
+  },
 
   /*
   ** Apollo module configuration
@@ -171,16 +183,19 @@ export default {
           warningLightest: '#FEF8E8',
 
           error: '#db3030',
+          errorLight: '#db3030',
           errorDark: '#ce2424',
 
           info: '#adb5bd',
-          success: '#137547'
+          success: '#137547',
+
+          tertiary: '#2F2235',
+          tertiaryLight: '#4b3654',
+          tertiaryLightest: '#9a7aa9'
         }
       }
     }
   },
-
-  // modulesDir: ['../node_modules'],
 
   /*
    ** Build configuration
@@ -191,16 +206,5 @@ export default {
     externals: {
       moment: 'moment'
     }
-    // extend (config, { isDev, isClient }) {
-    //   // Run ESLint on save
-    //   if (isDev && isClient) {
-    //     config.module.rules.push({
-    //       enforce: 'pre',
-    //       test: /\.(js|vue)$/,
-    //       loader: 'eslint-loader',
-    //       exclude: /(node_modules)/
-    //     });
-    //   }
-    // }
   }
 };

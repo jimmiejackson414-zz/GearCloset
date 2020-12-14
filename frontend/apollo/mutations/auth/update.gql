@@ -16,19 +16,21 @@ mutation UpdateUser(
 ) {
   updateUser(
     id: $id
-    address_1: $address1
-    address_2: $address2
-    city: $city
-    country: $country
-    email: $email
-    first_name: $first_name
-    has_onboarded: $has_onboarded
-    last_name: $last_name
-    measuring_system: $measuring_system
-    pending_invite: $pending_invite
-    state: $state
-    subscription_level: $subscription_level
-    trail_name: $trail_name
+    input: {
+      address_1: $address1
+      address_2: $address2
+      city: $city
+      country: $country
+      email: $email
+      first_name: $first_name
+      has_onboarded: $has_onboarded
+      last_name: $last_name
+      measuring_system: $measuring_system
+      pending_invite: $pending_invite
+      state: $state
+      subscription_level: $subscription_level
+      trail_name: $trail_name
+    }
   ) {
     id
     address_1
