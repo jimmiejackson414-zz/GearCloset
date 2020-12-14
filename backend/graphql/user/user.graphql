@@ -1,6 +1,6 @@
 extend type Mutation @guard(with: ["api"]) {
-    updateUser(id: ID! user: UserInput! @spread): User @update
-    updateAvatar(id: ID! file: String!): User @field(resolver: "UserMutator@updateAvatar")
+    updateUser(id: ID! input: UserInput! @spread): User @update
+    updateAvatar(file: String): User @field(resolver: "UserMutator@updateAvatar")
     addFriends(trip_id: ID! input: [AddFriendsInput]! @spread): [User]! @field(resolver: "UserMutator@addFriends")
 }
 
@@ -46,11 +46,22 @@ input CreateUserBelongsTo {
 }
 
 input UserInput {
-    email: String!
+    api_token: String
+    email: String
+    password: String
+    avatar_url: String
+    address_1: String
+    address_2: String
+    city: String
+    state: String
+    country: String
     first_name: String
     last_name: String
-    avatar_url: String
     trail_name: String
+    subscription_level: String
+    measuring_system: String
+    has_onboarded: Boolean
+    pending_invite: Boolean
 }
 
 input AddFriendsInput {

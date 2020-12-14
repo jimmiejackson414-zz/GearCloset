@@ -75,7 +75,8 @@
           </v-btn>
           <v-btn
             v-if="shouldShow(card, 'member', 'annual')"
-            color="success"
+            class="white--text"
+            color="tertiaryLightest"
             depressed
             :ripple="false"
             @click="handleModalOpen">

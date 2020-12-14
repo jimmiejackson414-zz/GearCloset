@@ -31,8 +31,9 @@ $info: $grey6;
 $success: #137547;
 
 $error: #db3030;
+$errorLight: lighten($error, 10%);
 $errorDark: darken($error, 5%);
 
-// 2F2235 // dark purple
-// 1F271B // pine tree
-// 137547 // dark spring green
+$tertiary: #2F2235;
+$tertiaryLight: lighten($tertiary, 10%);
+$tertiaryLightest: lighten($tertiary, 40%);

@@ -1,41 +1,33 @@
 <template>
   <v-form
     ref="userSettingsForm"
-    v-model="valid">
+    v-model="valid"
+    @submit.prevent="handleSubmit">
     <v-container class="pt-0">
       <v-row class="justify-center align-center mb-6">
         <div class="avatar-container">
-          <v-avatar
+          <div
             v-if="!currentUser || !currentUser.avatar_url"
-            color="primary"
-            size="200">
-            <h1 class="white--text">
-              {{ currentUser | initials }}
-            </h1>
-            <div class="overlay">
-              <v-btn
-                color="#fff"
-                outlined
-                :ripple="false">
-                Change
-              </v-btn>
-            </div>
-          </v-avatar>
+            class="image-wrapper">
+            <image-uploader @handle-image-upload="handleImageUpload" />
+          </div>
+
           <v-avatar
             v-else
             size="250">
-            <img
-              alt="User Avatar"
-              :src="currentUser.avatar_url">
-            <div class="overlay">
-              <v-btn
-                color="#fff"
-                outlined
-                :ripple="false"
-                @click="toggleUppyOpen">
-                Change
-              </v-btn>
-            </div>
+            <client-only>
+              <cld-image
+                crop="fill"
+                fetch-format="auto"
+                gravity="auto:subject"
+                height="250"
+                :public-id="currentUser.avatar_url"
+                quality="auto"
+                radius="max"
+                width="250">
+                <cld-placeholder type="pixelate" />
+              </cld-image>
+            </client-only>
           </v-avatar>
           <v-btn
             v-if="currentUser && currentUser.avatar_url"
@@ -62,11 +54,11 @@
             :user="currentUser" />
         </div>
       </v-row>
-      <v-row>
+      <v-row v-if="localUser">
         <!-- First Name -->
         <v-col class="col-12 col-md-6">
           <v-text-field
-            v-model="currentUser.first_name"
+            v-model="localUser.first_name"
             color="primary"
             dense
             :disabled="submitting"
@@ -88,7 +80,7 @@
         <!-- Last Name -->
         <v-col class="col-12 col-md-6">
           <v-text-field
-            v-model="currentUser.last_name"
+            v-model="localUser.last_name"
             color="primary"
             dense
             :disabled="submitting"
@@ -110,7 +102,7 @@
         <!-- Trail Name -->
         <v-col class="col-12 col-md-6">
           <v-text-field
-            v-model="currentUser.trail_name"
+            v-model="localUser.trail_name"
             color="primary"
             dense
             :disabled="submitting"
@@ -132,7 +124,7 @@
         <!-- Country -->
         <v-col class="col-12 col-md-6">
           <v-select
-            v-model="currentUser.country"
+            v-model="localUser.country"
             color="primary"
             dense
             :disabled="submitting"
@@ -154,7 +146,7 @@
         <!-- Email -->
         <v-col class="col-12 col-md-6">
           <v-text-field
-            v-model="currentUser.email"
+            v-model="localUser.email"
             color="primary"
             dense
             :disabled="submitting"
@@ -176,7 +168,7 @@
         <!-- Preferred System -->
         <v-col class="col-12 col-md-6">
           <v-select
-            v-model="currentUser.measuring_system"
+            v-model="localUser.measuring_system"
             color="primary"
             dense
             :disabled="submitting"
@@ -204,7 +196,7 @@
             depressed
             :disabled="submitting"
             :ripple="false"
-            @click="handleSubmit">
+            type="submit">
             <loading
               v-if="submitting"
               color="#fff"
@@ -214,24 +206,25 @@
           </v-btn>
         </v-col>
       </v-row>
+      </v-row>
     </v-container>
   </v-form>
 </template>
 
 <script>
+  /* eslint-disable camelcase */
   import { countries } from '~/helpers';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import ImageUploader from '~/components/ImageUploader.vue';
+  import Loading from '~/components/Loading.vue';
   import MembershipChip from '~/components/MembershipChip';
+  import { userService } from '~/services';
 
   export default {
     props: {
       currentUser: {
         type: Object,
         default: () => {}
-      },
-      submitting: {
-        type: Boolean,
-        default: false
       }
     },
 
@@ -241,10 +234,12 @@
         v => /.+@.+/.test(v) || 'E-mail must be valid'
       ],
       iconColor: '',
+      localUser: null,
       nameRules: [
         v => !!v || 'This is a required field.'
       ],
       primaryColor: '',
+      submitting: false,
       systems: [
         { text: 'Imperial (oz, lb)', value: 'Imperial' },
         { text: 'Metric (g, kg)', value: 'Metric' }
@@ -259,24 +254,47 @@
     },
 
     methods: {
-      handleSubmit () {
-        this.$emit('handle-submit');
+      async handleImageUpload (avatar) {
+        const payload = { fields: { file: avatar }, apollo: this.$apollo };
+        await userService.updateAvatar(payload);
       },
-      removeAvatar () {
-        console.log('removeAvatar still need to write');
+      async handleSubmit () {
+        if (this.$refs.userSettingsForm.validate()) {
+          this.submitting = true;
+
+          const payload = {
+            fields: { id: this.currentUser.id, ...this.localUser },
+            apollo: this.$apollo
+          };
+          await userService.update(payload);
+
+          this.submitting = false;
+        }
       },
-      toggleUppyOpen () {
-        console.log('toggleUppyOpen still need to write');
+      async removeAvatar () {
+        const payload = { fields: { file: null }, apollo: this.$apollo };
+        await userService.updateAvatar(payload);
       }
     },
 
     mounted () {
+      const { first_name, last_name, trail_name, country, email, measuring_system } = this.currentUser;
+      this.localUser = {
+        first_name,
+        last_name,
+        trail_name,
+        country,
+        email,
+        measuring_system
+      };
       this.iconColor = $nuxt.$vuetify.theme.themes.light['dark-grey'];
       this.primaryColor = $nuxt.$vuetify.theme.themes.light.primary;
     },
 
     components: {
       CustomIcon,
+      ImageUploader,
+      Loading,
       MembershipChip
     }
   };
@@ -284,8 +302,16 @@
 
 <style lang="scss" scoped>
   .avatar-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
     margin-bottom: 1rem;
     margin-right: 0;
+
+    .image-wrapper {
+      height: 200px;
+      width: 200px;
+    }
 
     @include breakpoint(laptop) {
       margin-bottom: 0;
