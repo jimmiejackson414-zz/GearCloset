@@ -10,6 +10,9 @@ export const calculatePackWeights = pack => {
     cat.items.forEach(item => {
       if (!item.consumable && !item.worn) {
         data.base += item.weight;
+      } else if (item.consumable && item.worn) {
+        data.worn += item.weight;
+        data.consumable += item.weight;
       } else if (item.worn) {
         data.worn += item.weight;
       } else if (item.consumable) {

@@ -204,6 +204,10 @@
       packs: {
         type: Array,
         default: () => []
+      },
+      selectedPack: {
+        type: Object,
+        default: () => {}
       }
     },
 
@@ -219,8 +223,7 @@
 
     computed: {
       ...mapState({
-        expandOnHover: state => state.closet.sidebarExpandOnHover,
-        selectedPack: state => state.closet.selectedPack
+        expandOnHover: state => state.closet.sidebarExpandOnHover
       }),
       categories () {
         const cats = [];

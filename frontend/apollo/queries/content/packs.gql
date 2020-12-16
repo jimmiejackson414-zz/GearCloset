@@ -10,6 +10,7 @@ query Packs {
     categories {
       id
       name
+      unit
       created_at
       updated_at
 
@@ -17,6 +18,7 @@ query Packs {
         id
         name
         weight
+        unit
         price
         position
         generic_type

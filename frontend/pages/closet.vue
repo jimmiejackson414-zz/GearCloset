@@ -10,10 +10,11 @@
         v-resize="onResize"
         class="closet-page-styles">
         <!-- Sidebar -->
-        <!-- <closet-sidebar
+        <closet-sidebar
           :is-mobile="isMobile"
           :packs="packs"
-          @handle-selected-pack="handleSelectedPack" /> -->
+          :selected-pack="selectedPack"
+          @handle-selected-pack="handleSelectedPack" />
 
         <!-- Content -->
         <div class="content-container">
@@ -88,7 +89,7 @@
               </div>
             </div>
             <v-row class="closet-pack-graph-wrapper">
-              <v-col class="wrapper col-12 col-md-8 offset-md-2">
+              <v-col class="wrapper col-12 col-md-6 col-lg-7">
                 <selected-pack-graph
                   v-if="selectedPack"
                   v-resize="onResize"
@@ -96,6 +97,9 @@
                   :is-mobile="isMobile"
                   :styles="graphStyles"
                   :theme="selectedPack.theme" />
+              </v-col>
+              <v-col class="wrapper col-12 col-md-6 col-lg-5">
+                <totals-table :selected-pack="selectedPack" />
               </v-col>
             </v-row>
 
@@ -119,12 +123,13 @@
   import convert from 'convert-units';
   import { calculateCategoryWeight, convertToDollars, generateUUID } from '~/helpers/functions';
   import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
-  // import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
+  import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import isMobile from '~/mixins/isMobile';
   import LoadingPage from '~/components/LoadingPage.vue';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
+  import TotalsTable from '~/components/closet/TotalsTable.vue';
 
   export default {
     name: 'Closet',
@@ -158,7 +163,6 @@
 
     computed: {
       ...mapState({
-        // selectedPack: state => state.closet.selectedPack,
         sidebarExpandOnHover: state => state.closet.sidebarExpandOnHover
       }),
       graphStyles () {
@@ -176,7 +180,6 @@
 
     methods: {
       ...mapActions('closet', [
-        // 'setSelectedPack',
         'toggleSidebarExpandOnHover'
       ]),
       convertCurrency (amount) {
@@ -240,11 +243,12 @@
 
     components: {
       ClosetDataTable,
-      // ClosetSidebar,
+      ClosetSidebar,
       CustomIcon,
       LoadingPage,
       SelectedPackGraph,
-      SharePackListModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SharePackListModal.vue')
+      SharePackListModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SharePackListModal.vue'),
+      TotalsTable
     },
 
     head () {
@@ -263,10 +267,6 @@
     .content-container {
       padding-left: 56px;
       width: 100%;
-
-      @include breakpoint(smallDisplay) {
-        padding-left: 0;
-      }
 
       .header {
         align-items    : center;

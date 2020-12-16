@@ -6,6 +6,7 @@ extend type Mutation @guard(with: ["api"]) {
 type Category {
     id: ID!
     name: String!
+    unit: String!
     created_at: DateTime!
     updated_at: DateTime!
     pack_id: ID!
@@ -17,5 +18,6 @@ type Category {
 
 input CategoryInput {
     name: String
+    unit: String
     pack_id: ID
 }

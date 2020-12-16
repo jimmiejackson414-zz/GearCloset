@@ -7,6 +7,7 @@ type Item {
     id: ID!
     name: String
     weight: Float
+    unit: String
     price: Int
     generic_type: String
     consumable: Boolean
@@ -24,6 +25,7 @@ type Item {
 input ItemInput {
     name: String
     weight: Float
+    unit: String
     price: Int
     generic_type: String
     consumable: Boolean

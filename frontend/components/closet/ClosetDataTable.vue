@@ -21,6 +21,7 @@
                 @handle-update-item="updateCategory($event, category, 'name')" />
             </v-col>
             <v-data-table
+              v-if="category.items"
               :ref="`sortableTable${index}`"
               calculate-widths
               class="items-table-container"
@@ -112,13 +113,13 @@
                         <click-to-edit
                           :style="{ fontSize: '0.875rem' }"
                           :unique-identifier="`weight${item.id}Ref`"
-                          :value="String(item.weight)"
+                          :value="convertWeight(item)"
                           @handle-update-item="updateItem($event, item, 'weight')" />
                         <v-select
                           dense
                           hide-details
                           :items="weightItems"
-                          value="oz"
+                          :value="item.unit"
                           @change="handleUpdateUnits($event, item)" />
                       </span>
                     </td>
@@ -180,13 +181,13 @@
                       class="text-center"
                       :colspan="1">
                       <span class="weight-column">
-                        {{ weightTotal(items) }}
+                        {{ weightTotal(category) }}
                         <v-select
                           dense
                           hide-details
                           :items="weightItems"
-                          value="oz"
-                          @change="handleUpdateUnits($event, item)" />
+                          :value="category.unit"
+                          @change="handleUpdateUnits($event, category)" />
                       </span>
                     </td>
 
@@ -262,6 +263,7 @@
 
 <script>
   import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+  import convert from 'convert-units';
   import draggable from 'vuedraggable';
   import ClickToEdit from '~/components/ClickToEdit.vue';
   import { convertToDollars } from '~/helpers/functions';
@@ -327,6 +329,9 @@
         console.log('data table log: ', evt);
       },
 
+      convertWeight (item) {
+        return convert(item.weight).from('g').to(item.unit).toFixed(2);
+      },
       handleAddNewCategory () {
         const payload = {
           fields: { name: 'New Category', pack_id: this.activePack.id },
@@ -394,8 +399,10 @@
 
         await itemService.update(payload);
       },
-      weightTotal (items) {
-        return `${items.reduce((sum, elem) => sum + elem.weight, 0).toFixed(2)}`;
+      weightTotal (category) {
+        const reduced = `${category.items.reduce((sum, elem) => sum + elem.weight, 0)}`;
+        console.log({ reduced });
+        return convert(Number(reduced)).from('g').to(category.unit).toFixed(2);
       }
     },
 

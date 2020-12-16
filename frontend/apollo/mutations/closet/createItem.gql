@@ -1,6 +1,7 @@
 mutation CreateItem(
   $name:String
   $weight:Float
+  $unit:String
   $price:Int
   $generic_type:String
   $category_id:ID!
@@ -10,8 +11,9 @@ mutation CreateItem(
 ) {
   createItem(
     input: {
-      name: $name,
+      name: $name
       weight: $weight
+      unit: $unit
       price: $price
       generic_type: $generic_type
       category_id: $category_id
@@ -22,6 +24,7 @@ mutation CreateItem(
     id
     name
     weight
+    unit
     price
     generic_type
     category_id
