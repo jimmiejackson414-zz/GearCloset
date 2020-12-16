@@ -1,0 +1,9 @@
+mutation CreateCategory($name: String $pack_id: ID) {
+  createCategory(input: { name: $name pack_id: $pack_id}) {
+    id
+    name
+    pack_id
+    created_at
+    updated_at
+  }
+}

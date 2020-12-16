@@ -10,12 +10,16 @@
     :full-width="false"
     hide-details
     outlined
-    :style="{...customStyle, ...localStyle}"
+    :style="{...customStyle}"
     :type="type"
     :value="localValue"
     @blur="handleUpdateItem($event)"
     @click="activateInput"
-    @keyup.enter.native="handleUpdateItem($event)" />
+    @keyup.enter.native="handleUpdateItem($event)">
+    <template #prepend-inner>
+      <slot></slot>
+    </template>
+  </v-text-field>
 </template>
 
 <script>
@@ -55,14 +59,14 @@
       };
     },
 
-    computed: {
-      localStyle () {
-        const inputWidth = this.value.length * 18;
-        return {
-          width: `${inputWidth > 325 ? 325 : inputWidth}px`
-        };
-      }
-    },
+    // computed: {
+    // localStyle () {
+    //   const inputWidth = this.value.length * 18;
+    //   return {
+    //     width: `${inputWidth > 325 ? 325 : inputWidth}px`
+    //   };
+    // }
+    // },
 
     methods: {
       activateInput () {
@@ -98,6 +102,14 @@
     &.b-none {
       fieldset {
         border: none !important;
+      }
+    }
+
+    .v-input__slot {
+      .v-input__prepend-inner {
+        align-self: center;
+        margin: 0 0 3px;
+        margin-top: 0 !important;
       }
     }
   }

@@ -4,15 +4,16 @@
     :query="require('~/apollo/queries/content/packs.gql')"
     @result="handleData">
     <template v-slot="{ result: { data, error, loading }, isLoading}">
+      <loading-page v-if="isLoading && !selectedPack" />
       <div
-        v-if="!isLoading && selectedPack"
+        v-else
         v-resize="onResize"
         class="closet-page-styles">
         <!-- Sidebar -->
-        <closet-sidebar
+        <!-- <closet-sidebar
           :is-mobile="isMobile"
           :packs="packs"
-          @handle-selected-pack="handleSelectedPack" />
+          @handle-selected-pack="handleSelectedPack" /> -->
 
         <!-- Content -->
         <div class="content-container">
@@ -42,8 +43,8 @@
                 <v-menu
                   v-if="!isMobile"
                   :close-on-content-click="false"
+                  left
                   nudge-bottom
-                  offset-x
                   offset-y>
                   <template #activator="{ on, attrs }">
                     <v-btn
@@ -60,23 +61,28 @@
                     </v-btn>
                   </template>
                   <v-list>
-                    <v-list-item>
-                      <v-switch
-                        class="ma-0"
-                        color="accent"
-                        flat
-                        hide-details
-                        inset
-                        :ripple="false"
-                        :value="!sidebarExpandOnHover"
-                        @change="toggleSidebarExpandOnHover">
-                        <template #label>
-                          <p class="body-text-1 mb-0">
-                            Lock sidebar
-                          </p>
-                        </template>
-                      </v-switch>
-                    </v-list-item>
+                    <v-list-item-group>
+                      <v-list-item>
+                        Change Pack Theme Colors
+                      </v-list-item>
+                      <v-list-item>
+                        <v-switch
+                          class="ma-0"
+                          color="accent"
+                          flat
+                          hide-details
+                          inset
+                          :ripple="false"
+                          :value="!sidebarExpandOnHover"
+                          @change="toggleSidebarExpandOnHover">
+                          <template #label>
+                            <p class="body-text-1 mb-0">
+                              Lock sidebar
+                            </p>
+                          </template>
+                        </v-switch>
+                      </v-list-item>
+                    </v-list-item-group>
                   </v-list>
                 </v-menu>
               </div>
@@ -104,8 +110,6 @@
           </v-container>
         </div>
       </div>
-
-      <loading-page v-else />
     </template>
   </ApolloQuery>
 </template>
@@ -115,7 +119,7 @@
   import convert from 'convert-units';
   import { calculateCategoryWeight, convertToDollars, generateUUID } from '~/helpers/functions';
   import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
-  import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
+  // import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import isMobile from '~/mixins/isMobile';
@@ -148,12 +152,13 @@
       modalItem: null,
       packs: null,
       selected: null,
+      selectedPack: null,
       shareListModalOpen: false
     }),
 
     computed: {
       ...mapState({
-        selectedPack: state => state.closet.selectedPack,
+        // selectedPack: state => state.closet.selectedPack,
         sidebarExpandOnHover: state => state.closet.sidebarExpandOnHover
       }),
       graphStyles () {
@@ -171,7 +176,7 @@
 
     methods: {
       ...mapActions('closet', [
-        'setSelectedPack',
+        // 'setSelectedPack',
         'toggleSidebarExpandOnHover'
       ]),
       convertCurrency (amount) {
@@ -179,14 +184,14 @@
       },
       handleData ({ data: { packs } }) {
         this.packs = packs;
-        this.setSelectedPack(packs[0]);
+        this.selectedPack = packs[0];
       },
       handleRemoveModalOpen (item) {
         this.modalItem = item;
         this.deleteConfirmOpen = true;
       },
       handleSelectedPack (pack) {
-        this.setSelectedPack(pack);
+        this.selectedPack = pack;
       },
       onResize () {
         const width = window.innerWidth;
@@ -235,7 +240,7 @@
 
     components: {
       ClosetDataTable,
-      ClosetSidebar,
+      // ClosetSidebar,
       CustomIcon,
       LoadingPage,
       SelectedPackGraph,
@@ -384,6 +389,34 @@
             &:hover {
               td:first-child svg, td:last-child svg {
                 opacity: 1;
+              }
+            }
+
+            &.totals {
+              .weight-column {
+                align-items: center;
+                display: flex;
+                margin: 0 0 0 auto;
+                width: 100%;
+
+                .v-input {
+                  margin: 0 0 0 10px;
+                  max-width: 57px;
+
+                  .v-select__selection {
+                    margin-bottom: 0;
+                    margin-top: 0;
+                  }
+
+                  .v-icon {
+                    margin-top: 0;
+                  }
+                }
+              }
+
+              .price-total {
+                display: flex;
+                justify-content: center;
               }
             }
           }

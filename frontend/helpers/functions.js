@@ -1,3 +1,6 @@
+import Dinero from 'dinero.js';
+Dinero.defaultPrecision = 2;
+
 export const calculateCategoryWeight = category => category.items.reduce((sum, elem) => sum + +elem.weight, 0);
 
 export const calculatePackWeights = pack => {
@@ -21,13 +24,8 @@ export const calculatePackWeights = pack => {
 
 export const capitalize = text => text.replace(/^./, str => str.toUpperCase());
 
-export const convertToDollars = num => {
-  return (num / 100).toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 2
-  });
+export const convertToDollars = (num, currency = 'USD') => {
+  return Dinero({ amount: Number(num), currency }).toFormat('0,0.00');
 };
 
 export const generateUUID = () => {

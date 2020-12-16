@@ -5,207 +5,232 @@
         Pack Items
       </h2>
       <client-only>
+        </v-row>
         <v-list
           v-for="(category, index) in categories"
           :key="category.id"
           :class="['categories-container', categories.length === index + 1 ? 'last' : '']">
-          <click-to-edit
-            :custom-style="{ width: 'fit-content' }"
-            :unique-identifier="`title${category.id}Ref`"
-            :value="category.name"
-            @handle-update-item="updateItem($event, category, 'name')" />
-          <v-data-table
-            :ref="`sortableTable${index}`"
-            calculate-widths
-            class="items-table-container"
-            dense
-            disable-pagination
-            :headers="headers"
-            hide-default-footer
-            :items="category.items"
-            :mobile-breakpoint="0">
-            <template #body="{ items }">
-              <draggable
-                v-bind="dragOptions"
-                class="dragArea"
-                group="items"
-                handle=".drag"
-                :list="items"
-                tag="tbody"
-                @change="log"
-                @end="drag = false"
-                @start="drag = true">
-                <tr
-                  v-for="(item, i) in items"
-                  :key="item.id">
-                  <!-- Drag Handle -->
-                  <td :key="`${item.id}-drag-${i}-${index}`">
-                    <custom-icon
-                      color="#4a4a4a"
-                      custom-class="drag"
-                      :height="20"
-                      name="grip-horizontal-line"
-                      :width="20" />
-                  </td>
-
-                  <!-- Generic Type Click To Edit -->
-                  <td :key="`${item.id}-type-${i}-${index}`">
-                    <click-to-edit
-                      :style="{ fontSize: '0.875rem' }"
-                      :unique-identifier="`type${item.id}`"
-                      :value="item.generic_type"
-                      @handle-update-item="updateItem($event, item, 'generic_type')" />
-                  </td>
-
-                  <!-- Name Click To Edit -->
-                  <td :key="`${item.id}-name-${i}-${index}`">
-                    <click-to-edit
-                      :style="{ fontSize: '0.875rem' }"
-                      :unique-identifier="`name${item.id}Ref`"
-                      :value="item.name"
-                      @handle-update-item="updateItem($event, item, 'name')" />
-                  </td>
-
-                  <!-- Consumable Toggle -->
-                  <td
-                    :key="`${item.id}-consumable-${i}-${index}`"
-                    class="text-center">
-                    <v-btn
-                      :class="[{ active: item.consumable }, 'consumable-btn']"
-                      icon
-                      :ripple="false"
-                      text
-                      @click="updateBooleanItem(item, 'consumable')">
+          <v-row>
+            <v-col
+              cols="12"
+              lg="4"
+              md="6">
+              <click-to-edit
+                :unique-identifier="`title${category.id}Ref`"
+                :value="category.name"
+                @handle-update-item="updateCategory($event, category, 'name')" />
+            </v-col>
+            <v-data-table
+              :ref="`sortableTable${index}`"
+              calculate-widths
+              class="items-table-container"
+              dense
+              disable-pagination
+              :headers="headers"
+              hide-default-footer
+              :items="category.items"
+              :mobile-breakpoint="0">
+              <template #body="{ items }">
+                <draggable
+                  v-bind="dragOptions"
+                  class="dragArea"
+                  group="items"
+                  handle=".drag"
+                  :list="items"
+                  tag="tbody"
+                  @change="log"
+                  @end="drag = false"
+                  @start="drag = true">
+                  <tr
+                    v-for="(item, i) in items"
+                    :key="item.id">
+                    <!-- Drag Handle -->
+                    <td :key="`${item.id}-drag-${i}-${index}`">
                       <custom-icon
+                        color="#4a4a4a"
+                        custom-class="drag"
                         :height="20"
-                        name="utensils-alt"
+                        name="grip-horizontal-line"
                         :width="20" />
-                    </v-btn>
-                  </td>
+                    </td>
 
-                  <!-- Worn Toggle -->
-                  <td
-                    :key="`${item.id}-worn-${i}-${index}`"
-                    class="text-center">
-                    <v-btn
-                      :class="[{ active: item.worn }, 'worn-btn']"
-                      icon
-                      :ripple="false"
-                      text
-                      @click="updateBooleanItem(item, 'worn')">
-                      <custom-icon
-                        :height="20"
-                        name="layer-group"
-                        :width="20" />
-                    </v-btn>
-                  </td>
-
-                  <!-- Weight Click To Edit and Dropdown -->
-                  <td :key="`${item.id}-weight-${i}-${index}`">
-                    <span class="weight-column">
+                    <!-- Generic Type Click To Edit -->
+                    <td :key="`${item.id}-type-${i}-${index}`">
                       <click-to-edit
                         :style="{ fontSize: '0.875rem' }"
-                        :unique-identifier="`weight${item.id}Ref`"
-                        :value="String(item.weight)"
-                        @handle-update-item="updateItem($event, item, 'weight')" />
-                      <v-select
-                        dense
-                        hide-details
-                        :items="weightItems"
-                        value="oz"
-                        @change="handleUpdateUnits($event, item)" />
-                    </span>
-                  </td>
+                        :unique-identifier="`type${item.id}`"
+                        :value="item.generic_type"
+                        @handle-update-item="updateItem($event, item, 'generic_type')" />
+                    </td>
 
-                  <!-- Price Click To Edit -->
-                  <td :key="`${item.id}-price-${i}-${index}`">
-                    <click-to-edit
-                      :custom-class="'price-column'"
-                      :mask="currencyMask"
-                      :style="{ fontSize: '0.875rem' }"
-                      :unique-identifier="`price${item.id}Ref`"
-                      :value="itemPrice(item)"
-                      @handle-update-item="updateItem($event, item, 'price')" />
-                  </td>
+                    <!-- Name Click To Edit -->
+                    <td :key="`${item.id}-name-${i}-${index}`">
+                      <click-to-edit
+                        :style="{ fontSize: '0.875rem' }"
+                        :unique-identifier="`name${item.id}Ref`"
+                        :value="item.name"
+                        @handle-update-item="updateItem($event, item, 'name')" />
+                    </td>
 
-                  <!-- Quantity Click To Edit -->
-                  <td :key="`${item.id}-quantity-${i}-${index}`">
-                    <click-to-edit
-                      :custom-class="'quantity-column'"
-                      :style="{ fontSize: '0.875rem' }"
-                      type="number"
-                      :unique-identifier="`quantity${item.id}Ref`"
-                      :value="String(item.quantity)"
-                      @handle-update-item="updateItem($event, item, 'quantity')" />
-                  </td>
+                    <!-- Consumable Toggle -->
+                    <td
+                      :key="`${item.id}-consumable-${i}-${index}`"
+                      class="text-center">
+                      <v-btn
+                        :class="[{ active: item.consumable }, 'consumable-btn']"
+                        icon
+                        :ripple="false"
+                        text
+                        @click.native="updateBooleanItem(item, 'consumable')">
+                        <custom-icon
+                          :height="20"
+                          name="utensils-alt"
+                          :width="20" />
+                      </v-btn>
+                    </td>
 
-                  <!-- Remove button -->
-                  <td :key="`${item.id}-remove-${i}-${index}`">
-                    <v-btn
-                      icon
-                      @click="handleRemoveRow">
-                      <custom-icon
-                        :color="errorColor"
-                        custom-class="pointer"
-                        :height="20"
-                        name="trash-alt"
-                        :width="20" />
-                    </v-btn>
-                  </td>
-                </tr>
-              </draggable>
-            </template>
+                    <!-- Worn Toggle -->
+                    <td
+                      :key="`${item.id}-worn-${i}-${index}`"
+                      class="text-center">
+                      <v-btn
+                        :class="[{ active: item.worn }, 'worn-btn']"
+                        icon
+                        :ripple="false"
+                        text
+                        @click="updateBooleanItem(item, 'worn')">
+                        <custom-icon
+                          :height="20"
+                          name="layer-group"
+                          :width="20" />
+                      </v-btn>
+                    </td>
 
-            <!-- Totals -->
-            <template #body.append="{ items }">
-              <tr>
-                <td :colspan="1"></td>
-                <td :colspan="1">
-                  <span class="font-weight-bold px-3">Totals:</span>
-                </td>
-                <td :colspan="1"></td>
-                <td :colspan="1"></td>
-                <td :colspan="1"></td>
+                    <!-- Weight Click To Edit and Dropdown -->
+                    <td :key="`${item.id}-weight-${i}-${index}`">
+                      <span class="weight-column">
+                        <click-to-edit
+                          :style="{ fontSize: '0.875rem' }"
+                          :unique-identifier="`weight${item.id}Ref`"
+                          :value="String(item.weight)"
+                          @handle-update-item="updateItem($event, item, 'weight')" />
+                        <v-select
+                          dense
+                          hide-details
+                          :items="weightItems"
+                          value="oz"
+                          @change="handleUpdateUnits($event, item)" />
+                      </span>
+                    </td>
 
-                <!-- Weight Total -->
-                <td
-                  class="text-center"
-                  :colspan="1">
-                  {{ weightTotal(items) }}
-                </td>
+                    <!-- Price Click To Edit -->
+                    <td :key="`${item.id}-price-${i}-${index}`">
+                      <click-to-edit
+                        :custom-class="'price-column'"
+                        :style="{ fontSize: '0.875rem', maxWidth: '100px', margin: '0 auto' }"
+                        :unique-identifier="`price${item.id}Ref`"
+                        :value="itemPrice(item)"
+                        @handle-update-item="updateItem($event, item, 'price')">
+                        <custom-icon
+                          fill="#494f57"
+                          :height="14"
+                          name="dollar-alt"
+                          :width="14" />
+                      </click-to-edit>
+                    </td>
 
-                <!-- Price Total -->
-                <td
-                  class="text-center"
-                  :colspan="1">
-                  {{ priceTotal(items) }}
-                </td>
+                    <!-- Quantity Click To Edit -->
+                    <td :key="`${item.id}-quantity-${i}-${index}`">
+                      <click-to-edit
+                        :custom-class="'quantity-column'"
+                        :style="{ fontSize: '0.875rem', width: '60px', margin: '0 auto' }"
+                        type="number"
+                        :unique-identifier="`quantity${item.id}Ref`"
+                        :value="String(item.quantity)"
+                        @handle-update-item="updateItem($event, item, 'quantity')" />
+                    </td>
 
-                <!-- Quantity Total -->
-                <td
-                  class="text-center pr-4"
-                  :colspan="1">
-                  {{ quantityTotal(items) }}
-                </td>
-                <td :colspan="1"></td>
-              </tr>
-            </template>
-          </v-data-table>
+                    <!-- Remove button -->
+                    <td :key="`${item.id}-remove-${i}-${index}`">
+                      <v-btn
+                        icon
+                        @click="handleRemoveRow">
+                        <custom-icon
+                          :color="errorColor"
+                          custom-class="pointer"
+                          :height="20"
+                          name="trash-alt"
+                          :width="20" />
+                      </v-btn>
+                    </td>
+                  </tr>
 
-          <!-- Add New Item Button -->
-          <v-btn
-            :ripple="false"
-            text
-            @click="handleAddNewItem">
-            <custom-icon
-              :fill="primaryColor"
-              :height="18"
-              name="plus"
-              :width="18" />
-            <p class="body-2 primary--text mb-0 ml-3">
-              Add New Item
-            </p>
-          </v-btn>
+                  <!-- Totals -->
+                  <tr class="totals cursor-default">
+                    <td :colspan="1"></td>
+                    <td :colspan="1">
+                      <span class="font-weight-bold px-3">Totals:</span>
+                    </td>
+                    <td :colspan="1"></td>
+                    <td :colspan="1"></td>
+                    <td :colspan="1"></td>
+
+                    <!-- Weight Total -->
+                    <td
+                      class="text-center"
+                      :colspan="1">
+                      <span class="weight-column">
+                        {{ weightTotal(items) }}
+                        <v-select
+                          dense
+                          hide-details
+                          :items="weightItems"
+                          value="oz"
+                          @change="handleUpdateUnits($event, item)" />
+                      </span>
+                    </td>
+
+                    <!-- Price Total -->
+                    <td
+                      class="text-center"
+                      :colspan="1">
+                      <span class="price-total">
+                        <custom-icon
+                          fill="#494f57"
+                          :height="14"
+                          name="dollar-alt"
+                          :width="14" />
+                        {{ priceTotal(items) }}
+                      </span>
+                    </td>
+
+                    <!-- Quantity Total -->
+                    <td
+                      class="text-center pr-4"
+                      :colspan="1">
+                      {{ quantityTotal(items) }}
+                    </td>
+                    <td :colspan="1"></td>
+                  </tr>
+                </draggable>
+              </template>
+            </v-data-table>
+
+            <!-- Add New Item Button -->
+            <v-btn
+              :ripple="false"
+              text
+              @click="handleAddNewItem">
+              <custom-icon
+                :fill="primaryColor"
+                :height="18"
+                name="plus"
+                :width="18" />
+              <p class="body-2 primary--text mb-0 ml-3">
+                Add New Item
+              </p>
+            </v-btn>
+          </v-row>
         </v-list>
       </client-only>
 
@@ -241,6 +266,7 @@
   import ClickToEdit from '~/components/ClickToEdit.vue';
   import { convertToDollars } from '~/helpers/functions';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import { categoryService, itemService } from '~/services';
 
   export default {
     props: {
@@ -283,7 +309,6 @@
           allowNegative: false,
           includeThousandsSeparator: true,
           prefix: '$',
-          // requireDecimal: true, // TODO: Need to figure out why 00 isn't appending
           thousandsSeparatorSymbol: ','
         });
       },
@@ -303,7 +328,11 @@
       },
 
       handleAddNewCategory () {
-        console.log('handleAddNewCategory');
+        const payload = {
+          fields: { name: 'New Category', pack_id: this.activePack.id },
+          apollo: this.$apollo
+        };
+        categoryService.create(payload);
       },
       handleAddNewItem () {
         console.log('handleAddNewItem');
@@ -326,22 +355,47 @@
         return items.reduce((sum, elem) => sum + elem.quantity, 0);
       },
       priceTotal (items) {
-        const reduced = items.reduce((sum, elem) => sum + elem.price, 0);
+        const reduced = items.reduce((sum, elem) => sum + Number(elem.price), 0);
         return convertToDollars(reduced);
       },
-      updateItem (value, category, field) {
-        if (value === String(category[field])) {
-          // return if value hasn't changed
-          return;
-        } else {
-          category[field] = value;
+      async updateBooleanItem (item, field) {
+        const payload = {
+          fields: { id: item.id, [field]: !item[field] },
+          apollo: this.$apollo
+        };
+        await itemService.update(payload);
+      },
+      async updateCategory (value, category, field) {
+        // return if value hasn't changed
+        if (value === String(category[field])) { return; }
+
+        const payload = {
+          fields: { id: category.id, [field]: value },
+          apollo: this.$apollo
+        };
+        await categoryService.update(payload);
+      },
+      async updateItem (value, item, field) {
+        // return if value hasn't changed
+        if (value === String(item[field])) { return; }
+
+        const payload = {
+          fields: {
+            id: item.id,
+            [field]: value
+          },
+          apollo: this.$apollo
+        };
+
+        // handle floating point issue converting between string & number
+        if (field === 'price') {
+          payload.fields.price = Number((value * 100).toFixed(2));
         }
 
-        console.log('updateItem');
-        // await categoryService.update(category);
+        await itemService.update(payload);
       },
       weightTotal (items) {
-        return `${items.reduce((sum, elem) => sum + elem.weight, 0)}oz`;
+        return `${items.reduce((sum, elem) => sum + elem.weight, 0).toFixed(2)}`;
       }
     },
 
@@ -359,6 +413,10 @@
 </script>
 
 <style lang="scss">
+  .items-table-container {
+    width: 100%;
+  }
+
   .flip-list-move {
     transition: transform 0.5s;
   }
@@ -386,4 +444,5 @@
       max-width: 50px;
     }
   }
+
 </style>

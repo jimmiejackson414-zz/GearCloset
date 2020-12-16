@@ -67,6 +67,10 @@ span, div, input {
   cursor: pointer;
 }
 
+.cursor-default {
+  cursor: default;
+}
+
 .drag {
   cursor: grab;
 }
