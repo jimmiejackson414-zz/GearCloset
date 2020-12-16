@@ -12,10 +12,23 @@ async function create ({ fields, apollo }) {
       const pack = data.packs.find(pack => pack.id === fields.pack_id);
 
       // mutate
+      createCategory.items = [];
       pack.categories.push(createCategory);
 
       // write
       store.writeQuery({ query: packsQuery, data });
+    },
+    optimisticResponse: {
+      __typename: 'Mutation',
+      createCategory: {
+        __typename: 'category',
+        id: -1,
+        name: '',
+        pack_id: 0,
+        items: [],
+        created_at: Date.now(),
+        updated_at: Date.now()
+      }
     }
   });
 }
