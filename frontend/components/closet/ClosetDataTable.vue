@@ -155,7 +155,7 @@
                     <td :key="`${item.id}-remove-${i}-${index}`">
                       <v-btn
                         icon
-                        @click="handleRemoveRow">
+                        @click="handleRemoveRow(item, category)">
                         <custom-icon
                           :color="errorColor"
                           custom-class="pointer"
@@ -342,8 +342,17 @@
       handleAddNewItem () {
         console.log('handleAddNewItem');
       },
-      handleRemoveRow () {
+      async handleRemoveRow (item, category) {
         console.log('handleRemoveRow');
+        const payload = {
+          fields: {
+            item_id: item.id,
+            category_id: category.id
+          },
+          pack_id: this.activePack.id,
+          apollo: this.$apollo
+        };
+        await itemService.removeItem(payload);
       },
       handleUpdateUnits (e, item) {
         // access ref using item to convert specific text field's value
@@ -401,7 +410,6 @@
       },
       weightTotal (category) {
         const reduced = `${category.items.reduce((sum, elem) => sum + elem.weight, 0)}`;
-        console.log({ reduced });
         return convert(Number(reduced)).from('g').to(category.unit).toFixed(2);
       }
     },

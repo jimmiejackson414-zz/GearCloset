@@ -42,7 +42,6 @@
                 </div>
                 <!-- Options Button -->
                 <v-menu
-                  v-if="!isMobile"
                   :close-on-content-click="false"
                   left
                   nudge-bottom
@@ -63,10 +62,10 @@
                   </template>
                   <v-list>
                     <v-list-item-group>
-                      <v-list-item>
+                      <v-list-item @click="packThemeModalOpen = true">
                         Change Pack Theme Colors
                       </v-list-item>
-                      <v-list-item>
+                      <!-- <v-list-item>
                         <v-switch
                           class="ma-0"
                           color="accent"
@@ -82,7 +81,7 @@
                             </p>
                           </template>
                         </v-switch>
-                      </v-list-item>
+                      </v-list-item> -->
                     </v-list-item-group>
                   </v-list>
                 </v-menu>
@@ -115,6 +114,12 @@
         </div>
       </div>
     </template>
+
+    <pack-theme-modal
+      v-model="packThemeModalOpen"
+      :theme="localTheme"
+      :theme-options="themeOptions"
+      @handle-update="handleUpdatePackTheme" />
   </ApolloQuery>
 </template>
 
@@ -130,6 +135,8 @@
   import LoadingPage from '~/components/LoadingPage.vue';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
   import TotalsTable from '~/components/closet/TotalsTable.vue';
+  import { generateThemeOptions } from '~/helpers';
+  import { packService } from '~/services';
 
   export default {
     name: 'Closet',
@@ -156,6 +163,7 @@
       },
       modalItem: null,
       packs: null,
+      packThemeModalOpen: false,
       selected: null,
       selectedPack: null,
       shareListModalOpen: false
@@ -175,6 +183,9 @@
       },
       isSelected () {
         return this.selected === this.selectedPack;
+      },
+      themeOptions () {
+        return generateThemeOptions();
       }
     },
 
@@ -195,6 +206,16 @@
       },
       handleSelectedPack (pack) {
         this.selectedPack = pack;
+      },
+      handleUpdatePackTheme (theme) {
+        this.localTheme = theme;
+        this.packThemeModalOpen = false;
+
+        const payload = {
+          fields: { id: this.selectedPack.id, theme },
+          apollo: this.$apollo
+        };
+        packService.update(payload);
       },
       onResize () {
         const width = window.innerWidth;
@@ -246,6 +267,7 @@
       ClosetSidebar,
       CustomIcon,
       LoadingPage,
+      PackThemeModal: () => import(/* webpackPrefetch: true */ '~/components/modals/PackThemeModal'),
       SelectedPackGraph,
       SharePackListModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SharePackListModal.vue'),
       TotalsTable

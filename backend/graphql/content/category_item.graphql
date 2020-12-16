@@ -1,6 +1,6 @@
 type CategoryItemPivot {
     id: ID!
-    position: Int!
+    position: Int
     created_at: DateTime!
     updated_at: DateTime!
 

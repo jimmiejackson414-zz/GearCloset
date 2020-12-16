@@ -1,5 +1,6 @@
 extend type Mutation @guard(with: ["api"]) {
     createItem(input: ItemInput! @spread): Item @create
+    removeItem(input: ItemCategoryInput! @spread): Item @field(resolver: "ItemMutator@removeItem")
     updateItem(id:ID! input:ItemInput! @spread): Item @update
 }
 
@@ -32,4 +33,9 @@ input ItemInput {
     worn: Boolean
     quantity: Int
     category_id: ID
+}
+
+input ItemCategoryInput {
+    item_id:ID!
+    category_id:ID!
 }
