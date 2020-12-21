@@ -1,26 +1,28 @@
 /* eslint-disable camelcase */
-import { remove } from 'lodash';
+// import { remove } from 'lodash';
+'use strict';
+
+import { produce } from 'immer';
 import createItemMutation from '~/apollo/mutations/closet/createItem.gql';
 import removeItemMutation from '~/apollo/mutations/closet/removeItem.gql';
 import updateItemMutation from '~/apollo/mutations/closet/updateItem.gql';
 import packsQuery from '~/apollo/queries/content/packs.gql';
-import tripsQuery from '~/apollo/queries/content/trips.gql';
 
-async function create ({ fields, apollo }) {
+async function create ({ fields, pack_id, apollo }) {
   return await apollo.mutate({
     mutation: createItemMutation,
     variables: fields,
     update: (store, { data: { createItem } }) => {
       // read
-      const data = store.readQuery({ query: tripsQuery });
-      const trip = data.trips.find(trip => trip.id === fields.trip);
-      const category = trip.categories.find(cat => cat.id === fields.category);
+      const data = store.readQuery({ query: packsQuery });
+      const pack = data.packs.find(pack => pack.id === fields.pack_id);
+      const category = pack.categories.find(cat => cat.id === fields.category_id);
 
       // mutate
       category.items.unshift(createItem);
 
       // write
-      store.writeQuery({ query: tripsQuery, data });
+      store.writeQuery({ query: packsQuery, data });
     }
   });
 }
@@ -55,21 +57,26 @@ async function removeItem ({ fields, pack_id, apollo }) {
       }
     },
     update: (store, { data: { removeItem } }) => {
+      console.log({ removeItem });
+
       // read
       const data = store.readQuery({ query: packsQuery });
 
+      // find indices
+      const packIndex = data.packs.findIndex(e => e.id === pack_id);
+      const categoryIndex = data.packs[packIndex].categories.findIndex(e => e.id === fields.category_id);
+      const itemIndex = data.packs[packIndex].categories[categoryIndex].items.findIndex(e => e.id === fields.item_id);
+
       // mutate
-      const pack = data.packs.find(pack => pack.id === pack_id);
-      const category = pack.categories.find(category => category.id === fields.category_id);
-      remove(category.items, item => item.id === removeItem.id);
-      const otherPacks = data.packs.filter(t => t.id !== pack_id);
+      const newData = produce(data, x => {
+        x.packs[packIndex].categories[categoryIndex].items.splice(itemIndex, 1);
+      });
+      console.log({ newData });
 
       // write
       store.writeQuery({
         query: packsQuery,
-        data: {
-          packs: [pack, ...otherPacks]
-        }
+        data: newData
       });
     }
   });

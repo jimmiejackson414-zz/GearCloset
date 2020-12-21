@@ -262,6 +262,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   import convert from 'convert-units';
   import draggable from 'vuedraggable';
@@ -325,6 +326,9 @@
     },
 
     methods: {
+      ...mapActions({
+        success: 'alert/success'
+      }),
       log (evt) {
         console.log('data table log: ', evt);
       },
@@ -353,6 +357,7 @@
           apollo: this.$apollo
         };
         await itemService.removeItem(payload);
+        this.success('Successfully removed!');
       },
       handleUpdateUnits (e, item) {
         // access ref using item to convert specific text field's value

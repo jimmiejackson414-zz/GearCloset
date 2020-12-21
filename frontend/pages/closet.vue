@@ -1,71 +1,66 @@
 <template>
-  <ApolloQuery
-    ref="closetQueryRef"
-    :query="require('~/apollo/queries/content/packs.gql')"
-    @result="handleData">
-    <template v-slot="{ result: { data, error, loading }, isLoading}">
-      <loading-page v-if="isLoading && !selectedPack" />
-      <div
-        v-else
-        v-resize="onResize"
-        class="closet-page-styles">
-        <!-- Sidebar -->
-        <closet-sidebar
-          :is-mobile="isMobile"
-          :packs="packs"
-          :selected-pack="selectedPack"
-          @handle-selected-pack="handleSelectedPack" />
+  <loading-page v-if="isLoading && !selectedPack" />
+  <div
+    v-else
+    v-resize="onResize"
+    class="closet-page-styles">
+    <!-- Sidebar -->
+    <closet-sidebar
+      :is-mobile="isMobile"
+      :packs="packs"
+      :selected-pack="selectedPack"
+      @handle-selected-pack="handleSelectedPack" />
 
-        <!-- Content -->
-        <div class="content-container">
-          <v-container grid-list-lg>
-            <div class="header mb-6">
-              <h3 class="text-h3 font-weight-bold">
-                {{ selectedPack ? selectedPack.name : '' }}
-              </h3>
-              <div class="actions">
-                <div class="share-wrapper">
-                  <v-btn
-                    class="share-btn"
-                    icon
-                    :ripple="false"
-                    @click="shareListModalOpen = true">
-                    <custom-icon
-                      :fill="lightGrey"
-                      :height="20"
-                      name="share"
-                      :width="20" />
-                    <p class="body-2 mb-0 grey7--text">
-                      Share
-                    </p>
-                  </v-btn>
-                </div>
-                <!-- Options Button -->
-                <v-menu
-                  :close-on-content-click="false"
-                  left
-                  nudge-bottom
-                  offset-y>
-                  <template #activator="{ on, attrs }">
-                    <v-btn
-                      v-bind="attrs"
-                      depressed
-                      icon
-                      :ripple="false"
-                      v-on="on">
-                      <custom-icon
-                        :fill="lightGrey"
-                        :height="25"
-                        name="setting"
-                        :width="25" />
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-item-group>
-                      <v-list-item @click="packThemeModalOpen = true">
-                        Change Pack Theme Colors
-                      </v-list-item>
-                      <!-- <v-list-item>
+    <!-- Content -->
+    <div class="content-container">
+      <v-container grid-list-lg>
+        <div class="header mb-6">
+          <h3 class="text-h3 font-weight-bold">
+            {{ selectedPack ? selectedPack.name : '' }}
+          </h3>
+          <div class="actions">
+            <div class="share-wrapper">
+              <v-btn
+                class="share-btn"
+                icon
+                :ripple="false"
+                @click="shareListModalOpen = true">
+                <custom-icon
+                  :fill="lightGrey"
+                  :height="20"
+                  name="share"
+                  :width="20" />
+                <p class="body-2 mb-0 grey7--text">
+                  Share
+                </p>
+              </v-btn>
+            </div>
+            <!-- Options Button -->
+            <v-menu
+              :close-on-content-click="false"
+              left
+              nudge-bottom
+              offset-y>
+              <template #activator="{ on, attrs }">
+                <v-btn
+                  v-bind="attrs"
+                  depressed
+                  icon
+                  :ripple="false"
+                  v-on="on">
+                  <custom-icon
+                    :fill="lightGrey"
+                    :height="25"
+                    name="setting"
+                    :width="25" />
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item-group>
+                  <v-list-item @click="packThemeModalOpen = true">
+                    Change Pack Theme Colors
+                  </v-list-item>
+                  <!-- <v-list-item>
                         <v-switch
                           class="ma-0"
                           color="accent"
@@ -82,45 +77,43 @@
                           </template>
                         </v-switch>
                       </v-list-item> -->
-                    </v-list-item-group>
-                  </v-list>
-                </v-menu>
-              </div>
-            </div>
-            <v-row class="closet-pack-graph-wrapper">
-              <v-col class="wrapper col-12 col-md-6 col-lg-7">
-                <selected-pack-graph
-                  v-if="selectedPack"
-                  v-resize="onResize"
-                  :chart-data="chartData"
-                  :is-mobile="isMobile"
-                  :styles="graphStyles"
-                  :theme="selectedPack.theme" />
-              </v-col>
-              <v-col class="wrapper col-12 col-md-6 col-lg-5">
-                <totals-table :selected-pack="selectedPack" />
-              </v-col>
-            </v-row>
-
-            <!-- Data Tables -->
-            <closet-data-table
-              :active-pack="selectedPack" />
-
-            <!-- Share Pack List Modal -->
-            <share-pack-list-modal
-              v-model="shareListModalOpen"
-              :list="list" />
-          </v-container>
+                </v-list-item-group>
+              </v-list>
+            </v-menu>
+          </div>
         </div>
-      </div>
-    </template>
+        <v-row class="closet-pack-graph-wrapper">
+          <v-col class="wrapper col-12 col-md-6 col-lg-7">
+            <selected-pack-graph
+              v-if="selectedPack"
+              v-resize="onResize"
+              :chart-data="chartData"
+              :is-mobile="isMobile"
+              :styles="graphStyles"
+              :theme="selectedPack.theme" />
+          </v-col>
+          <v-col class="wrapper col-12 col-md-6 col-lg-5">
+            <totals-table :selected-pack="selectedPack" />
+          </v-col>
+        </v-row>
+
+        <!-- Data Tables -->
+        <closet-data-table
+          :active-pack="selectedPack" />
+
+        <!-- Share Pack List Modal -->
+        <share-pack-list-modal
+          v-model="shareListModalOpen"
+          :list="list" />
+      </v-container>
+    </div>
 
     <pack-theme-modal
       v-model="packThemeModalOpen"
       :theme="localTheme"
       :theme-options="themeOptions"
       @handle-update="handleUpdatePackTheme" />
-  </ApolloQuery>
+  </div>
 </template>
 
 <script>
@@ -137,6 +130,7 @@
   import TotalsTable from '~/components/closet/TotalsTable.vue';
   import { generateThemeOptions } from '~/helpers';
   import { packService } from '~/services';
+  import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
 
   export default {
     name: 'Closet',
@@ -144,6 +138,15 @@
     mixins: [currentUser, isMobile],
 
     middleware: 'authenticated',
+
+    apollo: {
+      packs: {
+        query: PACKS_QUERY,
+        result ({ data: { packs } }) {
+          this.selectedPack = packs[0];
+        }
+      }
+    },
 
     data: () => ({
       chartData: {
@@ -154,6 +157,7 @@
       chartWidth: 500,
       deleteConfirmOpen: false,
       isMobile: true,
+      isLoading: true,
       localTheme: '',
       lightGrey: '',
       list: {
@@ -162,7 +166,6 @@
         uuid: generateUUID()
       },
       modalItem: null,
-      packs: null,
       packThemeModalOpen: false,
       selected: null,
       selectedPack: null,
@@ -195,10 +198,6 @@
       ]),
       convertCurrency (amount) {
         return convertToDollars(amount);
-      },
-      handleData ({ data: { packs } }) {
-        this.packs = packs;
-        this.selectedPack = packs[0];
       },
       handleRemoveModalOpen (item) {
         this.modalItem = item;

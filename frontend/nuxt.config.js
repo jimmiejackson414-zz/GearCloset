@@ -83,18 +83,14 @@ export default {
   */
   apollo: {
     clientConfigs: {
-      default: {
-        httpEndpoint: process.env.NUXT_ENV_BACKEND_API_URL,
-        inMemoryCacheOptions: {
-          addTypename: true
-        }
-      }
+      default: '~/apollo/config.js'
     },
     defaultOptions: {
       $query: {
         loadingKey: 'loading'
       }
     },
+    includeNodeModules: true,
     cookieAttributes: {
       expires: 7 // optional, default 7 days
     },
