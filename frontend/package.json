@@ -9,7 +9,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "@nuxtjs/apollo": "^4.0.1-rc.5",
+    "@nuxtjs/apollo": "git@github.com:nuxt-community/apollo-module.git",
     "@nuxtjs/cloudinary": "^1.0.2",
     "@nuxtjs/dayjs": "^1.2.0",
     "@nuxtjs/eslint-module": "^2.0.0",

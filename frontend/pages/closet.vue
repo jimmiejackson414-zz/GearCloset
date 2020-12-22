@@ -98,8 +98,7 @@
         </v-row>
 
         <!-- Data Tables -->
-        <closet-data-table
-          :active-pack="selectedPack" />
+        <closet-data-table :active-pack="selectedPack" />
 
         <!-- Share Pack List Modal -->
         <share-pack-list-modal

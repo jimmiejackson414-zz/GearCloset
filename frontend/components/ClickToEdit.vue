@@ -59,31 +59,22 @@
       };
     },
 
-    // computed: {
-    // localStyle () {
-    //   const inputWidth = this.value.length * 18;
-    //   return {
-    //     width: `${inputWidth > 325 ? 325 : inputWidth}px`
-    //   };
-    // }
-    // },
-
     methods: {
       activateInput () {
         this.active = true;
       },
       handleUpdateItem (e) {
-        this.valueLocal = e.target.value;
+        this.localValue = e.target.value;
         this.active = false;
-        this.$emit('handle-update-item', this.valueLocal);
+        this.$emit('handle-update-item', this.localValue);
 
         if (e.type === 'keyup') { this.$refs[this.uniqueIdentifier].blur(); }
       }
     },
 
     watch: {
-      value () {
-        this.valueLocal = this.value;
+      value (val) {
+        this.localValue = val;
       }
     },
 

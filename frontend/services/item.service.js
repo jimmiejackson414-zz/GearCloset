@@ -8,21 +8,58 @@ import removeItemMutation from '~/apollo/mutations/closet/removeItem.gql';
 import updateItemMutation from '~/apollo/mutations/closet/updateItem.gql';
 import packsQuery from '~/apollo/queries/content/packs.gql';
 
-async function create ({ fields, pack_id, apollo }) {
+async function create ({ category_id, pack_id, apollo }) {
   return await apollo.mutate({
     mutation: createItemMutation,
-    variables: fields,
+    variables: {
+      name: 'New Item',
+      generic_type: 'Type',
+      weight: 0,
+      unit: 'g',
+      price: 0,
+      category_id,
+      consumable: false,
+      worn: false,
+      quantity: 0
+    },
+    optimisticResponse: {
+      __typename: 'Mutation',
+      createItem: {
+        __typename: 'item',
+        id: -1,
+        name: 'New Item',
+        weight: 0,
+        unit: 'oz',
+        price: 0,
+        generic_type: 'Type',
+        category_id,
+        consumable: false,
+        worn: false,
+        quantity: 0,
+        position: 1,
+        created_at: Date.now(),
+        updated_at: Date.now()
+      }
+    },
     update: (store, { data: { createItem } }) => {
       // read
       const data = store.readQuery({ query: packsQuery });
-      const pack = data.packs.find(pack => pack.id === fields.pack_id);
-      const category = pack.categories.find(cat => cat.id === fields.category_id);
+
+      // find indices
+      const packIndex = data.packs.findIndex(e => e.id === pack_id);
+      const categoryIndex = data.packs[packIndex].categories.findIndex(e => e.id === category_id);
 
       // mutate
-      category.items.unshift(createItem);
+      const newData = produce(data, x => {
+        const items = x.packs[packIndex].categories[categoryIndex].items;
+        createItem.position = items.length + 1;
+        items.push(createItem);
+      });
 
-      // write
-      store.writeQuery({ query: packsQuery, data });
+      store.writeQuery({
+        query: packsQuery,
+        data: newData
+      });
     }
   });
 }
@@ -58,7 +95,6 @@ async function removeItem ({ fields, pack_id, apollo }) {
     },
     update: (store, { data: { removeItem } }) => {
       console.log({ removeItem });
-
       // read
       const data = store.readQuery({ query: packsQuery });
 
@@ -71,9 +107,8 @@ async function removeItem ({ fields, pack_id, apollo }) {
       const newData = produce(data, x => {
         x.packs[packIndex].categories[categoryIndex].items.splice(itemIndex, 1);
       });
-      console.log({ newData });
 
-      // write
+      // write;
       store.writeQuery({
         query: packsQuery,
         data: newData

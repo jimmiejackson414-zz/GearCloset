@@ -108,21 +108,11 @@
                     </td>
 
                     <!-- Weight Click To Edit and Dropdown -->
-                    <td :key="`${item.id}-weight-${i}-${index}`">
-                      <span class="weight-column">
-                        <click-to-edit
-                          :style="{ fontSize: '0.875rem' }"
-                          :unique-identifier="`weight${item.id}Ref`"
-                          :value="convertWeight(item)"
-                          @handle-update-item="updateItem($event, item, 'weight')" />
-                        <v-select
-                          dense
-                          hide-details
-                          :items="weightItems"
-                          :value="item.unit"
-                          @change="handleUpdateUnits($event, item)" />
-                      </span>
-                    </td>
+                    <weight-row
+                      :identifier="`${item.id}-weight-${i}-${index}`"
+                      :item="item"
+                      @handle-update-item="updateItem"
+                      @handle-update-units="handleUpdateUnits" />
 
                     <!-- Price Click To Edit -->
                     <td :key="`${item.id}-price-${i}-${index}`">
@@ -181,7 +171,7 @@
                       class="text-center"
                       :colspan="1">
                       <span class="weight-column">
-                        {{ weightTotal(category) }}
+                        {{ category | displayCategoryWeight('oz') }}
                         <v-select
                           dense
                           hide-details
@@ -221,7 +211,7 @@
             <v-btn
               :ripple="false"
               text
-              @click="handleAddNewItem">
+              @click="handleAddNewItem(category.id)">
               <custom-icon
                 :fill="primaryColor"
                 :height="18"
@@ -262,10 +252,12 @@
 </template>
 
 <script>
+  /* eslint-disable camelcase */
   import { mapActions } from 'vuex';
   import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   import convert from 'convert-units';
   import draggable from 'vuedraggable';
+  import WeightRow from './WeightRow.vue';
   import ClickToEdit from '~/components/ClickToEdit.vue';
   import { convertToDollars } from '~/helpers/functions';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
@@ -296,7 +288,7 @@
       ],
       itemKeys: new WeakMap(),
       primaryColor: '',
-      weightItems: ['oz', 'lbs', 'g', 'kg']
+      weightItems: ['oz', 'lb', 'g', 'kg']
     }),
 
     computed: {
@@ -332,10 +324,6 @@
       log (evt) {
         console.log('data table log: ', evt);
       },
-
-      convertWeight (item) {
-        return convert(item.weight).from('g').to(item.unit).toFixed(2);
-      },
       handleAddNewCategory () {
         const payload = {
           fields: { name: 'New Category', pack_id: this.activePack.id },
@@ -343,11 +331,15 @@
         };
         categoryService.create(payload);
       },
-      handleAddNewItem () {
-        console.log('handleAddNewItem');
+      handleAddNewItem (category_id) {
+        const payload = {
+          category_id,
+          pack_id: this.activePack.id,
+          apollo: this.$apollo
+        };
+        itemService.create(payload);
       },
       async handleRemoveRow (item, category) {
-        console.log('handleRemoveRow');
         const payload = {
           fields: {
             item_id: item.id,
@@ -357,11 +349,15 @@
           apollo: this.$apollo
         };
         await itemService.removeItem(payload);
+        this.$emit('handle-refetch-packs');
         this.success('Successfully removed!');
       },
-      handleUpdateUnits (e, item) {
-        // access ref using item to convert specific text field's value
-        console.log('handleUpdateUnits');
+      handleUpdateUnits (event, item) {
+        if (item.quantity) {
+          this.updateItem(event, item, 'unit');
+        } else {
+          this.updateCategory(event, item, 'unit');
+        }
       },
       itemKey (item) {
         if (!this.itemKeys.has(item)) { this.itemKeys.set(item, ++this.currentItemKey); }
@@ -411,11 +407,17 @@
           payload.fields.price = Number((value * 100).toFixed(2));
         }
 
+        // convert back to mg for storage in db
+        if (field === 'weight') {
+          payload.fields.weight = convert(value).from(item.unit).to('mg');
+        }
+
         await itemService.update(payload);
       },
       weightTotal (category) {
-        const reduced = `${category.items.reduce((sum, elem) => sum + elem.weight, 0)}`;
-        return convert(Number(reduced)).from('g').to(category.unit).toFixed(2);
+        const weight = category.items.reduce((sum, elem) => sum + elem.weight, 0);
+        const payload = { weight, unit: category.unit };
+        return this.$options.filters.displayWeight(payload);
       }
     },
 
@@ -427,7 +429,8 @@
     components: {
       ClickToEdit,
       CustomIcon,
-      draggable
+      draggable,
+      WeightRow
     }
   };
 </script>

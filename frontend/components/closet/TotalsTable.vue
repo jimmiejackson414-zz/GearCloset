@@ -33,7 +33,7 @@
               </div>
             </td>
             <td class="text-center">
-              {{ weightTotal(category ) }}
+              {{ category | displayCategoryWeight }}{{ category.unit }}
             </td>
           </tr>
 
@@ -120,11 +120,11 @@
         }, 0);
 
         return {
-          base: `${convert(base).from('g').to('oz').toFixed(2)}oz`,
-          consumable: `${convert(consumable).from('g').to('oz').toFixed(2)}oz`,
+          base: `${convert(base).from('mg').to('oz').toFixed(2)}g`,
+          consumable: `${convert(consumable).from('mg').to('oz').toFixed(2)}g`,
           price: convertToDollars(priceTotal),
-          total: `${convert(total).from('g').to('oz').toFixed(2)}oz`,
-          worn: `${convert(worn).from('g').to('oz').toFixed(2)}oz`
+          total: `${convert(total).from('mg').to('oz').toFixed(2)}g`,
+          worn: `${convert(worn).from('mg').to('oz').toFixed(2)}g`
         };
       }
     },

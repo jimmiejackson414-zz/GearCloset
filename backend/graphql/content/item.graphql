@@ -1,11 +1,11 @@
-extend type Mutation @guard(with: ["api"]) {
-    createItem(input: ItemInput! @spread): Item @create
-    removeItem(input: ItemCategoryInput! @spread): Item @field(resolver: "ItemMutator@removeItem")
-    updateItem(id:ID! input:ItemInput! @spread): Item @update
-}
-
 extend type Query @guard(with: ["api"]) {
     item(id:ID! @eq): Item @find
+}
+
+extend type Mutation @guard(with: ["api"]) {
+    createItem(input: ItemInput! @spread): Item @field(resolver: "ItemMutator@createItem")
+    removeItem(input: ItemCategoryInput! @spread): Item @field(resolver: "ItemMutator@removeItem")
+    updateItem(id:ID! input: ItemInput! @spread): Item @update
 }
 
 type Item {
