@@ -10,10 +10,6 @@
     mixins: [reactiveProp],
 
     props: {
-      chartData: {
-        type: Object,
-        default: () => {}
-      },
       isMobile: {
         type: Boolean,
         default: true
@@ -99,6 +95,12 @@
     },
 
     watch: {
+      chartData: {
+        deep: true,
+        handler () {
+          this.$data._chart.update();
+        }
+      },
       isMobile (val) {
         const chart = this.$data._chart;
         if (val) {

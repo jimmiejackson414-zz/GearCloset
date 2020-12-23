@@ -1,10 +1,10 @@
-import updateAvatarMutation from '~/apollo/mutations/auth/updateAvatar.gql';
-import updatePasswordMutation from '~/apollo/mutations/auth/updatePassword.gql';
-import updateUserMutation from '~/apollo/mutations/auth/update.gql';
+import UPDATE_AVATAR_MUTATION from '~/apollo/mutations/auth/updateAvatar.gql';
+import UPDATE_PASSWORD_MUTATION from '~/apollo/mutations/auth/updatePassword.gql';
+import UPDATE_USER_MUTATION from '~/apollo/mutations/auth/update.gql';
 
 async function update ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: updateUserMutation,
+    mutation: UPDATE_USER_MUTATION,
     variables: fields
   });
 }
@@ -12,7 +12,7 @@ async function update ({ fields, apollo }) {
 async function updateAvatar ({ fields, apollo }) {
   try {
     return await apollo.mutate({
-      mutation: updateAvatarMutation,
+      mutation: UPDATE_AVATAR_MUTATION,
       variables: fields
     });
   } catch (error) {
@@ -23,7 +23,7 @@ async function updateAvatar ({ fields, apollo }) {
 async function updatePassword ({ fields, apollo }) {
   try {
     return await apollo.mutate({
-      mutation: updatePasswordMutation,
+      mutation: UPDATE_PASSWORD_MUTATION,
       variables: fields
     });
   } catch (error) {

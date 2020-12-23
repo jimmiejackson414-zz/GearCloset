@@ -1,15 +1,15 @@
 import { differenceWith } from 'lodash';
-import addFriendMutation from '~/apollo/mutations/planning/addFriend.gql';
-import getFriendsQuery from '~/apollo/queries/user/friends.gql';
-import tripsQuery from '~/apollo/queries/content/trips.gql';
+import ADD_FRIEND_MUTATION from '~/apollo/mutations/planning/addFriend.gql';
+import GET_FRIENDS_QUERY from '~/apollo/queries/user/friends.gql';
+import TRIPS_QUERY from '~/apollo/queries/content/trips.gql';
 
 async function addFriend ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: addFriendMutation,
+    mutation: ADD_FRIEND_MUTATION,
     variables: fields,
     update: (store, { data: { addFriends } }) => {
       // read query
-      const data = store.readQuery({ query: tripsQuery });
+      const data = store.readQuery({ query: TRIPS_QUERY });
 
       // modify user's friends
       const trip = data.trips.find(trip => trip.id === fields.trip);
@@ -21,7 +21,7 @@ async function addFriend ({ fields, apollo }) {
 
       // write query
       store.writeQuery({
-        query: tripsQuery,
+        query: TRIPS_QUERY,
         data: {
           trips: [trip, ...otherTrips]
         }
@@ -32,7 +32,7 @@ async function addFriend ({ fields, apollo }) {
 
 async function getFriends ({ apollo }) {
   return await apollo.query({
-    query: getFriendsQuery
+    query: GET_FRIENDS_QUERY
   });
 }
 

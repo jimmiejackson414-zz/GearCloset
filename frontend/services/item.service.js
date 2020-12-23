@@ -1,16 +1,13 @@
 /* eslint-disable camelcase */
-// import { remove } from 'lodash';
-'use strict';
-
 import { produce } from 'immer';
-import createItemMutation from '~/apollo/mutations/closet/createItem.gql';
-import removeItemMutation from '~/apollo/mutations/closet/removeItem.gql';
-import updateItemMutation from '~/apollo/mutations/closet/updateItem.gql';
-import packsQuery from '~/apollo/queries/content/packs.gql';
+import CREATE_ITEM_MUTATION from '~/apollo/mutations/closet/createItem.gql';
+import REMOVE_ITEM_MUTATION from '~/apollo/mutations/closet/removeItem.gql';
+import UPDATE_ITEM_MUTATION from '~/apollo/mutations/closet/updateItem.gql';
+import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
 
 async function create ({ category_id, pack_id, apollo }) {
   return await apollo.mutate({
-    mutation: createItemMutation,
+    mutation: CREATE_ITEM_MUTATION,
     variables: {
       name: 'New Item',
       generic_type: 'Type',
@@ -43,7 +40,7 @@ async function create ({ category_id, pack_id, apollo }) {
     },
     update: (store, { data: { createItem } }) => {
       // read
-      const data = store.readQuery({ query: packsQuery });
+      const data = store.readQuery({ query: PACKS_QUERY });
 
       // find indices
       const packIndex = data.packs.findIndex(e => e.id === pack_id);
@@ -56,8 +53,9 @@ async function create ({ category_id, pack_id, apollo }) {
         items.push(createItem);
       });
 
+      // write
       store.writeQuery({
-        query: packsQuery,
+        query: PACKS_QUERY,
         data: newData
       });
     }
@@ -72,7 +70,7 @@ async function destroy ({ fields, apollo }) {
 // remove from pack, keep assigned to user
 async function removeItem ({ fields, pack_id, apollo }) {
   return await apollo.mutate({
-    mutation: removeItemMutation,
+    mutation: REMOVE_ITEM_MUTATION,
     variables: fields,
     optimisticResponse: {
       __typename: 'Mutation',
@@ -94,9 +92,8 @@ async function removeItem ({ fields, pack_id, apollo }) {
       }
     },
     update: (store, { data: { removeItem } }) => {
-      console.log({ removeItem });
       // read
-      const data = store.readQuery({ query: packsQuery });
+      const data = store.readQuery({ query: PACKS_QUERY });
 
       // find indices
       const packIndex = data.packs.findIndex(e => e.id === pack_id);
@@ -110,7 +107,7 @@ async function removeItem ({ fields, pack_id, apollo }) {
 
       // write;
       store.writeQuery({
-        query: packsQuery,
+        query: PACKS_QUERY,
         data: newData
       });
     }
@@ -119,7 +116,7 @@ async function removeItem ({ fields, pack_id, apollo }) {
 
 async function update ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: updateItemMutation,
+    mutation: UPDATE_ITEM_MUTATION,
     variables: fields
   });
 }

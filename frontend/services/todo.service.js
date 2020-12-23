@@ -1,36 +1,36 @@
 import { remove } from 'lodash';
-import createTodoMutation from '~/apollo/mutations/planning/createTodo.gql';
-import removeTodoMutation from '~/apollo/mutations/planning/deleteTodo.gql';
-import updateTodoMutation from '~/apollo/mutations/planning/updateTodo.gql';
-import tripsQuery from '~/apollo/queries/content/trips.gql';
+import CREATE_TODO_MUTATION from '~/apollo/mutations/planning/createTodo.gql';
+import REMOVE_TODO_MUTATION from '~/apollo/mutations/planning/deleteTodo.gql';
+import UPDATE_TODO_MUTATION from '~/apollo/mutations/planning/updateTodo.gql';
+import TRIPS_QUERY from '~/apollo/queries/content/trips.gql';
 
 async function create ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: createTodoMutation,
+    mutation: CREATE_TODO_MUTATION,
     variables: fields,
     update: (store, { data: { createTodo } }) => {
       // read
-      const data = store.readQuery({ query: tripsQuery });
+      const data = store.readQuery({ query: TRIPS_QUERY });
       const trip = data.trips.find(trip => trip.id === fields.trip);
 
       // mutate
       trip.todos.unshift(createTodo);
 
       // write
-      store.writeQuery({ query: tripsQuery, data });
+      store.writeQuery({ query: TRIPS_QUERY, data });
     }
   });
 }
 
 async function destroy ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: removeTodoMutation,
+    mutation: REMOVE_TODO_MUTATION,
     variables: {
       id: fields.id
     },
     update: (store, { data: { deleteTodo } }) => {
       // read
-      const data = store.readQuery({ query: tripsQuery });
+      const data = store.readQuery({ query: TRIPS_QUERY });
 
       // mutate
       const trip = data.trips.find(trip => trip.id === fields.trip);
@@ -39,7 +39,7 @@ async function destroy ({ fields, apollo }) {
 
       // write
       store.writeQuery({
-        query: tripsQuery,
+        query: TRIPS_QUERY,
         data: {
           trips: [trip, ...otherTrips]
         }
@@ -60,7 +60,7 @@ async function destroy ({ fields, apollo }) {
 
 async function update ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: updateTodoMutation,
+    mutation: UPDATE_TODO_MUTATION,
     variables: fields
   });
 }

@@ -1,23 +1,12 @@
-import createCategoryMutation from '~/apollo/mutations/closet/createCategory.gql';
-import updateCategoryMutation from '~/apollo/mutations/closet/updateCategory.gql';
-import packsQuery from '~/apollo/queries/content/packs.gql';
+import { produce } from 'immer';
+import CREATE_CATEGORY_MUTATION from '~/apollo/mutations/closet/createCategory.gql';
+import UPDATE_CATEGORY_MUTATION from '~/apollo/mutations/closet/updateCategory.gql';
+import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
 
 async function create ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: createCategoryMutation,
+    mutation: CREATE_CATEGORY_MUTATION,
     variables: fields,
-    update: (store, { data: { createCategory } }) => {
-      // read
-      const data = store.readQuery({ query: packsQuery });
-      const pack = data.packs.find(pack => pack.id === fields.pack_id);
-
-      // mutate
-      createCategory.items = [];
-      pack.categories.push(createCategory);
-
-      // write
-      store.writeQuery({ query: packsQuery, data });
-    },
     optimisticResponse: {
       __typename: 'Mutation',
       createCategory: {
@@ -25,10 +14,27 @@ async function create ({ fields, apollo }) {
         id: -1,
         name: '',
         pack_id: 0,
+        unit: 'oz',
         items: [],
         created_at: Date.now(),
         updated_at: Date.now()
       }
+    },
+    update: (store, { data: { createCategory } }) => {
+      // read
+      const data = store.readQuery({ query: PACKS_QUERY });
+
+      // find indices
+      const packIndex = data.packs.findIndex(e => e.id === fields.pack_id);
+
+      // mutate
+      const newData = produce(data, x => {
+        createCategory.items = [];
+        x.packs[packIndex].categories.push(createCategory);
+      });
+
+      // write
+      store.writeQuery({ query: PACKS_QUERY, data: newData });
     }
   });
 }
@@ -39,7 +45,7 @@ async function destroy ({ fields, apollo }) {
 
 async function update ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: updateCategoryMutation,
+    mutation: UPDATE_CATEGORY_MUTATION,
     variables: fields
   });
 }

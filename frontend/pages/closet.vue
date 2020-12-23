@@ -60,6 +60,9 @@
                   <v-list-item @click="packThemeModalOpen = true">
                     Change Pack Theme Colors
                   </v-list-item>
+                  <v-list-item @click="resetPackModalOpen = true">
+                    Reset Pack
+                  </v-list-item>
                   <!-- <v-list-item>
                         <v-switch
                           class="ma-0"
@@ -112,6 +115,10 @@
       :theme="localTheme"
       :theme-options="themeOptions"
       @handle-update="handleUpdatePackTheme" />
+
+    <reset-pack-modal
+      v-model="resetPackModalOpen"
+      :pack="selectedPack" />
   </div>
 </template>
 
@@ -166,6 +173,7 @@
       },
       modalItem: null,
       packThemeModalOpen: false,
+      resetPackModalOpen: false,
       selected: null,
       selectedPack: null,
       shareListModalOpen: false
@@ -233,20 +241,10 @@
         this.chartData.datasets = [{
           label: 'Selected Pack Graph',
           data: this.selectedPack.categories.map(category => {
-            return parseFloat(convert(calculateCategoryWeight(category)).from('g').to('oz')).toFixed(2);
+            return convert(calculateCategoryWeight(category)).from('mg').to('lb').toFixed(2);
           })
         }];
-      },
-      update (item, field, value) {
-        const payload = { id: item.id, [field]: value };
-        console.log('update payload: ', payload);
-        // await itemService.update(payload);
-      },
-      updateBooleanItem (item, action) {
-        // if (action === 'consumable' || action === 'worn') { item[action] = !item[action]; }
-        this.update(item, action, item[action]);
       }
-
     },
 
     mounted () {
@@ -265,6 +263,7 @@
       ClosetSidebar,
       CustomIcon,
       LoadingPage,
+      ResetPackModal: () => import(/* webpackPrefetch: true */ '~/components/modals/ResetPackModal'),
       PackThemeModal: () => import(/* webpackPrefetch: true */ '~/components/modals/PackThemeModal'),
       SelectedPackGraph,
       SharePackListModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SharePackListModal.vue'),

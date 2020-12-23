@@ -1,36 +1,36 @@
 import { remove } from 'lodash';
-import createTripDetailMutation from '~/apollo/mutations/planning/createTripDetail.gql';
-import removeTripDetailMutation from '~/apollo/mutations/planning/deleteTripDetail.gql';
-import updateTripDetailMutation from '~/apollo/mutations/planning/updateTripDetail.gql';
-import tripsQuery from '~/apollo/queries/content/trips.gql';
+import CREATE_TRIP_DETAIL_MUTATION from '~/apollo/mutations/planning/createTripDetail.gql';
+import REMOVE_TRIP_DETAIL_MUTATION from '~/apollo/mutations/planning/deleteTripDetail.gql';
+import UPDATE_TRIP_DETAIL_MUTATION from '~/apollo/mutations/planning/updateTripDetail.gql';
+import TRIPS_QUERY from '~/apollo/queries/content/trips.gql';
 
 async function create ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: createTripDetailMutation,
+    mutation: CREATE_TRIP_DETAIL_MUTATION,
     variables: fields,
     update: (store, { data: { createTripDetail } }) => {
       // read
-      const data = store.readQuery({ query: tripsQuery });
+      const data = store.readQuery({ query: TRIPS_QUERY });
       const trip = data.trips.find(trip => trip.id === fields.trip);
 
       // mutate
       trip.tripDetails.unshift(createTripDetail);
 
       // write
-      store.writeQuery({ query: tripsQuery, data });
+      store.writeQuery({ query: TRIPS_QUERY, data });
     }
   });
 }
 
 async function destroy ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: removeTripDetailMutation,
+    mutation: REMOVE_TRIP_DETAIL_MUTATION,
     variables: {
       id: fields.id
     },
     update: (store, { data: { deleteTripDetail } }) => {
       // read
-      const data = store.readQuery({ query: tripsQuery });
+      const data = store.readQuery({ query: TRIPS_QUERY });
 
       // mutate
       const trip = data.trips.find(trip => trip.id === fields.trip);
@@ -39,7 +39,7 @@ async function destroy ({ fields, apollo }) {
 
       // write
       store.writeQuery({
-        query: tripsQuery,
+        query: TRIPS_QUERY,
         data: {
           trips: [trip, ...otherTrips]
         }
@@ -64,7 +64,7 @@ async function destroy ({ fields, apollo }) {
 
 async function update ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: updateTripDetailMutation,
+    mutation: UPDATE_TRIP_DETAIL_MUTATION,
     variables: fields
   });
 }

@@ -9,17 +9,17 @@ export const calculatePackWeights = pack => {
   pack.categories.forEach(cat => {
     cat.items.forEach(item => {
       if (!item.consumable && !item.worn) {
-        data.base += item.weight;
+        data.base += (item.weight * item.quantity);
       } else if (item.consumable && item.worn) {
-        data.worn += item.weight;
-        data.consumable += item.weight;
+        data.worn += (item.weight * item.quantity);
+        data.consumable += (item.weight * item.quantity);
       } else if (item.worn) {
-        data.worn += item.weight;
+        data.worn += (item.weight * item.quantity);
       } else if (item.consumable) {
-        data.consumable += item.weight;
+        data.consumable += (item.weight * item.quantity);
       }
 
-      data.total += item.weight;
+      data.total += (item.weight * item.quantity);
     });
   });
   return data;

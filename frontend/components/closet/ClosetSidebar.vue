@@ -239,7 +239,9 @@
         this.categories.forEach(category => {
           if (this.searchQuery) {
             const text = this.searchQuery.toLowerCase();
-            filteredItems.push(category.items.filter(item => item.name && item.name.toLowerCase().includes(text)));
+            filteredItems.push(category.items.filter(item => {
+              return item.name.toLowerCase().includes(text) || item.generic_type.toLowerCase().includes(text);
+            }));
           } else {
             filteredItems.push(category.items);
           }

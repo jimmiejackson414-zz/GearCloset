@@ -171,7 +171,7 @@
                       class="text-center"
                       :colspan="1">
                       <span class="weight-column">
-                        {{ category | displayCategoryWeight('oz') }}
+                        {{ category | displayCategoryWeight(category.unit) }}
                         <v-select
                           dense
                           hide-details
@@ -337,6 +337,7 @@
           pack_id: this.activePack.id,
           apollo: this.$apollo
         };
+
         itemService.create(payload);
       },
       async handleRemoveRow (item, category) {
@@ -348,12 +349,12 @@
           pack_id: this.activePack.id,
           apollo: this.$apollo
         };
+
         await itemService.removeItem(payload);
-        this.$emit('handle-refetch-packs');
         this.success('Successfully removed!');
       },
       handleUpdateUnits (event, item) {
-        if (item.quantity) {
+        if ('quantity' in item) {
           this.updateItem(event, item, 'unit');
         } else {
           this.updateCategory(event, item, 'unit');
@@ -416,8 +417,8 @@
       },
       weightTotal (category) {
         const weight = category.items.reduce((sum, elem) => sum + elem.weight, 0);
-        const payload = { weight, unit: category.unit };
-        return this.$options.filters.displayWeight(payload);
+        const payload = { weight };
+        return this.$options.filters.displayWeight(payload, category.unit);
       }
     },
 
