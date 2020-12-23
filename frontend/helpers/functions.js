@@ -3,6 +3,28 @@ Dinero.defaultPrecision = 2;
 
 export const calculateCategoryWeight = category => category.items.reduce((sum, elem) => sum + +elem.weight, 0);
 
+export const calculatePackPrices = pack => {
+  const data = { total: 0, base: 0, worn: 0, consumable: 0 };
+
+  pack.categories.forEach(cat => {
+    cat.items.forEach(item => {
+      if (!item.consumable && !item.worn) {
+        data.base += item.price;
+      } else if (item.consumable && item.worn) {
+        data.worn += item.price;
+        data.consumable += item.price;
+      } else if (item.worn) {
+        data.worn += item.price;
+      } else if (item.consumable) {
+        data.consumable += item.price;
+      }
+
+      data.total += item.price;
+    });
+  });
+  return data;
+};
+
 export const calculatePackWeights = pack => {
   const data = { total: 0, base: 0, worn: 0, consumable: 0 };
 

@@ -13,6 +13,13 @@
             <th class="text-center">
               Weight
             </th>
+            <th class="text-center unit-select">
+              <v-select
+                v-model="selectedUnit"
+                dense
+                hide-details
+                :items="weightItems" />
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -33,18 +40,33 @@
               </div>
             </td>
             <td class="text-center">
-              {{ category | displayCategoryWeight('lb', true) }}
+              {{ category | displayCategoryWeight(selectedUnit) }}
+            </td>
+            <td class="text-left pl-0">
+              {{ selectedUnit }}
             </td>
           </tr>
 
           <!-- Consumable Weight -->
-          <tr>
+          <tr class="totals">
             <td class="font-weight-bold text-left">
               Consumable:
             </td>
-            <td></td>
             <td class="text-center">
-              {{ packTotal.consumable }}
+              <div class="price-column">
+                <custom-icon
+                  fill="#494f57"
+                  :height="14"
+                  name="dollar-alt"
+                  :width="14" />
+                {{ prices.consumable }}
+              </div>
+            </td>
+            <td class="text-center">
+              {{ weights.consumable }}
+            </td>
+            <td class="text-left pl-0">
+              {{ selectedUnit }}
             </td>
           </tr>
 
@@ -53,9 +75,21 @@
             <td class="font-weight-bold text-left">
               Worn:
             </td>
-            <td></td>
             <td class="text-center">
-              {{ packTotal.worn }}
+              <div class="price-column">
+                <custom-icon
+                  fill="#494f57"
+                  :height="14"
+                  name="dollar-alt"
+                  :width="14" />
+                {{ prices.worn }}
+              </div>
+            </td>
+            <td class="text-center">
+              {{ weights.worn }}
+            </td>
+            <td class="text-left pl-0">
+              {{ selectedUnit }}
             </td>
           </tr>
 
@@ -64,9 +98,21 @@
             <td class="font-weight-bold text-left">
               Base:
             </td>
-            <td></td>
             <td class="text-center">
-              {{ packTotal.base }}
+              <div class="price-column">
+                <custom-icon
+                  fill="#494f57"
+                  :height="14"
+                  name="dollar-alt"
+                  :width="14" />
+                {{ prices.base }}
+              </div>
+            </td>
+            <td class="text-center">
+              {{ weights.base }}
+            </td>
+            <td class="text-left pl-0">
+              {{ selectedUnit }}
             </td>
           </tr>
 
@@ -82,11 +128,14 @@
                   :height="14"
                   name="dollar-alt"
                   :width="14" />
-                {{ packTotal.price }}
+                {{ prices.total }}
               </div>
             </td>
             <td class="text-center">
-              {{ packTotal.total }}
+              {{ weights.total }}
+            </td>
+            <td class="text-left pl-0">
+              {{ selectedUnit }}
             </td>
           </tr>
         </tbody>
@@ -97,7 +146,7 @@
 
 <script>
   import convert from 'convert-units';
-  import { calculatePackWeights, convertToDollars } from '~/helpers/functions';
+  import { calculatePackPrices, calculatePackWeights, convertToDollars } from '~/helpers/functions';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
@@ -108,23 +157,33 @@
       }
     },
 
+    data: () => ({
+      selectedUnit: 'lb',
+      weightItems: ['oz', 'lb', 'g', 'kg']
+    }),
+
     computed: {
       categories () {
         return this.selectedPack.categories.map(category => category);
       },
-      packTotal () {
-        const { base, consumable, total, worn } = calculatePackWeights(this.selectedPack);
-
-        const priceTotal = this.categories.reduce((sum, elem) => {
-          return sum + elem.items.reduce((sum, e) => sum + Number(e.price), 0);
-        }, 0);
+      prices () {
+        const { base, consumable, total, worn } = calculatePackPrices(this.selectedPack);
 
         return {
-          base: `${convert(base).from('mg').to('lb').toFixed(2)}lb`,
-          consumable: `${convert(consumable).from('mg').to('lb').toFixed(2)}lb`,
-          price: convertToDollars(priceTotal),
-          total: `${convert(total).from('mg').to('lb').toFixed(2)}lb`,
-          worn: `${convert(worn).from('mg').to('lb').toFixed(2)}lb`
+          base: convertToDollars(base),
+          consumable: convertToDollars(consumable),
+          total: convertToDollars(total),
+          worn: convertToDollars(worn)
+        };
+      },
+      weights () {
+        const { base, consumable, total, worn } = calculatePackWeights(this.selectedPack);
+
+        return {
+          base: `${convert(base).from('mg').to(this.selectedUnit).toFixed(2)}`,
+          consumable: `${convert(consumable).from('mg').to(this.selectedUnit).toFixed(2)}`,
+          total: `${convert(total).from('mg').to(this.selectedUnit).toFixed(2)}`,
+          worn: `${convert(worn).from('mg').to(this.selectedUnit).toFixed(2)}`
         };
       }
     },
@@ -133,10 +192,6 @@
       priceTotal (category) {
         const reduced = category.items.reduce((sum, elem) => sum + Number(elem.price), 0);
         return convertToDollars(reduced);
-      },
-      weightTotal (category) {
-        const reduced = category.items.reduce((sum, elem) => sum + elem.weight, 0).toFixed(2);
-        return `${convert(reduced).from('g').to('oz').toFixed(2)}oz`;
       }
     },
 
@@ -150,10 +205,64 @@
   .totals-wrapper {
     .v-data-table {
       tbody {
+        tr {
+          &.totals {
+            td {
+              border-top: 1px solid $grey5;
+            }
+          }
+        }
         .price-column {
           align-items: center;
           display: flex;
           justify-content: center;
+        }
+      }
+    }
+  }
+</style>
+
+<style lang="scss">
+  .totals-wrapper {
+    .v-data-table {
+      thead {
+        th {
+          &.unit-select {
+            padding: 0;
+
+            .v-select {
+              margin-bottom: 2px;
+              margin-top: 0;
+
+              .v-input__slot {
+                &::before {
+                  border-bottom: none;
+                  border-color: transparent;
+                }
+
+                .v-select__selections {
+                  input {
+                    display: none;
+                  }
+                }
+              }
+
+              .v-select__selection {
+                color: rgba(0, 0, 0, 0.6);
+                font-size: 12px;
+              }
+
+              &:hover {
+                .v-input__slot {
+                  &::before, &::after {
+                    border-bottom: none;
+                    border-color: transparent;
+                    transform: none;
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

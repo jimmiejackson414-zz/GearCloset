@@ -5,7 +5,12 @@
     :persistent="submitting">
     <v-card>
       <v-card-title>Delete {{ formatItem }}</v-card-title>
-      <v-card-text>Are you sure you want to delete this {{ item }}? This action cannot be undone.</v-card-text>
+      <v-card-text class="pb-0">
+        Are you sure you want to delete this {{ item }}?
+      </v-card-text>
+      <v-card-text class="font-weight-bold">
+        This action cannot be undone.
+      </v-card-text>
       <v-card-actions class="justify-space-between">
         <v-btn
           class="grey7--text"

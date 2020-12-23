@@ -37,7 +37,7 @@
             </div>
             <!-- Options Button -->
             <v-menu
-              :close-on-content-click="false"
+              close-on-content-click
               left
               nudge-bottom
               offset-y>
@@ -62,6 +62,12 @@
                   </v-list-item>
                   <v-list-item @click="resetPackModalOpen = true">
                     Reset Pack
+                  </v-list-item>
+                  <v-divider />
+                  <v-list-item
+                    :style="{color: '#db3030 !important'}"
+                    @click="handleDeletePackModal">
+                    Delete Pack
                   </v-list-item>
                   <!-- <v-list-item>
                         <v-switch
@@ -119,6 +125,12 @@
     <reset-pack-modal
       v-model="resetPackModalOpen"
       :pack="selectedPack" />
+
+    <delete-confirm-modal
+      v-model="deleteConfirmOpen"
+      :item="modalItem"
+      :selected-item="selectedPack"
+      @handle-remove-item="handleDeletePack" />
   </div>
 </template>
 
@@ -171,7 +183,7 @@
         title: 'Summer',
         uuid: generateUUID()
       },
-      modalItem: null,
+      modalItem: '',
       packThemeModalOpen: false,
       resetPackModalOpen: false,
       selected: null,
@@ -205,6 +217,14 @@
       ]),
       convertCurrency (amount) {
         return convertToDollars(amount);
+      },
+      handleDeletePack (pack) {
+        const payload = { id: pack.id, apollo: this.$apollo };
+        packService.destroy(payload);
+      },
+      handleDeletePackModal () {
+        this.modalItem = 'pack';
+        this.deleteConfirmOpen = true;
       },
       handleRemoveModalOpen (item) {
         this.modalItem = item;
@@ -262,6 +282,7 @@
       ClosetDataTable,
       ClosetSidebar,
       CustomIcon,
+      DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
       LoadingPage,
       ResetPackModal: () => import(/* webpackPrefetch: true */ '~/components/modals/ResetPackModal'),
       PackThemeModal: () => import(/* webpackPrefetch: true */ '~/components/modals/PackThemeModal'),
