@@ -1,5 +1,7 @@
 <template>
-  <td :key="identifier">
+  <td
+    :key="identifier"
+    class="px-0 py-1">
     <span class="weight-column">
       <click-to-edit
         :style="{ fontSize: '0.875rem' }"
@@ -17,8 +19,6 @@
 </template>
 
 <script>
-  import ClickToEdit from '~/components/ClickToEdit.vue';
-
   export default {
     props: {
       identifier: {
@@ -46,7 +46,7 @@
     },
 
     components: {
-      ClickToEdit
+      ClickToEdit: () => import(/* webpackPrefetch: true */ '~/components/ClickToEdit.vue')
     }
   };
 </script>

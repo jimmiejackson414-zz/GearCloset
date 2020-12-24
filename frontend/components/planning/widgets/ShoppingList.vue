@@ -89,10 +89,7 @@
 </template>
 
 <script>
-  import ClickToEdit from '~/components/ClickToEdit.vue';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import isMobile from '~/mixins/isMobile';
-  import PlusButton from '~/components/icons/PlusButton.vue';
   import { shoppingListItemService } from '~/services';
 
   export default {
@@ -170,9 +167,9 @@
     },
 
     components: {
-      ClickToEdit,
-      CustomIcon,
-      PlusButton
+      ClickToEdit: () => import(/* webpackPrefetch: true */ '~/components/ClickToEdit.vue'),
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
+      PlusButton: () => import(/* webpackPrefetch: true */ '~/components/icons/PlusButton.vue')
     }
   };
 </script>

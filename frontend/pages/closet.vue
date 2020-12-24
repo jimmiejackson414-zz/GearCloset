@@ -1,5 +1,5 @@
 <template>
-  <loading-page v-if="isLoading && !selectedPack" />
+  <loading-page v-if="$apollo.loading" />
   <div
     v-else
     v-resize="onResize"
@@ -8,15 +8,19 @@
     <closet-sidebar
       :is-mobile="isMobile"
       :packs="packs"
-      :selected-pack="selectedPack"
+      :selected-pack-id="selectedPackId"
       @handle-selected-pack="handleSelectedPack" />
 
     <!-- Content -->
+
     <div class="content-container">
-      <v-container grid-list-lg>
+      <loading-page v-if="loadingPack" />
+      <v-container
+        v-else
+        grid-list-lg>
         <div class="header mb-6">
           <h3 class="text-h3 font-weight-bold">
-            {{ selectedPack ? selectedPack.name : '' }}
+            {{ selectedPack.name || '' }}
           </h3>
           <div class="actions">
             <div class="share-wrapper">
@@ -44,9 +48,11 @@
               <template #activator="{ on, attrs }">
                 <v-btn
                   v-bind="attrs"
+                  class="settings-btn"
                   depressed
                   icon
                   :ripple="false"
+                  text
                   v-on="on">
                   <custom-icon
                     :fill="lightGrey"
@@ -102,19 +108,21 @@
               :theme="selectedPack.theme" />
           </v-col>
           <v-col class="wrapper col-12 col-md-6 col-lg-5">
-            <totals-table :selected-pack="selectedPack" />
+            <totals-table
+              v-if="selectedPack && selectedPack.categories"
+              :selected-pack="selectedPack" />
           </v-col>
         </v-row>
 
         <!-- Data Tables -->
         <closet-data-table :active-pack="selectedPack" />
-
-        <!-- Share Pack List Modal -->
-        <share-pack-list-modal
-          v-model="shareListModalOpen"
-          :list="list" />
       </v-container>
     </div>
+
+    <!-- Modals -->
+    <share-pack-list-modal
+      v-model="shareListModalOpen"
+      :list="list" />
 
     <pack-theme-modal
       v-model="packThemeModalOpen"
@@ -137,21 +145,16 @@
 <script>
   import { mapActions, mapState } from 'vuex';
   import convert from 'convert-units';
-  import { calculateCategoryWeight, convertToDollars, generateUUID } from '~/helpers/functions';
-  import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
-  import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
+  import { calculateCategoryWeight, generateUUID } from '~/helpers/functions';
   import currentUser from '~/mixins/currentUser';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
-  import isMobile from '~/mixins/isMobile';
-  import LoadingPage from '~/components/LoadingPage.vue';
-  import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
-  import TotalsTable from '~/components/closet/TotalsTable.vue';
   import { generateThemeOptions } from '~/helpers';
+  import isMobile from '~/mixins/isMobile';
   import { packService } from '~/services';
   import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
+  import SELECTED_PACK_QUERY from '~/apollo/queries/content/pack.gql';
 
   export default {
-    name: 'Closet',
+    name: 'ClosetPage',
 
     mixins: [currentUser, isMobile],
 
@@ -161,7 +164,7 @@
       packs: {
         query: PACKS_QUERY,
         result ({ data: { packs } }) {
-          this.selectedPack = packs[0];
+          this.selectedPackId = packs.length ? packs[0].id : null;
         }
       }
     },
@@ -175,19 +178,19 @@
       chartWidth: 500,
       deleteConfirmOpen: false,
       isMobile: true,
-      isLoading: true,
-      localTheme: '',
       lightGrey: '',
-      list: {
+      list: { // TODO: Generate dynamically instead of hard-coded
         id: 1,
         title: 'Summer',
         uuid: generateUUID()
       },
+      loadingPack: false,
+      localTheme: '',
       modalItem: '',
       packThemeModalOpen: false,
       resetPackModalOpen: false,
-      selected: null,
-      selectedPack: null,
+      selectedPackId: null,
+      selectedPack: {},
       shareListModalOpen: false
     }),
 
@@ -197,14 +200,11 @@
       }),
       graphStyles () {
         return {
-          height: `${this.chartHeight}px`,
+          returnheight: `${this.chartHeight}px`,
           margin: '0 auto',
           position: 'relative',
           width: `${this.chartWidth}px`
         };
-      },
-      isSelected () {
-        return this.selected === this.selectedPack;
       },
       themeOptions () {
         return generateThemeOptions();
@@ -215,23 +215,25 @@
       ...mapActions('closet', [
         'toggleSidebarExpandOnHover'
       ]),
-      convertCurrency (amount) {
-        return convertToDollars(amount);
+      async fetchPack (id) {
+        this.loadingPack = true;
+        const { data } = await this.$apollo.query({
+          query: SELECTED_PACK_QUERY,
+          variables: { id }
+        });
+        this.selectedPack = data.selectedPack;
+        this.loadingPack = false;
       },
-      handleDeletePack (pack) {
+      async handleDeletePack (pack) {
         const payload = { id: pack.id, apollo: this.$apollo };
-        packService.destroy(payload);
+        await packService.destroy(payload);
       },
       handleDeletePackModal () {
         this.modalItem = 'pack';
         this.deleteConfirmOpen = true;
       },
-      handleRemoveModalOpen (item) {
-        this.modalItem = item;
-        this.deleteConfirmOpen = true;
-      },
       handleSelectedPack (pack) {
-        this.selectedPack = pack;
+        this.selectedPackId = pack.id;
       },
       handleUpdatePackTheme (theme) {
         this.localTheme = theme;
@@ -273,22 +275,28 @@
     },
 
     watch: {
+      selectedPackId (newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.loadingPack = true;
+          this.fetchPack(newVal);
+        }
+      },
       selectedPack (val) {
         this.setChartData();
       }
     },
 
     components: {
-      ClosetDataTable,
-      ClosetSidebar,
-      CustomIcon,
+      ClosetDataTable: () => import(/* webpackPrefetch: true */ '~/components/closet/ClosetDataTable.vue'),
+      ClosetSidebar: () => import(/* webpackPrefetch: true */ '~/components/closet/ClosetSidebar.vue'),
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
-      LoadingPage,
+      LoadingPage: () => import(/* webpackPrefetch: true */ '~/components/LoadingPage.vue'),
+      SelectedPackGraph: () => import(/* webpackPrefetch: true */ '~/components/graphs/SelectedPackGraph.vue'),
+      TotalsTable: () => import(/* webpackPrefetch: true */ '~/components/closet/TotalsTable.vue'),
       ResetPackModal: () => import(/* webpackPrefetch: true */ '~/components/modals/ResetPackModal'),
       PackThemeModal: () => import(/* webpackPrefetch: true */ '~/components/modals/PackThemeModal'),
-      SelectedPackGraph,
-      SharePackListModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SharePackListModal.vue'),
-      TotalsTable
+      SharePackListModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SharePackListModal.vue')
     },
 
     head () {
@@ -302,15 +310,15 @@
 <style lang="scss" scoped>
   .closet-page-styles {
     display: flex;
-    height : 100%;
+    height: 100%;
 
     .content-container {
       padding-left: 56px;
       width: 100%;
 
       .header {
-        align-items    : center;
-        display        : flex;
+        align-items: center;
+        display: flex;
         justify-content: space-between;
 
         .actions {
@@ -327,142 +335,22 @@
             margin-right: 2rem;
 
             .share-btn {
+              background-color: transparent;
+
               p, svg {
                 transition: 0.2s color ease-in-out;
               }
 
               &:hover {
                 p {
-                  color: $primary;
-                }
-
-                svg {
-                  fill: $primary;
+                  color: $primary !important;
                 }
               }
             }
           }
-        }
-      }
-    }
-  }
-</style>
 
-<style lang="scss">
-  .closet-page-styles {
-    .content-container {
-      .items-list-styles {
-        .categories-container {
-          &.last {
-            border-bottom: 1px solid $grey5;
-            padding-bottom: 24px;
-          }
-        }
-
-        .items-table-container {
-          tr {
-            td {
-              padding: 0 4px;
-
-              .price-column {
-                .click-to-edit {
-                  .v-input__slot {
-                    input {
-                      text-align: center;
-                    }
-                  }
-                }
-              }
-
-              .weight-column {
-                display: grid;
-                grid-template-columns: auto minmax(auto, 57px);
-
-                .v-select {
-                  .v-input__slot {
-                    &:before, &:after {
-                      border: none;
-                    }
-                  }
-                }
-
-                .click-to-edit {
-                  .v-input__slot {
-                    input {
-                      text-align: right;
-                    }
-                  }
-                }
-              }
-
-              .v-btn {
-                &.active {
-                  &.worn-btn {
-                    background-color: $accentDarkest;
-                    svg {
-                      fill: white;
-                    }
-                  }
-
-                  &.consumable-btn {
-                    background-color: darken($secondaryLight, 10%);
-
-                    svg {
-                      fill: white;
-                    }
-                  }
-                }
-
-                &.remove {
-                  svg {
-                    fill: $error;
-                  }
-                }
-              }
-
-              &:last-child svg, &:first-child svg {
-                opacity   : 0;
-                transition: 0.2s opacity $cubicBezier;
-              }
-            }
-
-            &:hover {
-              td:first-child svg, td:last-child svg {
-                opacity: 1;
-              }
-            }
-
-            &.totals {
-              .weight-column {
-                align-items: center;
-                display: flex;
-                margin: 0 0 0 auto;
-                width: 100%;
-
-                .v-input {
-                  margin: 0 0 0 10px;
-                  max-width: 57px;
-
-                  .v-select__selection {
-                    margin-bottom: 0;
-                    margin-top: 0;
-                  }
-
-                  .v-icon {
-                    margin-top: 0;
-                  }
-                }
-              }
-
-              .price-total {
-                display: flex;
-                justify-content: center;
-              }
-            }
-          }
-
-          .new-category-container {
-            border-top: 1px solid $grey5;
+          .settings-btn {
+            background-color: transparent;
           }
         }
       }

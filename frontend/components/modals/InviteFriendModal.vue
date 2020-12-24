@@ -94,9 +94,7 @@
 <script>
   import { findIndex } from 'lodash';
   import { mapActions } from 'vuex';
-  import Avatar from '~/components/Avatar';
   import { friendService } from '~/services';
-  import Loading from '~/components/Loading';
   import { validateEmail } from '~/helpers/functions';
 
   export default {
@@ -191,14 +189,14 @@
     mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
       if (this.friends.length) {
-        this.friends.forEach(friend => delete friend.__typename);
+        // this.friends.forEach(friend => delete friend.__typename);
         this.chosenFriends = this.friends;
       }
     },
 
     components: {
-      Avatar,
-      Loading
+      Avatar: () => import(/* webpackPrefetch: true */ '~/components/Avatar'),
+      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading')
     }
   };
 </script>

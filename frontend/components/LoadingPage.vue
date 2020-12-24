@@ -5,11 +5,9 @@
 </template>
 
 <script>
-  import LoadingLogo from '~/components/icons/LoadingLogo.vue';
-
   export default {
     components: {
-      LoadingLogo
+      LoadingLogo: () => import(/* webpackPrefetch: true */ '~/components/icons/LoadingLogo.vue')
     }
   };
 </script>

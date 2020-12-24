@@ -24,7 +24,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="( category, index ) in categories"
+            v-for="( category, index ) in selectedPack.categories"
             :key="index">
             <td class="text-left">
               {{ category.name }}
@@ -147,7 +147,6 @@
 <script>
   import convert from 'convert-units';
   import { calculatePackPrices, calculatePackWeights, convertToDollars } from '~/helpers/functions';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     props: {
@@ -163,9 +162,6 @@
     }),
 
     computed: {
-      categories () {
-        return this.selectedPack.categories.map(category => category);
-      },
       prices () {
         const { base, consumable, total, worn } = calculatePackPrices(this.selectedPack);
 
@@ -196,7 +192,7 @@
     },
 
     components: {
-      CustomIcon
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue')
     }
   };
 </script>

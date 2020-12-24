@@ -69,11 +69,8 @@
 </template>
 
 <script>
-  import ClickToEdit from '~/components/ClickToEdit';
-  import CustomIcon from '~/components/icons/CustomIcon';
   import isMobile from '~/mixins/isMobile';
   import { todoService } from '~/services';
-  import PlusButton from '~/components/icons/PlusButton';
 
   export default {
     mixins: [isMobile],
@@ -148,9 +145,9 @@
     },
 
     components: {
-      ClickToEdit,
-      CustomIcon,
-      PlusButton
+      ClickToEdit: () => import(/* webpackPrefetch: true */ '~/components/ClickToEdit'),
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon'),
+      PlusButton: () => import(/* webpackPrefetch: true */ '~/components/icons/PlusButton')
     }
   };
 </script>

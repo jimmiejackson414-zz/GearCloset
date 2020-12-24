@@ -63,8 +63,6 @@
 </template>
 
 <script>
-  import PlusButton from '~/components/icons/PlusButton';
-
   export default {
     props: {
       currentUser: {
@@ -109,7 +107,7 @@
 
     components: {
       InviteFriendModal: () => import(/* webpackPrefetch: true */ '~/components/modals/InviteFriendModal.vue'),
-      PlusButton
+      PlusButton: () => import(/* webpackPrefetch: true */ '~/components/icons/PlusButton')
     }
   };
 </script>

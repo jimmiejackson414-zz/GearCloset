@@ -32,7 +32,6 @@
   import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
   import 'filepond/dist/filepond.min.css';
   import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
-  import SlideFadeTransition from './transitions/SlideFadeTransition.vue';
 
   const FilePond = vueFilePond(
     FilePondPluginFileValidateType,
@@ -75,7 +74,7 @@
 
     components: {
       FilePond,
-      SlideFadeTransition
+      SlideFadeTransition: () => import(/* webpackPrefetch: true */ './transitions/SlideFadeTransition.vue')
     }
   };
 </script>

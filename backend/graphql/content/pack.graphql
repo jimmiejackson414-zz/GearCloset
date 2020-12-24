@@ -6,6 +6,7 @@ extend type Mutation @guard(with: ["api"]) {
 }
 
 extend type Query @guard(with: ["api"]) {
+    pack(id: ID! @eq): Pack! @find
     packs: [Pack!]! @field(resolver: "PacksQuery@find_by_user")
 }
 

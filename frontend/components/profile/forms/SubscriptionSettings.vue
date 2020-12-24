@@ -24,7 +24,6 @@
 
 <script>
   import dayjs from 'dayjs';
-  import UpgradeCard from '~/components/UpgradeCard.vue';
 
   export default {
     props: {
@@ -59,7 +58,7 @@
 
     components: {
       UpdateSubscriptionModal: () => import(/* webpackPrefetch: true */ '~/components/modals/UpdateSubscriptionModal'),
-      UpgradeCard
+      UpgradeCard: () => import(/* webpackPrefetch: true */ '~/components/UpgradeCard.vue')
     }
   };
 </script>

@@ -197,6 +197,7 @@ export default {
    ** Build configuration
    */
   build: {
+    analyze: true,
     standalone: true,
     transpile: ['vee-validate/dist/rules'],
     externals: {

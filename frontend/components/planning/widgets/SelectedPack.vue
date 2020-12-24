@@ -52,10 +52,8 @@
 <script>
   import convert from 'convert-units';
   import { calculateCategoryWeight } from '~/helpers/functions';
-  import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import { generateThemeOptions } from '~/helpers';
   import { packService } from '~/services';
-  import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
 
   export default {
     props: {
@@ -163,9 +161,9 @@
     },
 
     components: {
-      EllipsisButton,
+      EllipsisButton: () => import(/* webpackPrefetch: true */ '~/components/icons/EllipsisButton.vue'),
       PackThemeModal: () => import(/* webpackPrefetch: true */ '~/components/modals/PackThemeModal'),
-      SelectedPackGraph,
+      SelectedPackGraph: () => import(/* webpackPrefetch: true */ '~/components/graphs/SelectedPackGraph.vue'),
       SelectPackModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SelectPackModal')
     }
   };

@@ -58,10 +58,7 @@
 </template>
 
 <script>
-  import CategoryBox from '~/components/forums/CategoryBox.vue';
   import currentUser from '~/mixins/currentUser';
-  import LoadingPage from '~/components/LoadingPage.vue';
-  import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
     name: 'ForumIndex',
@@ -86,10 +83,10 @@
     },
 
     components: {
-      CategoryBox,
+      CategoryBox: () => import(/* webpackPrefetch: true */ '~/components/forums/CategoryBox.vue'),
       FullScreenUpgrade: () => import(/* webpackPrefetch: true */'~/components/modals/FullScreenUpgrade'),
-      LoadingPage,
-      SignUpAlert,
+      LoadingPage: () => import(/* webpackPrefetch: true */ '~/components/LoadingPage.vue'),
+      SignUpAlert: () => import(/* webpackPrefetch: true */ '~/components/forums/SignUpAlert.vue'),
       UpdateSubscriptionModal: () => import(/* webpackPrefetch: true */'~/components/modals/UpdateSubscriptionModal')
     },
 

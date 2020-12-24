@@ -214,10 +214,6 @@
 <script>
   /* eslint-disable camelcase */
   import { countries } from '~/helpers';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
-  import ImageUploader from '~/components/ImageUploader.vue';
-  import Loading from '~/components/Loading.vue';
-  import MembershipChip from '~/components/MembershipChip';
   import { userService } from '~/services';
 
   export default {
@@ -292,10 +288,10 @@
     },
 
     components: {
-      CustomIcon,
-      ImageUploader,
-      Loading,
-      MembershipChip
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
+      ImageUploader: () => import(/* webpackPrefetch: true */ '~/components/ImageUploader.vue'),
+      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading.vue'),
+      MembershipChip: () => import(/* webpackPrefetch: true */ '~/components/MembershipChip')
     }
   };
 </script>

@@ -38,8 +38,6 @@
 </template>
 
 <script>
-  import CustomIcon from '~/components/icons/CustomIcon';
-
   export default {
     props: {
       items: {
@@ -68,7 +66,8 @@
     },
 
     components: {
-      CustomIcon
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon')
+
     }
   };
 </script>

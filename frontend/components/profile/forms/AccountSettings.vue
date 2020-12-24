@@ -102,8 +102,6 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import CustomIcon from '~/components/icons/CustomIcon';
-  import Loading from '~/components/Loading';
   import { userService } from '~/services';
 
   export default {
@@ -159,8 +157,8 @@
     },
 
     components: {
-      CustomIcon,
-      Loading
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon'),
+      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading')
     }
   };
 </script>

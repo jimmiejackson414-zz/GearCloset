@@ -52,7 +52,6 @@
 <script>
   import { mapState } from 'vuex';
   import { randBackgrounds } from '~/helpers';
-  import Logo from '~/components/icons/Logo';
 
   export default {
     name: 'Homepage',
@@ -87,7 +86,7 @@
     },
 
     components: {
-      Logo
+      Logo: () => import(/* webpackPrefetch: true */ '~/components/icons/Logo')
     }
   };
 </script>

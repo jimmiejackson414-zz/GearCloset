@@ -41,7 +41,6 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import Loading from '~/components/Loading';
 
   export default {
     props: {
@@ -86,7 +85,7 @@
     },
 
     components: {
-      Loading
+      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading')
     }
   };
 </script>

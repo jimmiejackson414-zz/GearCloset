@@ -45,8 +45,6 @@
 <script>
   import dayjs from 'dayjs';
   import { capitalize } from '~/helpers/functions';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
-  import UpgradeCard from '~/components/UpgradeCard.vue';
 
   export default {
     props: {
@@ -91,8 +89,8 @@
     },
 
     components: {
-      CustomIcon,
-      UpgradeCard
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
+      UpgradeCard: () => import(/* webpackPrefetch: true */ '~/components/UpgradeCard.vue')
     }
   };
 </script>

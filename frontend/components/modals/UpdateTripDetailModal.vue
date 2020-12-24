@@ -90,7 +90,6 @@
 
 <script>
   import { capitalize, prependProtocol } from '~/helpers/functions';
-  import Loading from '~/components/Loading.vue';
   import { tripDetailService } from '~/services';
 
   export default {
@@ -181,7 +180,7 @@
     },
 
     components: {
-      Loading
+      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading.vue')
     }
   };
 </script>

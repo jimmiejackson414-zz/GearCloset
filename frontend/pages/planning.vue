@@ -92,14 +92,6 @@
 
 <script>
   import currentUser from '~/mixins/currentUser';
-  import EllipsisButton from '~/components/icons/EllipsisButton.vue';
-  import Friends from '~/components/planning/widgets/Friends.vue';
-  import HikeDetails from '~/components/planning/widgets/HikeDetails.vue';
-  import LoadingPage from '~/components/LoadingPage.vue';
-  import SelectedPack from '~/components/planning/widgets/SelectedPack.vue';
-  import ShoppingList from '~/components/planning/widgets/ShoppingList.vue';
-  import TodoList from '~/components/planning/widgets/TodoList.vue';
-  import TripDetails from '~/components/planning/widgets/TripDetails.vue';
 
   export default {
     name: 'Planning',
@@ -136,14 +128,14 @@
 
     components: {
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal.vue'),
-      EllipsisButton,
-      Friends,
-      HikeDetails,
-      LoadingPage,
-      SelectedPack,
-      ShoppingList,
-      TodoList,
-      TripDetails
+      EllipsisButton: () => import(/* webpackPrefetch: true */ '~/components/icons/EllipsisButton.vue'),
+      Friends: () => import(/* webpackPrefetch: true */ '~/components/planning/widgets/Friends.vue'),
+      HikeDetails: () => import(/* webpackPrefetch: true */ '~/components/planning/widgets/HikeDetails.vue'),
+      LoadingPage: () => import(/* webpackPrefetch: true */ '~/components/LoadingPage.vue'),
+      SelectedPack: () => import(/* webpackPrefetch: true */ '~/components/planning/widgets/SelectedPack.vue'),
+      ShoppingList: () => import(/* webpackPrefetch: true */ '~/components/planning/widgets/ShoppingList.vue'),
+      TodoList: () => import(/* webpackPrefetch: true */ '~/components/planning/widgets/TodoList.vue'),
+      TripDetails: () => import(/* webpackPrefetch: true */ '~/components/planning/widgets/TripDetails.vue')
     },
 
     head () {

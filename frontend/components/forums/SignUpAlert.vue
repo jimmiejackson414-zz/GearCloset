@@ -26,7 +26,6 @@
 
 <script>
   import currentUser from '~/mixins/currentUser';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     mixins: [currentUser],
@@ -52,7 +51,7 @@
     },
 
     components: {
-      CustomIcon
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue')
     }
   };
 </script>

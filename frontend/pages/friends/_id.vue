@@ -120,7 +120,6 @@
 <script>
   import { convertToDollars } from '~/helpers/functions';
   import currentUser from '~/mixins/currentUser';
-  import MembershipChip from '~/components/MembershipChip.vue';
 
   export default {
     name: 'FriendPackList',
@@ -172,7 +171,7 @@
     },
 
     components: {
-      MembershipChip
+      MembershipChip: () => import(/* webpackPrefetch: true */ '~/components/MembershipChip.vue')
     },
 
     head () {

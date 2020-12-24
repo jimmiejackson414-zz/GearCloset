@@ -149,7 +149,9 @@
                 :width="35" />
             </v-btn>
           </div>
-          <v-list class="gear-list">
+          <v-list
+            v-if="hasItems"
+            class="gear-list">
             <v-list-item-group>
               <draggable
                 class="drag-area list-group"
@@ -178,6 +180,9 @@
               </draggable>
             </v-list-item-group>
           </v-list>
+          <p v-else>
+            You haven't created any items yet!
+          </p>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -189,7 +194,6 @@
   import { mapState } from 'vuex';
   import draggable from 'vuedraggable';
   import currentUser from '~/mixins/currentUser';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   let idGlobal = 8;
 
@@ -205,9 +209,9 @@
         type: Array,
         default: () => []
       },
-      selectedPack: {
-        type: Object,
-        default: () => {}
+      selectedPackId: {
+        type: String,
+        default: ''
       }
     },
 
@@ -257,12 +261,21 @@
           filteredPacks = this.packs;
         }
         return sortBy(filteredPacks, 'name');
+      },
+      hasItems () {
+        let containsItems = false;
+        this.categories.forEach(category => {
+          if (category.items.length) {
+            containsItems = true;
+          }
+        });
+        return containsItems;
       }
     },
 
     methods: {
       activeSelection (id) {
-        return id === this.selectedPack.id;
+        return id === this.selectedPackId;
       },
       clearSearch () {
         this.searchQuery = '';
@@ -291,7 +304,7 @@
 
     components: {
       draggable,
-      CustomIcon
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue')
     }
   };
 </script>

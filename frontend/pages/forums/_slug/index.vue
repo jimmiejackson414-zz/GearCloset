@@ -113,9 +113,6 @@
   import * as dayjs from 'dayjs';
   import relativeTime from 'dayjs/plugin/relativeTime';
   import currentUser from '~/mixins/currentUser';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
-  import LoadingPage from '~/components/LoadingPage.vue';
-  import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
     name: 'CategorySlug',
@@ -188,10 +185,10 @@
 
     components: {
       CreateNewTopicModal: () => import(/* webpackPrefetch: true */ '~/components/modals/CreateNewTopicModal.vue'),
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
       FullScreenUpgrade: () => import(/* webpackPrefetch: true */'~/components/modals/FullScreenUpgrade'),
-      CustomIcon,
-      LoadingPage,
-      SignUpAlert
+      LoadingPage: () => import(/* webpackPrefetch: true */ '~/components/LoadingPage.vue'),
+      SignUpAlert: () => import(/* webpackPrefetch: true */ '~/components/forums/SignUpAlert.vue')
     },
 
     head () {

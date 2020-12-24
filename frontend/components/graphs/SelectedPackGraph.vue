@@ -4,6 +4,24 @@
   import 'chartjs-plugin-colorschemes';
   const { reactiveProp } = mixins;
 
+  Chart.plugins.register({
+    afterDraw (chart) {
+      if (!chart.data.datasets[0].data.length) {
+        // no data is present
+        const { ctx, width, height } = chart.chart;
+        chart.clear();
+
+        ctx.save();
+        ctx.textAlign = 'end';
+        ctx.textBaseline = 'middle';
+        ctx.font = '16px \'Avenir Next\', \'Lato\', Roboto, \'Helvetica Neue\', sans-serif';
+        ctx.fillStyle = 'rgba(73, 79, 87, 1)';
+        ctx.fillText('No data to display', width / 2, height / 2);
+        ctx.restore();
+      }
+    }
+  });
+
   export default {
     extends: Doughnut,
 
@@ -97,7 +115,7 @@
     watch: {
       chartData: {
         deep: true,
-        handler () {
+        handler (val) {
           this.$data._chart.update();
         }
       },

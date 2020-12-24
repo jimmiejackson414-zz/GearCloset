@@ -7,9 +7,9 @@
       <client-only>
         </v-row>
         <v-list
-          v-for="(category, index) in categories"
+          v-for="(category, index) in activePack.categories"
           :key="category.id"
-          :class="['categories-container', categories.length === index + 1 ? 'last' : '']">
+          :class="['categories-container', activePack.categories.length === index + 1 ? 'last' : '']">
           <v-row>
             <v-col
               cols="12"
@@ -46,7 +46,9 @@
                     v-for="(item, i) in items"
                     :key="item.id">
                     <!-- Drag Handle -->
-                    <td :key="`${item.id}-drag-${i}-${index}`">
+                    <td
+                      :key="`${item.id}-drag-${i}-${index}`"
+                      class="px-0 py-1">
                       <custom-icon
                         color="#4a4a4a"
                         custom-class="drag"
@@ -56,7 +58,9 @@
                     </td>
 
                     <!-- Generic Type Click To Edit -->
-                    <td :key="`${item.id}-type-${i}-${index}`">
+                    <td
+                      :key="`${item.id}-type-${i}-${index}`"
+                      class="px-0 py-1">
                       <click-to-edit
                         :style="{ fontSize: '0.875rem' }"
                         :unique-identifier="`type${item.id}`"
@@ -65,7 +69,9 @@
                     </td>
 
                     <!-- Name Click To Edit -->
-                    <td :key="`${item.id}-name-${i}-${index}`">
+                    <td
+                      :key="`${item.id}-name-${i}-${index}`"
+                      class="px-0 py-1">
                       <click-to-edit
                         :style="{ fontSize: '0.875rem' }"
                         :unique-identifier="`name${item.id}Ref`"
@@ -76,7 +82,7 @@
                     <!-- Consumable Toggle -->
                     <td
                       :key="`${item.id}-consumable-${i}-${index}`"
-                      class="text-center">
+                      class="text-center px-0 py-1">
                       <v-btn
                         :class="[{ active: item.consumable }, 'consumable-btn']"
                         icon
@@ -93,7 +99,7 @@
                     <!-- Worn Toggle -->
                     <td
                       :key="`${item.id}-worn-${i}-${index}`"
-                      class="text-center">
+                      class="text-center px-0 py-1">
                       <v-btn
                         :class="[{ active: item.worn }, 'worn-btn']"
                         icon
@@ -115,7 +121,9 @@
                       @handle-update-units="handleUpdateUnits" />
 
                     <!-- Price Click To Edit -->
-                    <td :key="`${item.id}-price-${i}-${index}`">
+                    <td
+                      :key="`${item.id}-price-${i}-${index}`"
+                      class="px-0 py-1">
                       <click-to-edit
                         :custom-class="'price-column'"
                         :style="{ fontSize: '0.875rem', maxWidth: '100px', margin: '0 auto' }"
@@ -131,7 +139,9 @@
                     </td>
 
                     <!-- Quantity Click To Edit -->
-                    <td :key="`${item.id}-quantity-${i}-${index}`">
+                    <td
+                      :key="`${item.id}-quantity-${i}-${index}`"
+                      class="px-0 py-1">
                       <click-to-edit
                         :custom-class="'quantity-column'"
                         :style="{ fontSize: '0.875rem', width: '60px', margin: '0 auto' }"
@@ -142,7 +152,9 @@
                     </td>
 
                     <!-- Remove button -->
-                    <td :key="`${item.id}-remove-${i}-${index}`">
+                    <td
+                      :key="`${item.id}-remove-${i}-${index}`"
+                      class="px-0 py-1">
                       <v-btn
                         icon
                         @click="handleRemoveRow(item, category)">
@@ -209,6 +221,7 @@
 
             <!-- Add New Item Button -->
             <v-btn
+              class="mb-8"
               :ripple="false"
               text
               @click="handleAddNewItem(category.id)">
@@ -229,7 +242,7 @@
       <v-container
         class="new-category-container">
         <v-row>
-          <v-col class="col-12">
+          <v-col class="col-12 pl-0">
             <v-btn
               class="pl-1"
               :ripple="false"
@@ -257,10 +270,7 @@
   import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   import convert from 'convert-units';
   import draggable from 'vuedraggable';
-  import WeightRow from './WeightRow.vue';
-  import ClickToEdit from '~/components/ClickToEdit.vue';
   import { convertToDollars } from '~/helpers/functions';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import { categoryService, itemService } from '~/services';
 
   export default {
@@ -272,7 +282,6 @@
     },
 
     data: () => ({
-      currentItemKey: 0,
       drag: false,
       errorColor: '',
       headers: [
@@ -286,18 +295,11 @@
         { text: 'Quantity', align: 'center', sortable: true, value: 'quantity' },
         { text: '', align: 'right', sortable: false, value: 'remove' }
       ],
-      itemKeys: new WeakMap(),
       primaryColor: '',
       weightItems: ['oz', 'lb', 'g', 'kg']
     }),
 
     computed: {
-      categories () {
-        if (this.activePack) {
-          return this.activePack.categories;
-        }
-        return [];
-      },
       currencyMask () {
         return createNumberMask({
           allowDecimal: true,
@@ -359,10 +361,6 @@
         } else {
           this.updateCategory(event, item, 'unit');
         }
-      },
-      itemKey (item) {
-        if (!this.itemKeys.has(item)) { this.itemKeys.set(item, ++this.currentItemKey); }
-        return this.itemKeys.get(item);
       },
       itemPrice (item) {
         return convertToDollars(item.price);
@@ -427,11 +425,17 @@
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
     },
 
+    watch: {
+      activePack (val) {
+        console.log({ val });
+      }
+    },
+
     components: {
-      ClickToEdit,
-      CustomIcon,
+      ClickToEdit: () => import(/* webpackPrefetch: true */ '~/components/ClickToEdit.vue'),
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
       draggable,
-      WeightRow
+      WeightRow: () => import(/* webpackPrefetch: true */ './WeightRow.vue')
     }
   };
 </script>
@@ -439,6 +443,122 @@
 <style lang="scss">
   .items-table-container {
     width: 100%;
+
+    tr {
+      td {
+
+        .price-column, .quantity-column {
+          input {
+            text-align: center;
+          }
+        }
+
+        .price-column {
+          .click-to-edit {
+            .v-input__slot {
+              input {
+                text-align: center;
+              }
+            }
+          }
+        }
+
+        .weight-column {
+          display: grid;
+          grid-template-columns: auto minmax(auto, 57px);
+          margin: 0 auto;
+          max-width: max-content;
+
+          .v-select {
+            .v-input__slot {
+              &:before, &:after {
+                border: none;
+              }
+            }
+          }
+
+          .click-to-edit {
+            .v-input__slot {
+              input {
+                text-align: right;
+              }
+            }
+          }
+
+          input {
+            max-width: 50px;
+          }
+        }
+
+        .v-btn {
+          &.active {
+            &.worn-btn {
+              background-color: $accentDarkest;
+              svg {
+                fill: white;
+              }
+            }
+
+            &.consumable-btn {
+              background-color: darken($secondaryLight, 10%);
+
+              svg {
+                fill: white;
+              }
+            }
+          }
+
+          &.remove {
+            svg {
+              fill: $error;
+            }
+          }
+        }
+
+        &:last-child svg, &:first-child svg {
+          opacity   : 0;
+          transition: 0.2s opacity $cubicBezier;
+        }
+      }
+
+      &:hover {
+        td:first-child svg, td:last-child svg {
+          opacity: 1;
+        }
+      }
+
+      &.totals {
+        .weight-column {
+          align-items: center;
+          display: flex;
+          margin: 0 0 0 auto;
+          width: 100%;
+
+          .v-input {
+            margin: 0 0 0 10px;
+            max-width: 57px;
+
+            .v-select__selection {
+              margin-bottom: 0;
+              margin-top: 0;
+            }
+
+            .v-icon {
+              margin-top: 0;
+            }
+          }
+        }
+
+        .price-total {
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+  .new-category-container {
+    border-top: 1px solid $grey5;
   }
 
   .flip-list-move {
@@ -452,21 +572,6 @@
   .ghost {
     opacity: 0.5;
     background: #c8ebfb;
-  }
-
-  .price-column, .quantity-column {
-    input {
-      text-align: center;
-    }
-  }
-
-  .weight-column {
-    margin: 0 auto;
-    max-width: max-content;
-
-    input {
-      max-width: 50px;
-    }
   }
 
 </style>

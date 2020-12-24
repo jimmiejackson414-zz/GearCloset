@@ -16,8 +16,6 @@
 </template>
 
 <script>
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
-
   export default {
     methods: {
       handleClick () {
@@ -26,7 +24,8 @@
     },
 
     components: {
-      CustomIcon
+      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue')
+
     }
   };
 </script>
