@@ -184,8 +184,13 @@
 </template>
 
 <script>
-
   import registerMutation from '~/apollo/mutations/auth/register.gql';
+  import CustomIcon from '~/components/icons/CustomIcon';
+  import FadeTransition from '~/components/transitions/FadeTransition';
+  import Loading from '~/components/Loading';
+  import LoginDescriptionBox from '~/components/LoginDescriptionBox';
+  import LogoIcon from '~/components/icons/LogoIcon';
+  import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
 
   export default {
     layout: 'homepage',
@@ -258,12 +263,12 @@
     },
 
     components: {
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon'),
-      FadeTransition: () => import(/* webpackPrefetch: true */ '~/components/transitions/FadeTransition'),
-      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading'),
-      LoginDescriptionBox: () => import(/* webpackPrefetch: true */ '~/components/LoginDescriptionBox'),
-      LogoIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/LogoIcon'),
-      SlideFadeTransition: () => import(/* webpackPrefetch: true */ '~/components/transitions/SlideFadeTransition')
+      CustomIcon,
+      FadeTransition,
+      Loading,
+      LoginDescriptionBox,
+      LogoIcon,
+      SlideFadeTransition
     },
 
     head () {

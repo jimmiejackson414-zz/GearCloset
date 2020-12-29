@@ -63,6 +63,7 @@
 
 <script>
   import logoutMutation from '~/apollo/mutations/auth/logout.gql';
+  import Avatar from '~/components/Avatar.vue';
 
   export default {
     props: {
@@ -108,7 +109,7 @@
     },
 
     components: {
-      Avatar: () => import(/* webpackPrefetch: true */ '~/components/Avatar.vue')
+      Avatar
     }
   };
 </script>

@@ -59,6 +59,9 @@
 
 <script>
   import currentUser from '~/mixins/currentUser';
+  import CategoryBox from '~/components/forums/CategoryBox.vue';
+  import LoadingPage from '~/components/LoadingPage.vue';
+  import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
     name: 'ForumIndex',
@@ -83,10 +86,10 @@
     },
 
     components: {
-      CategoryBox: () => import(/* webpackPrefetch: true */ '~/components/forums/CategoryBox.vue'),
+      CategoryBox,
       FullScreenUpgrade: () => import(/* webpackPrefetch: true */'~/components/modals/FullScreenUpgrade'),
-      LoadingPage: () => import(/* webpackPrefetch: true */ '~/components/LoadingPage.vue'),
-      SignUpAlert: () => import(/* webpackPrefetch: true */ '~/components/forums/SignUpAlert.vue'),
+      LoadingPage,
+      SignUpAlert,
       UpdateSubscriptionModal: () => import(/* webpackPrefetch: true */'~/components/modals/UpdateSubscriptionModal')
     },
 

@@ -49,7 +49,10 @@
 </template>
 
 <script>
+  import AvatarDropdown from './AvatarDropdown.vue';
+  import NotificationsDropdown from './NotificationsDropdown.vue';
   import currentUser from '~/mixins/currentUser';
+  import Logo from '~/components/icons/Logo.vue';
 
   export default {
     mixins: [currentUser],
@@ -92,9 +95,9 @@
     },
 
     components: {
-      AvatarDropdown: () => import(/* webpackPrefetch: true */ './AvatarDropdown.vue'),
-      Logo: () => import(/* webpackPrefetch: true */ '~/components/icons/Logo.vue'),
-      NotificationsDropdown: () => import(/* webpackPrefetch: true */ './NotificationsDropdown.vue')
+      AvatarDropdown,
+      Logo,
+      NotificationsDropdown
     }
   };
 </script>

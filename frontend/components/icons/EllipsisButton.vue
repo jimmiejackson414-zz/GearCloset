@@ -38,6 +38,8 @@
 </template>
 
 <script>
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+
   export default {
     props: {
       items: {
@@ -66,8 +68,7 @@
     },
 
     components: {
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon')
-
+      CustomIcon
     }
   };
 </script>

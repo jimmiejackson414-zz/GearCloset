@@ -41,6 +41,7 @@
 <script>
   import { mapActions } from 'vuex';
   import { capitalize } from '~/helpers/functions';
+  import Loading from '~/components/Loading.vue';
 
   export default {
     props: {
@@ -92,7 +93,7 @@
     },
 
     components: {
-      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading.vue')
+      Loading
     }
   };
 </script>

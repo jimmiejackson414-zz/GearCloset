@@ -73,6 +73,9 @@
 
 <script>
   import { tripDetailService, tripService } from '~/services';
+  import ClickToEdit from '~/components/ClickToEdit.vue';
+  import EllipsisButton from '~/components/icons/EllipsisButton.vue';
+  import PlusButton from '~/components/icons/PlusButton.vue';
 
   export default {
     props: {
@@ -154,12 +157,12 @@
     },
 
     components: {
-      ClickToEdit: () => import(/* webpackPrefetch: true */ '~/components/ClickToEdit.vue'),
+      ClickToEdit,
       CreateTripDetailModal: () => import(/* webpackPrefetch: true */'~/components/modals/CreateTripDetailModal.vue'),
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal.vue'),
-      EllipsisButton: () => import(/* webpackPrefetch: true */ '~/components/icons/EllipsisButton.vue'),
+      EllipsisButton,
       UpdateTripDetailModal: () => import(/* webpackPrefetch: true */'~/components/modals/UpdateTripDetailModal.vue'),
-      PlusButton: () => import(/* webpackPrefetch: true */ '~/components/icons/PlusButton.vue')
+      PlusButton
     }
   };
 </script>,

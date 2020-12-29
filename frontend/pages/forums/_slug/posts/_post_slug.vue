@@ -92,6 +92,9 @@
 
 <script>
   import currentUser from '~/mixins/currentUser';
+  import LoadingPage from '~/components/LoadingPage.vue';
+  import PostCard from '~/components/forums/PostCard.vue';
+  import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
     name: 'PostSlug',
@@ -158,11 +161,11 @@
     components: {
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
       FullScreenUpgrade: () => import(/* webpackPrefetch: true */'~/components/modals/FullScreenUpgrade'),
-      LoadingPage: () => import(/* webpackPrefetch: true */ '~/components/LoadingPage.vue'),
-      PostCard: () => import(/* webpackPrefetch: true */ '~/components/forums/PostCard.vue'),
-      TipTapEditor: () => import(/* webpackPrefetch: true */ '~/components/TipTapEditor.vue'),
+      LoadingPage,
+      PostCard,
+      TipTapEditor: () => import(/* webpackPrefetch: true */'~/components/TipTapEditor.vue'),
       ReportPostModal: () => import(/* webpackPrefetch: true */ '~/components/modals/ReportPostModal'),
-      SignUpAlert: () => import(/* webpackPrefetch: true */ '~/components/forums/SignUpAlert.vue')
+      SignUpAlert
     },
 
     head () {

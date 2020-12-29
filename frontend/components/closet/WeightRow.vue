@@ -19,6 +19,8 @@
 </template>
 
 <script>
+  import ClickToEdit from '~/components/ClickToEdit.vue';
+
   export default {
     props: {
       identifier: {
@@ -46,7 +48,7 @@
     },
 
     components: {
-      ClickToEdit: () => import(/* webpackPrefetch: true */ '~/components/ClickToEdit.vue')
+      ClickToEdit
     }
   };
 </script>

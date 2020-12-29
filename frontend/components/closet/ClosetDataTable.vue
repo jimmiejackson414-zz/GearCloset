@@ -5,7 +5,6 @@
         Pack Items
       </h2>
       <client-only>
-        </v-row>
         <v-list
           v-for="(category, index) in activePack.categories"
           :key="category.id"
@@ -49,12 +48,12 @@
                     <td
                       :key="`${item.id}-drag-${i}-${index}`"
                       class="px-0 py-1">
-                      <custom-icon
-                        color="#4a4a4a"
-                        custom-class="drag"
-                        :height="20"
+                      <unicon
+                        class="drag"
+                        fill="#9e9e9e"
+                        height="20"
                         name="grip-horizontal-line"
-                        :width="20" />
+                        width="20" />
                     </td>
 
                     <!-- Generic Type Click To Edit -->
@@ -89,10 +88,11 @@
                         :ripple="false"
                         text
                         @click.native="updateBooleanItem(item, 'consumable')">
-                        <custom-icon
-                          :height="20"
+                        <unicon
+                          fill="#9e9e9e"
+                          height="20"
                           name="utensils-alt"
-                          :width="20" />
+                          width="20" />
                       </v-btn>
                     </td>
 
@@ -106,10 +106,11 @@
                         :ripple="false"
                         text
                         @click="updateBooleanItem(item, 'worn')">
-                        <custom-icon
-                          :height="20"
+                        <unicon
+                          fill="#9e9e9e"
+                          height="20"
                           name="layer-group"
-                          :width="20" />
+                          width="20" />
                       </v-btn>
                     </td>
 
@@ -130,11 +131,11 @@
                         :unique-identifier="`price${item.id}Ref`"
                         :value="itemPrice(item)"
                         @handle-update-item="updateItem($event, item, 'price')">
-                        <custom-icon
+                        <unicon
                           fill="#494f57"
-                          :height="14"
+                          height="14"
                           name="dollar-alt"
-                          :width="14" />
+                          width="14" />
                       </click-to-edit>
                     </td>
 
@@ -158,12 +159,12 @@
                       <v-btn
                         icon
                         @click="handleRemoveRow(item, category)">
-                        <custom-icon
-                          :color="errorColor"
-                          custom-class="pointer"
-                          :height="20"
+                        <unicon
+                          class="pointer"
+                          :fill="errorColor"
+                          height="20"
                           name="trash-alt"
-                          :width="20" />
+                          width="20" />
                       </v-btn>
                     </td>
                   </tr>
@@ -198,11 +199,11 @@
                       class="text-center"
                       :colspan="1">
                       <span class="price-total">
-                        <custom-icon
+                        <unicon
                           fill="#494f57"
-                          :height="14"
+                          height="14"
                           name="dollar-alt"
-                          :width="14" />
+                          width="14" />
                         {{ priceTotal(items) }}
                       </span>
                     </td>
@@ -225,11 +226,11 @@
               :ripple="false"
               text
               @click="handleAddNewItem(category.id)">
-              <custom-icon
+              <unicon
                 :fill="primaryColor"
-                :height="18"
+                height="18"
                 name="plus"
-                :width="18" />
+                width="18" />
               <p class="body-2 primary--text mb-0 ml-3">
                 Add New Item
               </p>
@@ -248,11 +249,11 @@
               :ripple="false"
               text
               @click="handleAddNewCategory">
-              <custom-icon
+              <unicon
                 :fill="primaryColor"
-                :height="18"
+                height="18"
                 name="plus"
-                :width="18" />
+                width="18" />
               <p class="body-2 primary--text mb-0 ml-3">
                 Add New Category
               </p>
@@ -270,8 +271,10 @@
   import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   import convert from 'convert-units';
   import draggable from 'vuedraggable';
+  import WeightRow from './WeightRow.vue';
   import { convertToDollars } from '~/helpers/functions';
   import { categoryService, itemService } from '~/services';
+  import ClickToEdit from '~/components/ClickToEdit.vue';
 
   export default {
     props: {
@@ -425,17 +428,10 @@
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
     },
 
-    watch: {
-      activePack (val) {
-        console.log({ val });
-      }
-    },
-
     components: {
-      ClickToEdit: () => import(/* webpackPrefetch: true */ '~/components/ClickToEdit.vue'),
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
+      ClickToEdit,
       draggable,
-      WeightRow: () => import(/* webpackPrefetch: true */ './WeightRow.vue')
+      WeightRow
     }
   };
 </script>

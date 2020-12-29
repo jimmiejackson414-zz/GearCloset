@@ -59,6 +59,9 @@
 <script>
   import currentUser from '~/mixins/currentUser';
   import updateMutation from '~/apollo/mutations/auth/update.gql';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import Loading from '~/components/Loading.vue';
+  import UpgradeCard from '~/components/UpgradeCard.vue';
 
   export default {
     mixins: [currentUser],
@@ -111,10 +114,10 @@
     },
 
     components: {
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
-      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading.vue'),
+      CustomIcon,
+      Loading,
       UpdateSubscriptionModal: () => import(/* webpackPrefetch: true */ '~/components/modals/UpdateSubscriptionModal'),
-      UpgradeCard: () => import(/* webpackPrefetch: true */ '~/components/UpgradeCard.vue')
+      UpgradeCard
     }
   };
 </script>

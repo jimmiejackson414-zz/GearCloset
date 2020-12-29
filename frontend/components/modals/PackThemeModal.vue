@@ -64,6 +64,8 @@
 </template>
 
 <script>
+  import ColorSwatch from '~/components/ColorSwatch.vue';
+
   export default {
     props: {
       theme: {
@@ -113,8 +115,7 @@
     },
 
     components: {
-      ColorSwatch: () => import(/* webpackPrefetch: true */ '~/components/ColorSwatch.vue')
-
+      ColorSwatch
     }
   };
 </script>

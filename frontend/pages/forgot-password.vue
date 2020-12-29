@@ -96,6 +96,12 @@
 
 <script>
   import resetPasswordMutation from '~/apollo/mutations/auth/resetPassword.gql';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import FadeTransition from '~/components/transitions/FadeTransition.vue';
+  import Loading from '~/components/Loading.vue';
+  import LoginDescriptionBox from '~/components/LoginDescriptionBox.vue';
+  import LogoIcon from '~/components/icons/LogoIcon.vue';
+  import SlideFadeTransition from '~/components/transitions/SlideFadeTransition.vue';
 
   export default {
     layout: 'homepage',
@@ -142,12 +148,12 @@
     },
 
     components: {
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
-      FadeTransition: () => import(/* webpackPrefetch: true */ '~/components/transitions/FadeTransition.vue'),
-      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading.vue'),
-      LoginDescriptionBox: () => import(/* webpackPrefetch: true */ '~/components/LoginDescriptionBox.vue'),
-      LogoIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/LogoIcon.vue'),
-      SlideFadeTransition: () => import(/* webpackPrefetch: true */ '~/components/transitions/SlideFadeTransition.vue')
+      CustomIcon,
+      FadeTransition,
+      Loading,
+      LoginDescriptionBox,
+      LogoIcon,
+      SlideFadeTransition
     },
 
     head () {

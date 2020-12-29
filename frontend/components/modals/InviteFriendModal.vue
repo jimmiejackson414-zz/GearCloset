@@ -96,6 +96,8 @@
   import { mapActions } from 'vuex';
   import { friendService } from '~/services';
   import { validateEmail } from '~/helpers/functions';
+  import Avatar from '~/components/Avatar';
+  import Loading from '~/components/Loading';
 
   export default {
     props: {
@@ -195,8 +197,8 @@
     },
 
     components: {
-      Avatar: () => import(/* webpackPrefetch: true */ '~/components/Avatar'),
-      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading')
+      Avatar,
+      Loading
     }
   };
 </script>

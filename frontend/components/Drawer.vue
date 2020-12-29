@@ -21,12 +21,14 @@
         :to="item.to">
         <v-list-item-content>
           <v-list-item-title>
-            <custom-icon
-              custom-class="mr-4"
-              :fill="fillColor(item)"
-              :height="20"
-              :name="item.icon"
-              :width="20" />
+            <client-only>
+              <unicon
+                class="mr-4"
+                :fill="fillColor(item)"
+                height="20"
+                :name="item.icon"
+                width="20" />
+            </client-only>
             {{ item.title }}
           </v-list-item-title>
         </v-list-item-content>
@@ -57,10 +59,6 @@
         }
         return this.$nuxt.$vuetify.theme.themes.light['dark-grey'];
       }
-    },
-
-    components: {
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue')
     }
   };
 </script>

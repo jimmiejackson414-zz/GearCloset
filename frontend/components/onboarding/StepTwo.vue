@@ -172,6 +172,8 @@
   import { countries } from '~/helpers/countries';
   import currentUser from '~/mixins/currentUser';
   import updateMutation from '~/apollo/mutations/auth/update.gql';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import Loading from '~/components/Loading.vue';
 
   export default {
     mixins: [currentUser],
@@ -245,8 +247,8 @@
     },
 
     components: {
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
-      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading.vue')
+      CustomIcon,
+      Loading
     }
   };
 </script>

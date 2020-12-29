@@ -90,6 +90,7 @@
 
 <script>
   import { capitalize } from '~/helpers/functions';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     props: {
@@ -125,7 +126,7 @@
     },
 
     components: {
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue')
+      CustomIcon
     }
   };
 </script>

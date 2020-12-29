@@ -33,6 +33,7 @@
 
 <script>
   import markAsReadMutation from '~/apollo/mutations/notifications/markAsRead.gql';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     props: {
@@ -75,7 +76,7 @@
     },
 
     components: {
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue')
+      CustomIcon
     }
   };
 </script>

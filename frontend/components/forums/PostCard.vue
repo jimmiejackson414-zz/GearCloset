@@ -72,6 +72,9 @@
 <script>
   import * as dayjs from 'dayjs';
   import currentUser from '~/mixins/currentUser';
+  import EllipsisButton from '~/components/icons/EllipsisButton';
+  import FavoriteItem from '~/components/icons/FavoriteItem';
+  import MembershipChip from '~/components/MembershipChip.vue';
 
   export default {
     mixins: [currentUser],
@@ -123,9 +126,9 @@
     },
 
     components: {
-      EllipsisButton: () => import(/* webpackPrefetch: true */ '~/components/icons/EllipsisButton'),
-      FavoriteItem: () => import(/* webpackPrefetch: true */ '~/components/icons/FavoriteItem'),
-      MembershipChip: () => import(/* webpackPrefetch: true */ '~/components/MembershipChip.vue')
+      EllipsisButton,
+      FavoriteItem,
+      MembershipChip
     }
   };
 </script>

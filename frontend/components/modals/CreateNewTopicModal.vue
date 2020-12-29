@@ -58,6 +58,8 @@
 
 <script>
   import { mapActions } from 'vuex';
+  import Loading from '~/components/Loading.vue';
+  import TipTapEditor from '~/components/TipTapEditor';
 
   export default {
     props: {
@@ -116,8 +118,8 @@
     },
 
     components: {
-      Loading: () => import(/* webpackPrefetch: true */ '~/components/Loading.vue'),
-      TipTapEditor: () => import(/* webpackPrefetch: true */ '~/components/TipTapEditor')
+      Loading,
+      TipTapEditor
     }
   };
 </script>

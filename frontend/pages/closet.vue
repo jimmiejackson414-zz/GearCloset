@@ -1,81 +1,83 @@
 <template>
-  <loading-page v-if="$apollo.loading" />
-  <div
-    v-else
-    v-resize="onResize"
-    class="closet-page-styles">
-    <!-- Sidebar -->
-    <closet-sidebar
-      :is-mobile="isMobile"
-      :packs="packs"
-      :selected-pack-id="selectedPackId"
-      @handle-selected-pack="handleSelectedPack" />
+  <div class="page-wrapper">
+    <loading-page v-if="isLoading" />
 
-    <!-- Content -->
+    <div
+      v-else
+      v-resize="onResize"
+      class="closet-page-styles">
+      <!-- Sidebar -->
+      <closet-sidebar
+        :is-mobile="isMobile"
+        :packs="packs"
+        :selected-pack-id="selectedPackId"
+        @handle-selected-pack="handleSelectedPack" />
 
-    <div class="content-container">
-      <loading-page v-if="loadingPack" />
-      <v-container
-        v-else
-        grid-list-lg>
-        <div class="header mb-6">
-          <h3 class="text-h3 font-weight-bold">
-            {{ selectedPack.name || '' }}
-          </h3>
-          <div class="actions">
-            <div class="share-wrapper">
-              <v-btn
-                class="share-btn"
-                icon
-                :ripple="false"
-                @click="shareListModalOpen = true">
-                <custom-icon
-                  :fill="lightGrey"
-                  :height="20"
-                  name="share"
-                  :width="20" />
-                <p class="body-2 mb-0 grey7--text">
-                  Share
-                </p>
-              </v-btn>
-            </div>
-            <!-- Options Button -->
-            <v-menu
-              close-on-content-click
-              left
-              nudge-bottom
-              offset-y>
-              <template #activator="{ on, attrs }">
+      <!-- Content -->
+
+      <div class="content-container">
+        <loading-page v-if="loadingPack" />
+        <v-container
+          v-else
+          grid-list-lg>
+          <div class="header mb-6">
+            <h3 class="text-h3 font-weight-bold">
+              {{ selectedPack ? selectedPack.name : '' }}
+            </h3>
+            <div class="actions">
+              <div class="share-wrapper">
                 <v-btn
-                  v-bind="attrs"
-                  class="settings-btn"
-                  depressed
+                  class="share-btn"
                   icon
                   :ripple="false"
-                  text
-                  v-on="on">
+                  @click="shareListModalOpen = true">
                   <custom-icon
                     :fill="lightGrey"
-                    :height="25"
-                    name="setting"
-                    :width="25" />
+                    :height="20"
+                    name="share"
+                    :width="20" />
+                  <p class="body-2 mb-0 grey7--text">
+                    Share
+                  </p>
                 </v-btn>
-              </template>
-              <v-list>
-                <v-list-item-group>
-                  <v-list-item @click="packThemeModalOpen = true">
-                    Change Pack Theme Colors
-                  </v-list-item>
-                  <v-list-item @click="resetPackModalOpen = true">
-                    Reset Pack
-                  </v-list-item>
-                  <v-divider />
-                  <v-list-item
-                    :style="{color: '#db3030 !important'}"
-                    @click="handleDeletePackModal">
-                    Delete Pack
-                  </v-list-item>
-                  <!-- <v-list-item>
+              </div>
+              <!-- Options Button -->
+              <v-menu
+                close-on-content-click
+                left
+                nudge-bottom
+                offset-y>
+                <template #activator="{ on, attrs }">
+                  <v-btn
+                    v-bind="attrs"
+                    class="settings-btn"
+                    depressed
+                    icon
+                    :ripple="false"
+                    text
+                    v-on="on">
+                    <custom-icon
+                      :fill="lightGrey"
+                      :height="25"
+                      name="setting"
+                      :width="25" />
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item-group>
+                    <v-list-item @click="packThemeModalOpen = true">
+                      Change Pack Theme Colors
+                    </v-list-item>
+                    <v-list-item @click="resetPackModalOpen = true">
+                      Reset Pack
+                    </v-list-item>
+                    <v-divider />
+                    <v-list-item
+                      :style="{color: '#db3030 !important'}"
+                      @click="handleDeletePackModal">
+                      Delete Pack
+                    </v-list-item>
+                    <!-- <v-list-item>
                         <v-switch
                           class="ma-0"
                           color="accent"
@@ -92,53 +94,56 @@
                           </template>
                         </v-switch>
                       </v-list-item> -->
-                </v-list-item-group>
-              </v-list>
-            </v-menu>
+                  </v-list-item-group>
+                </v-list>
+              </v-menu>
+            </div>
           </div>
-        </div>
-        <v-row class="closet-pack-graph-wrapper">
-          <v-col class="wrapper col-12 col-md-6 col-lg-7">
-            <selected-pack-graph
-              v-if="selectedPack"
-              v-resize="onResize"
-              :chart-data="chartData"
-              :is-mobile="isMobile"
-              :styles="graphStyles"
-              :theme="selectedPack.theme" />
-          </v-col>
-          <v-col class="wrapper col-12 col-md-6 col-lg-5">
-            <totals-table
-              v-if="selectedPack && selectedPack.categories"
-              :selected-pack="selectedPack" />
-          </v-col>
-        </v-row>
+          <v-row class="closet-pack-graph-wrapper">
+            <v-col class="wrapper col-12 col-md-6 col-lg-7">
+              <selected-pack-graph
+                v-if="selectedPack"
+                v-resize="onResize"
+                :chart-data="chartData"
+                :is-mobile="isMobile"
+                :styles="graphStyles"
+                :theme="selectedPack.theme" />
+            </v-col>
+            <v-col class="wrapper col-12 col-md-6 col-lg-5">
+              <totals-table
+                v-if="selectedPack && selectedPack.categories"
+                :selected-pack="selectedPack" />
+            </v-col>
+          </v-row>
 
-        <!-- Data Tables -->
-        <closet-data-table :active-pack="selectedPack" />
-      </v-container>
+          <!-- Data Tables -->
+          <closet-data-table
+            v-if="selectedPack"
+            :active-pack="selectedPack" />
+        </v-container>
+      </div>
+
+      <!-- Modals -->
+      <share-pack-list-modal
+        v-model="shareListModalOpen"
+        :list="list" />
+
+      <pack-theme-modal
+        v-model="packThemeModalOpen"
+        :theme="localTheme"
+        :theme-options="themeOptions"
+        @handle-update="handleUpdatePackTheme" />
+
+      <reset-pack-modal
+        v-model="resetPackModalOpen"
+        :pack="selectedPack" />
+
+      <delete-confirm-modal
+        v-model="deleteConfirmOpen"
+        :item="modalItem"
+        :selected-item="selectedPack"
+        @handle-remove-item="handleDeletePack" />
     </div>
-
-    <!-- Modals -->
-    <share-pack-list-modal
-      v-model="shareListModalOpen"
-      :list="list" />
-
-    <pack-theme-modal
-      v-model="packThemeModalOpen"
-      :theme="localTheme"
-      :theme-options="themeOptions"
-      @handle-update="handleUpdatePackTheme" />
-
-    <reset-pack-modal
-      v-model="resetPackModalOpen"
-      :pack="selectedPack" />
-
-    <delete-confirm-modal
-      v-model="deleteConfirmOpen"
-      :item="modalItem"
-      :selected-item="selectedPack"
-      @handle-remove-item="handleDeletePack" />
   </div>
 </template>
 
@@ -150,6 +155,12 @@
   import { generateThemeOptions } from '~/helpers';
   import isMobile from '~/mixins/isMobile';
   import { packService } from '~/services';
+  import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
+  import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import LoadingPage from '~/components/LoadingPage.vue';
+  import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
+  import TotalsTable from '~/components/closet/TotalsTable.vue';
   import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
   import SELECTED_PACK_QUERY from '~/apollo/queries/content/pack.gql';
 
@@ -163,8 +174,19 @@
     apollo: {
       packs: {
         query: PACKS_QUERY,
+        $loadingKey: 'isLoading',
         result ({ data: { packs } }) {
           this.selectedPackId = packs.length ? packs[0].id : null;
+        }
+      },
+      selectedPack: {
+        query: SELECTED_PACK_QUERY,
+        prefetch: false,
+        $loadingKey: 'loadingPack',
+        variables () {
+          return {
+            id: this.selectedPackId
+          };
         }
       }
     },
@@ -178,19 +200,20 @@
       chartWidth: 500,
       deleteConfirmOpen: false,
       isMobile: true,
+      isLoading: 0,
       lightGrey: '',
       list: { // TODO: Generate dynamically instead of hard-coded
         id: 1,
         title: 'Summer',
         uuid: generateUUID()
       },
-      loadingPack: false,
+      loadingPack: 0,
       localTheme: '',
       modalItem: '',
       packThemeModalOpen: false,
       resetPackModalOpen: false,
       selectedPackId: null,
-      selectedPack: {},
+      // selectedPack: {},
       shareListModalOpen: false
     }),
 
@@ -215,15 +238,15 @@
       ...mapActions('closet', [
         'toggleSidebarExpandOnHover'
       ]),
-      async fetchPack (id) {
-        this.loadingPack = true;
-        const { data } = await this.$apollo.query({
-          query: SELECTED_PACK_QUERY,
-          variables: { id }
-        });
-        this.selectedPack = data.selectedPack;
-        this.loadingPack = false;
-      },
+      // async fetchPack (id) {
+      //   this.loadingPack = true;
+      //   const { data } = await this.$apollo.query({
+      //     query: SELECTED_PACK_QUERY,
+      //     variables: { id }
+      //   });
+      //   this.selectedPack = data.selectedPack;
+      //   this.loadingPack = false;
+      // },
       async handleDeletePack (pack) {
         const payload = { id: pack.id, apollo: this.$apollo };
         await packService.destroy(payload);
@@ -275,25 +298,25 @@
     },
 
     watch: {
-      selectedPackId (newVal, oldVal) {
-        if (newVal !== oldVal) {
-          this.loadingPack = true;
-          this.fetchPack(newVal);
-        }
-      },
+      // selectedPackId (newVal, oldVal) {
+      //   if (newVal !== oldVal) {
+      //     this.loadingPack = true;
+      //     // this.fetchPack(newVal);
+      //   }
+      // },
       selectedPack (val) {
         this.setChartData();
       }
     },
 
     components: {
-      ClosetDataTable: () => import(/* webpackPrefetch: true */ '~/components/closet/ClosetDataTable.vue'),
-      ClosetSidebar: () => import(/* webpackPrefetch: true */ '~/components/closet/ClosetSidebar.vue'),
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
+      ClosetDataTable,
+      ClosetSidebar,
+      CustomIcon,
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
-      LoadingPage: () => import(/* webpackPrefetch: true */ '~/components/LoadingPage.vue'),
-      SelectedPackGraph: () => import(/* webpackPrefetch: true */ '~/components/graphs/SelectedPackGraph.vue'),
-      TotalsTable: () => import(/* webpackPrefetch: true */ '~/components/closet/TotalsTable.vue'),
+      LoadingPage,
+      SelectedPackGraph,
+      TotalsTable,
       ResetPackModal: () => import(/* webpackPrefetch: true */ '~/components/modals/ResetPackModal'),
       PackThemeModal: () => import(/* webpackPrefetch: true */ '~/components/modals/PackThemeModal'),
       SharePackListModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SharePackListModal.vue')

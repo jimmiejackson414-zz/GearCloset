@@ -194,6 +194,7 @@
   import { mapState } from 'vuex';
   import draggable from 'vuedraggable';
   import currentUser from '~/mixins/currentUser';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   let idGlobal = 8;
 
@@ -303,8 +304,8 @@
     },
 
     components: {
-      draggable,
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue')
+      CustomIcon,
+      draggable
     }
   };
 </script>

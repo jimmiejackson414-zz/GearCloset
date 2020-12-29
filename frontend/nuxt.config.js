@@ -16,7 +16,12 @@ export default {
   },
 
   /*
-   ** PrivateRuntimeConfig (API Secrets, etc.)
+  ** SSR Options
+  */
+  ssr: true,
+
+  /*
+   ** PublicRuntimeConfig Options
    */
   publicRuntimeConfig: {
     baseUrl: process.env.NUXT_ENV_API_URL || 'http://localhost:3000',
@@ -64,8 +69,7 @@ export default {
   modules: [
     '@nuxtjs/apollo',
     '@nuxtjs/cloudinary',
-    '@nuxtjs/dayjs',
-    '@nuxtjs/pwa'
+    '@nuxtjs/dayjs'
   ],
 
   /*
@@ -101,13 +105,13 @@ export default {
   /*
    ** Progressive Web App configuration
    */
-  pwa: {
-    icon: {
-      fileName: 'icon.png',
-      source: './static/icon.png',
-      sizes: [64, 120, 144, 152, 192, 384, 512]
-    }
-  },
+  // pwa: {
+  //   icon: {
+  //     fileName: 'icon.png',
+  //     source: './static/icon.png',
+  //     sizes: [64, 120, 144, 152, 192, 384, 512]
+  //   }
+  // },
 
   /*
   ** Dayjs module configuration
@@ -197,7 +201,7 @@ export default {
    ** Build configuration
    */
   build: {
-    analyze: true,
+    // analyze: true,
     standalone: true,
     transpile: ['vee-validate/dist/rules'],
     externals: {

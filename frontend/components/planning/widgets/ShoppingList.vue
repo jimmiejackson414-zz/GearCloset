@@ -91,6 +91,9 @@
 <script>
   import isMobile from '~/mixins/isMobile';
   import { shoppingListItemService } from '~/services';
+  import ClickToEdit from '~/components/ClickToEdit.vue';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import PlusButton from '~/components/icons/PlusButton.vue';
 
   export default {
     mixins: [isMobile],
@@ -167,9 +170,9 @@
     },
 
     components: {
-      ClickToEdit: () => import(/* webpackPrefetch: true */ '~/components/ClickToEdit.vue'),
-      CustomIcon: () => import(/* webpackPrefetch: true */ '~/components/icons/CustomIcon.vue'),
-      PlusButton: () => import(/* webpackPrefetch: true */ '~/components/icons/PlusButton.vue')
+      ClickToEdit,
+      CustomIcon,
+      PlusButton
     }
   };
 </script>

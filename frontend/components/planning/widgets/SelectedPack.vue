@@ -54,6 +54,8 @@
   import { calculateCategoryWeight } from '~/helpers/functions';
   import { generateThemeOptions } from '~/helpers';
   import { packService } from '~/services';
+  import EllipsisButton from '~/components/icons/EllipsisButton.vue';
+  import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
 
   export default {
     props: {
@@ -161,9 +163,9 @@
     },
 
     components: {
-      EllipsisButton: () => import(/* webpackPrefetch: true */ '~/components/icons/EllipsisButton.vue'),
+      EllipsisButton,
       PackThemeModal: () => import(/* webpackPrefetch: true */ '~/components/modals/PackThemeModal'),
-      SelectedPackGraph: () => import(/* webpackPrefetch: true */ '~/components/graphs/SelectedPackGraph.vue'),
+      SelectedPackGraph,
       SelectPackModal: () => import(/* webpackPrefetch: true */ '~/components/modals/SelectPackModal')
     }
   };
