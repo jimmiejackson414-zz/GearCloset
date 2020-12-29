@@ -76,11 +76,11 @@
 </template>
 
 <script>
-  import ClickToEdit from '~/components/ClickToEdit.vue';
-  import CustomIcon from '~/components/icons/CustomIcon';
-  import EllipsisButton from '~/components/icons/EllipsisButton';
-  import PlusButton from '~/components/icons/PlusButton';
   import { tripDetailService, tripService } from '~/services';
+  import ClickToEdit from '~/components/ClickToEdit.vue';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import EllipsisButton from '~/components/icons/EllipsisButton.vue';
+  import PlusButton from '~/components/icons/PlusButton.vue';
 
   export default {
     props: {
@@ -173,7 +173,7 @@
       ClickToEdit,
       CreateTripDetailModal: () => import(/* webpackPrefetch: true */'~/components/modals/CreateTripDetailModal.vue'),
       CustomIcon,
-      DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
+      DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal.vue'),
       EllipsisButton,
       PlusButton,
       UpdateTripDetailModal: () => import(/* webpackPrefetch: true */'~/components/modals/UpdateTripDetailModal.vue')

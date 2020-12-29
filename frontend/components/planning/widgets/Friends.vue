@@ -63,7 +63,7 @@
 </template>
 
 <script>
-  import PlusButton from '~/components/icons/PlusButton';
+  import PlusButton from '~/components/icons/PlusButton.vue';
 
   export default {
     props: {

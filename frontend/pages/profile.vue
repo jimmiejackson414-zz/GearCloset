@@ -128,11 +128,9 @@
 </template>
 
 <script>
-  import AccountSettings from '~/components/profile/forms/AccountSettings.vue';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import isMobile from '~/mixins/isMobile';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition.vue';
-  import SubscriptionSettings from '~/components/profile/forms/SubscriptionSettings.vue';
   import UserSettings from '~/components/profile/forms/UserSettings.vue';
 
   export default {
@@ -171,10 +169,10 @@
     },
 
     components: {
-      AccountSettings,
+      AccountSettings: () => import(/* webpackPrefetch: true */ '~/components/profile/forms/AccountSettings.vue'),
       CustomIcon,
       SlideFadeTransition,
-      SubscriptionSettings,
+      SubscriptionSettings: () => import(/* webpackPrefetch: true */ '~/components/profile/forms/SubscriptionSettings.vue'),
       UserSettings
     },
 

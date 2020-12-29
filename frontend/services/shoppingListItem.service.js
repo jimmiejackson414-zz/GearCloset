@@ -1,36 +1,36 @@
 import { remove } from 'lodash';
-import createShoppingListItemMutation from '~/apollo/mutations/planning/createShoppingListItem.gql';
-import removeShoppingListItemMutation from '~/apollo/mutations/planning/deleteShoppingListItem.gql';
-import updateShoppingListMutation from '~/apollo/mutations/planning/updateShoppingListItem.gql';
-import tripsQuery from '~/apollo/queries/content/trips.gql';
+import CREATE_SHOPPING_LIST_MUTATION from '~/apollo/mutations/planning/createShoppingListItem.gql';
+import REMOVE_SHOPPING_LIST_MUTATION from '~/apollo/mutations/planning/deleteShoppingListItem.gql';
+import UPDATE_SHOPPING_LIST_MUTATION from '~/apollo/mutations/planning/updateShoppingListItem.gql';
+import TRIPS_QUERY from '~/apollo/queries/content/trips.gql';
 
 async function create ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: createShoppingListItemMutation,
+    mutation: CREATE_SHOPPING_LIST_MUTATION,
     variables: fields,
     update: (store, { data: { createShoppingListItem } }) => {
       // read
-      const data = store.readQuery({ query: tripsQuery });
+      const data = store.readQuery({ query: TRIPS_QUERY });
       const trip = data.trips.find(trip => trip.id === fields.trip);
 
       // mutate
       trip.shoppingListItems.unshift(createShoppingListItem);
 
       // write
-      store.writeQuery({ query: tripsQuery, data });
+      store.writeQuery({ query: TRIPS_QUERY, data });
     }
   });
 };
 
 async function destroy ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: removeShoppingListItemMutation,
+    mutation: REMOVE_SHOPPING_LIST_MUTATION,
     variables: {
       id: fields.id
     },
     update: (store, { data: { deleteShoppingListItem } }) => {
       // read
-      const data = store.readQuery({ query: tripsQuery });
+      const data = store.readQuery({ query: TRIPS_QUERY });
 
       // mutate
       const trip = data.trips.find(trip => trip.id === fields.trip);
@@ -39,7 +39,7 @@ async function destroy ({ fields, apollo }) {
 
       // // write
       store.writeQuery({
-        query: tripsQuery,
+        query: TRIPS_QUERY,
         data: {
           trips: [trip, ...otherTrips]
         }
@@ -61,7 +61,7 @@ async function destroy ({ fields, apollo }) {
 
 async function update ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: updateShoppingListMutation,
+    mutation: UPDATE_SHOPPING_LIST_MUTATION,
     variables: fields
   });
 };

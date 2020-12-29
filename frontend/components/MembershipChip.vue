@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import CustomIcon from '~/components/icons/CustomIcon';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     props: {

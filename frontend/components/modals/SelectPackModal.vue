@@ -50,8 +50,8 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import Loading from '~/components/Loading.vue';
   import { packService, tripService } from '~/services';
+  import Loading from '~/components/Loading.vue';
 
   export default {
     props: {

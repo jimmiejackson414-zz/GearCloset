@@ -74,8 +74,9 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import CustomIcon from '~/components/icons/CustomIcon';
-  import Navbar from '~/components/navbar/Navbar';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import HomeDrawer from '~/components/Drawer.vue';
+  import Navbar from '~/components/navbar/Navbar.vue';
 
   export default {
     name: 'Default',
@@ -128,7 +129,7 @@
 
     components: {
       CustomIcon,
-      HomeDrawer: () => import(/* webpackPrefetch: true */ '~/components/Drawer'),
+      HomeDrawer,
       Navbar
     }
   };

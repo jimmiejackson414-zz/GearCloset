@@ -149,7 +149,9 @@
                 :width="35" />
             </v-btn>
           </div>
-          <v-list class="gear-list">
+          <v-list
+            v-if="hasItems"
+            class="gear-list">
             <v-list-item-group>
               <draggable
                 class="drag-area list-group"
@@ -178,6 +180,9 @@
               </draggable>
             </v-list-item-group>
           </v-list>
+          <p v-else>
+            You haven't created any items yet!
+          </p>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -204,6 +209,10 @@
       packs: {
         type: Array,
         default: () => []
+      },
+      selectedPackId: {
+        type: String,
+        default: ''
       }
     },
 
@@ -219,8 +228,7 @@
 
     computed: {
       ...mapState({
-        expandOnHover: state => state.closet.sidebarExpandOnHover,
-        selectedPack: state => state.closet.selectedPack
+        expandOnHover: state => state.closet.sidebarExpandOnHover
       }),
       categories () {
         const cats = [];
@@ -236,7 +244,9 @@
         this.categories.forEach(category => {
           if (this.searchQuery) {
             const text = this.searchQuery.toLowerCase();
-            filteredItems.push(category.items.filter(item => item.name && item.name.toLowerCase().includes(text)));
+            filteredItems.push(category.items.filter(item => {
+              return item.name.toLowerCase().includes(text) || item.generic_type.toLowerCase().includes(text);
+            }));
           } else {
             filteredItems.push(category.items);
           }
@@ -252,12 +262,21 @@
           filteredPacks = this.packs;
         }
         return sortBy(filteredPacks, 'name');
+      },
+      hasItems () {
+        let containsItems = false;
+        this.categories.forEach(category => {
+          if (category.items.length) {
+            containsItems = true;
+          }
+        });
+        return containsItems;
       }
     },
 
     methods: {
       activeSelection (id) {
-        return id === this.selectedPack.id;
+        return id === this.selectedPackId;
       },
       clearSearch () {
         this.searchQuery = '';
@@ -285,8 +304,8 @@
     },
 
     components: {
-      draggable,
-      CustomIcon
+      CustomIcon,
+      draggable
     }
   };
 </script>

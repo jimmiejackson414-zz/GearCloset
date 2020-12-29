@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Category extends Model
 {
     protected $fillable = [
-        'name', 'pack_id'
+        'name', 'pack_id', 'unit'
     ];
 
     // automatically eager load items of a category

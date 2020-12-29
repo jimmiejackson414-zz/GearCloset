@@ -24,9 +24,8 @@
 
 <script>
   import currentUser from '~/mixins/currentUser';
-  import ImageUploader from '~/components/ImageUploader.vue';
-  import Loading from '~/components/Loading.vue';
   import updateAvatarMutation from '~/apollo/mutations/auth/updateAvatar.gql';
+  import Loading from '~/components/Loading.vue';
 
   export default {
     mixins: [currentUser],
@@ -77,7 +76,7 @@
     },
 
     components: {
-      ImageUploader,
+      ImageUploader: () => import(/* webpackPrefetch: true */ '~/components/ImageUploader.vue'),
       Loading
     }
   };

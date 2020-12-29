@@ -102,9 +102,9 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import CustomIcon from '~/components/icons/CustomIcon';
-  import Loading from '~/components/Loading';
   import { userService } from '~/services';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import Loading from '~/components/Loading.vue';
 
   export default {
     props: {

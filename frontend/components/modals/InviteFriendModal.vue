@@ -94,10 +94,10 @@
 <script>
   import { findIndex } from 'lodash';
   import { mapActions } from 'vuex';
-  import Avatar from '~/components/Avatar';
   import { friendService } from '~/services';
-  import Loading from '~/components/Loading';
   import { validateEmail } from '~/helpers/functions';
+  import Avatar from '~/components/Avatar';
+  import Loading from '~/components/Loading';
 
   export default {
     props: {
@@ -191,7 +191,7 @@
     mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
       if (this.friends.length) {
-        this.friends.forEach(friend => delete friend.__typename);
+        // this.friends.forEach(friend => delete friend.__typename);
         this.chosenFriends = this.friends;
       }
     },

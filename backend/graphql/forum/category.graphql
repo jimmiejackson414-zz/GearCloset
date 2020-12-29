@@ -1,3 +1,8 @@
+extend type Query @guard(with: ["api"]) {
+    category(id:ID! @eq): Category @find
+    categories(pack_id:ID! @where(operator: "=", key: "pack_id")): [Category]! @all
+}
+
 type ForumCategory {
     id: ID!
     title: String!

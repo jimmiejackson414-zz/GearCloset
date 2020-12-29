@@ -1,8 +1,8 @@
-import updateTripMutation from '~/apollo/mutations/planning/updateTrip.gql';
+import UPDATE_TRIP_MUTATION from '~/apollo/mutations/planning/updateTrip.gql';
 
 async function update ({ fields, apollo }) {
   return await apollo.mutate({
-    mutation: updateTripMutation,
+    mutation: UPDATE_TRIP_MUTATION,
     variables: fields
   });
 }

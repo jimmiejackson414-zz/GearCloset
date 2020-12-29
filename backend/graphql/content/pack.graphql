@@ -1,10 +1,12 @@
 extend type Mutation @guard(with: ["api"]) {
     createPack(input: PackInput! @spread): Pack @create
-    deletePack(id: ID!): Pack @delete
+    destroyPack(id: ID!): Pack @delete
+    resetPack(id: ID!): Pack @field(resolver: "PackMutator@reset")
     updatePack(id: ID! input: PackInput! @spread): Pack @update
 }
 
 extend type Query @guard(with: ["api"]) {
+    pack(id: ID! @eq): Pack! @find
     packs: [Pack!]! @field(resolver: "PacksQuery@find_by_user")
 }
 

@@ -89,9 +89,9 @@
 <script>
   import * as dayjs from 'dayjs';
   import relativeTime from 'dayjs/plugin/relativeTime';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import markAllReadMutation from '~/apollo/mutations/notifications/markAllRead.gql';
   import meQuery from '~/apollo/queries/user/me.gql';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     props: {
@@ -170,6 +170,12 @@
 
     &.unread {
       background-color: lighten($accent, 30%);
+    }
+  }
+
+  .notifications-wrapper {
+    .v-btn {
+      background-color: transparent;
     }
   }
 </style>

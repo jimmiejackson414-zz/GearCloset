@@ -1,0 +1,37 @@
+mutation CreateItem(
+  $name:String
+  $weight:Float
+  $unit:String
+  $price:Int
+  $generic_type:String
+  $category_id:ID!
+  $consumable:Boolean
+  $worn:Boolean
+  $quantity:Int
+) {
+  createItem(
+    input: {
+      name: $name
+      weight: $weight
+      unit: $unit
+      price: $price
+      generic_type: $generic_type
+      category_id: $category_id
+      consumable: $consumable
+      worn: $worn
+      quantity: $quantity
+    }) {
+    id
+    name
+    weight
+    unit
+    price
+    generic_type
+    category_id
+    consumable
+    worn
+    quantity
+    created_at
+    updated_at
+  }
+}

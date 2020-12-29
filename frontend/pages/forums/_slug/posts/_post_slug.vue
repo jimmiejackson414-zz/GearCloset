@@ -94,7 +94,6 @@
   import currentUser from '~/mixins/currentUser';
   import LoadingPage from '~/components/LoadingPage.vue';
   import PostCard from '~/components/forums/PostCard.vue';
-  import TipTapEditor from '~/components/TipTapEditor';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 
   export default {
@@ -164,7 +163,7 @@
       FullScreenUpgrade: () => import(/* webpackPrefetch: true */'~/components/modals/FullScreenUpgrade'),
       LoadingPage,
       PostCard,
-      TipTapEditor,
+      TipTapEditor: () => import(/* webpackPrefetch: true */'~/components/TipTapEditor.vue'),
       ReportPostModal: () => import(/* webpackPrefetch: true */ '~/components/modals/ReportPostModal'),
       SignUpAlert
     },

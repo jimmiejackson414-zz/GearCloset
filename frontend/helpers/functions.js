@@ -1,4 +1,29 @@
+import Dinero from 'dinero.js';
+Dinero.defaultPrecision = 2;
+
 export const calculateCategoryWeight = category => category.items.reduce((sum, elem) => sum + +elem.weight, 0);
+
+export const calculatePackPrices = pack => {
+  const data = { total: 0, base: 0, worn: 0, consumable: 0 };
+
+  pack.categories.forEach(cat => {
+    cat.items.forEach(item => {
+      if (!item.consumable && !item.worn) {
+        data.base += item.price;
+      } else if (item.consumable && item.worn) {
+        data.worn += item.price;
+        data.consumable += item.price;
+      } else if (item.worn) {
+        data.worn += item.price;
+      } else if (item.consumable) {
+        data.consumable += item.price;
+      }
+
+      data.total += item.price;
+    });
+  });
+  return data;
+};
 
 export const calculatePackWeights = pack => {
   const data = { total: 0, base: 0, worn: 0, consumable: 0 };
@@ -6,14 +31,17 @@ export const calculatePackWeights = pack => {
   pack.categories.forEach(cat => {
     cat.items.forEach(item => {
       if (!item.consumable && !item.worn) {
-        data.base += item.weight;
+        data.base += (item.weight * item.quantity);
+      } else if (item.consumable && item.worn) {
+        data.worn += (item.weight * item.quantity);
+        data.consumable += (item.weight * item.quantity);
       } else if (item.worn) {
-        data.worn += item.weight;
+        data.worn += (item.weight * item.quantity);
       } else if (item.consumable) {
-        data.consumable += item.weight;
+        data.consumable += (item.weight * item.quantity);
       }
 
-      data.total += item.weight;
+      data.total += (item.weight * item.quantity);
     });
   });
   return data;
@@ -21,13 +49,8 @@ export const calculatePackWeights = pack => {
 
 export const capitalize = text => text.replace(/^./, str => str.toUpperCase());
 
-export const convertToDollars = num => {
-  return (num / 100).toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 2
-  });
+export const convertToDollars = (num, currency = 'USD') => {
+  return Dinero({ amount: Number(num), currency }).toFormat('0,0.00');
 };
 
 export const generateUUID = () => {

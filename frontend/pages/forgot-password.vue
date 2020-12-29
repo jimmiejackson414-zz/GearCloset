@@ -95,13 +95,13 @@
 </template>
 
 <script>
-  import CustomIcon from '~/components/icons/CustomIcon';
-  import FadeTransition from '~/components/transitions/FadeTransition';
-  import Loading from '~/components/Loading';
-  import LoginDescriptionBox from '~/components/LoginDescriptionBox';
-  import LogoIcon from '~/components/icons/LogoIcon';
   import resetPasswordMutation from '~/apollo/mutations/auth/resetPassword.gql';
-  import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import FadeTransition from '~/components/transitions/FadeTransition.vue';
+  import Loading from '~/components/Loading.vue';
+  import LoginDescriptionBox from '~/components/LoginDescriptionBox.vue';
+  import LogoIcon from '~/components/icons/LogoIcon.vue';
+  import SlideFadeTransition from '~/components/transitions/SlideFadeTransition.vue';
 
   export default {
     layout: 'homepage',

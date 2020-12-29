@@ -62,8 +62,8 @@
 </template>
 
 <script>
-  import Avatar from '~/components/Avatar.vue';
   import logoutMutation from '~/apollo/mutations/auth/logout.gql';
+  import Avatar from '~/components/Avatar.vue';
 
   export default {
     props: {

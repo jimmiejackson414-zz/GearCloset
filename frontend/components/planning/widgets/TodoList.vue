@@ -69,11 +69,11 @@
 </template>
 
 <script>
-  import ClickToEdit from '~/components/ClickToEdit';
-  import CustomIcon from '~/components/icons/CustomIcon';
   import isMobile from '~/mixins/isMobile';
   import { todoService } from '~/services';
-  import PlusButton from '~/components/icons/PlusButton';
+  import ClickToEdit from '~/components/ClickToEdit.vue';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import PlusButton from '~/components/icons/PlusButton.vue';
 
   export default {
     mixins: [isMobile],

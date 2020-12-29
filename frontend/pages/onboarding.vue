@@ -48,10 +48,6 @@
 </template>
 
 <script>
-  import StepOne from '~/components/onboarding/StepOne.vue';
-  import StepTwo from '~/components/onboarding/StepTwo.vue';
-  import StepThree from '~/components/onboarding/StepThree.vue';
-
   export default {
     name: 'NewUser',
 
@@ -66,9 +62,9 @@
     },
 
     components: {
-      StepOne,
-      StepTwo,
-      StepThree
+      StepOne: () => import(/* webpackPrefetch: true */ '~/components/onboarding/StepOne.vue'),
+      StepTwo: () => import(/* webpackPrefetch: true */ '~/components/onboarding/StepTwo.vue'),
+      StepThree: () => import(/* webpackPrefetch: true */ '~/components/onboarding/StepThree.vue')
     }
   };
 </script>

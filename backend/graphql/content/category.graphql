@@ -1,6 +1,12 @@
+extend type Mutation @guard(with: ["api"]) {
+    createCategory(input: CategoryInput! @spread): Category @create
+    updateCategory(id:ID! input: CategoryInput! @spread): Category @update
+}
+
 type Category {
     id: ID!
     name: String!
+    unit: String!
     created_at: DateTime!
     updated_at: DateTime!
     pack_id: ID!
@@ -10,7 +16,8 @@ type Category {
     items(orderBy: [OrderByClause!] @orderBy): [Item!]! @belongsToMany
 }
 
-# input CategoryInput {
-#     name: String
-#     pack_id: ID
-# }
+input CategoryInput {
+    name: String
+    unit: String
+    pack_id: ID
+}

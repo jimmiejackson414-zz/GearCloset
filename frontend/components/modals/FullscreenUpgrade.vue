@@ -9,7 +9,7 @@
         <v-btn
           icon
           @click="show = false">
-          <custom-icon
+          <unicon
             fill="#4a4a4a"
             :height="30"
             name="multiply"
@@ -45,7 +45,6 @@
 <script>
   import dayjs from 'dayjs';
   import { capitalize } from '~/helpers/functions';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import UpgradeCard from '~/components/UpgradeCard.vue';
 
   export default {
@@ -91,7 +90,6 @@
     },
 
     components: {
-      CustomIcon,
       UpgradeCard
     }
   };

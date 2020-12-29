@@ -91,8 +91,8 @@
 
 <script>
   import { capitalize, prependProtocol } from '~/helpers/functions';
-  import Loading from '~/components/Loading.vue';
   import { tripDetailService } from '~/services';
+  import Loading from '~/components/Loading.vue';
 
   export default {
     props: {

@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import Vue from 'vue';
+import convert from 'convert-units';
 
 Vue.filter('prettyName', (user, type) => {
   const { first_name, last_name, trail_name, email } = user;
@@ -48,4 +49,13 @@ Vue.filter('truncate', (string, length = 140) => {
   }
 
   return `${string.substring(0, length)}...`;
+});
+
+Vue.filter('displayWeight', (value, unit = 'g') => {
+  return convert(value.weight).from('mg').to(unit).toFixed(2);
+});
+
+Vue.filter('displayCategoryWeight', (value, unit = 'g', displayUnits = false) => {
+  const weight = value.items.reduce((sum, elem) => sum + (elem.weight * elem.quantity), 0);
+  return `${convert(weight).from('mg').to(unit).toFixed(2)}${displayUnits ? unit : ''}`;
 });

@@ -214,11 +214,11 @@
 <script>
   /* eslint-disable camelcase */
   import { countries } from '~/helpers';
+  import { userService } from '~/services';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import ImageUploader from '~/components/ImageUploader.vue';
   import Loading from '~/components/Loading.vue';
-  import MembershipChip from '~/components/MembershipChip';
-  import { userService } from '~/services';
+  import MembershipChip from '~/components/MembershipChip.vue';
 
   export default {
     props: {

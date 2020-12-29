@@ -58,8 +58,8 @@
 </template>
 
 <script>
-  import CategoryBox from '~/components/forums/CategoryBox.vue';
   import currentUser from '~/mixins/currentUser';
+  import CategoryBox from '~/components/forums/CategoryBox.vue';
   import LoadingPage from '~/components/LoadingPage.vue';
   import SignUpAlert from '~/components/forums/SignUpAlert.vue';
 

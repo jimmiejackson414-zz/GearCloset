@@ -1,0 +1,10 @@
+mutation UpdateCategory($id:ID! $unit:String $name:String $pack_id:ID) {
+  updateCategory(id:$id input: { name:$name unit:$unit pack_id:$pack_id}) {
+    id
+    name
+    unit
+    pack_id
+    created_at
+    updated_at
+  }
+}

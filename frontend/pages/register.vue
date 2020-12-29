@@ -184,12 +184,12 @@
 </template>
 
 <script>
+  import registerMutation from '~/apollo/mutations/auth/register.gql';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
   import LogoIcon from '~/components/icons/LogoIcon';
-  import registerMutation from '~/apollo/mutations/auth/register.gql';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
 
   export default {

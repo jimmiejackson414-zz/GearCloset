@@ -1,0 +1,33 @@
+mutation ResetPack($id: ID!) {
+  resetPack(id: $id) {
+    id
+    name
+    active
+    theme
+    created_at
+    updated_at
+
+    categories {
+      id
+      name
+      unit
+      created_at
+      updated_at
+
+      items(orderBy: [{ columns: "position", order: ASC }]) {
+        id
+        name
+        weight
+        unit
+        price
+        position
+        generic_type
+        consumable
+        worn
+        quantity
+        created_at
+        updated_at
+      }
+    }
+  }
+}

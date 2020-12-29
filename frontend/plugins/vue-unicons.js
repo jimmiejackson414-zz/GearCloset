@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Unicon from 'vue-unicons';
+import Unicon from 'vue-unicons/dist/vue-unicons-ssr.common.js';
 import {
   uniAngleLeft,
   uniAngleRight,
@@ -15,6 +15,7 @@ import {
   uniClipboardAlt,
   uniCommentAltDots,
   uniCopy,
+  uniDollarAlt,
   uniEllipsisV,
   uniEnvelopeAlt,
   uniExclamationTriangle,
@@ -51,6 +52,7 @@ import {
   uniUserCircle,
   uniUtensilsAlt
 } from 'vue-unicons/src/icons';
+import 'vue-unicons/dist/vue-unicons-ssr.css';
 
 Unicon.add([
   uniAngleLeft,
@@ -67,6 +69,7 @@ Unicon.add([
   uniClipboardAlt,
   uniCommentAltDots,
   uniCopy,
+  uniDollarAlt,
   uniEllipsisV,
   uniEnvelopeAlt,
   uniExclamationTriangle,
@@ -103,4 +106,5 @@ Unicon.add([
   uniUserCircle,
   uniUtensilsAlt
 ]);
+
 Vue.use(Unicon);

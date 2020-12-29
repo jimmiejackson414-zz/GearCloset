@@ -52,9 +52,9 @@
 <script>
   import convert from 'convert-units';
   import { calculateCategoryWeight } from '~/helpers/functions';
-  import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import { generateThemeOptions } from '~/helpers';
   import { packService } from '~/services';
+  import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
 
   export default {

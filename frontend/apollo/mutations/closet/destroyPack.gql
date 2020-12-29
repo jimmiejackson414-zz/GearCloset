@@ -1,0 +1,5 @@
+mutation DestroyPack($id:ID!) {
+  destroyPack(id:$id) {
+    id
+  }
+}

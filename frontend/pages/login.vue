@@ -6,100 +6,101 @@
       </fade-transition>
     </div>
     <div class="right">
-      <slide-fade-transition>
-        <div class="form-wrapper">
-          <v-form
-            ref="loginForm"
-            v-model="valid"
-            @submit.prevent="handleSubmit">
-            <div class="form-header">
-              <logo-icon
-                height="50px"
-                width="50px" />
-              <div class="text-h4">
-                Login
+      <client-only>
+        <slide-fade-transition>
+          <div class="form-wrapper">
+            <v-form
+              ref="loginForm"
+              v-model="valid"
+              @submit.prevent="handleSubmit">
+              <div class="form-header">
+                <logo-icon
+                  height="50px"
+                  width="50px" />
+                <div class="text-h4">
+                  Login
+                </div>
+                <span class="body-1">or <router-link to="/register">create a new account.</router-link></span>
               </div>
-              <span class="body-1">or <router-link to="/register">create a new account.</router-link></span>
-            </div>
 
-            <!-- Email -->
-            <v-text-field
-              v-model="email"
-              color="primary"
-              dense
-              :disabled="loggingIn"
-              :error="isError"
-              label="Email"
-              outlined
-              required
-              :rules="emailRules"
-              validate-on-blur
-              @keyup.enter="handleSubmit">
-              <template #prepend-inner>
-                <custom-icon
-                  fill="#0077be"
-                  :height="20"
-                  name="envelope-alt"
-                  :width="20" />
-              </template>
-            </v-text-field>
-
-            <!-- Password -->
-            <v-text-field
-              v-model="password"
-              color="primary"
-              dense
-              :disabled="loggingIn"
-              :error="isError"
-              label="Password"
-              outlined
-              required
-              :rules="passwordRules"
-              type="password"
-              validate-on-blur
-              @keyup.enter="handleSubmit">
-              <template #prepend-inner>
-                <custom-icon
-                  fill="#0077be"
-                  :height="20"
-                  name="padlock"
-                  :width="20" />
-              </template>
-            </v-text-field>
-
-            <!-- Form Submit -->
-            <div class="btn-actions">
-              <v-alert
-                v-if="isError"
-                border="top"
-                color="error"
-                outlined>
-                <template #prepend>
-                  <custom-icon
-                    custom-class="mr-4"
-                    :fill="errorColor"
-                    :height="30"
-                    name="exclamation-triangle"
-                    :width="30" />
-                </template>
-                <p class="body-text-1 mb-0 error--text">
-                  Your email or password is incorrect. Please try again.
-                </p>
-              </v-alert>
-              <v-btn
-                block
+              <!-- Email -->
+              <v-text-field
+                v-model="email"
                 color="primary"
-                depressed
+                dense
                 :disabled="loggingIn"
-                :ripple="false"
-                type="submit">
-                <loading
-                  v-if="loggingIn"
-                  color="#0077be"
-                  height="30px"
-                  width="30px" />
-                <span v-else>Login</span>
-              </v-btn>
+                :error="isError"
+                label="Email"
+                outlined
+                required
+                :rules="emailRules"
+                validate-on-blur
+                @keyup.enter="handleSubmit">
+                <template #prepend-inner>
+                  <custom-icon
+                    fill="#0077be"
+                    :height="20"
+                    name="envelope-alt"
+                    :width="20" />
+                </template>
+              </v-text-field>
+
+              <!-- Password -->
+              <v-text-field
+                v-model="password"
+                color="primary"
+                dense
+                :disabled="loggingIn"
+                :error="isError"
+                label="Password"
+                outlined
+                required
+                :rules="passwordRules"
+                type="password"
+                validate-on-blur
+                @keyup.enter="handleSubmit">
+                <template #prepend-inner>
+                  <custom-icon
+                    fill="#0077be"
+                    :height="20"
+                    name="padlock"
+                    :width="20" />
+                </template>
+              </v-text-field>
+
+              <!-- Form Submit -->
+              <div class="btn-actions">
+                <v-alert
+                  v-if="isError"
+                  border="top"
+                  color="error"
+                  outlined>
+                  <template #prepend>
+                    <custom-icon
+                      custom-class="mr-4"
+                      :fill="errorColor"
+                      :height="30"
+                      name="exclamation-triangle"
+                      :width="30" />
+                  </template>
+                  <p class="body-text-1 mb-0 error--text">
+                    Your email or password is incorrect. Please try again.
+                  </p>
+                </v-alert>
+                <v-btn
+                  block
+                  color="primary"
+                  depressed
+                  :disabled="loggingIn"
+                  :ripple="false"
+                  type="submit">
+                  <loading
+                    v-if="loggingIn"
+                    color="#0077be"
+                    height="30px"
+                    width="30px" />
+                  <span v-else>Login</span>
+                </v-btn>
               <!-- <v-btn
                 class="mt-3"
                 color="primary"
@@ -108,10 +109,11 @@
                 to="/forgot-password">
                 Forgot Password?
               </v-btn> -->
-            </div>
-          </v-form>
-        </div>
-      </slide-fade-transition>
+              </div>
+            </v-form>
+          </div>
+        </slide-fade-transition>
+      </client-only>
       <div class="contact-wrapper">
         <div class="contact body-1 mb-2">
           <nuxt-link to="/contact">
@@ -125,12 +127,11 @@
 </template>
 
 <script>
+  import loginMutation from '~/apollo/mutations/auth/login.gql';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
-  // import { loginService } from '~/services';
-  import loginMutation from '~/apollo/mutations/auth/login.gql';
   import LogoIcon from '~/components/icons/LogoIcon';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
 

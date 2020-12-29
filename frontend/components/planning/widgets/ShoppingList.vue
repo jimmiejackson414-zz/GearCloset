@@ -89,11 +89,11 @@
 </template>
 
 <script>
+  import isMobile from '~/mixins/isMobile';
+  import { shoppingListItemService } from '~/services';
   import ClickToEdit from '~/components/ClickToEdit.vue';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
-  import isMobile from '~/mixins/isMobile';
   import PlusButton from '~/components/icons/PlusButton.vue';
-  import { shoppingListItemService } from '~/services';
 
   export default {
     mixins: [isMobile],

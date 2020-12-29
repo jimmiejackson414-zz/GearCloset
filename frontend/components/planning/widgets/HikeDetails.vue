@@ -72,10 +72,10 @@
 </template>
 
 <script>
+  import { tripDetailService, tripService } from '~/services';
   import ClickToEdit from '~/components/ClickToEdit.vue';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import PlusButton from '~/components/icons/PlusButton.vue';
-  import { tripDetailService, tripService } from '~/services';
 
   export default {
     props: {

@@ -1,7 +1,18 @@
+extend type Query @guard(with: ["api"]) {
+    item(id:ID! @eq): Item @find
+}
+
+extend type Mutation @guard(with: ["api"]) {
+    createItem(input: ItemInput! @spread): Item @field(resolver: "ItemMutator@createItem")
+    removeItem(input: ItemCategoryInput! @spread): Item @field(resolver: "ItemMutator@removeItem")
+    updateItem(id:ID! input: ItemInput! @spread): Item @update
+}
+
 type Item {
     id: ID!
     name: String
     weight: Float
+    unit: String
     price: Int
     generic_type: String
     consumable: Boolean
@@ -16,13 +27,19 @@ type Item {
     pivot: CategoryItemPivot
 }
 
-# input ItemInput {
-#     name: String
-#     weight: Float
-#     price: Int
-#     generic_type: String
-#     consumable: Boolean
-#     worn: Boolean
-#     quantity: Int
-#     category_id: ID
-# }
+input ItemInput {
+    name: String
+    weight: Float
+    unit: String
+    price: Int
+    generic_type: String
+    consumable: Boolean
+    worn: Boolean
+    quantity: Int
+    category_id: ID
+}
+
+input ItemCategoryInput {
+    item_id:ID!
+    category_id:ID!
+}

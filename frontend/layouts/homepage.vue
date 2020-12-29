@@ -52,7 +52,7 @@
 <script>
   import { mapState } from 'vuex';
   import { randBackgrounds } from '~/helpers';
-  import Logo from '~/components/icons/Logo';
+  import Logo from '~/components/icons/Logo.vue';
 
   export default {
     name: 'Homepage',
