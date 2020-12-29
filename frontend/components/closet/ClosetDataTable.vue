@@ -4,21 +4,22 @@
       <h2 class="text-h6 ml-3">
         Pack Items
       </h2>
-      <client-only>
-        <v-list
-          v-for="(category, index) in activePack.categories"
-          :key="category.id"
-          :class="['categories-container', activePack.categories.length === index + 1 ? 'last' : '']">
-          <v-row>
-            <v-col
-              cols="12"
-              lg="4"
-              md="6">
-              <click-to-edit
-                :unique-identifier="`title${category.id}Ref`"
-                :value="category.name"
-                @handle-update-item="updateCategory($event, category, 'name')" />
-            </v-col>
+      <v-row
+        v-for="(category, index) in activePack.categories"
+        :key="category.id"
+        :class="['categories-container', activePack.categories.length === index + 1 ? 'last' : '']">
+        <v-lazy
+          min-height="100"
+          :options="{ threshold: .25}"
+          :style="{ width: '100%' }"
+          transition="fade-transition"
+          :value="false">
+          <v-col
+            cols="12">
+            <click-to-edit
+              :unique-identifier="`title${category.id}Ref`"
+              :value="category.name"
+              @handle-update-item="updateCategory($event, category, 'name')" />
             <v-data-table
               v-if="category.items"
               :ref="`sortableTable${index}`"
@@ -219,25 +220,25 @@
                 </draggable>
               </template>
             </v-data-table>
+          </v-col>
 
-            <!-- Add New Item Button -->
-            <v-btn
-              class="mb-8"
-              :ripple="false"
-              text
-              @click="handleAddNewItem(category.id)">
-              <unicon
-                :fill="primaryColor"
-                height="18"
-                name="plus"
-                width="18" />
-              <p class="body-2 primary--text mb-0 ml-3">
-                Add New Item
-              </p>
-            </v-btn>
-          </v-row>
-        </v-list>
-      </client-only>
+          <!-- Add New Item Button -->
+          <v-btn
+            class="mb-8"
+            :ripple="false"
+            text
+            @click="handleAddNewItem(category.id)">
+            <unicon
+              :fill="primaryColor"
+              height="18"
+              name="plus"
+              width="18" />
+            <p class="body-2 primary--text mb-0 ml-3">
+              Add New Item
+            </p>
+          </v-btn>
+        </v-lazy>
+      </v-row>
 
       <!-- Add New Category Button -->
       <v-container
