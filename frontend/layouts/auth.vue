@@ -30,7 +30,7 @@
         </v-btn>
       </v-toolbar-items>
     </v-app-bar>
-    <v-main :style="{ backgroundImage: 'url(' + require(`~/assets/images/${randBackground.src}`) + ')' }">
+    <v-main :style="randBackground">
       <v-container
         v-if="isUserPage"
         fluid>
@@ -50,39 +50,55 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-  import { randBackgrounds } from '~/helpers';
   import Logo from '~/components/icons/Logo.vue';
+  import AUTH_IMAGES_QUERY from '~/apollo/queries/content/authImages.gql';
 
   export default {
-    name: 'Homepage',
+    name: 'Auth',
+
+    apollo: {
+      authImages: {
+        query: AUTH_IMAGES_QUERY
+      }
+    },
 
     data: () => ({
-      images: randBackgrounds,
-      logo: null
+      authImages: [],
+      isGenerated: false,
+      logo: null,
+      randBackground: ''
     }),
 
     computed: {
-      ...mapState({
-        randBackground: state => state.homepage.background
-      }),
-      randBackground () {
-        return this.images[Math.floor(Math.random() * this.images.length)];
-      },
       isUserPage () {
         return this.$route.name === 'login' || this.$route.name === 'register' || this.$route.name === 'forgot-password' || this.$route.name === 'contact';
       },
       logoColor () {
         return (this.$route.name !== 'login' || this.$route.name !== 'register' || this.$route.name !== 'forgot-password') ? '#4a4a4a' : '#fff';
-      },
-      position () {
-        return this.randBackground.position;
       }
     },
 
     methods: {
+      generateBackground () {
+        const rand = this.authImages[Math.floor(Math.random() * this.authImages.length)];
+        this.randBackground = `backgroundImage: url(${rand ? rand.secure_url : ''})`;
+        this.isGenerated = true;
+      },
       isCurrentPage (linkTo) {
         return this.$route.path === linkTo;
+      }
+    },
+
+    watch: {
+      authImages (val) {
+        if (!this.isGenerated || !this.randBackground) {
+          this.generateBackground();
+        }
+      },
+      '$route' (route, oldRoute) {
+        if (route !== oldRoute) {
+          this.generateBackground();
+        }
       }
     },
 

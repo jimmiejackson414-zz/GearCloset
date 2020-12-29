@@ -136,7 +136,7 @@
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
 
   export default {
-    layout: 'homepage',
+    layout: 'auth',
 
     name: 'Login',
 

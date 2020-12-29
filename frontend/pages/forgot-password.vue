@@ -104,7 +104,7 @@
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition.vue';
 
   export default {
-    layout: 'homepage',
+    layout: 'auth',
 
     name: 'ForgotPassword',
 

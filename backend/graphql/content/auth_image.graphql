@@ -1,0 +1,8 @@
+type AuthImage {
+  asset_id: String
+  public_id: String
+  height: Int
+  width: Int
+  url: String
+  secure_url: String
+}
