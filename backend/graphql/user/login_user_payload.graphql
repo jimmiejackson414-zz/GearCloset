@@ -1,0 +1,4 @@
+# type LoginUserPayload {
+#     me: User
+#     token: String
+# }

@@ -18,6 +18,7 @@ module.exports = {
   globals: {
     $nuxt: true
   },
+  ignorePatterns: ['jsconfig.json'],
   settings: {
     'import/resolver': {
       webpack: {

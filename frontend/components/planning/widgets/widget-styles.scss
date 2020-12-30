@@ -1,0 +1,29 @@
+.widget-wrapper {
+  align-content: start;
+  border: 1px solid $grey5;
+  border-radius: 4px;
+  display: grid;
+  height: 100%;
+  max-height: 450px;
+  padding: 1rem;
+  position: relative;
+  width: 100%;
+
+  @include breakpoint(tablet) {
+    padding: 2rem;
+  }
+
+  .widget-header {
+    align-items: start;
+    display: grid;
+    font-weight: 500;
+    grid-template-columns: repeat(2, auto);
+    justify-content: space-between;
+    margin-bottom: 1rem;
+
+    &.no-action {
+      grid-template-columns: 1fr;
+      justify-content: start;
+    }
+  }
+}

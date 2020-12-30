@@ -1,0 +1,25 @@
+extend type Mutation @guard(with: ["api"]) {
+    createTodo(input: TodoInput! @spread): Todo @create
+    deleteTodo(id: ID!): Todo @delete
+    updateTodo(id: ID! input: TodoInput! @spread): Todo @update
+}
+
+extend type Query @guard(with: ["api"]) {
+    todos(trip_id: ID! @where(operator: "=", key: "trip_id")): [Todo]! @all
+}
+
+type Todo {
+    id: ID!
+    title: String
+    checked: Boolean!
+    trip: Trip! @belongsTo
+    created_at: DateTime!
+    updated_at: DateTime!
+    trip_id: ID
+}
+
+input TodoInput {
+    title: String
+    checked: Boolean
+    trip_id: ID
+}

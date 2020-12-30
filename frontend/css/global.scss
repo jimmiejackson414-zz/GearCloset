@@ -1,20 +1,8 @@
-@import '~vuetify/src/styles/styles.sass';
-
-// colors
-$primary: #4a90e2; // water
-$secondary: #b7410e; // rust
-$accent: #e1ad01; // mustard
-$info: #759194; // stone
-$warning: #f05e23; // orange
-$error: #950714; // cranberry
-$success: #228b22; // forrest
-
-$light-grey: #d9d9d9;
-$dark-grey: #4a4a4a;
+// @import '~vuetify/src/styles/styles.sass';
 
 html,
 body {
-  color: $dark-grey;
+  color: $grey8;
   height: 100%;
 }
 
@@ -53,6 +41,10 @@ a {
   }
 }
 
+span, div, input {
+  letter-spacing: 1px !important;
+}
+
 .page-fade-enter-active,
 .page-fade-leave-active {
   transition: opacity 0.5s;
@@ -75,6 +67,14 @@ a {
   cursor: pointer;
 }
 
+.cursor-default {
+  cursor: default;
+}
+
+.drag {
+  cursor: grab;
+}
+
 .nav-link, .v-btn {
   &:hover::before {
     opacity: 0 !important;
@@ -87,4 +87,8 @@ a {
 
 .v-ripple__container {
   display: none !important;
+}
+
+.text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6, .text-p, span, div {
+  letter-spacing: 1px;
 }

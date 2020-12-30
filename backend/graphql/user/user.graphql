@@ -1,0 +1,77 @@
+extend type Mutation @guard(with: ["api"]) {
+    updateUser(id: ID! input: UserInput! @spread): User @update
+    updateAvatar(file: String): User @field(resolver: "UserMutator@updateAvatar")
+    addFriends(trip_id: ID! input: [AddFriendsInput]! @spread): [User]! @field(resolver: "UserMutator@addFriends")
+}
+
+extend type Query {
+    me: User @auth(guard: "api")
+    users: [User!]! @paginate(defaultCount: 10)
+    user(id: ID @eq): User @find
+    friends: [User]! @field(resolver: "UserQuery@friends")
+}
+
+type User {
+    id: ID!
+    api_token: String!
+    email: String!
+    password: String!
+    avatar_url: String
+    address_1: String
+    address_2: String
+    city: String
+    state: String
+    country: String
+    first_name: String
+    last_name: String
+    trail_name: String
+    subscription_level: String
+    measuring_system: String
+    has_onboarded: Boolean
+    pending_invite: Boolean
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    comments: [ForumComment]! @hasMany
+    friends: [User]! @belongsToMany(relation: "friends")
+    notifications: [Notification!]! @hasMany
+    packs: [Pack!]! @hasMany
+    posts: [ForumPost]! @hasMany
+    trips: [Trip]! @hasMany
+}
+
+input CreateUserBelongsTo {
+    connect: ID
+    create: UserInput
+}
+
+input UserInput {
+    api_token: String
+    email: String
+    password: String
+    avatar_url: String
+    address_1: String
+    address_2: String
+    city: String
+    state: String
+    country: String
+    first_name: String
+    last_name: String
+    trail_name: String
+    subscription_level: String
+    measuring_system: String
+    has_onboarded: Boolean
+    pending_invite: Boolean
+}
+
+input AddFriendsInput {
+    id: ID
+    email: String!
+    first_name: String
+    last_name: String
+    avatar_url: String
+    trail_name: String
+    pending_invite: Boolean
+    created_at: DateTime
+    updated_at: DateTime
+}

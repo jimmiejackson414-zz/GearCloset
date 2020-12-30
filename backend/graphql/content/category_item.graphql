@@ -1,0 +1,9 @@
+type CategoryItemPivot {
+    id: ID!
+    position: Int
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    categories: [Category!]! @hasMany
+    items: [Item!]! @hasMany
+}

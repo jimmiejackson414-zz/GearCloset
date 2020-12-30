@@ -1,0 +1,55 @@
+#import "~/apollo/fragments/category.gql"
+#import "~/apollo/fragments/item.gql"
+#import "~/apollo/fragments/pack.gql"
+#import "~/apollo/fragments/shoppingListItem.gql"
+#import "~/apollo/fragments/trip.gql"
+#import "~/apollo/fragments/tripDetail.gql"
+#import "~/apollo/fragments/todo.gql"
+
+query Trips {
+  trips {
+    ...trip
+
+    owner {
+      id
+      email
+      first_name
+      last_name
+      trail_name
+    }
+
+    todos(orderBy: [{ columns: CREATED_AT, order: DESC }]) {
+      ...todo
+    }
+
+    shoppingListItems(orderBy: [{ columns: CREATED_AT, order: DESC }]) {
+      ...shoppingListItem
+    }
+
+    tripDetails(orderBy: [{ columns: CREATED_AT, order: DESC }]) {
+			...tripDetail
+    }
+
+    users {
+      id
+      avatar_url
+      first_name
+      last_name
+      trail_name
+      email
+      pending_invite
+    }
+
+    pack {
+      ...pack
+
+      categories {
+        ...category
+
+        items(orderBy: [{ columns: "position", order: ASC }]) {
+          ...item
+        }
+      }
+    }
+  }
+}

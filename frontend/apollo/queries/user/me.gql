@@ -1,0 +1,25 @@
+query Me {
+  currentUser: me {
+    id
+    avatar_url
+    email
+    first_name
+    last_name
+    trail_name
+    address_1
+    address_2
+    city
+    state
+    country
+    subscription_level
+    measuring_system
+
+    notifications {
+      id
+      message
+      viewed
+      created_at
+      updated_at
+    }
+  }
+}

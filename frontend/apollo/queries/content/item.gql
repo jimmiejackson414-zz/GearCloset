@@ -1,0 +1,16 @@
+query Item($id:ID!) {
+  item(id:$id) {
+    id
+    name
+    weight
+    unit
+    price
+    position
+    generic_type
+    consumable
+    worn
+    quantity
+    created_at
+    updated_at
+  }
+}

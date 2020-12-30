@@ -10,7 +10,8 @@
         <div class="form-wrapper">
           <v-form
             ref="registerForm"
-            v-model="valid">
+            v-model="valid"
+            @submit.prevent="handleSubmit">
             <div class="form-header">
               <logo-icon
                 height="50px"
@@ -27,17 +28,19 @@
               color="primary"
               dense
               :disabled="submitting"
-              label="First Name"
+              :error="isError"
+              label="First Name*"
               outlined
               required
               :rules="nameRules"
-              validate-on-blur>
-              <template v-slot:prepend-inner>
+              validate-on-blur
+              @keyup.enter="handleSubmit">
+              <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
-                  height="20px"
+                  :height="20"
                   name="user-circle"
-                  width="20px" />
+                  :width="20" />
               </template>
             </v-text-field>
 
@@ -47,17 +50,19 @@
               color="primary"
               dense
               :disabled="submitting"
-              label="Last Name"
+              :error="isError"
+              label="Last Name*"
               outlined
               required
               :rules="nameRules"
-              validate-on-blur>
-              <template v-slot:prepend-inner>
+              validate-on-blur
+              @keyup.enter="handleSubmit">
+              <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
-                  height="20px"
+                  :height="20"
                   name="user-circle"
-                  width="20px" />
+                  :width="20" />
               </template>
             </v-text-field>
 
@@ -67,17 +72,19 @@
               color="primary"
               dense
               :disabled="submitting"
-              label="Email"
+              :error="isError"
+              label="Email*"
               outlined
               required
               :rules="emailRules"
-              validate-on-blur>
-              <template v-slot:prepend-inner>
+              validate-on-blur
+              @keyup.enter="handleSubmit">
+              <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
-                  height="20px"
+                  :height="20"
                   name="envelope-alt"
-                  width="20px" />
+                  :width="20" />
               </template>
             </v-text-field>
 
@@ -87,51 +94,72 @@
               color="primary"
               dense
               :disabled="submitting"
-              label="Password"
+              :error="isError"
+              label="Password*"
               outlined
               required
               :rules="passwordRules"
               type="password"
-              validate-on-blur>
-              <template v-slot:prepend-inner>
+              validate-on-blur
+              @keyup.enter="handleSubmit">
+              <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
-                  height="20px"
+                  :height="20"
                   name="padlock"
-                  width="20px" />
+                  :width="20" />
               </template>
             </v-text-field>
 
             <!-- Verify Password -->
             <v-text-field
-              v-model="confirm_password"
+              v-model="user.confirm_password"
               color="primary"
               dense
               :disabled="submitting"
-              label="Confirm Password"
+              :error="isError"
+              label="Confirm Password*"
               outlined
               required
               :rules="passwordsMatchRules"
               type="password"
-              validate-on-blur>
-              <template v-slot:prepend-inner>
+              validate-on-blur
+              @keyup.enter="handleSubmit">
+              <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
-                  height="20px"
+                  :height="20"
                   name="padlock"
-                  width="20px" />
+                  :width="20" />
               </template>
             </v-text-field>
 
             <!-- Form Submit -->
             <div class="btn-actions">
+              <v-alert
+                v-if="isError"
+                border="top"
+                color="error"
+                outlined>
+                <template #prepend>
+                  <custom-icon
+                    custom-class="mr-4"
+                    :fill="errorColor"
+                    :height="30"
+                    name="exclamation-triangle"
+                    :width="30" />
+                </template>
+                <p class="body-text-1 mb-0 error--text">
+                  There was an error creating your account. Please try again.
+                </p>
+              </v-alert>
               <v-btn
                 block
                 color="primary"
                 depressed
                 :disabled="submitting"
                 :ripple="false"
-                @click="handleSubmit">
+                type="submit">
                 <loading
                   v-if="submitting"
                   color="#0077be"
@@ -156,6 +184,7 @@
 </template>
 
 <script>
+  import registerMutation from '~/apollo/mutations/auth/register.gql';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
@@ -164,17 +193,18 @@
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
 
   export default {
-    layout: 'homepage',
+    layout: 'auth',
 
     name: 'Register',
 
     data () {
       return {
-        confirm_password: '',
         emailRules: [
           v => !!v || 'Email is required',
           v => /.+@.+/.test(v) || 'E-mail must be valid'
         ],
+        errorColor: '',
+        isError: false,
         submitting: false,
         nameRules: [
           v => !!v || 'This is a required field'
@@ -185,33 +215,51 @@
           v => (this.user.password === this.confirm_password) || 'Passwords must match'
         ],
         user: {
+          confirm_password: '',
           first_name: '',
           last_name: '',
           email: '',
-          password: '',
-          trail_name: ''
+          password: ''
         },
         valid: false
       };
     },
 
     methods: {
-      handleSubmit () {
-        console.log('user Service');
-        // if (this.$refs.loginForm.validate()) {
-        //   this.submitting = true;
-        //   const payload = { email: this.email, password: this.password };
-        //   if (payload.email && payload.password) {
-        //     const res = await userService.login(payload);
-        //     if (res.status === 401) {
-        //       this.submitting = false;
-        //     } else {
-        //       this.submitting = false;
-        //       router.push('/');
-        //     }
-        //   }
-        // }
+      async handleSubmit () {
+        if (this.$refs.registerForm.validate()) {
+          this.submitting = true;
+
+          try {
+            const { data: { register: { token } }, errors } = await this.$apollo.mutate({
+              mutation: registerMutation,
+              variables: {
+                ...this.user
+              }
+            });
+
+            if (errors?.length) {
+              this.isError = true;
+              this.loggingIn = false;
+            }
+
+            // set the jwt to the this.$apolloHelpers.onLogin
+            await this.$apolloHelpers.onLogin(token);
+            this.$router.push({ path: '/onboarding' });
+          } catch (e) {
+            console.error('register error: ', e);
+            this.isError = true;
+            this.submitting = false;
+          }
+        }
       }
+    },
+
+    async mounted () {
+      this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
+
+      // clear apollo-token from cookies to make sure none were accidentally set
+      await this.$apolloHelpers.onLogout();
     },
 
     components: {
@@ -221,14 +269,17 @@
       LoginDescriptionBox,
       LogoIcon,
       SlideFadeTransition
+    },
+
+    head () {
+      return {
+        title: 'Register'
+      };
     }
   };
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/global';
-  @import '~/css/breakpoints';
-
   .register {
     display: flex;
     flex-flow: row wrap;

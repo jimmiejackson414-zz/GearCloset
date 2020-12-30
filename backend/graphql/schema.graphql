@@ -1,0 +1,58 @@
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type Query {
+    forumCategories: [ForumCategory!]! @all
+    forumCategory(id: ID @eq): ForumCategory @find
+
+    forumSubcategories: [ForumSubcategory!]! @all
+    forumSubcategory(id: ID @eq): ForumSubcategory @find
+    forumSubcategoryBySlug(slug: String! @eq): ForumSubcategory
+
+    forumPosts: [ForumPost!]! @all
+    forumPost(id: ID @eq): ForumPost @find
+    forumPostBySlug(slug: String! @eq): ForumPost
+
+    forumComments: [ForumComment!]! @all
+    forumComment(id: ID @eq): ForumComment @find
+
+    # categories: [Category!]! @field(resolver: "CategoriesQuery@find_by_user")
+    items: [Item!]! @field(resolver: "ItemsQuery@find_by_user")
+    notifications: [Notification]! @field(resolver: "NotificationQuery@find_by_user")
+
+    authImages: [AuthImage]! @field(resolver: "AuthQuery@find_bg_images")
+}
+
+type Mutation {
+    # User/Auth Mutations
+    login(input: LoginInput @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Login@resolve")
+    refreshToken(input: RefreshTokenInput @spread): RefreshTokenPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\RefreshToken@resolve")
+    logout: LogoutResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Logout@resolve")
+    forgotPassword(input: ForgotPasswordInput! @spread): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ForgotPassword@resolve")
+    updateForgottenPassword(input: NewPasswordWithCodeInput @spread): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ResetPassword@resolve")
+    register(input: RegisterInput @spread): RegisterResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Register@resolve")
+    socialLogin(input: SocialLoginInput! @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\SocialLogin@resolve")
+    verifyEmail(input: VerifyEmailInput! @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\VerifyEmail@resolve")
+    updatePassword(input: UpdatePassword! @spread): UpdatePasswordResponse! @field(resolver: "UserMutator@updatePassword") @guard(with: ["api"])
+}
+
+input OrderByClause {
+    columns: DateTime
+    order: SortOrder!
+}
+
+enum CreatedAtColumn {
+    CREATED_AT @enum(value: "created_at")
+}
+
+enum SortOrder {
+    ASC
+    DESC
+}
+
+#import user/*.graphql
+#import content/*.graphql
+#import forum/*.graphql

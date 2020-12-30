@@ -3,9 +3,11 @@
     id="app"
     v-scroll="onScroll"
     light>
-    <navbar />
+    <navbar @handle-toggle-drawer="handleToggleDrawer" />
 
-    <home-drawer v-model="drawer" />
+    <home-drawer
+      v-if="shouldShow"
+      v-model="drawer" />
 
     <v-main>
       <transition
@@ -29,16 +31,16 @@
       bottom
       :color="alert.type"
       left
-      :timeout="5000"
+      :timeout="3000"
       :value="alert.message">
       <custom-icon
         class="mr-4"
         fill="#fff"
-        height="26px"
+        :height="26"
         :name="alert.type === 'success' ? 'check-circle' : 'multiply'"
-        width="26px" />
+        :width="26" />
       {{ alert.message }}
-      <template v-slot:action="{ attrs }">
+      <template #action="{ attrs }">
         <v-btn
           v-bind="attrs"
           :ripple="false"
@@ -62,9 +64,9 @@
         @click="scrollToTop">
         <custom-icon
           fill="white"
-          height="40px"
+          :height="40"
           name="angle-up"
-          width="40px" />
+          :width="40" />
       </v-btn>
     </v-fab-transition>
   </v-app>
@@ -72,15 +74,15 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import CustomIcon from '~/components/icons/CustomIcon';
-  import Navbar from '~/components/Navbar';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import HomeDrawer from '~/components/Drawer.vue';
+  import Navbar from '~/components/navbar/Navbar.vue';
 
   export default {
     name: 'Default',
 
     data: () => ({
-      drawer: null,
-
+      drawer: false,
       offsetTop: 0
     }),
 
@@ -90,6 +92,9 @@
       }),
       showScrollBtn () {
         return this.offsetTop > 60;
+      },
+      shouldShow () {
+        return this.$route.name !== 'onboarding';
       }
     },
 
@@ -97,6 +102,9 @@
       ...mapActions({
         clearAlert: 'alert/clear'
       }),
+      handleToggleDrawer () {
+        this.drawer = !this.drawer;
+      },
       onScroll () {
         this.offsetTop = window.pageYOffset || document.documentElement.scrollTop;
       },
@@ -114,28 +122,26 @@
         if (newValue) {
           setTimeout(() => {
             this.clearAlert();
-          }, 5000);
+          }, 3500);
         }
       }
     },
 
     components: {
       CustomIcon,
-      HomeDrawer: () => import('~/components/Drawer'),
+      HomeDrawer,
       Navbar
     }
   };
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/breakpoints';
-
   footer.v-footer.custom {
     background-color: transparent;
     color: white;
     display: flex;
     justify-content: center;
-    padding: 2rem;
+    padding: 1rem;
     position: relative;
 
     .social-container {

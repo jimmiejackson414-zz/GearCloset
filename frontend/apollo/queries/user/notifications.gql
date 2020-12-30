@@ -1,0 +1,9 @@
+query Notifications {
+  notifications {
+    id
+    message
+    viewed
+    created_at
+    updated_at
+  }
+}

@@ -6,92 +6,114 @@
       </fade-transition>
     </div>
     <div class="right">
-      <slide-fade-transition>
-        <div class="form-wrapper">
-          <v-form
-            ref="loginForm"
-            v-model="valid">
-            <div class="form-header">
-              <logo-icon
-                height="50px"
-                width="50px" />
-              <div class="text-h4">
-                Login
+      <client-only>
+        <slide-fade-transition>
+          <div class="form-wrapper">
+            <v-form
+              ref="loginForm"
+              v-model="valid"
+              @submit.prevent="handleSubmit">
+              <div class="form-header">
+                <logo-icon
+                  height="50px"
+                  width="50px" />
+                <div class="text-h4">
+                  Login
+                </div>
+                <span class="body-1">or <router-link to="/register">create a new account.</router-link></span>
               </div>
-              <span class="body-1">or <router-link to="/register">create a new account.</router-link></span>
-            </div>
 
-            <!-- Email -->
-            <v-text-field
-              v-model="email"
-              color="primary"
-              dense
-              :disabled="loggingIn"
-              label="Email"
-              outlined
-              required
-              :rules="emailRules"
-              validate-on-blur
-              @keyup.enter="handleSubmit">
-              <template v-slot:prepend-inner>
-                <custom-icon
-                  fill="#0077be"
-                  height="20px"
-                  name="envelope-alt"
-                  width="20px" />
-              </template>
-            </v-text-field>
-
-            <!-- Password -->
-            <v-text-field
-              v-model="password"
-              color="primary"
-              dense
-              :disabled="loggingIn"
-              label="Password"
-              outlined
-              required
-              :rules="passwordRules"
-              type="password"
-              validate-on-blur
-              @keyup.enter="handleSubmit">
-              <template v-slot:prepend-inner>
-                <custom-icon
-                  fill="#0077be"
-                  height="20px"
-                  name="padlock"
-                  width="20px" />
-              </template>
-            </v-text-field>
-
-            <!-- Form Submit -->
-            <div class="btn-actions">
-              <v-btn
-                block
+              <!-- Email -->
+              <v-text-field
+                v-model="email"
                 color="primary"
-                depressed
+                dense
                 :disabled="loggingIn"
-                :ripple="false"
-                @click="handleSubmit">
-                <loading
-                  v-if="loggingIn"
-                  color="#0077be"
-                  height="30px"
-                  width="30px" />
-                <span v-else>Login</span>
-              </v-btn>
-              <v-btn
+                :error="isError"
+                label="Email"
+                outlined
+                required
+                :rules="emailRules"
+                validate-on-blur
+                @keyup.enter="handleSubmit">
+                <template #prepend-inner>
+                  <custom-icon
+                    fill="#0077be"
+                    :height="20"
+                    name="envelope-alt"
+                    :width="20" />
+                </template>
+              </v-text-field>
+
+              <!-- Password -->
+              <v-text-field
+                v-model="password"
+                color="primary"
+                dense
+                :disabled="loggingIn"
+                :error="isError"
+                label="Password"
+                outlined
+                required
+                :rules="passwordRules"
+                type="password"
+                validate-on-blur
+                @keyup.enter="handleSubmit">
+                <template #prepend-inner>
+                  <custom-icon
+                    fill="#0077be"
+                    :height="20"
+                    name="padlock"
+                    :width="20" />
+                </template>
+              </v-text-field>
+
+              <!-- Form Submit -->
+              <div class="btn-actions">
+                <v-alert
+                  v-if="isError"
+                  border="top"
+                  color="error"
+                  outlined>
+                  <template #prepend>
+                    <custom-icon
+                      custom-class="mr-4"
+                      :fill="errorColor"
+                      :height="30"
+                      name="exclamation-triangle"
+                      :width="30" />
+                  </template>
+                  <p class="body-text-1 mb-0 error--text">
+                    Your email or password is incorrect. Please try again.
+                  </p>
+                </v-alert>
+                <v-btn
+                  block
+                  color="primary"
+                  depressed
+                  :disabled="loggingIn"
+                  :ripple="false"
+                  type="submit">
+                  <loading
+                    v-if="loggingIn"
+                    color="#0077be"
+                    height="30px"
+                    width="30px" />
+                  <span v-else>Login</span>
+                </v-btn>
+              <!-- <v-btn
                 class="mt-3"
                 color="primary"
                 nuxt
                 text
                 to="/forgot-password">
                 Forgot Password?
-              </v-btn>
-            </div>
-          </v-form>
-        </div>
-      </slide-fade-transition>
+              </v-btn> -->
+              </div>
+            </v-form>
+          </div>
+        </slide-fade-transition>
+      </client-only>
       <div class="contact-wrapper">
         <div class="contact body-1 mb-2">
           <nuxt-link to="/contact">
@@ -105,6 +127,7 @@
 </template>
 
 <script>
+  import loginMutation from '~/apollo/mutations/auth/login.gql';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
@@ -113,7 +136,7 @@
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
 
   export default {
-    layout: 'homepage',
+    layout: 'auth',
 
     name: 'Login',
 
@@ -123,6 +146,8 @@
         v => !!v || 'Email is required',
         v => /.+@.+/.test(v) || 'E-mail must be valid'
       ],
+      errorColor: '',
+      isError: false,
       loggingIn: false,
       password: '',
       passwordRules: [v => !!v || 'Password is required'],
@@ -130,22 +155,43 @@
     }),
 
     methods: {
-      handleSubmit () {
-        console.log('user Service');
-        // if (this.$refs.loginForm.validate()) {
-        //   this.loggingIn = true;
-        //   const payload = { email: this.email, password: this.password };
-        //   if (payload.email && payload.password) {
-        //     const res = await userService.login(payload);
-        //     if (res.status === 401) {
-        //       this.logginIn = false;
-        //     } else {
-        //       this.loggingIn = false;
-        //       router.push('/');
-        //     }
-        //   }
-        // }
+      async handleSubmit () {
+        if (this.$refs.loginForm.validate()) {
+          this.loggingIn = true;
+
+          const email = this.email;
+          const password = this.password;
+
+          try {
+            const { data: { login }, errors } = await this.$apollo.mutate({
+              mutation: loginMutation,
+              variables: {
+                email,
+                password
+              }
+            });
+
+            if (errors?.length) {
+              this.isError = true;
+              this.loggingIn = false;
+            }
+
+            // set the jwt to the this.$apolloHelpers.onLogin
+            await this.$apolloHelpers.onLogin(login.access_token);
+            this.$router.push({ path: '/closet' });
+          } catch (e) {
+            console.error('login error: ', e);
+            this.isError = true;
+            this.loggingIn = false;
+          }
+        }
       }
+    },
+
+    async mounted () {
+      this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
+      // clear apollo-token from cookies to make sure user is fully logged out
+      await this.$apolloHelpers.onLogout();
     },
 
     components: {
@@ -155,14 +201,17 @@
       LoginDescriptionBox,
       LogoIcon,
       SlideFadeTransition
+    },
+
+    head () {
+      return {
+        title: 'Login'
+      };
     }
   };
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/global';
-  @import '~/css/breakpoints';
-
   .login {
     display: flex;
     flex-flow: row wrap;

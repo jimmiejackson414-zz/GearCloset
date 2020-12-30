@@ -1,0 +1,12 @@
+mutation MarkAllRead {
+  markAllRead {
+    status
+    notifications {
+      id
+      message
+      viewed
+      created_at
+      updated_at
+    }
+  }
+}

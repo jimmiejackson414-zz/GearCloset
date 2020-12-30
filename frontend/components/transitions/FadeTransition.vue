@@ -14,7 +14,7 @@
 <style lang="scss" scoped>
   .fade-enter-active, .fade-leave-active {
     opacity: 1;
-    transition: all 0.5s cubic-bezier(0.57, 0.06, 0, 1.06);
+    transition: all 0.5s $cubicBezier;
   }
 
   .fade-enter, .fade-leave-to {

@@ -1,7 +1,7 @@
 export default {
   head: {
-    titleTemplate: '%s - GearCloset',
-    title: 'GearCloset',
+    titleTemplate: '%s | Gear Closet',
+    title: 'Gear Closet',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },
@@ -15,50 +15,133 @@ export default {
     ]
   },
 
+  /*
+  ** SSR Options
+  */
+  ssr: true,
+
+  /*
+   ** PublicRuntimeConfig Options
+   */
+  publicRuntimeConfig: {
+    baseUrl: process.env.NUXT_ENV_API_URL || 'http://localhost:3000',
+    apiUrl: process.env.NUXT_ENV_BACKEND_API_URL || 'http://localhost:8000/graphql',
+    cloudinaryFolder: process.env.CLOUDINARY_FOLDER
+  },
+
+  /*
+   ** PrivateRuntimeConfig (API Secrets, etc.)
+   */
+  privateRuntimeConfig: {
+    nodeEnv: process.env.NODE_ENV || 'development'
+  },
+
+  /*
+   ** Global CSS
+   */
   css: [
-    '~/css/global.scss',
-    '~/css/breakpoints.scss'
+    '~/css/global.scss'
   ],
 
+  /*
+   ** Plugins to load before mounting the App
+   ** Icons can be found at https://antonreshetov.github.io/vue-unicons/
+   */
   plugins: [
     { src: '~/plugins/vue-unicons', mode: 'client' },
-    { src: '~/plugins/filters' },
-    { src: '~/plugins/mixins' }
+    { src: '~/plugins/v-mask', mode: 'client' },
+    { src: '~/plugins/tiptap-vuetify', mode: 'client' },
+    { src: '~/plugins/filters' }
   ],
 
-  components: true,
-
+  /*
+   ** Nuxt.js dev-modules
+   */
   buildModules: [
     '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/style-resources'
   ],
 
+  /*
+   ** Nuxt.js build modules
+   */
   modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/auth',
-    '@nuxtjs/pwa'
+    '@nuxtjs/apollo',
+    '@nuxtjs/cloudinary',
+    '@nuxtjs/dayjs'
   ],
 
-  pwa: {
-    icon: {
-      fileName: 'icon.png',
-      source: './static/icon.png',
-      sizes: [64, 120, 144, 152, 192, 384, 512]
-    }
+  /*
+  ** Cloudinary module configuration
+  */
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_NAME,
+    apiKey: process.env.CLOUDINARY_API_KEY,
+    apiSecret: process.env.CLOUDINARY_API_SECRET,
+    useComponent: true
   },
 
-  auth: {
-    strategies: {
-      'laravel.passport': {
-        url: '',
-        client_id: '',
-        client_secret: ''
+  /*
+  ** Apollo module configuration
+  */
+  apollo: {
+    clientConfigs: {
+      default: '~/apollo/config.js'
+    },
+    defaultOptions: {
+      $query: {
+        loadingKey: 'loading'
       }
-    }
+    },
+    includeNodeModules: true,
+    cookieAttributes: {
+      expires: 7 // optional, default 7 days
+    },
+    // watchLoading: '~/apollo/loadingHandler',
+    errorHandler: '~/apollo/errorHandler'
   },
 
-  axios: {},
+  /*
+   ** Progressive Web App configuration
+   */
+  // pwa: {
+  //   icon: {
+  //     fileName: 'icon.png',
+  //     source: './static/icon.png',
+  //     sizes: [64, 120, 144, 152, 192, 384, 512]
+  //   }
+  // },
 
+  /*
+  ** Dayjs module configuration
+  */
+  dayjs: {
+    locales: ['en'],
+    defaultLocale: 'en',
+    plugins: []
+
+  },
+
+  /*
+  ** Customize the progress-bar color
+  */
+  loading: {
+    color: '#2368a2',
+    height: '5px',
+    failedColor: '#db3030'
+  },
+
+  /*
+  ** Enable global scss variables
+  */
+  styleResources: {
+    scss: ['./css/_colors.scss', '~/css/_breakpoints.scss', '~/css/_defaults.scss']
+  },
+
+  /*
+   ** Vuetify configuration
+   */
   vuetify: {
     customVariables: ['~/css/variables.scss'],
     treeShake: true,
@@ -71,44 +154,58 @@ export default {
       },
       themes: {
         light: {
-          primary: '#4a90e2', // water
-          secondary: '#b7410e', // rust
-          accent: '#e1ad01', // mustard
-          info: '#759194', // stone
-          warning: '#f05e23', // orange
-          error: '#950714', // cranberry
-          success: '#228b22', // forrest
-          background: '#fff',
-          'dark-grey': '#4a4a4a',
-          'light-grey': '#aaa'
-        },
-        dark: {
-          primary: '#4a90e2', // water
-          secondary: '#b7410e', // rust
-          accent: '#e1ad01', // mustard
-          info: '#759194', // stone
-          warning: '#f05e23', // orange
-          error: '#950714', // cranberry
-          success: '#228b22', // forrest
-          background: '#252525',
-          'dark-grey': '#4a4a4a'
+          grey10: '#21242a',
+          grey9: '#343a40',
+          grey8: '#494f57',
+          grey7: '#868e95',
+          grey6: '#adb5bd',
+          grey5: '#cfd4da',
+          grey4: '#dee2e6',
+          grey3: '#e9ecee',
+          grey2: '#f0f3f5',
+          grey1: '#f8f9fa',
+
+          primary: '#2368a2',
+          primaryDark: '#1a4971',
+          primaryLight: '#aad3f5',
+
+          secondary: '#1a645d',
+          secondaryLight: '#6ed7d3',
+
+          accent: '#74d99f',
+          accentDark: '#4cce83',
+          accentDarkest: '#32b56a',
+
+          warning: '#fae19f',
+          warningDark: '#F7D26F',
+          warningDarkest: '#5b4712',
+          warningLight: '#FDF0CF',
+          warningLightest: '#FEF8E8',
+
+          error: '#db3030',
+          errorLight: '#db3030',
+          errorDark: '#ce2424',
+
+          info: '#adb5bd',
+          success: '#137547',
+
+          tertiary: '#2F2235',
+          tertiaryLight: '#4b3654',
+          tertiaryLightest: '#9a7aa9'
         }
       }
     }
   },
 
+  /*
+   ** Build configuration
+   */
   build: {
+    // analyze: true,
     standalone: true,
-    extend (config, { isDev, isClient }) {
-      // Run ESLint on save
-      if (isDev && isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        });
-      }
+    transpile: ['vee-validate/dist/rules'],
+    externals: {
+      moment: 'moment'
     }
   }
 };

@@ -46,12 +46,12 @@
               required
               :rules="nameRules"
               validate-on-blur>
-              <template v-slot:prepend-inner>
+              <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
-                  height="20px"
+                  :height="20"
                   name="user-circle"
-                  width="20px" />
+                  :width="20" />
               </template>
             </v-text-field>
 
@@ -66,12 +66,12 @@
               required
               :rules="nameRules"
               validate-on-blur>
-              <template v-slot:prepend-inner>
+              <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
-                  height="20px"
+                  :height="20"
                   name="user-circle"
-                  width="20px" />
+                  :width="20" />
               </template>
             </v-text-field>
 
@@ -86,12 +86,12 @@
               required
               :rules="emailRules"
               validate-on-blur>
-              <template v-slot:prepend-inner>
+              <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
-                  height="20px"
+                  :height="20"
                   name="envelope-alt"
-                  width="20px" />
+                  :width="20" />
               </template>
             </v-text-field>
 
@@ -105,12 +105,12 @@
               outlined
               required
               validate-on-blur>
-              <template v-slot:prepend-inner>
+              <template #prepend-inner>
                 <custom-icon
                   fill="#0077be"
-                  height="20px"
+                  :height="20"
                   name="comment-alt-dots"
-                  width="20px" />
+                  :width="20" />
               </template>
             </v-textarea>
 
@@ -147,15 +147,15 @@
 </template>
 
 <script>
-  import CustomIcon from '~/components/icons/CustomIcon';
-  import FadeTransition from '~/components/transitions/FadeTransition';
-  import Loading from '~/components/Loading';
-  import LoginDescriptionBox from '~/components/LoginDescriptionBox';
-  import LogoIcon from '~/components/icons/LogoIcon';
-  import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import FadeTransition from '~/components/transitions/FadeTransition.vue';
+  import Loading from '~/components/Loading.vue';
+  import LoginDescriptionBox from '~/components/LoginDescriptionBox.vue';
+  import LogoIcon from '~/components/icons/LogoIcon.vue';
+  import SlideFadeTransition from '~/components/transitions/SlideFadeTransition.vue';
 
   export default {
-    layout: 'homepage',
+    layout: 'auth',
 
     name: 'Contact',
 
@@ -209,14 +209,17 @@
       LoginDescriptionBox,
       LogoIcon,
       SlideFadeTransition
+    },
+
+    head () {
+      return {
+        title: 'Contact'
+      };
     }
   };
 </script>
 
 <style lang="scss" scoped>
-  @import '~/css/global';
-  @import '~/css/breakpoints';
-
   .contact {
     display: flex;
     flex-flow: row wrap;

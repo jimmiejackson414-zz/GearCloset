@@ -33,13 +33,13 @@
         required: false
       },
       height: {
-        type: String,
-        default: '20px',
+        type: Number,
+        default: 20,
         required: false
       },
       width: {
-        type: String,
-        default: '20px',
+        type: Number,
+        default: 20,
         required: false
       }
     },
@@ -59,4 +59,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .unicon {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
 </style>

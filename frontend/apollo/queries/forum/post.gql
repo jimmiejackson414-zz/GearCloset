@@ -1,0 +1,38 @@
+query Post($slug: String!) {
+  post: forumPostBySlug(slug: $slug) {
+    id
+    title
+    slug
+    created_at
+    updated_at
+
+    author: user {
+      id
+      email
+      first_name
+      last_name
+      subscription_level
+    }
+
+    comments {
+      id
+      text
+      created_at
+      updated_at
+
+      author: user {
+        id
+        email
+        first_name
+        last_name
+        subscription_level
+      }
+    }
+
+    subcategory {
+      id
+      title
+      slug
+    }
+  }
+}

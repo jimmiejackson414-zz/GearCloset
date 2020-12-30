@@ -1,106 +1,166 @@
 <template>
-  <div class="page-wrapper mt-10">
-    <div class="container text-left">
-      <div class="page-title text-h4">
-        Profile
+  <ApolloQuery
+    :query="require('~/apollo/queries/user/me.gql')"
+    @result="handleData">
+    <template v-slot="{ result: { data, error, loading}, isLoading}">
+      <div
+        v-if="!isLoading"
+        v-resize="onResize"
+        class="page-wrapper mt-10">
+        <div class="container text-left">
+          <div class="page-title text-h4">
+            Profile
+          </div>
+
+          <!-- Custom Mobile Tabs -->
+          <div
+            v-if="isMobile"
+            class="mobile-tabs">
+            <v-select
+              class="px-8 mb-4"
+              dense
+              hide-details
+              item-text="title"
+              item-value="value"
+              :items="tabs"
+              label="Settings"
+              outlined
+              value="user"
+              @change="handleTabSwitch($event)" />
+
+            <!-- Account Settings -->
+            <slide-fade-transition>
+              <div
+                v-if="mobileTab === 'account'"
+                key="1"
+                class="user-settings">
+                <v-card flat>
+                  <v-card-text>
+                    <account-settings :current-user="currentUser" />
+                  </v-card-text>
+                </v-card>
+              </div>
+
+              <!-- Subscription Settings -->
+              <div
+                v-if="mobileTab === 'subscription'"
+                key="2"
+                class="user-settings">
+                <v-card flat>
+                  <v-card-text>
+                    <subscription-settings :current-user="currentUser" />
+                  </v-card-text>
+                </v-card>
+              </div>
+
+              <!-- User Settings -->
+              <div
+                v-if="mobileTab === 'user'"
+                key="3"
+                class="user-settings">
+                <v-card flat>
+                  <v-card-text class="py-0">
+                    <user-settings :current-user="currentUser" />
+                  </v-card-text>
+                </v-card>
+              </div>
+            </slide-fade-transition>
+          </div>
+
+          <!-- Desktop Tabs -->
+          <v-tabs
+            v-else
+            class="mt-4"
+            :vertical="!isMobile">
+            <v-tab
+              v-for="(tab, i) in tabs"
+              :key="i"
+              class="justify-start">
+              <custom-icon
+                class="mr-3"
+                :color="iconColor"
+                :height="25"
+                :name="tab.icon"
+                :width="25" />
+              {{ tab.title }}
+            </v-tab>
+
+            <!-- User Settings -->
+            <!-- TODO: Set transitions to false temporarily until fade transition works better -->
+            <v-tab-item
+              :reverse-transition="false"
+              :transition="false">
+              <v-card flat>
+                <v-card-text class="py-0">
+                  <user-settings :current-user="currentUser" />
+                </v-card-text>
+              </v-card>
+            </v-tab-item>
+
+            <!-- Account Settings -->
+            <v-tab-item
+              :reverse-transition="false"
+              :transition="false">
+              <v-card flat>
+                <v-card-text>
+                  <account-settings :current-user="currentUser" />
+                </v-card-text>
+              </v-card>
+            </v-tab-item>
+
+            <!-- Subscription Settings -->
+            <v-tab-item
+              :reverse-transition="false"
+              :transition="false">
+              <v-card flat>
+                <v-card-text>
+                  <subscription-settings :current-user="currentUser" />
+                </v-card-text>
+              </v-card>
+            </v-tab-item>
+          </v-tabs>
+        </div>
       </div>
-      <v-tabs
-        class="mt-4"
-        vertical>
-        <v-tab
-          v-for="(tab, i) in tabs"
-          :key="i"
-          class="justify-start">
-          <custom-icon
-            class="mr-3"
-            :color="iconColor"
-            height="25px"
-            :name="tab.icon"
-            width="25px" />
-          {{ tab.title }}
-        </v-tab>
 
-        <!-- User Settings -->
-        <v-tab-item
-          reverse-transition="fade-transition"
-          transition="fade-transition">
-          <v-card flat>
-            <v-card-text class="py-0">
-              <user-settings
-                :current-user="currentUser"
-                @handle-submit="handleSubmit" />
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-
-        <!-- Account Settings -->
-        <v-tab-item
-          reverse-transition="fade-transition"
-          transition="fade-transition">
-          <v-card flat>
-            <v-card-text>
-              <account-settings
-                :current-user="currentUser"
-                @handle-submit="handleSubmit" />
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-
-        <!-- Subscription Settings -->
-        <v-tab-item
-          reverse-transition="fade-transition"
-          transition="fade-transition">
-          <v-card flat>
-            <v-card-text>
-              <subscription-settings
-                :current-user="currentUser"
-                @handle-submit="handleSubmit" />
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-      </v-tabs>
-    </div>
-  </div>
+      <loading-page v-else />
+    </template>
+  </ApolloQuery>
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-  import AccountSettings from '~/components/profile/forms/AccountSettings';
-  import CustomIcon from '~/components/icons/CustomIcon';
-  import SubscriptionSettings from '~/components/profile/forms/SubscriptionSettings';
-  import UserSettings from '~/components/profile/forms/UserSettings';
+  import isMobile from '~/mixins/isMobile';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
+  import SlideFadeTransition from '~/components/transitions/SlideFadeTransition.vue';
+  import UserSettings from '~/components/profile/forms/UserSettings.vue';
 
   export default {
     name: 'Profile',
 
+    mixins: [isMobile],
+
+    middleware: 'authenticated',
+
     data () {
       return {
         confirm_password: '',
+        currentUser: null,
         iconColor: '',
-
         submitting: false,
+        mobileTab: 'user',
         tabs: [
-          { title: 'User Settings', icon: 'user-circle' },
-          { title: 'Account Settings', icon: 'setting' },
-          { title: 'Subscription', icon: 'file-landscape-alt' }
+          { title: 'User Settings', icon: 'user-circle', value: 'user' },
+          { title: 'Account Settings', icon: 'setting', value: 'account' },
+          { title: 'Subscription', icon: 'file-landscape-alt', value: 'subscription' }
         ]
       };
     },
 
-    computed: {
-      ...mapState({
-        currentUser: state => state.user
-      })
-    },
-
     methods: {
-      handleSubmit () {
-        this.submitting = true;
-        console.log('handleSubmit');
-
-        setTimeout(() => {
-          this.submitting = false;
-        }, 3000);
+      handleData ({ data: { currentUser } }) {
+        this.currentUser = currentUser;
+      },
+      handleTabSwitch (e) {
+        this.mobileTab = e;
       }
     },
 
@@ -109,14 +169,29 @@
     },
 
     components: {
-      AccountSettings,
+      AccountSettings: () => import(/* webpackPrefetch: true */ '~/components/profile/forms/AccountSettings.vue'),
       CustomIcon,
-      SubscriptionSettings,
+      SlideFadeTransition,
+      SubscriptionSettings: () => import(/* webpackPrefetch: true */ '~/components/profile/forms/SubscriptionSettings.vue'),
       UserSettings
+    },
+
+    head () {
+      return {
+        title: 'Profile'
+      };
     }
   };
 </script>
 
 <style lang="scss" scoped>
+  .page-title {
+    margin-bottom: 1rem;
+    text-align: center;
 
+    @include breakpoint(laptop) {
+      margin-bottom: 0;
+      text-align: left;
+    }
+  }
 </style>

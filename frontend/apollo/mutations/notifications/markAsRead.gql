@@ -1,0 +1,9 @@
+mutation MarkAsRead($id: ID!, $viewed:Boolean!) {
+  markAsRead(id:$id, viewed: $viewed){
+    id
+    message
+    viewed
+    created_at
+    updated_at
+  }
+}

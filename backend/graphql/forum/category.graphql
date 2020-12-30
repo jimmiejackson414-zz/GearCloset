@@ -1,0 +1,21 @@
+extend type Query @guard(with: ["api"]) {
+    category(id:ID! @eq): Category @find
+    categories(pack_id:ID! @where(operator: "=", key: "pack_id")): [Category]! @all
+}
+
+type ForumCategory {
+    id: ID!
+    title: String!
+    description: String!
+    slug: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    subcategories: [ForumSubcategory!]! @hasMany
+}
+
+# input ForumCategoryInput {
+#     title: String
+#     description: String
+#     slug: String
+# }

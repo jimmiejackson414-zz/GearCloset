@@ -1,0 +1,11 @@
+mutation DeleteTripDetail($id: ID!) {
+  deleteTripDetail(id: $id) {
+    id
+    title
+    url
+    value
+    type
+    created_at
+    updated_at
+  }
+}
