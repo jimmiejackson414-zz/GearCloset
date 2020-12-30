@@ -6,7 +6,8 @@
     "dev": "node --max-old-space-size=4096 node_modules/nuxt/bin/nuxt.js",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "analyze": "nuxt build --analyze"
   },
   "dependencies": {
     "@nuxtjs/apollo": "git@github.com:nuxt-community/apollo-module.git",

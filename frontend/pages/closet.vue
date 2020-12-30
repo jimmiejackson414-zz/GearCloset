@@ -174,7 +174,7 @@
     apollo: {
       packs: {
         query: PACKS_QUERY,
-        $loadingKey: 'isLoading',
+        loadingKey: 'isLoading',
         result ({ data: { packs } }) {
           this.selectedPackId = packs.length ? packs[0].id : null;
         }
@@ -182,7 +182,7 @@
       selectedPack: {
         query: SELECTED_PACK_QUERY,
         prefetch: false,
-        $loadingKey: 'loadingPack',
+        loadingKey: 'loadingPack',
         variables () {
           return {
             id: this.selectedPackId
