@@ -220,23 +220,23 @@
                 </draggable>
               </template>
             </v-data-table>
-          </v-col>
 
-          <!-- Add New Item Button -->
-          <v-btn
-            class="mb-8"
-            :ripple="false"
-            text
-            @click="handleAddNewItem(category.id)">
-            <unicon
-              :fill="primaryColor"
-              height="18"
-              name="plus"
-              width="18" />
-            <p class="body-2 primary--text mb-0 ml-3">
-              Add New Item
-            </p>
-          </v-btn>
+            <!-- Add New Item Button -->
+            <v-btn
+              class="mb-8"
+              :ripple="false"
+              text
+              @click="handleAddNewItem(category.id)">
+              <unicon
+                :fill="primaryColor"
+                height="18"
+                name="plus"
+                width="18" />
+              <p class="body-2 primary--text mb-0 ml-3">
+                Add New Item
+              </p>
+            </v-btn>
+          </v-col>
         </v-lazy>
       </v-row>
 
