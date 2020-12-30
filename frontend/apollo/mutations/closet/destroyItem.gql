@@ -1,0 +1,17 @@
+mutation DestroyItem($id:ID!) {
+  destroyItem(id:$id) {
+    id
+    name
+    weight
+    unit
+    price
+    position
+    generic_type
+    consumable
+    worn
+    quantity
+    category_id
+    created_at
+    updated_at
+  }
+}

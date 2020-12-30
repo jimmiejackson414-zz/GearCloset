@@ -11,6 +11,7 @@ query Pack($id:ID!) {
       id
       name
       unit
+      pack_id
       created_at
       updated_at
 
@@ -25,6 +26,7 @@ query Pack($id:ID!) {
         consumable
         worn
         quantity
+        category_id
         created_at
         updated_at
       }

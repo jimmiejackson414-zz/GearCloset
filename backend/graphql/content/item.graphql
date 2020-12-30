@@ -4,6 +4,7 @@ extend type Query @guard(with: ["api"]) {
 
 extend type Mutation @guard(with: ["api"]) {
     createItem(input: ItemInput! @spread): Item @field(resolver: "ItemMutator@createItem")
+    destroyItem(id:ID!): Item @delete
     removeItem(input: ItemCategoryInput! @spread): Item @field(resolver: "ItemMutator@removeItem")
     updateItem(id:ID! input: ItemInput! @spread): Item @update
 }

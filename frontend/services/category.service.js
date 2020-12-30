@@ -1,5 +1,6 @@
 import { produce } from 'immer';
 import CREATE_CATEGORY_MUTATION from '~/apollo/mutations/closet/createCategory.gql';
+import DESTROY_CATEGORY_MUTATION from '~/apollo/mutations/closet/destroyCategory.gql';
 import UPDATE_CATEGORY_MUTATION from '~/apollo/mutations/closet/updateCategory.gql';
 import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
 
@@ -39,8 +40,43 @@ async function create ({ fields, apollo }) {
   });
 }
 
-async function destroy ({ fields, apollo }) {
+async function destroy ({ category, apollo }) {
+  return await apollo.mutate({
+    mutation: DESTROY_CATEGORY_MUTATION,
+    variables: { id: category.id },
+    optimisticResponse: {
+      __typename: 'Mutation',
+      destroyCategory: {
+        __typename: 'category',
+        id: category.id,
+        name: category.name,
+        pack_id: category.pack_id,
+        unit: category.unit,
+        items: [],
+        created_at: Date.now(),
+        updated_at: Date.now()
+      }
+    },
+    update: (store, { data: { destroyCategory } }) => {
+      // read
+      const data = store.readQuery({ query: PACKS_QUERY });
 
+      // find indices
+      const packIndex = data.packs.findIndex(e => e.id === destroyCategory.pack_id);
+      const categoryIndex = data.packs[packIndex].categories.findIndex(e => e.id === category.id);
+
+      // mutate
+      const newData = produce(data, x => {
+        x.packs[packIndex].categories.splice(categoryIndex, 1);
+      });
+
+      // write
+      store.writeQuery({
+        query: PACKS_QUERY,
+        data: newData
+      });
+    }
+  });
 }
 
 async function update ({ fields, apollo }) {

@@ -11,6 +11,7 @@
         :is-mobile="isMobile"
         :packs="packs"
         :selected-pack-id="selectedPackId"
+        @handle-delete-item="handleDeleteItemModal"
         @handle-selected-pack="handleSelectedPack" />
 
       <!-- Content -->
@@ -119,7 +120,8 @@
           <!-- Data Tables -->
           <closet-data-table
             v-if="selectedPack"
-            :active-pack="selectedPack" />
+            :active-pack="selectedPack"
+            @handle-delete-category="handleDeleteCategoryModal" />
         </v-container>
       </div>
 
@@ -141,8 +143,8 @@
       <delete-confirm-modal
         v-model="deleteConfirmOpen"
         :item="modalItem"
-        :selected-item="selectedPack"
-        @handle-remove-item="handleDeletePack" />
+        :selected-item="deleteItem"
+        @handle-remove-item="handleDelete" />
     </div>
   </div>
 </template>
@@ -151,10 +153,10 @@
   import { mapActions, mapState } from 'vuex';
   import convert from 'convert-units';
   import { calculateCategoryWeight, generateUUID } from '~/helpers/functions';
-  import currentUser from '~/mixins/currentUser';
   import { generateThemeOptions } from '~/helpers';
   import isMobile from '~/mixins/isMobile';
-  import { packService } from '~/services';
+  // eslint-disable-next-line no-unused-vars
+  import { categoryService, itemService, packService } from '~/services';
   import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
   import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
@@ -167,7 +169,7 @@
   export default {
     name: 'ClosetPage',
 
-    mixins: [currentUser, isMobile],
+    mixins: [isMobile],
 
     middleware: 'authenticated',
 
@@ -199,6 +201,7 @@
       chartHeight: 300,
       chartWidth: 500,
       deleteConfirmOpen: false,
+      deleteItem: null,
       isMobile: true,
       isLoading: 0,
       lightGrey: '',
@@ -213,7 +216,6 @@
       packThemeModalOpen: false,
       resetPackModalOpen: false,
       selectedPackId: null,
-      // selectedPack: {},
       shareListModalOpen: false
     }),
 
@@ -238,21 +240,46 @@
       ...mapActions('closet', [
         'toggleSidebarExpandOnHover'
       ]),
-      // async fetchPack (id) {
-      //   this.loadingPack = true;
-      //   const { data } = await this.$apollo.query({
-      //     query: SELECTED_PACK_QUERY,
-      //     variables: { id }
-      //   });
-      //   this.selectedPack = data.selectedPack;
-      //   this.loadingPack = false;
-      // },
+      handleDelete (data) {
+        switch (this.modalItem) {
+        case 'pack':
+          this.handleDeletePack(data);
+          break;
+        case 'category':
+          this.handleDeleteCategory(data);
+          break;
+        case 'item':
+          this.handleDeleteItem(data);
+          break;
+        default:
+          break;
+        }
+      },
+      async handleDeleteCategory (category) {
+        const payload = { category, apollo: this.$apollo };
+        await categoryService.destroy(payload);
+      },
+      handleDeleteCategoryModal (category) {
+        this.deleteItem = category;
+        this.modalItem = 'category';
+        this.deleteConfirmOpen = true;
+      },
+      handleDeleteItemModal (item) {
+        this.deleteItem = item;
+        this.modalItem = 'item';
+        this.deleteConfirmOpen = true;
+      },
+      async handleDeleteItem (item) {
+        const payload = { item, pack_id: this.selectedPackId, apollo: this.$apollo };
+        await itemService.destroy(payload);
+      },
       async handleDeletePack (pack) {
         const payload = { id: pack.id, apollo: this.$apollo };
         await packService.destroy(payload);
       },
       handleDeletePackModal () {
         this.modalItem = 'pack';
+        this.deleteItem = this.selectedPack;
         this.deleteConfirmOpen = true;
       },
       handleSelectedPack (pack) {
@@ -298,12 +325,6 @@
     },
 
     watch: {
-      // selectedPackId (newVal, oldVal) {
-      //   if (newVal !== oldVal) {
-      //     this.loadingPack = true;
-      //     // this.fetchPack(newVal);
-      //   }
-      // },
       selectedPack (val) {
         this.setChartData();
       }

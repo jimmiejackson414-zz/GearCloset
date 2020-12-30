@@ -16,10 +16,22 @@
           :value="false">
           <v-col
             cols="12">
-            <click-to-edit
-              :unique-identifier="`title${category.id}Ref`"
-              :value="category.name"
-              @handle-update-item="updateCategory($event, category, 'name')" />
+            <div class="category-title">
+              <v-btn
+                icon
+                @click="handleDeleteCategory(category)">
+                <unicon
+                  class="pointer"
+                  :fill="errorColor"
+                  height="20"
+                  name="trash-alt"
+                  width="20" />
+              </v-btn>
+              <click-to-edit
+                :unique-identifier="`title${category.id}Ref`"
+                :value="category.name"
+                @handle-update-item="updateCategory($event, category, 'name')" />
+            </div>
             <v-data-table
               v-if="category.items"
               :ref="`sortableTable${index}`"
@@ -346,6 +358,9 @@
 
         itemService.create(payload);
       },
+      handleDeleteCategory (category) {
+        this.$emit('handle-delete-category', category);
+      },
       async handleRemoveRow (item, category) {
         const payload = {
           fields: {
@@ -438,6 +453,24 @@
 </script>
 
 <style lang="scss">
+  .category-title {
+    align-items: center;
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    .unicon {
+      display: flex;
+      opacity: 0;
+      transition: 0.15s opacity ease-in-out;
+    }
+
+    &:hover {
+      .unicon {
+        opacity: 1;
+      }
+    }
+  }
+
   .items-table-container {
     width: 100%;
 

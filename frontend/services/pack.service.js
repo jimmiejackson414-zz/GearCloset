@@ -32,7 +32,6 @@ async function destroy ({ id, apollo }) {
       const newData = produce(data, x => {
         x.packs.splice(packIndex, 1);
       });
-      console.log({ newData });
 
       // write
       store.writeQuery({
