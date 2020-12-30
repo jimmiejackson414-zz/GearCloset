@@ -33,7 +33,7 @@ class UserMutator
       // Upload to Cloudinary/gear_closet folder, and attach user_id to metadata
       $options = array("user_id" => $user->id);
 
-      $response = cloudinary()->upload($args['file'], array("folder" => "gear_closet", "context" => $options))->getPublicId();
+      $response = cloudinary()->upload($args['file'], array("folder" => "gear_closet/avatars", "context" => $options))->getPublicId();
       $avatar_url = $response;
     }
 
