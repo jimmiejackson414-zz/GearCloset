@@ -4,7 +4,7 @@
 
     <div
       v-else
-      v-resize="onResize"
+      v-resize.quiet="onResize"
       class="closet-page-styles">
       <!-- Sidebar -->
       <closet-sidebar
@@ -104,7 +104,6 @@
             <v-col class="wrapper col-12 col-md-6 col-lg-7">
               <selected-pack-graph
                 v-if="selectedPack"
-                v-resize="onResize"
                 :chart-data="chartData"
                 :is-mobile="isMobile"
                 :styles="graphStyles"
@@ -296,6 +295,7 @@
         packService.update(payload);
       },
       onResize () {
+        console.log('onResize');
         const width = window.innerWidth;
         if ((width < 560) || (width < 1264 && width > 959)) {
           this.chartWidth = 400;
@@ -321,7 +321,6 @@
 
     mounted () {
       this.lightGrey = this.$nuxt.$vuetify.theme.themes.light.grey7;
-      this.onResize();
     },
 
     watch: {
