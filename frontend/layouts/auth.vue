@@ -34,7 +34,9 @@
       <v-container
         v-if="isUserPage"
         fluid>
-        <nuxt />
+        <nuxt
+          keep-alive
+          :keep-alive-props="{ max: 5 }" />
       </v-container>
       <v-container v-else>
         <nuxt />
@@ -50,16 +52,20 @@
 </template>
 
 <script>
+  // import { authService } from '~/services';
   import Logo from '~/components/icons/Logo.vue';
-  import AUTH_IMAGES_QUERY from '~/apollo/queries/content/authImages.gql';
 
   export default {
     name: 'Auth',
 
-    apollo: {
-      authImages: {
-        query: AUTH_IMAGES_QUERY
-      }
+    // apollo: {
+    //   authImages: {
+    //     query: AUTH_IMAGES_QUERY
+    //   }
+    // },
+    fetch () {
+      console.log(this.$nuxt.context);
+      // this.authImages = await authService.fetchImages($graphql);
     },
 
     data: () => ({

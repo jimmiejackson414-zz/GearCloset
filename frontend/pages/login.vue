@@ -127,7 +127,7 @@
 </template>
 
 <script>
-  import loginMutation from '~/apollo/mutations/auth/login.gql';
+  // import loginMutation from '~/apollo/mutations/auth/login.gql';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
@@ -155,29 +155,29 @@
     }),
 
     methods: {
-      async handleSubmit () {
+      handleSubmit () {
         if (this.$refs.loginForm.validate()) {
           this.loggingIn = true;
 
-          const email = this.email;
-          const password = this.password;
+          // const email = this.email;
+          // const password = this.password;
 
           try {
-            const { data: { login }, errors } = await this.$apollo.mutate({
-              mutation: loginMutation,
-              variables: {
-                email,
-                password
-              }
-            });
+            // const { data: { login }, errors } = await this.$apollo.mutate({
+            //   mutation: loginMutation,
+            //   variables: {
+            //     email,
+            //     password
+            //   }
+            // });
 
-            if (errors?.length) {
-              this.isError = true;
-              this.loggingIn = false;
-            }
+            // if (errors?.length) {
+            //   this.isError = true;
+            //   this.loggingIn = false;
+            // }
 
             // set the jwt to the this.$apolloHelpers.onLogin
-            await this.$apolloHelpers.onLogin(login.access_token);
+            // await this.$apolloHelpers.onLogin(login.access_token);
             this.$router.push({ path: '/closet' });
           } catch (e) {
             console.error('login error: ', e);
@@ -188,10 +188,10 @@
       }
     },
 
-    async mounted () {
+    mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
       // clear apollo-token from cookies to make sure user is fully logged out
-      await this.$apolloHelpers.onLogout();
+      // await this.$apolloHelpers.onLogout();
     },
 
     components: {

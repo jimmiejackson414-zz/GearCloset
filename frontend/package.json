@@ -10,7 +10,6 @@
     "analyze": "nuxt build --analyze"
   },
   "dependencies": {
-    "@nuxtjs/apollo": "git@github.com:nuxt-community/apollo-module.git",
     "@nuxtjs/cloudinary": "^1.0.2",
     "@nuxtjs/dayjs": "^1.2.0",
     "@nuxtjs/eslint-module": "^2.0.0",
@@ -58,6 +57,8 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.2",
     "eslint-plugin-vue-scoped-css": "^1.0.0",
+    "graphql": "^15.4.0",
+    "nuxt-graphql-request": "^3.2.0",
     "webpack-bundle-analyzer": "^4.3.0"
   },
   "resolutions": {

@@ -13,7 +13,9 @@
       <transition
         mode="out-in"
         name="fade">
-        <nuxt />
+        <nuxt
+          keep-alive
+          :keep-alive-props="{ max: 5 }" />
       </transition>
     </v-main>
 
