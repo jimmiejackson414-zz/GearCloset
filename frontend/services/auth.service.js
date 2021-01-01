@@ -13,10 +13,8 @@ async function login (apollo, { email, password }) {
 }
 
 async function fetchImages ($graphql) {
-  console.log({ $graphql });
-  const data = await $graphql.request(AUTH_IMAGES_QUERY);
-  console.log({ data });
-  return data;
+  const { authImages } = await $graphql.request(AUTH_IMAGES_QUERY);
+  return authImages;
 };
 
 export const authService = {

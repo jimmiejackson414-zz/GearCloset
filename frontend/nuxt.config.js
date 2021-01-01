@@ -58,6 +58,7 @@ export default {
    ** Nuxt.js dev-modules
    */
   buildModules: [
+    'nuxt-graphql-request',
     '@nuxtjs/eslint-module',
     '@nuxtjs/vuetify',
     '@nuxtjs/style-resources'
@@ -82,7 +83,8 @@ export default {
       // headers: {
       //   authorization: `Bearer ${token}`
       // }
-    }
+    },
+    useFetchPolyfill: true
   },
 
   /*
@@ -188,13 +190,13 @@ export default {
     transpile: ['vee-validate/dist/rules'],
     externals: {
       moment: 'moment'
-    },
-    extend (config, { isDev, isClient }) {
-      config.module.rules.push({
-        test: /\.(graphql|gql)$/,
-        exclude: /node_modules/,
-        loader: 'graphql-tag/loader'
-      });
     }
+    // extend (config, { isDev, isClient }) {
+    //   config.module.rules.push({
+    //     test: /\.(graphql|gql)$/,
+    //     exclude: /node_modules/,
+    //     loader: 'graphql-tag/loader'
+    //   });
+    // }
   }
 };

@@ -1,6 +1,7 @@
 <template>
   <div class="login">
     <div class="left">
+      <!-- <p>{{ $fetchState.pending }}</p> -->
       <fade-transition>
         <login-description-box />
       </fade-transition>
@@ -127,7 +128,6 @@
 </template>
 
 <script>
-  // import loginMutation from '~/apollo/mutations/auth/login.gql';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';

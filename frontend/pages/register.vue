@@ -184,7 +184,7 @@
 </template>
 
 <script>
-  import registerMutation from '~/apollo/mutations/auth/register.gql';
+  // import registerMutation from '~/apollo/mutations/auth/register.gql';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
@@ -226,40 +226,40 @@
     },
 
     methods: {
-      async handleSubmit () {
+      handleSubmit () {
         if (this.$refs.registerForm.validate()) {
           this.submitting = true;
 
-          try {
-            const { data: { register: { token } }, errors } = await this.$apollo.mutate({
-              mutation: registerMutation,
-              variables: {
-                ...this.user
-              }
-            });
+          // try {
+          // const { data: { register: { token } }, errors } = await this.$apollo.mutate({
+          //   mutation: registerMutation,
+          //   variables: {
+          //     ...this.user
+          //   }
+          // });
 
-            if (errors?.length) {
-              this.isError = true;
-              this.loggingIn = false;
-            }
+          // if (errors?.length) {
+          //   this.isError = true;
+          //   this.loggingIn = false;
+          // }
 
-            // set the jwt to the this.$apolloHelpers.onLogin
-            await this.$apolloHelpers.onLogin(token);
-            this.$router.push({ path: '/onboarding' });
-          } catch (e) {
-            console.error('register error: ', e);
-            this.isError = true;
-            this.submitting = false;
-          }
+          // // set the jwt to the this.$apolloHelpers.onLogin
+          // await this.$apolloHelpers.onLogin(token);
+          // this.$router.push({ path: '/onboarding' });
+          // } catch (e) {
+          //   console.error('register error: ', e);
+          //   this.isError = true;
+          //   this.submitting = false;
+          // }
         }
       }
     },
 
-    async mounted () {
+    mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
 
       // clear apollo-token from cookies to make sure none were accidentally set
-      await this.$apolloHelpers.onLogout();
+      // await this.$apolloHelpers.onLogout();
     },
 
     components: {
