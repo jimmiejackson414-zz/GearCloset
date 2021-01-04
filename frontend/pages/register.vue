@@ -113,7 +113,7 @@
 
             <!-- Verify Password -->
             <v-text-field
-              v-model="user.confirm_password"
+              v-model="user.password_confirmation"
               color="primary"
               dense
               :disabled="submitting"
@@ -184,7 +184,7 @@
 </template>
 
 <script>
-  // import registerMutation from '~/apollo/mutations/auth/register.gql';
+  import { authService } from '~/services';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
@@ -212,10 +212,10 @@
         passwordRules: [v => !!v || 'Password is required'],
         passwordsMatchRules: [
           v => !!v || 'Password confirmation is required',
-          v => (this.user.password === this.confirm_password) || 'Passwords must match'
+          v => (this.user.password === this.user.password_confirmation) || 'Passwords must match'
         ],
         user: {
-          confirm_password: '',
+          password_confirmation: '',
           first_name: '',
           last_name: '',
           email: '',
@@ -226,31 +226,33 @@
     },
 
     methods: {
-      handleSubmit () {
+      async handleSubmit () {
         if (this.$refs.registerForm.validate()) {
           this.submitting = true;
 
-          // try {
-          // const { data: { register: { token } }, errors } = await this.$apollo.mutate({
-          //   mutation: registerMutation,
-          //   variables: {
-          //     ...this.user
-          //   }
-          // });
+          const payload = { variables: { ...this.user }, graphql: this.$graphql };
 
-          // if (errors?.length) {
-          //   this.isError = true;
-          //   this.loggingIn = false;
-          // }
+          try {
+            const { token } = await authService.register(payload);
 
-          // // set the jwt to the this.$apolloHelpers.onLogin
-          // await this.$apolloHelpers.onLogin(token);
-          // this.$router.push({ path: '/onboarding' });
-          // } catch (e) {
-          //   console.error('register error: ', e);
-          //   this.isError = true;
-          //   this.submitting = false;
-          // }
+            // set the token in cookies
+            if (token) {
+              this.$cookies.set('gc-token', token, {
+                path: '/',
+                maxAge: 60 * 60 * 24 * 7
+              });
+
+              this.$router.push({ path: '/onboarding' });
+            } else {
+              this.isError = true;
+              this.loggingIn = false;
+              return;
+            }
+          } catch (e) {
+            console.error(e);
+            this.isError = true;
+            this.submitting = false;
+          }
         }
       }
     },
@@ -259,7 +261,7 @@
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
 
       // clear apollo-token from cookies to make sure none were accidentally set
-      // await this.$apolloHelpers.onLogout();
+      this.$cookies.remove('gc-token');
     },
 
     components: {

@@ -128,6 +128,7 @@
 </template>
 
 <script>
+  import { authService } from '~/services';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
@@ -155,32 +156,30 @@
     }),
 
     methods: {
-      handleSubmit () {
+      async handleSubmit () {
         if (this.$refs.loginForm.validate()) {
           this.loggingIn = true;
 
-          // const email = this.email;
-          // const password = this.password;
+          const email = this.email;
+          const password = this.password;
+          const payload = { variables: { email, password }, graphql: this.$graphql };
 
           try {
-            // const { data: { login }, errors } = await this.$apollo.mutate({
-            //   mutation: loginMutation,
-            //   variables: {
-            //     email,
-            //     password
-            //   }
-            // });
+            const res = await authService.login(payload);
 
-            // if (errors?.length) {
-            //   this.isError = true;
-            //   this.loggingIn = false;
-            // }
+            if (res.token) {
+              this.$cookies.set('gc-token', res.token, {
+                path: '/',
+                maxAge: 60 * 60 * 24 * 7
+              });
 
-            // set the jwt to the this.$apolloHelpers.onLogin
-            // await this.$apolloHelpers.onLogin(login.access_token);
-            this.$router.push({ path: '/closet' });
+              this.$router.push({ path: '/closet ' });
+            } else {
+              this.isError = true;
+              this.loggingIn = false;
+            }
           } catch (e) {
-            console.error('login error: ', e);
+            console.error(e);
             this.isError = true;
             this.loggingIn = false;
           }
@@ -191,7 +190,7 @@
     mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
       // clear apollo-token from cookies to make sure user is fully logged out
-      // await this.$apolloHelpers.onLogout();
+      this.$cookies.remove('gc-token');
     },
 
     components: {

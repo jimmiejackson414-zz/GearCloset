@@ -69,7 +69,8 @@ export default {
    */
   modules: [
     '@nuxtjs/cloudinary',
-    '@nuxtjs/dayjs'
+    '@nuxtjs/dayjs',
+    'cookie-universal-nuxt'
   ],
 
   /*
@@ -77,13 +78,13 @@ export default {
   */
   graphql: {
     endpoint: process.env.NUXT_ENV_BACKEND_API_URL,
-    options: {
-      credentials: 'include',
-      mode: 'cors'
-      // headers: {
-      //   authorization: `Bearer ${token}`
-      // }
-    },
+    // options: {
+    // credentials: 'include',
+    // mode: 'cors'
+    // headers: {
+    //   authorization: `Bearer ${token}`
+    // }
+    // },
     useFetchPolyfill: true
   },
 
