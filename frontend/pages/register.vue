@@ -217,7 +217,7 @@
 <script>
   import Cookies from 'js-cookie';
   import { email, min, required } from 'vee-validate/dist/rules';
-  import { extend, setInteractionMode, ValidationProvider, ValidationObserver } from 'vee-validate';
+  import { extend, ValidationProvider, ValidationObserver } from 'vee-validate';
   import { authService } from '~/services';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
@@ -225,8 +225,6 @@
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
   import LogoIcon from '~/components/icons/LogoIcon';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
-
-  setInteractionMode('eager');
 
   extend('required', {
     ...required,
