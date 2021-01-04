@@ -57,7 +57,8 @@
     name: 'Auth',
 
     async fetch () {
-      this.authImages = await authService.fetchImages(this.$graphql);
+      const { authImages } = await authService.fetchImages(this.$graphql);
+      this.authImages = authImages;
     },
 
     data: () => ({

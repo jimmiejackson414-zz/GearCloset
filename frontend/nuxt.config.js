@@ -69,8 +69,7 @@ export default {
    */
   modules: [
     '@nuxtjs/cloudinary',
-    '@nuxtjs/dayjs',
-    'cookie-universal-nuxt'
+    '@nuxtjs/dayjs'
   ],
 
   /*

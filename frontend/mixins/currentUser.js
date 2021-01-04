@@ -1,17 +1,24 @@
-import meQuery from '~/apollo/queries/user/me.gql';
+import { mapActions, mapState } from 'vuex';
 
 export default {
-  apollo: {
-    currentUser: {
-      query: meQuery,
-      result ({ data: { currentUser } }) {
-        this.loading = false;
-        return currentUser;
-      }
-    }
+  async fetch () {
+    await this.fetchCurrentUser();
+    this.loading = false;
   },
 
   data: () => ({
     loading: true
-  })
+  }),
+
+  computed: {
+    ...mapState({
+      currentUser: state => state.users.currentUser
+    })
+  },
+
+  methods: {
+    ...mapActions({
+      fetchCurrentUser: 'users/fetchCurrentUser'
+    })
+  }
 };

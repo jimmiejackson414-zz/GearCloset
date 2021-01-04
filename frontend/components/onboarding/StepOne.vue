@@ -23,8 +23,8 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import currentUser from '~/mixins/currentUser';
-  import updateAvatarMutation from '~/apollo/mutations/auth/updateAvatar.gql';
   import Loading from '~/components/Loading.vue';
 
   export default {
@@ -42,6 +42,9 @@
     },
 
     methods: {
+      ...mapActions({
+        updateAvatar: 'users/updateAvatar'
+      }),
       handleImageUpload (avatar) {
         this.avatar = avatar;
       },
@@ -53,17 +56,9 @@
 
         try {
           this.submitting = true;
-          const payload = { file: this.avatar };
+          const payload = { variables: { file: this.avatar } };
 
-          const { errors } = await this.$apollo.mutate({
-            mutation: updateAvatarMutation,
-            variables: payload
-          });
-
-          if (errors?.length) {
-            this.isError = true;
-            this.submitting = false;
-          }
+          await this.updateAvatar(payload);
 
           this.$emit('handle-change-step', 2);
           this.submitting = false;

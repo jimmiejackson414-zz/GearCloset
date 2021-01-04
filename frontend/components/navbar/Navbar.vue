@@ -1,6 +1,6 @@
 <template>
   <v-app-bar
-    v-if="!$apollo.loading"
+    v-if="isLoading"
     id="home-app-bar"
     v-resize="onResize"
     app
@@ -58,6 +58,7 @@
     mixins: [currentUser],
 
     data: () => ({
+      isLoading: false,
       logoWidth: '175px',
       navItems: [
         { title: 'Forums', to: '/forums', badge: false, hasMenu: false },
