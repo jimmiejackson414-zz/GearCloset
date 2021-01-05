@@ -215,7 +215,6 @@
 </template>
 
 <script>
-  import Cookies from 'js-cookie';
   import { email, min, required } from 'vee-validate/dist/rules';
   import { extend, ValidationProvider, ValidationObserver } from 'vee-validate';
   import { authService } from '~/services';
@@ -282,7 +281,7 @@
 
             // set the token in cookies
             if (token) {
-              Cookies.set('gc-token', token, { expires: 7 });
+              this.$cookies.set('gc-token', token, { expires: 7 });
 
               this.$router.push({ path: '/onboarding' });
             } else {
@@ -303,7 +302,7 @@
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
 
       // clear apollo-token from cookies to make sure none were accidentally set
-      Cookies.remove('gc-token');
+      this.$cookies.remove('gc-token');
     },
 
     components: {

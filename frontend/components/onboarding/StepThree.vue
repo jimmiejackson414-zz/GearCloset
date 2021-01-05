@@ -78,7 +78,7 @@
 
     methods: {
       ...mapActions({
-        updateUser: 'users/updateUser'
+        updateUser: 'auth/updateUser'
       }),
       async completeOnboarding () {
         this.submitting = true;
@@ -87,7 +87,7 @@
           const payload = {
             variables: {
               has_onboarded: true,
-              id: Number(this.currentUser.id)
+              id: this.currentUser.id
             }
           };
 

@@ -1,6 +1,6 @@
 <template>
   <v-app-bar
-    v-if="isLoading"
+    v-if="!currentUserLoading"
     id="home-app-bar"
     v-resize="onResize"
     app
@@ -57,8 +57,14 @@
   export default {
     mixins: [currentUser],
 
+    props: {
+      currentUserLoading: {
+        type: Boolean,
+        default: false
+      }
+    },
+
     data: () => ({
-      isLoading: false,
       logoWidth: '175px',
       navItems: [
         { title: 'Forums', to: '/forums', badge: false, hasMenu: false },
@@ -92,7 +98,6 @@
 
     mounted () {
       this.onResize();
-      this.loading = false;
     },
 
     components: {

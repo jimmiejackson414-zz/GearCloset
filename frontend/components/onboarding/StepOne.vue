@@ -9,6 +9,7 @@
     <div class="btn-wrapper">
       <v-btn
         color="primary"
+        depressed
         :disabled="submitting"
         @click="handleNextStep">
         <loading
@@ -43,7 +44,7 @@
 
     methods: {
       ...mapActions({
-        updateAvatar: 'users/updateAvatar'
+        updateAvatar: 'auth/updateAvatar'
       }),
       handleImageUpload (avatar) {
         this.avatar = avatar;

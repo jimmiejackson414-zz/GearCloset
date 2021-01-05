@@ -30,6 +30,7 @@
               <!-- Email -->
               <validation-provider
                 v-slot="{ errors }"
+                mode="eager"
                 name="Email"
                 rules="required|email">
                 <v-text-field
@@ -143,7 +144,6 @@
 </template>
 
 <script>
-  import Cookies from 'js-cookie';
   import { email, required } from 'vee-validate/dist/rules';
   import { extend, ValidationProvider, ValidationObserver } from 'vee-validate';
   import { authService } from '~/services';
@@ -190,7 +190,8 @@
             const { login } = await authService.login(payload);
 
             if (login.access_token) {
-              Cookies.set('gc-token', login.access_token, { expires: 7 });
+              this.$cookies.set('gc-token', login.access_token, { expires: 7 });
+              this.$store.commit('auth/setCurrentUser', login.user.id);
 
               this.$router.push({ path: '/closet ' });
             } else {
@@ -209,7 +210,7 @@
     mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
       // clear apollo-token from cookies to make sure user is fully logged out
-      Cookies.remove('gc-token');
+      this.$cookies.remove('gc-token');
     },
 
     components: {

@@ -187,6 +187,7 @@
         </v-btn>
         <v-btn
           color="primary"
+          depressed
           :disabled="submitting || invalid"
           @click="handleNextStep">
           <loading
@@ -246,7 +247,7 @@
 
     methods: {
       ...mapActions({
-        updateUser: 'users/updateUser'
+        updateUser: 'auth/updateUser'
       }),
       async handleNextStep () {
         this.submitting = true;

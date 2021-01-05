@@ -1,10 +1,6 @@
+import { install } from '@vuex-orm/core';
+import database from '~/database';
+
+export const plugins = [install(database)];
+
 export const state = () => ({});
-
-// parse cookie for apollo-token to keep user logged in
-// export const actions = {
-//   nuxtServerInit (context, { req }) {
-//     console.log(req.headers.cookie);
-//   }
-// };
-
-export const mutations = {};
