@@ -16,11 +16,6 @@ export default {
   },
 
   /*
-  ** SSR Options
-  */
-  ssr: true,
-
-  /*
    ** PublicRuntimeConfig Options
    */
   publicRuntimeConfig: {
@@ -68,24 +63,16 @@ export default {
    ** Nuxt.js build modules
    */
   modules: [
+    'cookie-universal-nuxt',
     '@nuxtjs/cloudinary',
-    '@nuxtjs/dayjs',
-    'cookie-universal-nuxt'
+    '@nuxtjs/dayjs'
   ],
 
   /*
   ** GraphQL configuration
   */
   graphql: {
-    endpoint: process.env.NUXT_ENV_BACKEND_API_URL,
-    // options: {
-    // credentials: 'include',
-    // mode: 'cors'
-    // headers: {
-    //   authorization: `Bearer ${token}`
-    // }
-    // },
-    useFetchPolyfill: true
+    endpoint: process.env.NUXT_ENV_BACKEND_API_URL
   },
 
   /*

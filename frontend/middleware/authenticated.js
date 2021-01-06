@@ -1,5 +1,5 @@
 export default function ({ app, error, redirect, route }) {
-  const hasToken = !!app.$cookies.get('gc-token');
+  const hasToken = !!app.$cookies.get('gc_token');
 
   // if user doesn't have a token, redirect to login
   if (!hasToken) {

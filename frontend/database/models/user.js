@@ -38,6 +38,6 @@ export default class User extends Model {
   }
 
   static currentUser () {
-    return this.find(this.store().state.auth.userId);
+    return this.find(this.store().state.userId);
   }
 };

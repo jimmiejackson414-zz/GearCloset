@@ -281,7 +281,7 @@
 
             // set the token in cookies
             if (token) {
-              this.$cookies.set('gc-token', token, { expires: 7 });
+              this.$cookies.set('gc_token', token, { expires: 7 });
 
               this.$router.push({ path: '/onboarding' });
             } else {
@@ -302,7 +302,7 @@
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
 
       // clear apollo-token from cookies to make sure none were accidentally set
-      this.$cookies.remove('gc-token');
+      this.$cookies.remove('gc_token');
     },
 
     components: {

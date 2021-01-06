@@ -82,7 +82,6 @@
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import HomeDrawer from '~/components/Drawer.vue';
   import Navbar from '~/components/navbar/Navbar.vue';
-  import { userService } from '~/services';
 
   export default {
     name: 'Default',
@@ -120,14 +119,6 @@
       scrollToTop () {
         this.$vuetify.goTo('#app', { duration: 500, offset: 0 });
       }
-    },
-
-    async created () {
-      if (!this.currentUser) {
-        const res = await userService.currentUser({ graphql: this.$graphql });
-        if (res) { this.$store.commit('auth/setCurrentUser', res); }
-      }
-      this.currentUserLoading = false;
     },
 
     watch: {

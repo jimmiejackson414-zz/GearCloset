@@ -190,7 +190,7 @@
             const { login } = await authService.login(payload);
 
             if (login.access_token) {
-              this.$cookies.set('gc-token', login.access_token, { expires: 7 });
+              this.$cookies.set('gc_token', login.access_token, { maxAge: 60 * 60 * 24 * 7 });
               this.$store.commit('auth/setCurrentUser', login.user.id);
 
               this.$router.push({ path: '/closet ' });
@@ -210,7 +210,7 @@
     mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
       // clear apollo-token from cookies to make sure user is fully logged out
-      this.$cookies.remove('gc-token');
+      this.$cookies.remove('gc_token');
     },
 
     components: {
