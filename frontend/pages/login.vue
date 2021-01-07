@@ -144,9 +144,9 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import { email, required } from 'vee-validate/dist/rules';
   import { extend, ValidationProvider, ValidationObserver } from 'vee-validate';
-  import { authService } from '~/services';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
@@ -178,26 +178,28 @@
     }),
 
     methods: {
+      ...mapActions('entities/users', [
+        'login',
+        'logout'
+      ]),
       async handleSubmit () {
         if (await this.$refs.observer.validate()) {
           this.loggingIn = true;
 
           const email = this.email;
           const password = this.password;
-          const payload = { variables: { email, password }, graphql: this.$graphql };
+          const payload = { variables: { email, password } };
 
           try {
-            const { login } = await authService.login(payload);
+            const res = await this.login(payload);
 
-            if (login.access_token) {
-              this.$cookies.set('gc_token', login.access_token, { maxAge: 60 * 60 * 24 * 7 });
-              this.$store.commit('auth/setCurrentUser', login.user.id);
-
-              this.$router.push({ path: '/closet ' });
-            } else {
+            if (!res.success) {
               this.isError = true;
               this.loggingIn = false;
+              return;
             }
+
+            this.$router.push({ path: '/closet ' });
           } catch (e) {
             console.error(e);
             this.isError = true;
@@ -210,7 +212,8 @@
     mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
       // clear apollo-token from cookies to make sure user is fully logged out
-      this.$cookies.remove('gc_token');
+      this.logout();
+      this.$store.dispatch('entities/deleteAll');
     },
 
     components: {

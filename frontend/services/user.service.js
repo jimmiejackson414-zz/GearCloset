@@ -1,20 +1,18 @@
-import { GraphQLClient } from 'graphql-request';
-import ME_QUERY from '~/apollo/queries/user/me.gql';
+import LOGIN_MUTATION from '~/apollo/mutations/auth/login.gql';
+import REGISTER_MUTATION from '~/apollo/mutations/auth/register.gql';
 import UPDATE_AVATAR_MUTATION from '~/apollo/mutations/auth/updateAvatar.gql';
 import UPDATE_PASSWORD_MUTATION from '~/apollo/mutations/auth/updatePassword.gql';
 import UPDATE_USER_MUTATION from '~/apollo/mutations/auth/update.gql';
-import User from '~/database/models/user';
 
-const url = process.env.NUXT_ENV_BACKEND_API_URL;
-const client = new GraphQLClient(url);
+async function login ({ variables, graphql }) {
+  return await graphql.request(LOGIN_MUTATION, variables);
+}
 
-async function currentUser ({ requestHeaders }) {
-  return await client.request(ME_QUERY, {}, requestHeaders)
-    .then(({ currentUser }) => {
-      console.log('currentUser data: ', currentUser);
-      User.insertOrUpdate({ data: { ...currentUser } });
-    })
-    .catch(e => console.log('ERROR: ', e));
+async function register ({ variables, graphql }) {
+  return await graphql.request(
+    REGISTER_MUTATION,
+    variables
+  );
 }
 
 async function update ({ variables, graphql }) {
@@ -42,7 +40,9 @@ async function updatePassword ({ variables, graphql }) {
 }
 
 export const userService = {
-  currentUser,
+  // currentUser,
+  login,
+  register,
   update,
   updateAvatar,
   updatePassword
