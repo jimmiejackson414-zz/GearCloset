@@ -2,10 +2,14 @@
 import User from './models/user';
 import { userService } from '~/services';
 
-// State //
+/*
+** State
+*/
 export const state = () => ({});
 
-// Mutations //
+/*
+** Mutations
+*/
 export const mutations = {
   updateAvatar (state, { id, avatar_url }) {
     User.update({
@@ -17,7 +21,9 @@ export const mutations = {
   }
 };
 
-// Actions //
+/*
+** Actions
+*/
 export const actions = {
   async login ({ commit }, payload) {
     payload.graphql = this.$graphql;
@@ -36,9 +42,37 @@ export const actions = {
     commit('logout', null, { root: true });
   },
 
+  async register ({ commit }, payload) {
+    payload.graphql = this.$graphql;
+    const { register } = await userService.register(payload);
+    this.$cookies.set('gc_token', register.tokens.access_token, {
+      maxAge: 60 * 60 * 24 * 7
+    });
+    return {
+      success: !!register.tokens.access_token
+    };
+  },
+
   async updateAvatar ({ commit }, payload) {
-    const { updateAvatar } = await userService.updateAvatar({ ...payload, graphql: this.$graphql });
+    payload.graphql = this.$graphql;
+    payload.token = this.$cookies.get('gc_token');
+    const { updateAvatar } = await userService.updateAvatar(payload);
     commit('updateAvatar', updateAvatar);
+
+    return {
+      success: !!updateAvatar?.avatar_url
+    };
+  },
+
+  async updateUser ({ commit }, payload) {
+    payload.graphql = this.$graphql;
+    payload.token = this.$cookies.get('gc_token');
+    const { updateUser } = await userService.update(payload);
+    commit('setCurrentUser', updateUser, { root: true });
+
+    return {
+      success: !!updateUser
+    };
   }
 
 };

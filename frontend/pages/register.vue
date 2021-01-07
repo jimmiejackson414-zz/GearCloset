@@ -215,9 +215,9 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import { email, min, required } from 'vee-validate/dist/rules';
   import { extend, ValidationProvider, ValidationObserver } from 'vee-validate';
-  import { authService } from '~/services';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
@@ -270,25 +270,26 @@
     },
 
     methods: {
+      ...mapActions('entities/users', [
+        'register',
+        'logout'
+      ]),
       async handleSubmit () {
         if (await this.$refs.observer.validate()) {
           this.submitting = true;
 
-          const payload = { variables: { ...this.user }, graphql: this.$graphql };
+          const payload = { variables: { ...this.user } };
 
           try {
-            const { token } = await authService.register(payload);
+            const res = await this.register(payload);
 
-            // set the token in cookies
-            if (token) {
-              this.$cookies.set('gc_token', token, { expires: 7 });
-
-              this.$router.push({ path: '/onboarding' });
-            } else {
+            if (!res.success) {
               this.isError = true;
               this.loggingIn = false;
               return;
             }
+
+            this.$router.push({ path: '/onboarding' });
           } catch (e) {
             console.error(e);
             this.isError = true;
@@ -301,8 +302,9 @@
     mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
 
-      // clear apollo-token from cookies to make sure none were accidentally set
-      this.$cookies.remove('gc_token');
+      // clear token from cookies to make sure none were accidentally set
+      this.logout();
+      this.$store.dispatch('entities/deleteAll');
     },
 
     components: {

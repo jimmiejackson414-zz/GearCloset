@@ -179,7 +179,7 @@
       <div class="btn-wrapper">
         <v-btn
           class="grey7--text"
-          :disabled="submitting || invalid"
+          :disabled="submitting"
           :ripple="false"
           text
           @click="handlePrevStep">
@@ -246,20 +246,27 @@
     },
 
     methods: {
-      ...mapActions({
-        updateUser: 'auth/updateUser'
-      }),
+      ...mapActions('entities/users', [
+        'updateUser'
+      ]),
       async handleNextStep () {
         this.submitting = true;
 
         try {
-          const payload = { variables: { ...this.user, id: Number(this.currentUser.id) } };
+          const payload = { variables: { ...this.user, id: this.currentUser.id } };
 
-          await this.updateUser(payload);
+          const res = await this.updateUser(payload);
+
+          if (!res.success) {
+            this.isError = true;
+            this.submitting = false;
+            return;
+          }
 
           this.$emit('handle-change-step', 3);
           this.submitting = false;
         } catch (e) {
+          console.error(e);
           this.isError = true;
         }
       },

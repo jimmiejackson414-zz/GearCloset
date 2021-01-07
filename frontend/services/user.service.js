@@ -9,25 +9,22 @@ async function login ({ variables, graphql }) {
 }
 
 async function register ({ variables, graphql }) {
-  return await graphql.request(
-    REGISTER_MUTATION,
-    variables
-  );
+  return await graphql.request(REGISTER_MUTATION, variables);
 }
 
-async function update ({ variables, graphql }) {
+async function update ({ variables, graphql, token }) {
   return await graphql.request(
     UPDATE_USER_MUTATION,
-    variables
-    // requestHeaders
+    variables,
+    { Authorization: `Bearer ${token}` }
   );
 }
 
-async function updateAvatar ({ variables, graphql }) {
+async function updateAvatar ({ variables, graphql, token }) {
   return await graphql.request(
     UPDATE_AVATAR_MUTATION,
-    variables
-    // requestHeaders
+    variables,
+    { Authorization: `Bearer ${token}` }
   );
 }
 

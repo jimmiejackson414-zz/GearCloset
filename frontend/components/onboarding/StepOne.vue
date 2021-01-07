@@ -6,6 +6,27 @@
     <div class="image-wrapper">
       <image-uploader @handle-image-upload="handleImageUpload" />
     </div>
+    <v-row class="mt-4">
+      <v-col class="col-12 col-md-6 offset-md-3">
+        <v-alert
+          v-if="isError"
+          border="top"
+          color="error"
+          outlined>
+          <template #prepend>
+            <custom-icon
+              custom-class="mr-4"
+              :fill="errorColor"
+              :height="30"
+              name="exclamation-triangle"
+              :width="30" />
+          </template>
+          <p class="body-text-1 mb-0 error--text">
+            There was an error uploading your profile picture. Please try again, or contact us if the issue persists.
+          </p>
+        </v-alert>
+      </v-col>
+    </v-row>
     <div class="btn-wrapper">
       <v-btn
         color="primary"
@@ -26,6 +47,7 @@
 <script>
   import { mapActions } from 'vuex';
   import currentUser from '~/mixins/currentUser';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import Loading from '~/components/Loading.vue';
 
   export default {
@@ -33,6 +55,8 @@
 
     data: () => ({
       avatar: null,
+      errorColor: '',
+      isError: false,
       submitting: false
     }),
 
@@ -43,9 +67,9 @@
     },
 
     methods: {
-      ...mapActions({
-        updateAvatar: 'auth/updateAvatar'
-      }),
+      ...mapActions('entities/users', [
+        'updateAvatar'
+      ]),
       handleImageUpload (avatar) {
         this.avatar = avatar;
       },
@@ -59,7 +83,13 @@
           this.submitting = true;
           const payload = { variables: { file: this.avatar } };
 
-          await this.updateAvatar(payload);
+          const res = await this.updateAvatar(payload);
+
+          if (!res.success) {
+            this.isError = true;
+            this.submitting = false;
+            return;
+          }
 
           this.$emit('handle-change-step', 2);
           this.submitting = false;
@@ -71,7 +101,12 @@
       }
     },
 
+    mounted () {
+      this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
+    },
+
     components: {
+      CustomIcon,
       ImageUploader: () => import(/* webpackPrefetch: true */ '~/components/ImageUploader.vue'),
       Loading
     }

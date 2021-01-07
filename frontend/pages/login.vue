@@ -1,13 +1,11 @@
 <template>
   <div class="login">
     <div class="left">
-      <!-- <p>{{ $fetchState.pending }}</p> -->
       <fade-transition>
         <login-description-box />
       </fade-transition>
     </div>
     <div class="right">
-      <!-- <client-only> -->
       <slide-fade-transition>
         <div class="form-wrapper">
           <validation-observer
@@ -130,7 +128,6 @@
           </validation-observer>
         </div>
       </slide-fade-transition>
-      <!-- </client-only> -->
       <div class="contact-wrapper">
         <div class="contact body-1 mb-2">
           <nuxt-link to="/contact">
@@ -211,7 +208,7 @@
 
     mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
-      // clear apollo-token from cookies to make sure user is fully logged out
+      // clear token from cookies to make sure user is fully logged out
       this.logout();
       this.$store.dispatch('entities/deleteAll');
     },

@@ -77,9 +77,9 @@
     }),
 
     methods: {
-      ...mapActions({
-        updateUser: 'auth/updateUser'
-      }),
+      ...mapActions('entities/users', [
+        'updateUser'
+      ]),
       async completeOnboarding () {
         this.submitting = true;
 
@@ -91,7 +91,13 @@
             }
           };
 
-          await this.updateUser(payload);
+          const res = await this.updateUser(payload);
+
+          if (!res.success) {
+            this.isError = true;
+            this.submitting = false;
+            return;
+          }
 
           this.$router.push('/closet');
           this.submitting = false;
