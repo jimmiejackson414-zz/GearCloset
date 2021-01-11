@@ -1,6 +1,5 @@
 import { install } from '@vuex-orm/core';
 import database from '~/database';
-// import { handleCookies } from '~/helpers';
 import ME_QUERY from '~/apollo/queries/user/me.gql';
 import User from '~/database/models/user';
 
@@ -26,7 +25,7 @@ export const mutations = {
 };
 
 export const actions = {
-  async nuxtServerInit ({ commit }, { $cookies, $graphql, req }) {
+  async nuxtServerInit ({ commit }, { $cookies, $graphql }) {
     const token = $cookies.get('gc_token');
 
     if (!token) {

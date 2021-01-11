@@ -84,8 +84,7 @@
 </template>
 
 <script>
-  // import { handleCookies } from '~/helpers';
-  // import { request } from 'graphql-request';
+  import { mapActions, mapState } from 'vuex';
   import currentUser from '~/mixins/currentUser';
   // import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   // import Friends from '~/components/planning/widgets/Friends.vue';
@@ -98,6 +97,8 @@
   // import TRIPS_QUERY from '~/apollo/queries/content/trips.gql';
   // import { userService } from '~/services';
   // import ME_QUERY from '~/apollo/queries/user/me.gql';
+  // import Trip from '~/database/models/trip';
+  import TRIPS_QUERY from '~/apollo/queries/content/trips.gql';
 
   export default {
     name: 'Planning',
@@ -106,18 +107,34 @@
 
     mixins: [currentUser],
 
+    apollo: {
+      trips: {
+        query: TRIPS_QUERY
+      }
+    },
+
     data: () => ({
       deleteTripModalOpen: false,
-      isLoading: true,
+      // isLoading: true,
       listItems: [
         { title: 'Create trip', event: 'create-trip' },
         { title: 'Delete trip', event: 'delete-trip', customClass: 'error--text' }
       ],
       selectedTrip: null,
-      trips: null
+      trips: []
     }),
 
+    computed: {
+      ...mapState({
+        isLoading: state => state.entities.trips.isLoading
+      })
+    //   trips: () => Trip.all()
+    },
+
     methods: {
+      ...mapActions('entities/trips', [
+        'fetchTrips'
+      ]),
       handleData ({ data: { trips } }) {
         this.selectedTrip = trips[0];
         this.trips = trips;

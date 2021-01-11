@@ -1,14 +1,11 @@
-#import "~/apollo/fragments/category.gql"
-#import "~/apollo/fragments/item.gql"
-#import "~/apollo/fragments/pack.gql"
-#import "~/apollo/fragments/shoppingListItem.gql"
-#import "~/apollo/fragments/trip.gql"
-#import "~/apollo/fragments/tripDetail.gql"
-#import "~/apollo/fragments/todo.gql"
-
 query Trips {
   trips {
-    ...trip
+    id
+    name
+    description
+    starting_point
+    ending_point
+    owner_id
 
     owner {
       id
@@ -19,15 +16,31 @@ query Trips {
     }
 
     todos(orderBy: [{ columns: CREATED_AT, order: DESC }]) {
-      ...todo
+      id
+      title
+      checked
+      created_at
+      updated_at
     }
 
     shoppingListItems(orderBy: [{ columns: CREATED_AT, order: DESC }]) {
-      ...shoppingListItem
+      id
+      title
+      checked
+      quantity
+      trip_id
+      created_at
+      updated_at
     }
 
     tripDetails(orderBy: [{ columns: CREATED_AT, order: DESC }]) {
-			...tripDetail
+			id
+      title
+      url
+      value
+      type
+      created_at
+      updated_at
     }
 
     users {
@@ -41,13 +54,33 @@ query Trips {
     }
 
     pack {
-      ...pack
+      id
+      name
+      active
+      theme
+      created_at
+      updated_at
 
       categories {
-        ...category
+        id
+        name
+        unit
+        created_at
+        updated_at
 
         items(orderBy: [{ columns: "position", order: ASC }]) {
-          ...item
+          id
+          name
+          weight
+          unit
+          price
+          position
+          generic_type
+          consumable
+          worn
+          quantity
+          created_at
+          updated_at
         }
       }
     }

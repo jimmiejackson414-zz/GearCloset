@@ -1,5 +1,5 @@
 import { tripService } from '~/services';
-// import Trip from '~/database/models/trip';
+import Trip from '~/database/models/trip';
 
 export const state = () => ({
   isLoading: true
@@ -13,9 +13,12 @@ export const mutations = {
 
 export const actions = {
   async fetchTrips ({ commit }) {
-    const { trips } = await tripService.fetchTrips(this);
-    console.log({ trips });
-    // Trip.insert()
+    const token = this.$cookies.get('gc_token');
+    // const payload = { graphql: this.$graphql, token, variables: {} };
+    const payload = { token };
+    const { trips } = await tripService.fetchTrips(payload);
+    console.log('trip module: ', trips);
+    Trip.insert({ data: trips });
     commit('toggleIsLoading');
   }
 };

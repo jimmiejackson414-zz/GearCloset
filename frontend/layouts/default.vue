@@ -7,9 +7,9 @@
       :current-user-loading="currentUserLoading"
       @handle-toggle-drawer="handleToggleDrawer" />
 
-    <home-drawer
+    <!-- <home-drawer
       v-if="shouldShow"
-      v-model="drawer" />
+      v-model="drawer" /> -->
 
     <v-main>
       <transition
@@ -80,7 +80,7 @@
   import { mapState, mapActions } from 'vuex';
   import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
-  import HomeDrawer from '~/components/Drawer.vue';
+  // import HomeDrawer from '~/components/Drawer.vue';
   import Navbar from '~/components/navbar/Navbar.vue';
 
   export default {
@@ -137,7 +137,7 @@
 
     components: {
       CustomIcon,
-      HomeDrawer,
+      // HomeDrawer,
       Navbar
     }
   };
