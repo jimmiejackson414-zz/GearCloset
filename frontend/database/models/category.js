@@ -12,6 +12,7 @@ export default class Category extends Model {
       id: this.attr(null),
       name: this.string(''),
       pack_id: this.attr(null),
+      unit: this.string(''),
       created_at: this.string(''),
       updated_at: this.string(''),
 

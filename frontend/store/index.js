@@ -6,6 +6,7 @@ import User from '~/database/models/user';
 export const plugins = [install(database)];
 
 export const state = () => ({
+  currentUserLoading: true,
   userId: null
 });
 
@@ -21,6 +22,9 @@ export const mutations = {
         ...user
       }
     });
+  },
+  toggleIsLoading (state) {
+    state.currentUserLoading = !state.currentUserLoading;
   }
 };
 
@@ -36,5 +40,6 @@ export const actions = {
     const requestHeaders = { authorization: `Bearer ${token}` };
     const { currentUser } = await $graphql.request(ME_QUERY, {}, requestHeaders);
     commit('setCurrentUser', currentUser);
+    commit('toggleIsLoading');
   }
 };

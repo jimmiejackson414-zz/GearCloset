@@ -15,6 +15,7 @@ export default class Item extends Model {
       category_id: this.attr(null).nullable(),
       consumable: this.boolean(0),
       worn: this.boolean(0),
+      unit: this.string(''),
       quantity: this.number(0),
       created_at: this.attr(''),
       updated_at: this.attr(''),

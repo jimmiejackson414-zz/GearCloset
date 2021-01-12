@@ -57,13 +57,6 @@
   export default {
     mixins: [currentUser],
 
-    props: {
-      currentUserLoading: {
-        type: Boolean,
-        default: false
-      }
-    },
-
     data: () => ({
       logoWidth: '175px',
       navItems: [

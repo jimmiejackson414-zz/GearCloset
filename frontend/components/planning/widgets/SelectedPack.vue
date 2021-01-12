@@ -149,7 +149,7 @@
         this.chartData.datasets = [{
           label: 'Selected Pack Graph',
           data: this.activePack.categories.map(category => {
-            return parseFloat(convert(calculateCategoryWeight(category)).from('g').to('oz')).toFixed(2);
+            return parseFloat(convert(calculateCategoryWeight(category)).from('g').to(category.unit)).toFixed(2);
           })
         }];
       }

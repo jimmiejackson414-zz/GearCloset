@@ -64,7 +64,6 @@ export default {
    */
   modules: [
     'cookie-universal-nuxt',
-    '@nuxtjs/apollo',
     '@nuxtjs/cloudinary',
     '@nuxtjs/dayjs'
   ],
@@ -72,18 +71,8 @@ export default {
   /*
   ** GraphQL configuration
   */
-  apollo: {
-    clientConfigs: {
-      default: {
-        httpEndpoint: process.env.NUXT_ENV_BACKEND_API_URL
-      }
-    },
-    defaultOptions: {
-      $query: {
-        fetchPolicy: 'no-cache'
-      }
-    },
-    tokenName: 'gc_token'
+  graphql: {
+    endpoint: process.env.NUXT_ENV_BACKEND_API_URL
   },
 
   /*

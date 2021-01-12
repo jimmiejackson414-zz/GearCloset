@@ -1,5 +1,6 @@
 fragment item on Item {
   id
+  category_id
   name
   weight
   unit

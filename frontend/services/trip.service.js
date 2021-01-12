@@ -9,11 +9,12 @@ async function fetchTrips ({ graphql, token, variables }) {
   );
 };
 
-async function update ({ fields, apollo }) {
-  return await apollo.mutate({
-    mutation: UPDATE_TRIP_MUTATION,
-    variables: fields
-  });
+async function update ({ graphql, token, variables }) {
+  return await graphql.request(
+    UPDATE_TRIP_MUTATION,
+    variables,
+    { authorization: `Bearer ${token}` }
+  );
 }
 
 export const tripService = {

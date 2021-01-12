@@ -28,4 +28,12 @@ export default class Trip extends Model {
       users: this.belongsToMany(User, TripUser, 'trip_id', 'user_id')
     };
   }
+
+  static selectedTrip () {
+    return this
+      .query()
+      .whereId(this.store().state.entities.trips.selectedTripId)
+      .withAllRecursive()
+      .first();
+  }
 };
