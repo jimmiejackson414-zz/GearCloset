@@ -35,9 +35,7 @@
       <v-flex
         md6
         xs12>
-        <selected-pack
-          :trip="selectedTrip"
-          @handle-refetch-trips="refetchTrips" />
+        <selected-pack :trip="selectedTrip" />
       </v-flex>
 
       <!-- Friends Widget -->
@@ -122,7 +120,14 @@
         isLoading: state => state.entities.trips.isLoading,
         selectedTripId: state => state.entities.trips.selectedTripId
       }),
-      selectedTrip: () => Trip.selectedTrip(),
+      selectedTrip: {
+        get () {
+          return Trip.selectedTrip();
+        },
+        set (newValue) {
+          this.$store.commit('entities/trips/setSelectedTripId', newValue.id);
+        }
+      },
       trips: () => Trip.all()
     },
 
@@ -139,9 +144,6 @@
       },
       handleDeleteTrip () {
         this.deleteTripModalOpen = true;
-      },
-      refetchTrips () {
-        this.$refs.tripsQueryRef.getApolloQuery().refetch();
       }
     },
 

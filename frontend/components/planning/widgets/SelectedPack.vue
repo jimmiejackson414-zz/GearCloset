@@ -38,7 +38,6 @@
     <select-pack-modal
       v-model="modalOpen"
       :trip="trip"
-      @handle-refetch-trips="refetchTrips"
       @handle-reset-modal="resetModal" />
 
     <pack-theme-modal
@@ -50,10 +49,10 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import convert from 'convert-units';
   import { calculateCategoryWeight } from '~/helpers/functions';
   import { generateThemeOptions } from '~/helpers';
-  import { packService } from '~/services';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
 
@@ -115,18 +114,15 @@
     },
 
     methods: {
+      ...mapActions('entities/packs', [
+        'update'
+      ]),
       handleUpdatePackTheme (theme) {
         this.localTheme = theme;
         this.packThemeModalOpen = false;
 
-        const payload = {
-          fields: { id: this.activePack.id, theme },
-          apollo: this.$apollo
-        };
-        packService.update(payload);
-      },
-      refetchTrips () {
-        this.$emit('handle-refetch-trips');
+        const payload = { variables: { id: this.activePack.id, theme } };
+        this.update(payload);
       },
       resetModal () {
         this.modalOpen = false;
@@ -159,6 +155,14 @@
       this.onResize();
       if (this.activePack) {
         this.setChartData();
+      }
+    },
+
+    watch: {
+      trip (val, oldVal) {
+        if (val !== oldVal) {
+          this.setChartData();
+        }
       }
     },
 
