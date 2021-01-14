@@ -133,14 +133,17 @@
 
     methods: {
       ...mapActions('entities/trips', [
+        'createTrip',
         'fetchTrips'
       ]),
       handleData ({ data: { trips } }) {
         this.selectedTrip = trips[0];
         this.trips = trips;
       },
-      handleCreateTrip () {
-        console.log('createTrip');
+      async handleCreateTrip () {
+        const payload = { variables: { owner_id: this.currentUser.id } };
+        const results = await this.createTrip(payload);
+        console.log({ results });
       },
       handleDeleteTrip () {
         this.deleteTripModalOpen = true;

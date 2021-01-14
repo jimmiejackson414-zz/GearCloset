@@ -11,6 +11,21 @@ export const state = () => ({});
 ** Mutations
 */
 export const mutations = {
+  fetchFriend (state, friend) {
+    User.insertOrUpdate({
+      data: [{ ...friend }]
+    });
+  },
+  fetchFriends (state, friends) {
+    User.insertOrUpdate({
+      data: [...friends]
+    });
+  },
+  inviteFriend (state, friend) {
+    User.insertOrUpdate({
+      data: [...friend]
+    });
+  },
   updateAvatar (state, { id, avatar_url }) {
     User.update({
       where: id,
@@ -25,6 +40,31 @@ export const mutations = {
 ** Actions
 */
 export const actions = {
+  async inviteFriend ({ commit }, payload) {
+    payload.graphql = this.$graphql;
+    payload.token = this.$cookies.get('gc_token');
+
+    const { addFriends } = await userService.addFriend(payload);
+
+    commit('inviteFriend', addFriends);
+    return { addFriends };
+  },
+  async fetchFriend ({ commit }, payload) {
+    payload.graphql = this.$graphql;
+    payload.token = this.$cookies.get('gc_token');
+
+    const { friend } = await userService.fetchFriend(payload);
+
+    commit('fetchFriend', friend);
+    return { friend };
+  },
+  async fetchFriends ({ commit }) {
+    const payload = { graphql: this.$graphql, token: this.$cookies.get('gc_token') };
+    const { friends } = await userService.fetchFriends(payload);
+
+    commit('fetchFriends', friends);
+    return { friends };
+  },
   async login ({ commit }, payload) {
     payload.graphql = this.$graphql;
     const { login } = await userService.login(payload);
@@ -36,7 +76,6 @@ export const actions = {
       success: !!login.access_token
     };
   },
-
   logout ({ commit }) {
     this.$cookies.remove('gc_token');
     commit('logout', null, { root: true });
@@ -52,7 +91,6 @@ export const actions = {
       success: !!register.tokens.access_token
     };
   },
-
   async updateAvatar ({ commit }, payload) {
     payload.graphql = this.$graphql;
     payload.token = this.$cookies.get('gc_token');
@@ -63,7 +101,6 @@ export const actions = {
       success: !!updateAvatar?.avatar_url
     };
   },
-
   async updateUser ({ commit }, payload) {
     payload.graphql = this.$graphql;
     payload.token = this.$cookies.get('gc_token');

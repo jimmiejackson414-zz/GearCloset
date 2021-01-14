@@ -7,6 +7,9 @@ export const state = () => ({
 });
 
 export const mutations = {
+  createTrip (state, trip) {
+    Trip.insert({ data: trip });
+  },
   setSelectedTripId (state, id) {
     state.selectedTripId = id;
   },
@@ -16,6 +19,17 @@ export const mutations = {
 };
 
 export const actions = {
+  async createTrip ({ commit }, payload) {
+    commit('toggleIsLoading');
+
+    payload.graphql = this.$graphql;
+    payload.token = this.$cookies.get('gc_token');
+    const { createTrip } = await tripService.create(payload);
+
+    commit('createTrip', createTrip);
+    commit('setSelectedTripId', createTrip.id);
+    commit('toggleIsLoading');
+  },
   async fetchTrips ({ commit }) {
     const token = this.$cookies.get('gc_token');
     const payload = { graphql: this.$graphql, token, variables: {} };
