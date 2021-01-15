@@ -20,6 +20,7 @@ import User from './models/user';
 
 // Import Vuex modules
 import * as packs from '~/database/packs';
+import * as tripDetails from '~/database/tripDetails';
 import * as trips from '~/database/trips';
 import * as users from '~/database/users';
 
@@ -38,7 +39,7 @@ database.register(Pack, packs);
 database.register(ShoppingListItem, {});
 database.register(Todo, {});
 database.register(Trip, trips);
-database.register(TripDetail, {});
+database.register(TripDetail, tripDetails);
 database.register(TripUser, {});
 database.register(User, users);
 

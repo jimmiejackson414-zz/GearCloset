@@ -51,7 +51,7 @@
       <v-flex
         md6
         xs12>
-        <trip-details :trip="selectedTrip" />
+        <trip-details />
       </v-flex>
 
       <v-flex

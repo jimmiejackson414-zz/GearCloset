@@ -90,8 +90,8 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import { capitalize, prependProtocol } from '~/helpers/functions';
-  import { tripDetailService } from '~/services';
   import Loading from '~/components/Loading.vue';
 
   export default {
@@ -138,6 +138,9 @@
     },
 
     methods: {
+      ...mapActions('entities/tripDetails', [
+        'createTripDetail'
+      ]),
       closeModal () {
         this.show = false;
         this.detail = { title: '', url: '', value: '', type: '' };
@@ -146,21 +149,20 @@
       handleCheckbox () {
         this.hasUrl = !this.hasUrl;
       },
-      handleCreate () {
+      async handleCreate () {
         this.submitting = true;
 
         const payload = {
-          fields: {
+          variables: {
             title: this.detail.title,
             type: this.detail.type,
             url: this.hasUrl ? prependProtocol(this.detail.url) : null,
             value: this.detail.value,
             trip: this.trip.id
-          },
-          apollo: this.$apollo
+          }
         };
 
-        tripDetailService.create(payload);
+        await this.createTripDetail(payload);
 
         this.submitting = false;
         this.closeModal();

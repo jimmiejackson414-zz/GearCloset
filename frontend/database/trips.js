@@ -15,6 +15,12 @@ export const mutations = {
   },
   toggleIsLoading (state) {
     state.isLoading = !state.isLoading;
+  },
+  updateTrip (state, trip) {
+    Trip.update({
+      where: trip.id,
+      data: { ...trip }
+    });
   }
 };
 
@@ -37,5 +43,12 @@ export const actions = {
     Trip.insert({ data: trips });
     commit('setSelectedTripId', trips.length ? trips[0].id : null);
     commit('toggleIsLoading');
+  },
+  async updateTrip ({ commit }, payload) {
+    payload.graphql = this.$graphql;
+    payload.token = this.$cookies.get('gc_token');
+    const { updateTrip } = await tripService.update(payload);
+
+    commit('updateTrip', updateTrip);
   }
 };

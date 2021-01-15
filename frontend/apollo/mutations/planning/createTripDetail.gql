@@ -5,6 +5,7 @@ mutation CreateTripDetail($url:String $title:String $value:String $type:String $
     url
     value
     type
+    trip_id
     created_at
     updated_at
   }
