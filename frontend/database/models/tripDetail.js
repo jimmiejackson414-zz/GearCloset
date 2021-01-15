@@ -7,9 +7,9 @@ export default class TripDetail extends Model {
   static fields () {
     return {
       id: this.attr(null),
-      title: this.string(''),
-      url: this.string(''),
-      value: this.string(''),
+      title: this.string('').nullable(),
+      url: this.string('').nullable(),
+      value: this.string('').nullable(),
       type: this.string(''),
       trip_id: this.attr(null),
       created_at: this.attr(null),

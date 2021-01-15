@@ -116,7 +116,7 @@
           title: '',
           url: '',
           value: '',
-          type: this.detailType || 'hike'
+          type: this.detailType || 'trip'
         },
         hasUrl: false,
         submitting: false
@@ -143,7 +143,7 @@
       ]),
       closeModal () {
         this.show = false;
-        this.detail = { title: '', url: '', value: '', type: '' };
+        this.detail = { title: '', url: '', value: '' };
         this.$emit('handle-reset-modal');
       },
       handleCheckbox () {
@@ -172,6 +172,11 @@
     watch: {
       detail (val) {
         this.hasUrl = !!val.url;
+      },
+      value (val) {
+        if (val) {
+          this.detail.type = this.detailType;
+        }
       }
     },
 

@@ -13,7 +13,7 @@
             :custom-style="hikeNameStyles"
             unique-identifier="hikeNameRef"
             :value="trip ? trip.name : ''"
-            @handle-update-item="updateTrip($event, 'name')" />
+            @handle-update-item="updateTripField($event, 'name')" />
         </div>
       </div>
       <transition-group
@@ -72,19 +72,14 @@
 </template>
 
 <script>
-  import { tripDetailService, tripService } from '~/services';
+  import { mapActions, mapState } from 'vuex';
   import ClickToEdit from '~/components/ClickToEdit.vue';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import PlusButton from '~/components/icons/PlusButton.vue';
+  import Trip from '~/database/models/trip';
+  import TripDetail from '~/database/models/tripDetail';
 
   export default {
-    props: {
-      trip: {
-        type: Object,
-        default: () => {}
-      }
-    },
-
     data: () => ({
       createTripDetailModalOpen: false,
       ellipsisItems: [
@@ -97,11 +92,13 @@
     }),
 
     computed: {
+      ...mapState({
+        selectedTripId: state => state.entities.trips.selectedTripId
+      }),
       hikeDetails () {
-        if (this.trip) {
-          return this.trip.tripDetails.filter(detail => detail.type === 'hike');
-        }
-        return [];
+        return TripDetail.query().where(detail => {
+          return detail.trip_id === this.selectedTripId && detail.type === 'hike';
+        }).get();
       },
       hikeNameStyles () {
         return {
@@ -109,10 +106,19 @@
           fontWeight: 'bold',
           letterSpacing: '1px'
         };
+      },
+      trip () {
+        return Trip.find(this.selectedTripId);
       }
     },
 
     methods: {
+      ...mapActions('entities/tripDetails', [
+        'destroyTripDetail'
+      ]),
+      ...mapActions('entities/trips', [
+        'updateTrip'
+      ]),
       openCreate () {
         this.selectedDetail = { type: 'hike' };
         this.$nextTick(() => {
@@ -129,30 +135,28 @@
           this.updateTripDetailModalOpen = true;
         });
       },
-      removeDetail (detail) {
+      async removeDetail (detail) {
         const payload = {
-          fields: { id: detail.id, trip: this.trip.id },
-          apollo: this.$apollo
+          variables: { id: detail.id, trip: this.trip.id }
         };
-        tripDetailService.destroy(payload);
+        await this.destroyTripDetail(payload);
       },
       resetModal () {
         this.createTripDetailModalOpen = false;
         this.updateTripDetailModalOpen = false;
         this.selectedDetail = null;
       },
-      updateTrip (e, field) {
+      updateTripField (e, field) {
         // return if value hasn't changed
         if (e === this.trip.name) { return; }
 
         const payload = {
-          fields: {
+          variables: {
             id: this.trip.id,
             [field]: e
-          },
-          apollo: this.$apollo
+          }
         };
-        tripService.update(payload);
+        this.updateTrip(payload);
       }
     },
 

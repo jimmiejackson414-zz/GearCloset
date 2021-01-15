@@ -57,7 +57,7 @@
       <v-flex
         md6
         xs12>
-        <hike-details :trip="selectedTrip" />
+        <hike-details />
       </v-flex>
 
       <!-- Todo List Widget -->

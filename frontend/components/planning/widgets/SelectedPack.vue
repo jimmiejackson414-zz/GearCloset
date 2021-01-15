@@ -158,13 +158,15 @@
       }
     },
 
-    watch: {
-      trip (val, oldVal) {
-        if (val !== oldVal) {
-          this.setChartData();
-        }
-      }
-    },
+    // TODO: This watch rerenders the chart on change of unrelated events, such as adding/removing a Trip Detail
+    // Will need to modify so that only rerenders when category or item is modified.
+    // watch: {
+    //   trip (val, oldVal) {
+    //     if (val !== oldVal) {
+    //       this.setChartData();
+    //     }
+    //   }
+    // },
 
     components: {
       EllipsisButton,
