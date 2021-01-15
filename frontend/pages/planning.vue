@@ -64,7 +64,7 @@
       <v-flex
         md6
         xs12>
-        <todo-list :trip="selectedTrip" />
+        <todo-list />
       </v-flex>
 
       <!-- Shopping List Widget -->

@@ -69,21 +69,16 @@
 </template>
 
 <script>
+  import { mapActions, mapState } from 'vuex';
   import isMobile from '~/mixins/isMobile';
-  import { todoService } from '~/services';
   import ClickToEdit from '~/components/ClickToEdit.vue';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import PlusButton from '~/components/icons/PlusButton.vue';
+  import Trip from '~/database/models/trip';
+  import Todo from '~/database/models/todo';
 
   export default {
     mixins: [isMobile],
-
-    props: {
-      trip: {
-        type: Object,
-        default: () => {}
-      }
-    },
 
     data: () => ({
       deleteColor: '',
@@ -95,32 +90,33 @@
     }),
 
     computed: {
+      ...mapState({
+        selectedTripId: state => state.entities.trips.selectedTripId
+      }),
       allSelected () {
         return this.todos.every(item => item.checked);
       },
       todos () {
-        if (this.trip) {
-          return this.trip.todos;
-        }
-        return [];
+        return Todo.query().where('trip_id', this.selectedTripId).get();
+      },
+      trip () {
+        return Trip.find(this.selectedTripId);
       }
     },
 
     methods: {
-      addTodo () {
-        const payload = {
-          fields: { title: 'New Todo', checked: false, trip: this.trip.id },
-          apollo: this.$apollo
-        };
-
-        todoService.create(payload);
+      ...mapActions('entities/todos', [
+        'createTodo',
+        'destroyTodo',
+        'updateTodo'
+      ]),
+      async addTodo () {
+        const payload = { variables: { title: 'New Todo', checked: false, trip: this.trip.id } };
+        await this.createTodo(payload);
       },
       removeTodo (todo) {
-        const payload = {
-          fields: { id: todo.id, trip: this.trip.id },
-          apollo: this.$apollo
-        };
-        todoService.destroy(payload);
+        const payload = { variables: { id: todo.id, trip: this.trip.id } };
+        this.destroyTodo(payload);
       },
       setEditing (ref) {
         this.editableItem = ref;
@@ -135,11 +131,8 @@
         // return if value hasn't changed
         if (value === String(todo[field])) { return; }
 
-        const payload = {
-          fields: { id: todo.id, [field]: value, trip: this.trip.id },
-          apollo: this.$apollo
-        };
-        todoService.update(payload);
+        const payload = { variables: { id: todo.id, [field]: value, trip: this.trip.id } };
+        this.updateTodo(payload);
       }
     },
 
