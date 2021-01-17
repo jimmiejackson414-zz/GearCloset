@@ -21,9 +21,9 @@ export const mutations = {
       data: [...friends]
     });
   },
-  inviteFriend (state, friend) {
+  inviteFriend (state, friends) {
     User.insertOrUpdate({
-      data: [...friend]
+      data: [...friends]
     });
   },
   updateAvatar (state, { id, avatar_url }) {
@@ -44,7 +44,7 @@ export const actions = {
     payload.graphql = this.$graphql;
     payload.token = this.$cookies.get('gc_token');
 
-    const { addFriends } = await userService.addFriend(payload);
+    const { addFriends } = await userService.addFriends(payload);
 
     commit('inviteFriend', addFriends);
     return { addFriends };

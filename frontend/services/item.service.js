@@ -1,10 +1,9 @@
 /* eslint-disable camelcase */
-import { produce } from 'immer';
 import CREATE_ITEM_MUTATION from '~/apollo/mutations/closet/createItem.gql';
 import DESTROY_ITEM_MUTATION from '~/apollo/mutations/closet/destroyItem.gql';
 import REMOVE_ITEM_MUTATION from '~/apollo/mutations/closet/removeItem.gql';
 import UPDATE_ITEM_MUTATION from '~/apollo/mutations/closet/updateItem.gql';
-import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
+// import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
 
 async function create ({ category_id, pack_id, apollo }) {
   return await apollo.mutate({
@@ -41,24 +40,24 @@ async function create ({ category_id, pack_id, apollo }) {
     },
     update: (store, { data: { createItem } }) => {
       // read
-      const data = store.readQuery({ query: PACKS_QUERY });
+      // const data = store.readQuery({ query: PACKS_QUERY });
 
       // find indices
-      const packIndex = data.packs.findIndex(e => e.id === pack_id);
-      const categoryIndex = data.packs[packIndex].categories.findIndex(e => e.id === category_id);
+      // const packIndex = data.packs.findIndex(e => e.id === pack_id);
+      // const categoryIndex = data.packs[packIndex].categories.findIndex(e => e.id === category_id);
 
       // mutate
-      const newData = produce(data, x => {
-        const items = x.packs[packIndex].categories[categoryIndex].items;
-        createItem.position = items.length + 1;
-        items.push(createItem);
-      });
+      // const newData = produce(data, x => {
+      //   const items = x.packs[packIndex].categories[categoryIndex].items;
+      //   createItem.position = items.length + 1;
+      //   items.push(createItem);
+      // });
 
       // write
-      store.writeQuery({
-        query: PACKS_QUERY,
-        data: newData
-      });
+      // store.writeQuery({
+      //   query: PACKS_QUERY,
+      //   data: newData
+      // });
     }
   });
 }
@@ -150,23 +149,23 @@ async function removeItem ({ fields, pack_id, apollo }) {
     },
     update: (store, { data: { removeItem } }) => {
       // read
-      const data = store.readQuery({ query: PACKS_QUERY });
+      // const data = store.readQuery({ query: PACKS_QUERY });
 
       // find indices
-      const packIndex = data.packs.findIndex(e => e.id === pack_id);
-      const categoryIndex = data.packs[packIndex].categories.findIndex(e => e.id === fields.category_id);
-      const itemIndex = data.packs[packIndex].categories[categoryIndex].items.findIndex(e => e.id === fields.item_id);
+      // const packIndex = data.packs.findIndex(e => e.id === pack_id);
+      // const categoryIndex = data.packs[packIndex].categories.findIndex(e => e.id === fields.category_id);
+      // const itemIndex = data.packs[packIndex].categories[categoryIndex].items.findIndex(e => e.id === fields.item_id);
 
       // mutate
-      const newData = produce(data, x => {
-        x.packs[packIndex].categories[categoryIndex].items.splice(itemIndex, 1);
-      });
+      // const newData = produce(data, x => {
+      //   x.packs[packIndex].categories[categoryIndex].items.splice(itemIndex, 1);
+      // });
 
       // write;
-      store.writeQuery({
-        query: PACKS_QUERY,
-        data: newData
-      });
+      // store.writeQuery({
+      //   query: PACKS_QUERY,
+      //   data: newData
+      // });
     }
   });
 }

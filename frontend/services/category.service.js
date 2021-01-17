@@ -1,8 +1,7 @@
-import { produce } from 'immer';
 import CREATE_CATEGORY_MUTATION from '~/apollo/mutations/closet/createCategory.gql';
 import DESTROY_CATEGORY_MUTATION from '~/apollo/mutations/closet/destroyCategory.gql';
 import UPDATE_CATEGORY_MUTATION from '~/apollo/mutations/closet/updateCategory.gql';
-import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
+// import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
 
 async function create ({ fields, apollo }) {
   return await apollo.mutate({
@@ -23,19 +22,19 @@ async function create ({ fields, apollo }) {
     },
     update: (store, { data: { createCategory } }) => {
       // read
-      const data = store.readQuery({ query: PACKS_QUERY });
+      // const data = store.readQuery({ query: PACKS_QUERY });
 
       // find indices
-      const packIndex = data.packs.findIndex(e => e.id === fields.pack_id);
+      // const packIndex = data.packs.findIndex(e => e.id === fields.pack_id);
 
       // mutate
-      const newData = produce(data, x => {
-        createCategory.items = [];
-        x.packs[packIndex].categories.push(createCategory);
-      });
+      // const newData = produce(data, x => {
+      //   createCategory.items = [];
+      //   x.packs[packIndex].categories.push(createCategory);
+      // });
 
       // write
-      store.writeQuery({ query: PACKS_QUERY, data: newData });
+      // store.writeQuery({ query: PACKS_QUERY, data: newData });
     }
   });
 }
@@ -59,22 +58,22 @@ async function destroy ({ category, apollo }) {
     },
     update: (store, { data: { destroyCategory } }) => {
       // read
-      const data = store.readQuery({ query: PACKS_QUERY });
+      // const data = store.readQuery({ query: PACKS_QUERY });
 
       // find indices
-      const packIndex = data.packs.findIndex(e => e.id === destroyCategory.pack_id);
-      const categoryIndex = data.packs[packIndex].categories.findIndex(e => e.id === category.id);
+      // const packIndex = data.packs.findIndex(e => e.id === destroyCategory.pack_id);
+      // const categoryIndex = data.packs[packIndex].categories.findIndex(e => e.id === category.id);
 
       // mutate
-      const newData = produce(data, x => {
-        x.packs[packIndex].categories.splice(categoryIndex, 1);
-      });
+      // const newData = produce(data, x => {
+      //   x.packs[packIndex].categories.splice(categoryIndex, 1);
+      // });
 
       // write
-      store.writeQuery({
-        query: PACKS_QUERY,
-        data: newData
-      });
+      // store.writeQuery({
+      //   query: PACKS_QUERY,
+      //   data: newData
+      // });
     }
   });
 }

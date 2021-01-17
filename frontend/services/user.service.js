@@ -7,7 +7,8 @@ import UPDATE_AVATAR_MUTATION from '~/apollo/mutations/auth/updateAvatar.gql';
 import UPDATE_PASSWORD_MUTATION from '~/apollo/mutations/auth/updatePassword.gql';
 import UPDATE_USER_MUTATION from '~/apollo/mutations/auth/update.gql';
 
-async function addFriend ({ variables, graphql, token }) {
+async function addFriends ({ variables, graphql, token }) {
+  console.log({ variables });
   return await graphql.request(
     ADD_FRIEND_MUTATION,
     variables,
@@ -64,7 +65,7 @@ async function updatePassword ({ variables, graphql }) {
 }
 
 export const userService = {
-  addFriend,
+  addFriends,
   fetchFriend,
   fetchFriends,
   login,

@@ -171,7 +171,16 @@
           variables: { trip: this.trip.id, friends: this.chosenFriends }
         };
 
-        // TODO: Doesn't work yet, receive GraphQL error
+        payload.variables.friends.forEach(friend => {
+          delete friend.$id;
+          delete friend.comments;
+          delete friend.pivot;
+          delete friend.notifications;
+          delete friend.packs;
+          delete friend.posts;
+          delete friend.trips;
+        });
+
         await this.inviteFriend(payload);
 
         this.submitting = false;

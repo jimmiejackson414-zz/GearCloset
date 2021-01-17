@@ -35,16 +35,14 @@
       <v-flex
         md6
         xs12>
-        <selected-pack :trip="selectedTrip" />
+        <selected-pack ref="selectedPackRef" />
       </v-flex>
 
       <!-- Friends Widget -->
       <v-flex
         md6
         xs12>
-        <friends
-          :current-user="currentUser"
-          :trip="selectedTrip" />
+        <friends />
       </v-flex>
 
       <!-- Trip Details Widget -->
@@ -71,7 +69,7 @@
       <v-flex
         md6
         xs12>
-        <shopping-list :trip="selectedTrip" />
+        <shopping-list />
       </v-flex>
     </v-layout>
 
@@ -126,6 +124,7 @@
         },
         set (newValue) {
           this.$store.commit('entities/trips/setSelectedTripId', newValue.id);
+          this.$refs.selectedPackRef.triggerRerender();
         }
       },
       trips: () => Trip.all()
@@ -136,10 +135,6 @@
         'createTrip',
         'fetchTrips'
       ]),
-      handleData ({ data: { trips } }) {
-        this.selectedTrip = trips[0];
-        this.trips = trips;
-      },
       async handleCreateTrip () {
         const payload = { variables: { owner_id: this.currentUser.id } };
         const results = await this.createTrip(payload);

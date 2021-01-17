@@ -69,9 +69,18 @@ input AddFriendsInput {
     email: String!
     first_name: String
     last_name: String
+    trail_name: String
     avatar_url: String
     trail_name: String
     pending_invite: Boolean
+    address_1: String
+    address_2: String
+    city: String
+    state: String
+    country: String
+    subscription_level: String
+    measuring_system: String
+    has_onboarded: Boolean
     created_at: DateTime
     updated_at: DateTime
 }

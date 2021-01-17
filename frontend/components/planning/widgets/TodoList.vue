@@ -124,7 +124,7 @@
       },
       updateAllItems (value) {
         // TODO: Come up with batch update mutation instead
-        this.trip.todos.forEach(t => this.updateItem(value, t, 'checked'));
+        this.todos.forEach(t => this.updateItem(value, t, 'checked'));
       },
       updateItem (value, todo, field) {
         this.editableItem = null;

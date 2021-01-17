@@ -49,21 +49,15 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   import convert from 'convert-units';
   import { calculateCategoryWeight } from '~/helpers/functions';
   import { generateThemeOptions } from '~/helpers';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
+  import Trip from '~/database/models/trip';
 
   export default {
-    props: {
-      trip: {
-        type: Object,
-        default: () => {}
-      }
-    },
-
     data () {
       return {
         chartData: {
@@ -85,6 +79,9 @@
     },
 
     computed: {
+      ...mapState({
+        selectedTripId: state => state.entities.trips.selectedTripId
+      }),
       activePack () {
         if (!this.trip) { return null; }
         return this.trip.pack;
@@ -110,6 +107,9 @@
       },
       themeOptions () {
         return generateThemeOptions();
+      },
+      trip () {
+        return Trip.query().whereId(this.selectedTripId).with('pack.categories.items').first();
       }
     },
 
@@ -148,6 +148,9 @@
             return parseFloat(convert(calculateCategoryWeight(category)).from('g').to(category.unit)).toFixed(2);
           })
         }];
+      },
+      triggerRerender () {
+        this.setChartData();
       }
     },
 

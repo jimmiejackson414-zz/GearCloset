@@ -1,4 +1,3 @@
-import { produce } from 'immer';
 import DESTROY_PACK_MUTATION from '~/apollo/mutations/closet/destroyPack.gql';
 import RESET_PACK_MUTATION from '~/apollo/mutations/closet/resetPack.gql';
 import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
@@ -23,21 +22,21 @@ async function destroy ({ id, apollo }) {
     },
     update: (store, { data: { destroyPack } }) => {
       // read
-      const data = store.readQuery({ query: PACKS_QUERY });
+      // const data = store.readQuery({ query: PACKS_QUERY });
 
       // find indices
-      const packIndex = data.packs.findIndex(e => e.id === destroyPack.id);
+      // const packIndex = data.packs.findIndex(e => e.id === destroyPack.id);
 
       // mutate
-      const newData = produce(data, x => {
-        x.packs.splice(packIndex, 1);
-      });
+      // const newData = produce(data, x => {
+      //   x.packs.splice(packIndex, 1);
+      // });
 
       // write
-      store.writeQuery({
-        query: PACKS_QUERY,
-        data: newData
-      });
+      // store.writeQuery({
+      //   query: PACKS_QUERY,
+      //   data: newData
+      // });
     }
   });
 };

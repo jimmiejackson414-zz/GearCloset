@@ -16,7 +16,26 @@
         nudge-top
         top>
         <template #activator="{ on, attrs }">
+          <div
+            v-if="isPendingInvite(friend)"
+            v-bind="attrs"
+            class="pending"
+            v-on="on">
+            <v-avatar
+              color="info"
+              size="75">
+              <span
+                class="white--text text-body-1 font-weight-bold">
+                {{ friendInitials(friend) }}
+              </span>
+            </v-avatar>
+            <div
+              class="pending-wrapper">
+              <p>Pending</p>
+            </div>
+          </div>
           <v-btn
+            v-else
             v-bind="attrs"
             class="friend-btn"
             elevation="0"
@@ -31,21 +50,17 @@
               class="pointer"
               color="info"
               size="75">
-              <img
+              <cld-image
                 v-if="friend.avatar_url"
-                alt="avatar"
-                :src="friend.avatar_url">
+                crop="scale"
+                :public-id="friend.avatar_url"
+                width="75" />
               <span
                 v-else
                 class="white--text text-body-1 font-weight-bold">
                 {{ friendInitials(friend) }}
               </span>
             </v-avatar>
-            <div
-              v-if="isPendingInvite(friend)"
-              class="pending-wrapper">
-              <p>Pending</p>
-            </div>
           </v-btn>
         </template>
         <span class="text-body-2">{{ friend | prettyName }}</span>
@@ -63,33 +78,28 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
   import PlusButton from '~/components/icons/PlusButton.vue';
+  import Trip from '~/database/models/trip';
 
   export default {
-    props: {
-      currentUser: {
-        type: Object,
-        default: () => {}
-      },
-      trip: {
-        type: Object,
-        default: () => {}
-      }
-    },
-
     data: () => ({
       modalOpen: false
     }),
 
     computed: {
+      ...mapState({
+        selectedTripId: state => state.entities.trips.selectedTripId
+      }),
       friends () {
-        if (!this.trip) { return []; }
-        return this.trip.users.filter(friend => friend.id !== this.currentUser.id);
+        return this.trip.users;
       },
       friendCount () {
         return this.friends.length;
+      },
+      trip () {
+        return Trip.query().whereId(this.selectedTripId).with('users').first();
       }
-
     },
 
     methods: {
@@ -134,11 +144,17 @@
           transform: scale(1.1);
         }
       }
+    }
+
+    .pending {
+      display: flex;
+      position: relative;
 
       .pending-wrapper {
         background-color: $accentDarkest;
         border-radius: 5px;
         bottom: 0;
+        left: 12%;
         padding: 5px;
         position: absolute;
 
