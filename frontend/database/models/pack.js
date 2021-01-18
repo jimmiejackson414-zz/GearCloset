@@ -25,4 +25,12 @@ export default class Pack extends Model {
       user: this.belongsTo(User, 'user_id')
     };
   }
+
+  static selectedPack () {
+    return this
+      .query()
+      .whereId(this.store().state.entities.packs.selectedPackId)
+      .withAllRecursive()
+      .first();
+  }
 }

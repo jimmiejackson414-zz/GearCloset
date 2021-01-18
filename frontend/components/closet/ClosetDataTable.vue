@@ -20,12 +20,14 @@
               <v-btn
                 icon
                 @click="handleDeleteCategory(category)">
-                <unicon
-                  class="pointer"
-                  :fill="errorColor"
-                  height="20"
-                  name="trash-alt"
-                  width="20" />
+                <client-only>
+                  <unicon
+                    class="pointer"
+                    :fill="errorColor"
+                    height="20"
+                    name="trash-alt"
+                    width="20" />
+                </client-only>
               </v-btn>
               <click-to-edit
                 :unique-identifier="`title${category.id}Ref`"
@@ -61,12 +63,14 @@
                     <td
                       :key="`${item.id}-drag-${i}-${index}`"
                       class="px-0 py-1">
-                      <unicon
-                        class="drag"
-                        fill="#9e9e9e"
-                        height="20"
-                        name="grip-horizontal-line"
-                        width="20" />
+                      <client-only>
+                        <unicon
+                          class="drag"
+                          fill="#9e9e9e"
+                          height="20"
+                          name="grip-horizontal-line"
+                          width="20" />
+                      </client-only>
                     </td>
 
                     <!-- Generic Type Click To Edit -->
@@ -101,11 +105,13 @@
                         :ripple="false"
                         text
                         @click.native="updateBooleanItem(item, 'consumable')">
-                        <unicon
-                          fill="#9e9e9e"
-                          height="20"
-                          name="utensils-alt"
-                          width="20" />
+                        <client-only>
+                          <unicon
+                            fill="#9e9e9e"
+                            height="20"
+                            name="utensils-alt"
+                            width="20" />
+                        </client-only>
                       </v-btn>
                     </td>
 
@@ -119,11 +125,13 @@
                         :ripple="false"
                         text
                         @click="updateBooleanItem(item, 'worn')">
-                        <unicon
-                          fill="#9e9e9e"
-                          height="20"
-                          name="layer-group"
-                          width="20" />
+                        <client-only>
+                          <unicon
+                            fill="#9e9e9e"
+                            height="20"
+                            name="layer-group"
+                            width="20" />
+                        </client-only>
                       </v-btn>
                     </td>
 
@@ -144,11 +152,13 @@
                         :unique-identifier="`price${item.id}Ref`"
                         :value="itemPrice(item)"
                         @handle-update-item="updateItem($event, item, 'price')">
-                        <unicon
-                          fill="#494f57"
-                          height="14"
-                          name="dollar-alt"
-                          width="14" />
+                        <client-only>
+                          <unicon
+                            fill="#494f57"
+                            height="14"
+                            name="dollar-alt"
+                            width="14" />
+                        </client-only>
                       </click-to-edit>
                     </td>
 
@@ -172,12 +182,14 @@
                       <v-btn
                         icon
                         @click="handleRemoveRow(item, category)">
-                        <unicon
-                          class="pointer"
-                          :fill="errorColor"
-                          height="20"
-                          name="trash-alt"
-                          width="20" />
+                        <client-only>
+                          <unicon
+                            class="pointer"
+                            :fill="errorColor"
+                            height="20"
+                            name="trash-alt"
+                            width="20" />
+                        </client-only>
                       </v-btn>
                     </td>
                   </tr>
@@ -212,11 +224,13 @@
                       class="text-center"
                       :colspan="1">
                       <span class="price-total">
-                        <unicon
-                          fill="#494f57"
-                          height="14"
-                          name="dollar-alt"
-                          width="14" />
+                        <client-only>
+                          <unicon
+                            fill="#494f57"
+                            height="14"
+                            name="dollar-alt"
+                            width="14" />
+                        </client-only>
                         {{ priceTotal(items) }}
                       </span>
                     </td>
@@ -239,11 +253,13 @@
               :ripple="false"
               text
               @click="handleAddNewItem(category.id)">
-              <unicon
-                :fill="primaryColor"
-                height="18"
-                name="plus"
-                width="18" />
+              <client-only>
+                <unicon
+                  :fill="primaryColor"
+                  height="18"
+                  name="plus"
+                  width="18" />
+              </client-only>
               <p class="body-2 primary--text mb-0 ml-3">
                 Add New Item
               </p>
@@ -262,11 +278,13 @@
               :ripple="false"
               text
               @click="handleAddNewCategory">
-              <unicon
-                :fill="primaryColor"
-                height="18"
-                name="plus"
-                width="18" />
+              <client-only>
+                <unicon
+                  :fill="primaryColor"
+                  height="18"
+                  name="plus"
+                  width="18" />
+              </client-only>
               <p class="body-2 primary--text mb-0 ml-3">
                 Add New Category
               </p>
