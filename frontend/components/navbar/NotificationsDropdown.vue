@@ -89,8 +89,8 @@
 <script>
   import * as dayjs from 'dayjs';
   import relativeTime from 'dayjs/plugin/relativeTime';
-  import markAllReadMutation from '~/apollo/mutations/notifications/markAllRead.gql';
-  import meQuery from '~/apollo/queries/user/me.gql';
+  import { MARK_ALL_READ_MUTATION } from '~/apollo/mutations/notifications/markAllRead';
+  import { ME_QUERY } from '~/apollo/queries/user/me';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
@@ -123,11 +123,11 @@
       },
       async handleMarkAllAsRead () {
         await this.$apollo.mutate({
-          mutation: markAllReadMutation,
+          mutation: MARK_ALL_READ_MUTATION,
           update (store, { data: { markAllRead } }) {
-            const data = store.readQuery({ query: meQuery });
+            const data = store.readQuery({ query: ME_QUERY });
             data.currentUser.notifications = markAllRead.notifications;
-            store.writeQuery({ query: meQuery, data });
+            store.writeQuery({ query: ME_QUERY, data });
           }
         });
       },

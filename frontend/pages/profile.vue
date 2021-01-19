@@ -1,6 +1,6 @@
 <template>
   <ApolloQuery
-    :query="require('~/apollo/queries/user/me.gql')"
+    :query="require('~/apollo/queries/user/me')"
     @result="handleData">
     <template v-slot="{ result: { data, error, loading}, isLoading}">
       <div

@@ -1,6 +1,6 @@
-import CREATE_SHOPPING_LIST_MUTATION from '~/apollo/mutations/planning/createShoppingListItem.gql';
-import REMOVE_SHOPPING_LIST_MUTATION from '~/apollo/mutations/planning/deleteShoppingListItem.gql';
-import UPDATE_SHOPPING_LIST_MUTATION from '~/apollo/mutations/planning/updateShoppingListItem.gql';
+import { CREATE_SHOPPING_LIST_MUTATION } from '~/apollo/mutations/planning/createShoppingListItem';
+import { DELETE_SHOPPING_LIST_ITEM_MUTATION } from '~/apollo/mutations/planning/deleteShoppingListItem';
+import { UPDATE_SHOPPING_LIST_MUTATION } from '~/apollo/mutations/planning/updateShoppingListItem';
 
 async function create ({ graphql, token, variables }) {
   return await graphql.request(
@@ -12,7 +12,7 @@ async function create ({ graphql, token, variables }) {
 
 async function destroy ({ graphql, token, variables }) {
   return await graphql.request(
-    REMOVE_SHOPPING_LIST_MUTATION,
+    DELETE_SHOPPING_LIST_ITEM_MUTATION,
     variables,
     { authorization: `Bearer ${token}` }
   );

@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
-import CREATE_ITEM_MUTATION from '~/apollo/mutations/closet/createItem.gql';
-import DESTROY_ITEM_MUTATION from '~/apollo/mutations/closet/destroyItem.gql';
-import REMOVE_ITEM_MUTATION from '~/apollo/mutations/closet/removeItem.gql';
-import UPDATE_ITEM_MUTATION from '~/apollo/mutations/closet/updateItem.gql';
+import { CREATE_ITEM_MUTATION } from '~/apollo/mutations/closet/createItem';
+import { DESTROY_ITEM_MUTATION } from '~/apollo/mutations/closet/destroyItem';
+import { REMOVE_ITEM_MUTATION } from '~/apollo/mutations/closet/removeItem';
+import { UPDATE_ITEM_MUTATION } from '~/apollo/mutations/closet/updateItem';
 // import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
 
 async function create ({ category_id, pack_id, apollo }) {

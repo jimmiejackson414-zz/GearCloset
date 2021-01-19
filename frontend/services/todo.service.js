@@ -1,6 +1,6 @@
-import CREATE_TODO_MUTATION from '~/apollo/mutations/planning/createTodo.gql';
-import REMOVE_TODO_MUTATION from '~/apollo/mutations/planning/deleteTodo.gql';
-import UPDATE_TODO_MUTATION from '~/apollo/mutations/planning/updateTodo.gql';
+import { CREATE_TODO_MUTATION } from '~/apollo/mutations/planning/createTodo';
+import { DELETE_TODO_MUTATION } from '~/apollo/mutations/planning/deleteTodo';
+import { UPDATE_TODO_MUTATION } from '~/apollo/mutations/planning/updateTodo';
 
 async function create ({ graphql, token, variables }) {
   return await graphql.request(
@@ -12,7 +12,7 @@ async function create ({ graphql, token, variables }) {
 
 async function destroy ({ graphql, token, variables }) {
   return await graphql.request(
-    REMOVE_TODO_MUTATION,
+    DELETE_TODO_MUTATION,
     variables,
     { authorization: `Bearer ${token}` }
   );

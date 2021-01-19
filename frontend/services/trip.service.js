@@ -1,6 +1,6 @@
-import CREATE_TRIP_MUTATION from '~/apollo/mutations/planning/createTrip.gql';
-import TRIPS_QUERY from '~/apollo/queries/content/trips.gql';
-import UPDATE_TRIP_MUTATION from '~/apollo/mutations/planning/updateTrip.gql';
+import { CREATE_TRIP_MUTATION } from '~/apollo/mutations/planning/createTrip';
+import { TRIPS_QUERY } from '~/apollo/queries/content/trips';
+import { UPDATE_TRIP_MUTATION } from '~/apollo/mutations/planning/updateTrip';
 
 async function create ({ graphql, token, variables }) {
   return await graphql.request(

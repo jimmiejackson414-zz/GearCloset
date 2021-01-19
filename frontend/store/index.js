@@ -1,6 +1,6 @@
 import { install } from '@vuex-orm/core';
 import database from '~/database';
-import ME_QUERY from '~/apollo/queries/user/me.gql';
+import { ME_QUERY } from '~/apollo/queries/user/me';
 import User from '~/database/models/user';
 
 export const plugins = [install(database)];

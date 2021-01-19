@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class ForumPost extends Model
 {
+    use Sluggable;
+
     protected $fillable = [
         'title', 'forum_subcategory_id', 'user_id', 'pinned', 'slug', 'comments'
     ];
@@ -32,5 +35,14 @@ class ForumPost extends Model
     public function scopeFindBySlug($query, $slug)
     {
         return $query->whereSlug($slug);
+    }
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => [ 'title', 'id' ]
+            ]
+        ];
     }
 }

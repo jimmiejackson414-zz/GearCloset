@@ -1,6 +1,0 @@
-mutation UpdateAvatar($file: String) {
-  updateAvatar(file: $file) {
-    id
-    avatar_url
-  }
-}

@@ -41,7 +41,7 @@
         <v-btn
           color="primary"
           depressed
-          :disabled="submitting"
+          :disabled="submitting || isDisabled"
           :ripple="false"
           @click="handleCreate">
           <loading
@@ -63,6 +63,10 @@
 
   export default {
     props: {
+      subcategory: {
+        type: Object,
+        default: () => {}
+      },
       value: {
         type: Boolean,
         default: false
@@ -79,6 +83,9 @@
     }),
 
     computed: {
+      isDisabled () {
+        return !this.title || !this.content;
+      },
       show: {
         get () {
           return this.value;
@@ -94,25 +101,33 @@
         success: 'alert/success',
         error: 'alert/error'
       }),
+      ...mapActions('entities/forumPosts', [
+        'createPost'
+      ]),
       closeModal () {
         this.show = false;
         this.content = '';
         this.title = '';
       },
-      handleCreate () {
-        console.log('handleCreate');
+      async handleCreate () {
         this.submitting = true;
 
-        setTimeout(() => {
-          this.closeModal();
-          this.submitting = false;
-          this.$emit('handle-reset-modal');
-          this.success('Post successfully created.');
-          console.log('new post details: ', this.title, this.content);
-        }, 2000);
+        const payload = {
+          variables: {
+            title: this.title,
+            text: this.content,
+            pinned: false,
+            forum_subcategory_id: this.subcategory.id
+          }
+        };
+        await this.createPost(payload);
+
+        this.success('Post successfully created.');
+        this.closeModal();
+        this.$emit('handle-reset-modal');
+        this.submitting = false;
       },
       handleUpdateContent (value) {
-        console.log({ value });
         this.content = value;
       }
     },

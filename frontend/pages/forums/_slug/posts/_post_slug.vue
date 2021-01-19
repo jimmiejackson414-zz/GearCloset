@@ -1,6 +1,6 @@
 <template>
   <ApolloQuery
-    :query="require('~/apollo/queries/forum/post.gql')"
+    :query="require('~/apollo/queries/forum/post.js')"
     :variables="{ slug: this.$route.params.post_slug }"
     @result="setPost">
     <template v-slot="{ result: { data, error, loading }, isLoading}">

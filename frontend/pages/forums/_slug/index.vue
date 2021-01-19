@@ -100,14 +100,16 @@
       @handle-modal-open="updateSubscriptionModalOpen = true" />
 
     <!-- Create New Topic Modal -->
-    <create-new-topic-modal v-model="createNewTopicModal" />
+    <create-new-topic-modal
+      v-model="createNewTopicModal"
+      :subcategory="subcategory" />
   </v-container>
 
   <loading-page v-else />
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex';
+  import { mapActions } from 'vuex';
   import * as dayjs from 'dayjs';
   import relativeTime from 'dayjs/plugin/relativeTime';
   import currentUser from '~/mixins/currentUser';
@@ -125,15 +127,9 @@
     async fetch () {
       const slug = this.$route.params.slug;
       await this.fetchForumSlugIndex(slug);
-      this.items = this.subcategory.posts.slice().sort((a, b) => b.pinned - a.pinned);
       this.breadcrumbs[1] = { text: this.subcategory.title, disabled: true };
+      this.isLoading = false;
     },
-
-    //     result ({ data: { subcategory } }) {
-    //       this.subcategory = subcategory;
-    //       this.items = this.subcategory.posts.slice().sort((a, b) => b.pinned - a.pinned);
-    //       this.breadcrumbs[1] = { text: this.subcategory.title, disabled: true };
-    //     }
 
     data () {
       return {
@@ -147,23 +143,32 @@
           { text: 'Comments', align: 'center', sortable: false, value: 'commentCount', filterable: false },
           { text: 'Last Post', align: 'center', sortable: false, value: 'last_post', filterable: false }
         ],
-        items: null,
+        isLoading: true,
         search: '',
-        // subcategory: null,
         warningDarkest: '',
         upgradeModalOpen: false
       };
     },
 
     computed: {
-      ...mapState({
-        isLoading: state => state.entities.forumSubcategories.isLoading
-      }),
+      // ...mapState({
+      //   isLoading: state => state.entities.forumSubcategories.isLoading
+      // }),
+      items () {
+        return this.subcategory.posts.slice().sort((a, b) => {
+          return b.pinned - a.pinned || b.updated_at.localeCompare(a.updated_at);
+        });
+      },
       pageTitle () {
         return this.subcategory ? this.subcategory.title : '';
       },
       subcategory () {
-        return ForumSubcategory.query().where('slug', this.$route.params.slug).with('posts.comments').first();
+        return ForumSubcategory
+          .query()
+          .where('slug', this.$route.params.slug)
+          .with('posts.author')
+          .with('posts.comments.author')
+          .first();
       }
     },
 
@@ -185,21 +190,12 @@
 
         return {
           date: dayjs(lastComment.updated_at).fromNow(),
-          // author: this.$options.filters.prettyName(lastComment.author)
-          author: 'TEST'
+          author: this.$options.filters.prettyName(lastComment.author)
         };
       },
       postAuthor (post) {
-        return 'TEST';
-        // return this.$options.filters.prettyName(post.author);
-      },
-      resetModal () {
-        console.log('resetModal');
-      },
-      setSubcategory ({ data: { subcategory } }) {
-        this.subcategory = subcategory;
-        this.items = this.subcategory.posts.sort((a, b) => b.pinned - a.pinned);
-        this.breadcrumbs[1] = { text: this.subcategory.title, disabled: true };
+        console.log({ post });
+        return this.$options.filters.prettyName(post.author);
       }
     },
 

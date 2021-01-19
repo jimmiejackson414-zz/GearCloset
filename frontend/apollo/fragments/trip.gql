@@ -1,8 +1,0 @@
-fragment trip on Trip {
-  id
-  name
-  description
-  starting_point
-  ending_point
-  owner_id
-}

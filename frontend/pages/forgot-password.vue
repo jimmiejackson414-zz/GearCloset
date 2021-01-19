@@ -95,7 +95,7 @@
 </template>
 
 <script>
-  import resetPasswordMutation from '~/apollo/mutations/auth/resetPassword.gql';
+  import { RESET_PASSWORD_MUTATION } from '~/apollo/mutations/auth/resetPassword';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import FadeTransition from '~/components/transitions/FadeTransition.vue';
   import Loading from '~/components/Loading.vue';
@@ -128,7 +128,7 @@
 
           try {
             const { errors } = await this.$apollo.mutate({
-              mutation: resetPasswordMutation,
+              mutation: RESET_PASSWORD_MUTATION,
               variables: {
                 email
               }

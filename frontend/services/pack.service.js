@@ -1,7 +1,7 @@
-import DESTROY_PACK_MUTATION from '~/apollo/mutations/closet/destroyPack.gql';
-import RESET_PACK_MUTATION from '~/apollo/mutations/closet/resetPack.gql';
-import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
-import UPDATE_PACK_MUTATION from '~/apollo/mutations/planning/updatePack.gql';
+import { DESTROY_PACK_MUTATION } from '~/apollo/mutations/closet/destroyPack';
+import { RESET_PACK_MUTATION } from '~/apollo/mutations/closet/resetPack';
+import { PACKS_QUERY } from '~/apollo/queries/content/packs';
+import { UPDATE_PACK_MUTATION } from '~/apollo/mutations/planning/updatePack';
 
 async function destroy ({ id, apollo }) {
   return await apollo.mutate({

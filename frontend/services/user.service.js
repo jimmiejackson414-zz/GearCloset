@@ -1,16 +1,16 @@
-import ADD_FRIEND_MUTATION from '~/apollo/mutations/planning/addFriend.gql';
-import FRIEND_QUERY from '~/apollo/queries/user/friend.gql';
-import GET_FRIENDS_QUERY from '~/apollo/queries/user/friends.gql';
-import LOGIN_MUTATION from '~/apollo/mutations/auth/login.gql';
-import REGISTER_MUTATION from '~/apollo/mutations/auth/register.gql';
-import UPDATE_AVATAR_MUTATION from '~/apollo/mutations/auth/updateAvatar.gql';
-import UPDATE_PASSWORD_MUTATION from '~/apollo/mutations/auth/updatePassword.gql';
-import UPDATE_USER_MUTATION from '~/apollo/mutations/auth/update.gql';
+import { ADD_FRIENDS_MUTATION } from '~/apollo/mutations/planning/addFriends';
+import { FRIEND_QUERY } from '~/apollo/queries/user/friend';
+import { FRIENDS_QUERY } from '~/apollo/queries/user/friends';
+import { LOGIN_MUTATION } from '~/apollo/mutations/auth/login';
+import { REGISTER_MUTATION } from '~/apollo/mutations/auth/register';
+import { UPDATE_AVATAR_MUTATION } from '~/apollo/mutations/auth/updateAvatar';
+import { UPDATE_PASSWORD_MUTATION } from '~/apollo/mutations/auth/updatePassword';
+import { UPDATE_USER_MUTATION } from '~/apollo/mutations/auth/update';
 
 async function addFriends ({ variables, graphql, token }) {
   console.log({ variables });
   return await graphql.request(
-    ADD_FRIEND_MUTATION,
+    ADD_FRIENDS_MUTATION,
     variables,
     { authorization: `Bearer ${token}` }
   );
@@ -26,7 +26,7 @@ async function fetchFriend ({ variables, graphql, token }) {
 
 async function fetchFriends ({ variables, graphql, token }) {
   return await graphql.request(
-    GET_FRIENDS_QUERY,
+    FRIENDS_QUERY,
     variables,
     { authorization: `Bearer ${token}` }
   );

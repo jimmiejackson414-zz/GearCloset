@@ -1,6 +1,6 @@
-import CREATE_CATEGORY_MUTATION from '~/apollo/mutations/closet/createCategory.gql';
-import DESTROY_CATEGORY_MUTATION from '~/apollo/mutations/closet/destroyCategory.gql';
-import UPDATE_CATEGORY_MUTATION from '~/apollo/mutations/closet/updateCategory.gql';
+import { CREATE_CATEGORY_MUTATION } from '~/apollo/mutations/closet/createCategory';
+import { DESTROY_CATEGORY_MUTATION } from '~/apollo/mutations/closet/destroyCategory';
+import { UPDATE_CATEGORY_MUTATION } from '~/apollo/mutations/closet/updateCategory';
 // import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
 
 async function create ({ fields, apollo }) {

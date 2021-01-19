@@ -20,6 +20,7 @@ import User from './models/user';
 
 // Import Vuex modules
 import * as forumCategories from '~/database/forumCategories';
+import * as forumPosts from '~/database/forumPosts';
 import * as forumSubcategories from '~/database/forumSubcategories';
 import * as packs from '~/database/packs';
 import * as shoppingListItems from '~/database/shoppingListItems';
@@ -34,7 +35,7 @@ database.register(Category, {});
 database.register(CategoryItem, {});
 database.register(ForumCategory, forumCategories);
 database.register(ForumComment, {});
-database.register(ForumPost, {});
+database.register(ForumPost, forumPosts);
 database.register(ForumSubcategory, forumSubcategories);
 database.register(FriendUser, {});
 database.register(Item, {});
