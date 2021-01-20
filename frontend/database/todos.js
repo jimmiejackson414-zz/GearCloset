@@ -28,7 +28,6 @@ export const actions = {
     commit('toggleIsLoading');
 
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
     const { createTodo } = await todoService.create(payload);
 
     commit('createTodo', createTodo);
@@ -37,7 +36,6 @@ export const actions = {
   async destroyTodo ({ commit }, payload) {
     commit('toggleIsLoading');
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
 
     const { deleteTodo } = await todoService.destroy(payload);
     commit('destroyTripDetail', deleteTodo);
@@ -47,7 +45,6 @@ export const actions = {
     commit('toggleIsLoading');
 
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
     const { updateTodo } = await todoService.update(payload);
 
     commit('updateTodo', updateTodo);

@@ -42,8 +42,6 @@ export const mutations = {
 export const actions = {
   async inviteFriend ({ commit }, payload) {
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
-
     const { addFriends } = await userService.addFriends(payload);
 
     commit('inviteFriend', addFriends);
@@ -51,15 +49,13 @@ export const actions = {
   },
   async fetchFriend ({ commit }, payload) {
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
-
     const { friend } = await userService.fetchFriend(payload);
 
     commit('fetchFriend', friend);
     return { friend };
   },
   async fetchFriends ({ commit }) {
-    const payload = { graphql: this.$graphql, token: this.$cookies.get('gc_token') };
+    const payload = { graphql: this.$graphql };
     const { friends } = await userService.fetchFriends(payload);
 
     commit('fetchFriends', friends);
@@ -77,7 +73,7 @@ export const actions = {
     };
   },
   async logout ({ commit }) {
-    const payload = { graphql: this.$graphql, token: this.$cookies.get('gc_token') };
+    const payload = { graphql: this.$graphql };
     await userService.logout(payload);
     this.$cookies.remove('gc_token');
     commit('logout', null, { root: true });
@@ -95,7 +91,6 @@ export const actions = {
   },
   async updateAvatar ({ commit }, payload) {
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
     const { updateAvatar } = await userService.updateAvatar(payload);
     commit('updateAvatar', updateAvatar);
 
@@ -105,7 +100,6 @@ export const actions = {
   },
   async updateUser ({ commit }, payload) {
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
     const { updateUser } = await userService.update(payload);
     commit('setCurrentUser', updateUser, { root: true });
 

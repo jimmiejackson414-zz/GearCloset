@@ -27,7 +27,6 @@ export const actions = {
   async createTripDetail ({ commit }, payload) {
     commit('toggleIsLoading');
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
 
     const { createTripDetail } = await tripDetailService.create(payload);
     commit('createTripDetail', createTripDetail);
@@ -36,7 +35,6 @@ export const actions = {
   async destroyTripDetail ({ commit }, payload) {
     commit('toggleIsLoading');
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
 
     const { deleteTripDetail } = await tripDetailService.destroy(payload);
     commit('destroyTripDetail', deleteTripDetail);
@@ -45,7 +43,6 @@ export const actions = {
   async updateTripDetail ({ commit }, payload) {
     commit('toggleIsLoading');
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
 
     const { updateTripDetail } = await tripDetailService.update(payload);
     commit('updateTripDetail', updateTripDetail);

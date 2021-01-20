@@ -8,69 +8,40 @@ import { UPDATE_AVATAR_MUTATION } from '~/apollo/mutations/auth/updateAvatar';
 import { UPDATE_PASSWORD_MUTATION } from '~/apollo/mutations/auth/updatePassword';
 import { UPDATE_USER_MUTATION } from '~/apollo/mutations/auth/update';
 
-async function addFriends ({ variables, graphql, token }) {
-  console.log({ variables });
-  return await graphql.request(
-    ADD_FRIENDS_MUTATION,
-    variables,
-    { authorization: `Bearer ${token}` }
-  );
+async function addFriends ({ variables, graphql }) {
+  return await graphql.request(ADD_FRIENDS_MUTATION, variables);
 }
 
-async function fetchFriend ({ variables, graphql, token }) {
-  return await graphql.request(
-    FRIEND_QUERY,
-    variables,
-    { Authorization: `Bearer ${token}` }
-  );
+async function fetchFriend ({ variables, graphql }) {
+  return await graphql.request(FRIEND_QUERY, variables);
 }
 
-async function fetchFriends ({ variables, graphql, token }) {
-  return await graphql.request(
-    FRIENDS_QUERY,
-    variables,
-    { authorization: `Bearer ${token}` }
-  );
+async function fetchFriends ({ variables, graphql }) {
+  return await graphql.request(FRIENDS_QUERY, variables);
 }
 
 async function login ({ variables, graphql }) {
   return await graphql.request(LOGIN_MUTATION, variables);
 }
 
-async function logout ({ graphql, token }) {
-  return await graphql.request(
-    LOGOUT_MUTATION,
-    {},
-    { authorization: `Bearer ${token}` }
-  );
+async function logout ({ graphql }) {
+  return await graphql.request(LOGOUT_MUTATION, {});
 }
 
 async function register ({ variables, graphql }) {
   return await graphql.request(REGISTER_MUTATION, variables);
 }
 
-async function update ({ variables, graphql, token }) {
-  return await graphql.request(
-    UPDATE_USER_MUTATION,
-    variables,
-    { Authorization: `Bearer ${token}` }
-  );
+async function update ({ variables, graphql }) {
+  return await graphql.request(UPDATE_USER_MUTATION, variables);
 }
 
-async function updateAvatar ({ variables, graphql, token }) {
-  return await graphql.request(
-    UPDATE_AVATAR_MUTATION,
-    variables,
-    { Authorization: `Bearer ${token}` }
-  );
+async function updateAvatar ({ variables, graphql }) {
+  return await graphql.request(UPDATE_AVATAR_MUTATION, variables);
 }
 
 async function updatePassword ({ variables, graphql }) {
-  return await graphql.request(
-    UPDATE_PASSWORD_MUTATION,
-    variables
-    // requestHeaders
-  );
+  return await graphql.request(UPDATE_PASSWORD_MUTATION, variables);
 }
 
 export const userService = {

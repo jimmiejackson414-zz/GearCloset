@@ -95,7 +95,7 @@
 </template>
 
 <script>
-  import { RESET_PASSWORD_MUTATION } from '~/apollo/mutations/auth/resetPassword';
+  // import { RESET_PASSWORD_MUTATION } from '~/apollo/mutations/auth/resetPassword';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import FadeTransition from '~/components/transitions/FadeTransition.vue';
   import Loading from '~/components/Loading.vue';
@@ -121,28 +121,30 @@
     },
 
     methods: {
-      async handleSubmit () {
+      handleSubmit () {
         if (this.$refs.forgotPasswordForm.validate()) {
+          // TODO: handleSubmit
+          console.log('NEED TO REWORK THIS METHOD');
           this.submitting = true;
-          const email = this.email;
+          // const email = this.email;
 
-          try {
-            const { errors } = await this.$apollo.mutate({
-              mutation: RESET_PASSWORD_MUTATION,
-              variables: {
-                email
-              }
-            });
+          // try {
+          //   const { errors } = await this.$apollo.mutate({
+          //     mutation: RESET_PASSWORD_MUTATION,
+          //     variables: {
+          //       email
+          //     }
+          //   });
 
-            if (errors?.length) {
-              this.isError = true;
-              this.submitting = false;
-            }
-          } catch (e) {
-            console.error('reset password error: ', e);
-            this.isError = true;
-            this.submitting = false;
-          }
+          //   if (errors?.length) {
+          //     this.isError = true;
+          //     this.submitting = false;
+          //   }
+          // } catch (e) {
+          //   console.error('reset password error: ', e);
+          //   this.isError = true;
+          //   this.submitting = false;
+          // }
         }
       }
     },

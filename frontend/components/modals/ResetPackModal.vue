@@ -39,7 +39,7 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import { packService } from '~/services';
+  // import { packService } from '~/services';
   import Loading from '~/components/Loading.vue';
 
   export default {
@@ -76,11 +76,13 @@
       closeModal () {
         this.show = false;
       },
-      async handleResetPack () {
-        const payload = { id: this.pack.id, apollo: this.$apollo };
-        await packService.reset(payload);
-        this.success('Pack successfully reset');
-        this.closeModal();
+      handleResetPack () {
+        // TODO: handleResetPack
+        console.log('NEED TO RECREATE THIS METHOD');
+        // const payload = { id: this.pack.id };
+        // await packService.reset(payload);
+        // this.success('Pack successfully reset');
+        // this.closeModal();
       }
     },
 

@@ -117,6 +117,11 @@
       }
     },
 
+    created () {
+      const token = this.$cookies.get('gc_token');
+      this.$graphql.setHeaders({ authorization: `Bearer ${token}` });
+    },
+
     watch: {
       $route () {
         this.clearAlert();

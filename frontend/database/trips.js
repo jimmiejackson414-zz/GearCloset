@@ -29,7 +29,6 @@ export const actions = {
     commit('toggleIsLoading');
 
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
     const { createTrip } = await tripService.create(payload);
 
     commit('createTrip', createTrip);
@@ -37,8 +36,7 @@ export const actions = {
     commit('toggleIsLoading');
   },
   async fetchTrips ({ commit }) {
-    const token = this.$cookies.get('gc_token');
-    const payload = { graphql: this.$graphql, token, variables: {} };
+    const payload = { graphql: this.$graphql };
     const { trips } = await tripService.fetchTrips(payload);
     Trip.insert({ data: trips });
     commit('setSelectedTripId', trips.length ? trips[0].id : null);
@@ -46,7 +44,6 @@ export const actions = {
   },
   async updateTrip ({ commit }, payload) {
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
     const { updateTrip } = await tripService.update(payload);
 
     commit('updateTrip', updateTrip);

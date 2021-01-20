@@ -41,12 +41,8 @@ async function destroy ({ id, apollo }) {
   });
 };
 
-async function getPacks ({ graphql, token }) {
-  return await graphql.request(
-    PACKS_QUERY,
-    {},
-    { authorization: `Bearer ${token}` }
-  );
+async function getPacks ({ graphql }) {
+  return await graphql.request(PACKS_QUERY, {});
 };
 
 async function reset ({ id, apollo }) {
@@ -56,12 +52,8 @@ async function reset ({ id, apollo }) {
   });
 }
 
-async function update ({ graphql, token, variables }) {
-  return await graphql.request(
-    UPDATE_PACK_MUTATION,
-    variables,
-    { authorization: `Bearer ${token}` }
-  );
+async function update ({ graphql, variables }) {
+  return await graphql.request(UPDATE_PACK_MUTATION, variables);
 }
 
 export const packService = {

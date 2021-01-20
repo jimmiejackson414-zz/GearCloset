@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import { MARK_AS_READ_MUTATION } from '~/apollo/mutations/notifications/markAsRead';
+  // import { MARK_AS_READ_MUTATION } from '~/apollo/mutations/notifications/markAsRead';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
@@ -65,12 +65,14 @@
       closeModal () {
         this.show = false;
       },
-      async handleMarkAsRead () {
-        const payload = { id: this.notification.id, viewed: true };
-        await this.$apollo.mutate({
-          mutation: MARK_AS_READ_MUTATION,
-          variables: payload
-        });
+      handleMarkAsRead () {
+        // TODO: handleMarkAsRead
+        console.log('NEED TO RECREATE THIS METHOD');
+        // const payload = { id: this.notification.id, viewed: true };
+        // await this.$apollo.mutate({
+        //   mutation: MARK_AS_READ_MUTATION,
+        //   variables: payload
+        // });
         this.show = false;
       }
     },

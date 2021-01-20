@@ -102,7 +102,7 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import { userService } from '~/services';
+  // import { userService } from '~/services';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import Loading from '~/components/Loading.vue';
 
@@ -134,22 +134,23 @@
       ...mapActions({
         success: 'alert/success'
       }),
-      async handleSubmit () {
+      handleSubmit () {
+        // TODO: handleSubmit
+        console.log('NEED TO RECREATE THIS METHOD');
         if (this.$refs.accountSettingsForm.validate()) {
           this.submitting = true;
-          const payload = {
-            fields: { password: this.new_password, password_confirmation: this.confirm_password },
-            apollo: this.$apollo
-          };
-          const res = await userService.updatePassword(payload);
+          // const payload = {
+          //   variables: { password: this.new_password, password_confirmation: this.confirm_password }
+          // };
+          // const res = await userService.updatePassword(payload);
 
-          if (!res.data) {
-            this.hasError = 'There was an error updating your password. Please check all values are correct.';
-            this.submitting = false;
-          } else {
-            this.success('Password successfully updated');
-            this.submitting = false;
-          }
+          // if (!res.data) {
+          //   this.hasError = 'There was an error updating your password. Please check all values are correct.';
+          //   this.submitting = false;
+          // } else {
+          //   this.success('Password successfully updated');
+          //   this.submitting = false;
+          // }
         }
       }
     },

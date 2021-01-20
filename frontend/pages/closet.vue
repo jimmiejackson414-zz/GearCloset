@@ -158,7 +158,7 @@
   import { calculateCategoryWeight, generateUUID } from '~/helpers/functions';
   import { generateThemeOptions } from '~/helpers';
   import isMobile from '~/mixins/isMobile';
-  import { categoryService, itemService, packService } from '~/services';
+  // import { categoryService, itemService, packService } from '~/services';
   import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
   import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
   import LoadingPage from '~/components/LoadingPage.vue';
@@ -251,9 +251,11 @@
           break;
         }
       },
-      async handleDeleteCategory (category) {
-        const payload = { category, apollo: this.$apollo };
-        await categoryService.destroy(payload);
+      handleDeleteCategory (category) {
+        // TODO: handleDeleteCategory
+        console.log('NEED TO REWORK THIS METHOD');
+        // const payload = { category };
+        // await categoryService.destroy(payload);
       },
       handleDeleteCategoryModal (category) {
         this.deleteItem = category;
@@ -265,13 +267,17 @@
         this.modalItem = 'item';
         this.deleteConfirmOpen = true;
       },
-      async handleDeleteItem (item) {
-        const payload = { item, pack_id: this.selectedPackId, apollo: this.$apollo };
-        await itemService.destroy(payload);
+      handleDeleteItem (item) {
+        // TODO: handleDeleteItem
+        console.log('NEED TO REWORK THIS METHOD');
+        // const payload = { item, pack_id: this.selectedPackId };
+        // await itemService.destroy(payload);
       },
-      async handleDeletePack (pack) {
-        const payload = { id: pack.id, apollo: this.$apollo };
-        await packService.destroy(payload);
+      handleDeletePack (pack) {
+        // TODO: handleDeletePack
+        console.log('NEED TO REWORK THIS METHOD');
+        // const payload = { id: pack.id };
+        // await packService.destroy(payload);
       },
       handleDeletePackModal () {
         this.modalItem = 'pack';

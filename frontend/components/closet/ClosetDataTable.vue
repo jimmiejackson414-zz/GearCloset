@@ -300,11 +300,11 @@
   /* eslint-disable camelcase */
   import { mapActions } from 'vuex';
   import createNumberMask from 'text-mask-addons/dist/createNumberMask';
-  import convert from 'convert-units';
+  // import convert from 'convert-units';
   import draggable from 'vuedraggable';
   import WeightRow from './WeightRow.vue';
   import { convertToDollars } from '~/helpers/functions';
-  import { categoryService, itemService } from '~/services';
+  // import { categoryService, itemService } from '~/services';
   import ClickToEdit from '~/components/ClickToEdit.vue';
 
   export default {
@@ -361,36 +361,33 @@
         console.log('data table log: ', evt);
       },
       handleAddNewCategory () {
-        const payload = {
-          fields: { name: 'New Category', pack_id: this.activePack.id },
-          apollo: this.$apollo
-        };
-        categoryService.create(payload);
+        // TODO: handleAddNewCategory
+        console.log('NEED TO RECREATE THIS METHOD');
+        // const payload = { variables: { name: 'New Category', pack_id: this.activePack.id } };
+        // categoryService.create(payload);
       },
       handleAddNewItem (category_id) {
-        const payload = {
-          category_id,
-          pack_id: this.activePack.id,
-          apollo: this.$apollo
-        };
-
-        itemService.create(payload);
+        // TODO: handleAddNewItem
+        console.log('NEED TO RECREATE THIS METHOD');
+        // const payload = { category_id, pack_id: this.activePack.id };
+        // itemService.create(payload);
       },
       handleDeleteCategory (category) {
         this.$emit('handle-delete-category', category);
       },
-      async handleRemoveRow (item, category) {
-        const payload = {
-          fields: {
-            item_id: item.id,
-            category_id: category.id
-          },
-          pack_id: this.activePack.id,
-          apollo: this.$apollo
-        };
+      handleRemoveRow (item, category) {
+        // TODO: handleRemoveRow
+        console.log('NEED TO RECREATE THIS METHOD');
+        // const payload = {
+        //   variables: {
+        //     item_id: item.id,
+        //     category_id: category.id
+        //   },
+        //   pack_id: this.activePack.id,
+        // };
 
-        await itemService.removeItem(payload);
-        this.success('Successfully removed!');
+        // await itemService.removeItem(payload);
+        // this.success('Successfully removed!');
       },
       handleUpdateUnits (event, item) {
         if ('quantity' in item) {
@@ -409,46 +406,45 @@
         const reduced = items.reduce((sum, elem) => sum + Number(elem.price), 0);
         return convertToDollars(reduced);
       },
-      async updateBooleanItem (item, field) {
-        const payload = {
-          fields: { id: item.id, [field]: !item[field] },
-          apollo: this.$apollo
-        };
-        await itemService.update(payload);
+      updateBooleanItem (item, field) {
+        // TODO: updateBooleanItem
+        console.log('NEED TO RECREATE THIS METHOD');
+        // const payload = { variables: { id: item.id, [field]: !item[field] } };
+        // await itemService.update(payload);
       },
-      async updateCategory (value, category, field) {
+      updateCategory (value, category, field) {
+        // TODO: updateCategory
+        console.log('NEED TO RECREATE THIS METHOD');
         // return if value hasn't changed
-        if (value === String(category[field])) { return; }
+        // if (value === String(category[field])) { return; }
 
-        const payload = {
-          fields: { id: category.id, [field]: value },
-          apollo: this.$apollo
-        };
-        await categoryService.update(payload);
+        // const payload = { variables: { id: category.id, [field]: value } };
+        // await categoryService.update(payload);
       },
-      async updateItem (value, item, field) {
+      updateItem (value, item, field) {
+        // TODO: updateItem
+        console.log('NEED TO RECREATE THIS METHOD');
         // return if value hasn't changed
-        if (value === String(item[field])) { return; }
+        // if (value === String(item[field])) { return; }
 
-        const payload = {
-          fields: {
-            id: item.id,
-            [field]: value
-          },
-          apollo: this.$apollo
-        };
+        // const payload = {
+        //   variables: {
+        //     id: item.id,
+        //     [field]: value
+        //   },
+        // };
 
         // handle floating point issue converting between string & number
-        if (field === 'price') {
-          payload.fields.price = Number((value * 100).toFixed(2));
-        }
+        // if (field === 'price') {
+        //   payload.fields.price = Number((value * 100).toFixed(2));
+        // }
 
         // convert back to mg for storage in db
-        if (field === 'weight') {
-          payload.fields.weight = convert(value).from(item.unit).to('mg');
-        }
+        // if (field === 'weight') {
+        //   payload.fields.weight = convert(value).from(item.unit).to('mg');
+        // }
 
-        await itemService.update(payload);
+        // await itemService.update(payload);
       },
       weightTotal (category) {
         const weight = category.items.reduce((sum, elem) => sum + elem.weight, 0);

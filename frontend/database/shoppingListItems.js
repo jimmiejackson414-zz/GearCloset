@@ -28,7 +28,6 @@ export const actions = {
     commit('toggleIsLoading');
 
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
     const { createShoppingListItem } = await shoppingListItemService.create(payload);
 
     commit('createShoppingListItem', createShoppingListItem);
@@ -37,7 +36,6 @@ export const actions = {
   async destroyShoppingListItem ({ commit }, payload) {
     commit('toggleIsLoading');
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
 
     const { deleteShoppingListItem } = await shoppingListItemService.destroy(payload);
     commit('destroyShoppingListItem', deleteShoppingListItem);
@@ -47,7 +45,6 @@ export const actions = {
     commit('toggleIsLoading');
 
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
     const { updateShoppingListItem } = await shoppingListItemService.update(payload);
 
     commit('updateShoppingListItem', updateShoppingListItem);

@@ -52,6 +52,7 @@
         <v-col
           class="post-text"
           cols="9">
+          <!-- eslint-disable -->
           <span
             class="mb-0"
             v-html="postText" />

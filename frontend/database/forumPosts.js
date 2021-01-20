@@ -36,7 +36,7 @@ export const actions = {
     commit('toggleIsLoading');
 
     payload.graphql = this.$graphql;
-    payload.token = this.$cookies.get('gc_token');
+    // payload.token = this.$cookies.get('gc_token');
     const { post } = await forumService.fetchForumPost(payload);
 
     commit('fetchPost', post);

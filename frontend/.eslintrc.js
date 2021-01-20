@@ -40,7 +40,6 @@ module.exports = {
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
     'arrow-parens': 0,
-    'vue/no-v-html': 0,
     'vue/html-self-closing': [
       1,
       {
