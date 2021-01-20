@@ -41,6 +41,7 @@
     "vee-validate": "^3.4.4",
     "vue-chartjs": "^3.5.1",
     "vue-filepond": "^6.0.3",
+    "vue-sanitize": "^0.2.1",
     "vue-unicons": "^2.3.0",
     "vuedraggable": "^2.24.3"
   },

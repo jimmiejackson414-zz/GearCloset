@@ -46,6 +46,7 @@ export default {
     { src: '~/plugins/vue-unicons', mode: 'client' },
     { src: '~/plugins/v-mask', mode: 'client' },
     { src: '~/plugins/tiptap-vuetify', mode: 'client' },
+    { src: '~/plugins/sanitize', mode: 'client' },
     { src: '~/plugins/filters' }
   ],
 

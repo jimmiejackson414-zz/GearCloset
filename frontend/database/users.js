@@ -76,7 +76,9 @@ export const actions = {
       success: !!login.access_token
     };
   },
-  logout ({ commit }) {
+  async logout ({ commit }) {
+    const payload = { graphql: this.$graphql, token: this.$cookies.get('gc_token') };
+    await userService.logout(payload);
     this.$cookies.remove('gc_token');
     commit('logout', null, { root: true });
   },

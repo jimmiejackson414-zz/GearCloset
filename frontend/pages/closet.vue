@@ -191,7 +191,6 @@
       deleteConfirmOpen: false,
       deleteItem: null,
       isMobile: true,
-      isLoading: 0,
       lightGrey: '',
       list: { // TODO: Generate dynamically instead of hard-coded
         id: 1,
@@ -208,6 +207,7 @@
 
     computed: {
       ...mapState({
+        isLoading: state => state.entities.packs.isLoading,
         selectedPackId: state => state.entities.packs.selectedPackId,
         sidebarExpandOnHover: state => state.closet.sidebarExpandOnHover
       }),

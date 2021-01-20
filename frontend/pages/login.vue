@@ -209,7 +209,9 @@
     mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
       // clear token from cookies to make sure user is fully logged out
-      this.logout();
+      if (this.$cookies.get('gc_token')) {
+        this.logout();
+      }
       this.$store.dispatch('entities/deleteAll');
     },
 
