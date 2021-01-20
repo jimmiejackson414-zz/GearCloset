@@ -79,7 +79,7 @@
       ...mapState({
         isLoading: state => state.entities.forumCategories.isLoading
       }),
-      categories: () => ForumCategory.query().with('subcategories').all()
+      categories: () => ForumCategory.query().with('subcategories.posts.comments').all()
     },
 
     methods: {

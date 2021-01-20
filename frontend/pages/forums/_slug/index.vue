@@ -151,9 +151,6 @@
     },
 
     computed: {
-      // ...mapState({
-      //   isLoading: state => state.entities.forumSubcategories.isLoading
-      // }),
       items () {
         return this.subcategory.posts.slice().sort((a, b) => {
           return b.pinned - a.pinned || b.updated_at.localeCompare(a.updated_at);
@@ -194,7 +191,6 @@
         };
       },
       postAuthor (post) {
-        console.log({ post });
         return this.$options.filters.prettyName(post.author);
       }
     },

@@ -9,6 +9,8 @@ type ForumPost {
     slug: String!
     created_at: DateTime!
     updated_at: DateTime!
+    forum_subcategory_id: ID!
+    user_id: ID!
 
     commentCount: Int! @count(relation: "comments")
 

@@ -4,7 +4,7 @@ import { USER_FRAGMENT } from '~/apollo/fragments/user';
 import { COMMENT_FRAGMENT } from '~/apollo/fragments/forum/comment';
 import { SUBCATEGORY_FRAGMENT } from '~/apollo/fragments/forum/subcategory';
 
-export const POST_QUERY = gql`
+export const FORUM_POST_QUERY = gql`
   query Post($slug: String!) {
     post: forumPostBySlug(slug: $slug) {
       ...post
