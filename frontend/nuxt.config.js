@@ -16,11 +16,6 @@ export default {
   },
 
   /*
-  ** SSR Options
-  */
-  ssr: true,
-
-  /*
    ** PublicRuntimeConfig Options
    */
   publicRuntimeConfig: {
@@ -51,6 +46,7 @@ export default {
     { src: '~/plugins/vue-unicons', mode: 'client' },
     { src: '~/plugins/v-mask', mode: 'client' },
     { src: '~/plugins/tiptap-vuetify', mode: 'client' },
+    { src: '~/plugins/sanitize', mode: 'client' },
     { src: '~/plugins/filters' }
   ],
 
@@ -58,6 +54,7 @@ export default {
    ** Nuxt.js dev-modules
    */
   buildModules: [
+    'nuxt-graphql-request',
     '@nuxtjs/eslint-module',
     '@nuxtjs/vuetify',
     '@nuxtjs/style-resources'
@@ -67,10 +64,17 @@ export default {
    ** Nuxt.js build modules
    */
   modules: [
-    '@nuxtjs/apollo',
+    'cookie-universal-nuxt',
     '@nuxtjs/cloudinary',
     '@nuxtjs/dayjs'
   ],
+
+  /*
+  ** GraphQL configuration
+  */
+  graphql: {
+    endpoint: process.env.NUXT_ENV_BACKEND_API_URL
+  },
 
   /*
   ** Cloudinary module configuration
@@ -81,37 +85,6 @@ export default {
     apiSecret: process.env.CLOUDINARY_API_SECRET,
     useComponent: true
   },
-
-  /*
-  ** Apollo module configuration
-  */
-  apollo: {
-    clientConfigs: {
-      default: '~/apollo/config.js'
-    },
-    defaultOptions: {
-      $query: {
-        loadingKey: 'loading'
-      }
-    },
-    includeNodeModules: true,
-    cookieAttributes: {
-      expires: 7 // optional, default 7 days
-    },
-    // watchLoading: '~/apollo/loadingHandler',
-    errorHandler: '~/apollo/errorHandler'
-  },
-
-  /*
-   ** Progressive Web App configuration
-   */
-  // pwa: {
-  //   icon: {
-  //     fileName: 'icon.png',
-  //     source: './static/icon.png',
-  //     sizes: [64, 120, 144, 152, 192, 384, 512]
-  //   }
-  // },
 
   /*
   ** Dayjs module configuration
@@ -207,5 +180,12 @@ export default {
     externals: {
       moment: 'moment'
     }
+    // extend (config, { isDev, isClient }) {
+    //   config.module.rules.push({
+    //     test: /\.(graphql|gql)$/,
+    //     exclude: /node_modules/,
+    //     loader: 'graphql-tag/loader'
+    //   });
+    // }
   }
 };

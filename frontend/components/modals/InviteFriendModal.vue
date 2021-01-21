@@ -35,7 +35,6 @@
             autofocus
             cache-items
             chips
-            clearable
             deletable-chips
             :delimiters="[',', ' ']"
             dense
@@ -94,7 +93,6 @@
 <script>
   import { findIndex } from 'lodash';
   import { mapActions } from 'vuex';
-  import { friendService } from '~/services';
   import { validateEmail } from '~/helpers/functions';
   import Avatar from '~/components/Avatar';
   import Loading from '~/components/Loading';
@@ -141,6 +139,10 @@
         success: 'alert/success',
         error: 'alert/error'
       }),
+      ...mapActions('entities/users', [
+        'fetchFriends',
+        'inviteFriend'
+      ]),
       closeModal () {
         this.show = false;
       },
@@ -166,11 +168,20 @@
         const numFriends = `${this.chosenFriends.length - this.friends.length} ${this.chosenFriends.length === 1 ? 'friend' : 'friends'}`;
 
         const payload = {
-          fields: { trip: this.trip.id, friends: this.chosenFriends },
-          apollo: this.$apollo
+          variables: { trip: this.trip.id, friends: this.chosenFriends }
         };
 
-        await friendService.addFriend(payload);
+        payload.variables.friends.forEach(friend => {
+          delete friend.$id;
+          delete friend.comments;
+          delete friend.pivot;
+          delete friend.notifications;
+          delete friend.packs;
+          delete friend.posts;
+          delete friend.trips;
+        });
+
+        await this.inviteFriend(payload);
 
         this.submitting = false;
         this.$emit('handle-reset-modal');
@@ -178,9 +189,8 @@
       },
       async populateFriends () {
         this.isLoading = true;
-        const payload = { apollo: this.$apollo };
-        const { data } = await friendService.getFriends(payload);
-        this.existingFriends = data.friends;
+        const results = await this.fetchFriends();
+        this.existingFriends = results.friends;
         this.isLoading = false;
       },
       removeItem (item) {
@@ -191,7 +201,6 @@
     mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
       if (this.friends.length) {
-        // this.friends.forEach(friend => delete friend.__typename);
         this.chosenFriends = this.friends;
       }
     },

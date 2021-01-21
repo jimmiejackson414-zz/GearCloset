@@ -39,7 +39,6 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import { packService } from '~/services';
   import Loading from '~/components/Loading.vue';
 
   export default {
@@ -71,14 +70,15 @@
 
     methods: {
       ...mapActions({
+        resetPack: 'entities/packs/resetPack',
         success: 'alert/success'
       }),
       closeModal () {
         this.show = false;
       },
       async handleResetPack () {
-        const payload = { id: this.pack.id, apollo: this.$apollo };
-        await packService.reset(payload);
+        const payload = { variables: { id: this.pack.id } };
+        await this.resetPack(payload);
         this.success('Pack successfully reset');
         this.closeModal();
       }

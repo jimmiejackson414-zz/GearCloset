@@ -4,6 +4,7 @@ type ForumSubcategory {
     slug: String!
     created_at: DateTime!
     updated_at: DateTime!
+    forum_category_id: ID!
 
     postCount: Int! @count(relation: "posts")
 

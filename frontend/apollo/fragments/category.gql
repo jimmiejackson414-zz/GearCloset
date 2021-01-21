@@ -1,7 +1,0 @@
-fragment category on Category {
-  id
-  name
-  unit
-  created_at
-  updated_at
-}

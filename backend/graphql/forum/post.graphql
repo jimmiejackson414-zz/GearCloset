@@ -1,3 +1,7 @@
+extend type Mutation @guard(with: ["api"]) {
+    createPost(text:String! input: ForumPostInput! @spread): ForumPost! @field(resolver: "ForumMutator@createPost")
+}
+
 type ForumPost {
     id: ID!
     title: String!
@@ -5,6 +9,8 @@ type ForumPost {
     slug: String!
     created_at: DateTime!
     updated_at: DateTime!
+    forum_subcategory_id: ID!
+    user_id: ID!
 
     commentCount: Int! @count(relation: "comments")
 
@@ -13,8 +19,10 @@ type ForumPost {
     user: User! @belongsTo
 }
 
-# input ForumPostInput {
-#     title: String
-#     pinned: Boolean
-#     slug: String
-# }
+input ForumPostInput {
+    title: String!
+    pinned: Boolean
+    slug: String
+    forum_subcategory_id: ID!
+    user_id: ID
+}

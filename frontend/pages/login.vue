@@ -6,12 +6,14 @@
       </fade-transition>
     </div>
     <div class="right">
-      <client-only>
-        <slide-fade-transition>
-          <div class="form-wrapper">
+      <slide-fade-transition>
+        <div class="form-wrapper">
+          <validation-observer
+            ref="observer"
+            v-slot="{ invalid }"
+            slim>
             <v-form
               ref="loginForm"
-              v-model="valid"
               @submit.prevent="handleSubmit">
               <div class="form-header">
                 <logo-icon
@@ -24,49 +26,61 @@
               </div>
 
               <!-- Email -->
-              <v-text-field
-                v-model="email"
-                color="primary"
-                dense
-                :disabled="loggingIn"
-                :error="isError"
-                label="Email"
-                outlined
-                required
-                :rules="emailRules"
-                validate-on-blur
-                @keyup.enter="handleSubmit">
-                <template #prepend-inner>
-                  <custom-icon
-                    fill="#0077be"
-                    :height="20"
-                    name="envelope-alt"
-                    :width="20" />
-                </template>
-              </v-text-field>
+              <validation-provider
+                v-slot="{ errors }"
+                mode="eager"
+                name="Email"
+                rules="required|email">
+                <v-text-field
+                  v-model="email"
+                  color="primary"
+                  dense
+                  :disabled="loggingIn"
+                  :error="!!errors.length"
+                  :error-messages="errors"
+                  label="Email"
+                  outlined
+                  required
+                  type="email"
+                  validate-on-blur
+                  @keyup.enter="handleSubmit">
+                  <template #prepend-inner>
+                    <custom-icon
+                      fill="#0077be"
+                      :height="20"
+                      name="envelope-alt"
+                      :width="20" />
+                  </template>
+                </v-text-field>
+              </validation-provider>
 
               <!-- Password -->
-              <v-text-field
-                v-model="password"
-                color="primary"
-                dense
-                :disabled="loggingIn"
-                :error="isError"
-                label="Password"
-                outlined
-                required
-                :rules="passwordRules"
-                type="password"
-                validate-on-blur
-                @keyup.enter="handleSubmit">
-                <template #prepend-inner>
-                  <custom-icon
-                    fill="#0077be"
-                    :height="20"
-                    name="padlock"
-                    :width="20" />
-                </template>
-              </v-text-field>
+              <validation-provider
+                v-slot="{ errors }"
+                name="Password"
+                rules="required">
+                <v-text-field
+                  v-model="password"
+                  color="primary"
+                  dense
+                  :disabled="loggingIn"
+                  :error="!!errors.length"
+                  :error-messages="errors"
+                  label="Password"
+                  outlined
+                  required
+                  type="password"
+                  validate-on-blur
+                  @keyup.enter="handleSubmit">
+                  <template #prepend-inner>
+                    <custom-icon
+                      fill="#0077be"
+                      :height="20"
+                      name="padlock"
+                      :width="20" />
+                  </template>
+                </v-text-field>
+              </validation-provider>
 
               <!-- Form Submit -->
               <div class="btn-actions">
@@ -91,7 +105,7 @@
                   block
                   color="primary"
                   depressed
-                  :disabled="loggingIn"
+                  :disabled="loggingIn || invalid"
                   :ripple="false"
                   type="submit">
                   <loading
@@ -101,7 +115,7 @@
                     width="30px" />
                   <span v-else>Login</span>
                 </v-btn>
-              <!-- <v-btn
+                <!-- <v-btn
                 class="mt-3"
                 color="primary"
                 nuxt
@@ -111,9 +125,9 @@
               </v-btn> -->
               </div>
             </v-form>
-          </div>
-        </slide-fade-transition>
-      </client-only>
+          </validation-observer>
+        </div>
+      </slide-fade-transition>
       <div class="contact-wrapper">
         <div class="contact body-1 mb-2">
           <nuxt-link to="/contact">
@@ -127,13 +141,25 @@
 </template>
 
 <script>
-  import loginMutation from '~/apollo/mutations/auth/login.gql';
+  import { mapActions } from 'vuex';
+  import { email, required } from 'vee-validate/dist/rules';
+  import { extend, ValidationProvider, ValidationObserver } from 'vee-validate';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
   import LogoIcon from '~/components/icons/LogoIcon';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
+
+  extend('required', {
+    ...required,
+    message: '{_field_} is required'
+  });
+
+  extend('email', {
+    ...email,
+    message: 'Please provide a valid email'
+  });
 
   export default {
     layout: 'auth',
@@ -142,45 +168,37 @@
 
     data: () => ({
       email: '',
-      emailRules: [
-        v => !!v || 'Email is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
-      ],
       errorColor: '',
       isError: false,
       loggingIn: false,
-      password: '',
-      passwordRules: [v => !!v || 'Password is required'],
-      valid: false
+      password: ''
     }),
 
     methods: {
+      ...mapActions('entities/users', [
+        'login',
+        'logout'
+      ]),
       async handleSubmit () {
-        if (this.$refs.loginForm.validate()) {
+        if (await this.$refs.observer.validate()) {
           this.loggingIn = true;
 
           const email = this.email;
           const password = this.password;
+          const payload = { variables: { email, password } };
 
           try {
-            const { data: { login }, errors } = await this.$apollo.mutate({
-              mutation: loginMutation,
-              variables: {
-                email,
-                password
-              }
-            });
+            const res = await this.login(payload);
 
-            if (errors?.length) {
+            if (!res.success) {
               this.isError = true;
               this.loggingIn = false;
+              return;
             }
 
-            // set the jwt to the this.$apolloHelpers.onLogin
-            await this.$apolloHelpers.onLogin(login.access_token);
-            this.$router.push({ path: '/closet' });
+            this.$router.push({ path: '/closet ' });
           } catch (e) {
-            console.error('login error: ', e);
+            console.error(e);
             this.isError = true;
             this.loggingIn = false;
           }
@@ -188,10 +206,13 @@
       }
     },
 
-    async mounted () {
+    mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
-      // clear apollo-token from cookies to make sure user is fully logged out
-      await this.$apolloHelpers.onLogout();
+      // clear token from cookies to make sure user is fully logged out
+      if (this.$cookies.get('gc_token')) {
+        this.logout();
+      }
+      this.$store.dispatch('entities/deleteAll');
     },
 
     components: {
@@ -200,7 +221,9 @@
       Loading,
       LoginDescriptionBox,
       LogoIcon,
-      SlideFadeTransition
+      SlideFadeTransition,
+      ValidationObserver,
+      ValidationProvider
     },
 
     head () {

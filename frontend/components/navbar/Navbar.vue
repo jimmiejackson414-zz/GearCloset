@@ -1,6 +1,6 @@
 <template>
   <v-app-bar
-    v-if="!$apollo.loading"
+    v-if="!currentUserLoading"
     id="home-app-bar"
     v-resize="onResize"
     app
@@ -91,7 +91,6 @@
 
     mounted () {
       this.onResize();
-      this.loading = false;
     },
 
     components: {

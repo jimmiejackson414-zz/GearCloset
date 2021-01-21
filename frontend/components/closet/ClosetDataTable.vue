@@ -20,12 +20,14 @@
               <v-btn
                 icon
                 @click="handleDeleteCategory(category)">
-                <unicon
-                  class="pointer"
-                  :fill="errorColor"
-                  height="20"
-                  name="trash-alt"
-                  width="20" />
+                <client-only>
+                  <unicon
+                    class="pointer"
+                    :fill="errorColor"
+                    height="20"
+                    name="trash-alt"
+                    width="20" />
+                </client-only>
               </v-btn>
               <click-to-edit
                 :unique-identifier="`title${category.id}Ref`"
@@ -61,12 +63,14 @@
                     <td
                       :key="`${item.id}-drag-${i}-${index}`"
                       class="px-0 py-1">
-                      <unicon
-                        class="drag"
-                        fill="#9e9e9e"
-                        height="20"
-                        name="grip-horizontal-line"
-                        width="20" />
+                      <client-only>
+                        <unicon
+                          class="drag"
+                          fill="#9e9e9e"
+                          height="20"
+                          name="grip-horizontal-line"
+                          width="20" />
+                      </client-only>
                     </td>
 
                     <!-- Generic Type Click To Edit -->
@@ -101,11 +105,13 @@
                         :ripple="false"
                         text
                         @click.native="updateBooleanItem(item, 'consumable')">
-                        <unicon
-                          fill="#9e9e9e"
-                          height="20"
-                          name="utensils-alt"
-                          width="20" />
+                        <client-only>
+                          <unicon
+                            fill="#9e9e9e"
+                            height="20"
+                            name="utensils-alt"
+                            width="20" />
+                        </client-only>
                       </v-btn>
                     </td>
 
@@ -119,11 +125,13 @@
                         :ripple="false"
                         text
                         @click="updateBooleanItem(item, 'worn')">
-                        <unicon
-                          fill="#9e9e9e"
-                          height="20"
-                          name="layer-group"
-                          width="20" />
+                        <client-only>
+                          <unicon
+                            fill="#9e9e9e"
+                            height="20"
+                            name="layer-group"
+                            width="20" />
+                        </client-only>
                       </v-btn>
                     </td>
 
@@ -144,11 +152,13 @@
                         :unique-identifier="`price${item.id}Ref`"
                         :value="itemPrice(item)"
                         @handle-update-item="updateItem($event, item, 'price')">
-                        <unicon
-                          fill="#494f57"
-                          height="14"
-                          name="dollar-alt"
-                          width="14" />
+                        <client-only>
+                          <unicon
+                            fill="#494f57"
+                            height="14"
+                            name="dollar-alt"
+                            width="14" />
+                        </client-only>
                       </click-to-edit>
                     </td>
 
@@ -172,12 +182,14 @@
                       <v-btn
                         icon
                         @click="handleRemoveRow(item, category)">
-                        <unicon
-                          class="pointer"
-                          :fill="errorColor"
-                          height="20"
-                          name="trash-alt"
-                          width="20" />
+                        <client-only>
+                          <unicon
+                            class="pointer"
+                            :fill="errorColor"
+                            height="20"
+                            name="trash-alt"
+                            width="20" />
+                        </client-only>
                       </v-btn>
                     </td>
                   </tr>
@@ -212,11 +224,13 @@
                       class="text-center"
                       :colspan="1">
                       <span class="price-total">
-                        <unicon
-                          fill="#494f57"
-                          height="14"
-                          name="dollar-alt"
-                          width="14" />
+                        <client-only>
+                          <unicon
+                            fill="#494f57"
+                            height="14"
+                            name="dollar-alt"
+                            width="14" />
+                        </client-only>
                         {{ priceTotal(items) }}
                       </span>
                     </td>
@@ -239,11 +253,13 @@
               :ripple="false"
               text
               @click="handleAddNewItem(category.id)">
-              <unicon
-                :fill="primaryColor"
-                height="18"
-                name="plus"
-                width="18" />
+              <client-only>
+                <unicon
+                  :fill="primaryColor"
+                  height="18"
+                  name="plus"
+                  width="18" />
+              </client-only>
               <p class="body-2 primary--text mb-0 ml-3">
                 Add New Item
               </p>
@@ -262,11 +278,13 @@
               :ripple="false"
               text
               @click="handleAddNewCategory">
-              <unicon
-                :fill="primaryColor"
-                height="18"
-                name="plus"
-                width="18" />
+              <client-only>
+                <unicon
+                  :fill="primaryColor"
+                  height="18"
+                  name="plus"
+                  width="18" />
+              </client-only>
               <p class="body-2 primary--text mb-0 ml-3">
                 Add New Category
               </p>
@@ -281,12 +299,10 @@
 <script>
   /* eslint-disable camelcase */
   import { mapActions } from 'vuex';
-  import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   import convert from 'convert-units';
   import draggable from 'vuedraggable';
   import WeightRow from './WeightRow.vue';
   import { convertToDollars } from '~/helpers/functions';
-  import { categoryService, itemService } from '~/services';
   import ClickToEdit from '~/components/ClickToEdit.vue';
 
   export default {
@@ -316,15 +332,6 @@
     }),
 
     computed: {
-      currencyMask () {
-        return createNumberMask({
-          allowDecimal: true,
-          allowNegative: false,
-          includeThousandsSeparator: true,
-          prefix: '$',
-          thousandsSeparatorSymbol: ','
-        });
-      },
       dragOptions () {
         return {
           animation: 200,
@@ -337,42 +344,37 @@
 
     methods: {
       ...mapActions({
-        success: 'alert/success'
+        createCategory: 'entities/categories/createCategory',
+        createItem: 'entities/items/createItem',
+        removeItem: 'entities/items/removeItem',
+        success: 'alert/success',
+        updateCategory: 'entities/categories/updateCategory',
+        updateItem: 'entities/items/updateItem'
       }),
       log (evt) {
         console.log('data table log: ', evt);
       },
-      handleAddNewCategory () {
-        const payload = {
-          fields: { name: 'New Category', pack_id: this.activePack.id },
-          apollo: this.$apollo
-        };
-        categoryService.create(payload);
+      async handleAddNewCategory () {
+        const payload = { variables: { name: 'New Category', pack_id: this.activePack.id } };
+        await this.createCategory(payload);
       },
-      handleAddNewItem (category_id) {
-        const payload = {
-          category_id,
-          pack_id: this.activePack.id,
-          apollo: this.$apollo
-        };
-
-        itemService.create(payload);
+      async handleAddNewItem (category_id) {
+        const payload = { variables: { category_id, pack_id: this.activePack.id } };
+        await this.createItem(payload);
       },
       handleDeleteCategory (category) {
         this.$emit('handle-delete-category', category);
       },
       async handleRemoveRow (item, category) {
         const payload = {
-          fields: {
+          variables: {
             item_id: item.id,
             category_id: category.id
           },
-          pack_id: this.activePack.id,
-          apollo: this.$apollo
+          pack_id: this.activePack.id
         };
 
-        await itemService.removeItem(payload);
-        this.success('Successfully removed!');
+        await this.removeItem(payload);
       },
       handleUpdateUnits (event, item) {
         if ('quantity' in item) {
@@ -392,32 +394,25 @@
         return convertToDollars(reduced);
       },
       async updateBooleanItem (item, field) {
-        const payload = {
-          fields: { id: item.id, [field]: !item[field] },
-          apollo: this.$apollo
-        };
-        await itemService.update(payload);
+        const payload = { variables: { id: item.id, [field]: !item[field] } };
+        await this.updateItem(payload);
       },
       async updateCategory (value, category, field) {
         // return if value hasn't changed
         if (value === String(category[field])) { return; }
 
-        const payload = {
-          fields: { id: category.id, [field]: value },
-          apollo: this.$apollo
-        };
-        await categoryService.update(payload);
+        const payload = { variables: { id: category.id, [field]: value } };
+        await this.updateCategory(payload);
       },
       async updateItem (value, item, field) {
         // return if value hasn't changed
         if (value === String(item[field])) { return; }
 
         const payload = {
-          fields: {
+          variables: {
             id: item.id,
             [field]: value
-          },
-          apollo: this.$apollo
+          }
         };
 
         // handle floating point issue converting between string & number
@@ -430,7 +425,7 @@
           payload.fields.weight = convert(value).from(item.unit).to('mg');
         }
 
-        await itemService.update(payload);
+        await this.updateItem(payload);
       },
       weightTotal (category) {
         const weight = category.items.reduce((sum, elem) => sum + elem.weight, 0);

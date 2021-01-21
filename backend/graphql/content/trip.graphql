@@ -4,6 +4,7 @@ extend type Query @guard(with: ["api"]) {
 }
 
 extend type Mutation @guard(with: ["api"]) {
+    createTrip(input: TripInput @spread): Trip! @create
     setSelectedPack(input: SelectedPackInput @spread): Trip! @field(resolver: "TripMutator@setSelectedPack")
     updateTrip(id: ID! input: TripInput! @spread): Trip @update
 }

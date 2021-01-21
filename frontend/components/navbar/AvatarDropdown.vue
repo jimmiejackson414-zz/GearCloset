@@ -62,7 +62,7 @@
 </template>
 
 <script>
-  import logoutMutation from '~/apollo/mutations/auth/logout.gql';
+  import { mapActions } from 'vuex';
   import Avatar from '~/components/Avatar.vue';
 
   export default {
@@ -95,15 +95,16 @@
     },
 
     methods: {
+      ...mapActions('entities/users', [
+        'logout'
+      ]),
       async handleLogout () {
         try {
-          await this.$apollo.mutate({
-            mutation: logoutMutation
-          });
+          await this.logout();
 
           this.$router.push({ path: '/login' });
         } catch (e) {
-
+          console.error(e);
         }
       }
     },

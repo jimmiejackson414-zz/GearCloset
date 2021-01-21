@@ -31,12 +31,14 @@
                   class="share-btn"
                   icon
                   :ripple="false"
-                  @click="shareListModalOpen = true">
-                  <custom-icon
-                    :fill="lightGrey"
-                    :height="20"
-                    name="share"
-                    :width="20" />
+                  @click="handleSharePackListModal">
+                  <client-only>
+                    <unicon
+                      :fill="lightGrey"
+                      height="20"
+                      name="share"
+                      width="20" />
+                  </client-only>
                   <p class="body-2 mb-0 grey7--text">
                     Share
                   </p>
@@ -57,11 +59,11 @@
                     :ripple="false"
                     text
                     v-on="on">
-                    <custom-icon
+                    <unicon
                       :fill="lightGrey"
-                      :height="25"
+                      height="25"
                       name="setting"
-                      :width="25" />
+                      width="25" />
                   </v-btn>
                 </template>
                 <v-list>
@@ -127,7 +129,7 @@
       <!-- Modals -->
       <share-pack-list-modal
         v-model="shareListModalOpen"
-        :list="list" />
+        :pack-list="packList" />
 
       <pack-theme-modal
         v-model="packThemeModalOpen"
@@ -149,21 +151,18 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex';
+  // eslint-disable-next-line no-unused-vars
+  import { mapActions, mapMutations, mapState } from 'vuex';
   import convert from 'convert-units';
   import { calculateCategoryWeight, generateUUID } from '~/helpers/functions';
   import { generateThemeOptions } from '~/helpers';
   import isMobile from '~/mixins/isMobile';
-  // eslint-disable-next-line no-unused-vars
-  import { categoryService, itemService, packService } from '~/services';
   import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
   import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import LoadingPage from '~/components/LoadingPage.vue';
+  import Pack from '~/database/models/pack';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
   import TotalsTable from '~/components/closet/TotalsTable.vue';
-  import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
-  import SELECTED_PACK_QUERY from '~/apollo/queries/content/pack.gql';
 
   export default {
     name: 'ClosetPage',
@@ -172,23 +171,11 @@
 
     middleware: 'authenticated',
 
-    apollo: {
-      packs: {
-        query: PACKS_QUERY,
-        loadingKey: 'isLoading',
-        result ({ data: { packs } }) {
-          this.selectedPackId = packs.length ? packs[0].id : null;
-        }
-      },
-      selectedPack: {
-        query: SELECTED_PACK_QUERY,
-        prefetch: false,
-        loadingKey: 'loadingPack',
-        variables () {
-          return {
-            id: this.selectedPackId
-          };
-        }
+    async fetch () {
+      await this.fetchPacks();
+      if (this.packs.length) {
+        this.$store.commit('entities/packs/setSelectedPackId', this.packs[0].id);
+        this.setChartData();
       }
     },
 
@@ -202,24 +189,20 @@
       deleteConfirmOpen: false,
       deleteItem: null,
       isMobile: true,
-      isLoading: 0,
       lightGrey: '',
-      list: { // TODO: Generate dynamically instead of hard-coded
-        id: 1,
-        title: 'Summer',
-        uuid: generateUUID()
-      },
+      packList: {},
       loadingPack: 0,
       localTheme: '',
       modalItem: '',
       packThemeModalOpen: false,
       resetPackModalOpen: false,
-      selectedPackId: null,
       shareListModalOpen: false
     }),
 
     computed: {
       ...mapState({
+        isLoading: state => state.entities.packs.isLoading,
+        selectedPackId: state => state.entities.packs.selectedPackId,
         sidebarExpandOnHover: state => state.closet.sidebarExpandOnHover
       }),
       graphStyles () {
@@ -230,6 +213,10 @@
           width: `${this.chartWidth}px`
         };
       },
+      packs: () => Pack.query().with('categories.items').all(),
+      selectedPack () {
+        return Pack.selectedPack();
+      },
       themeOptions () {
         return generateThemeOptions();
       }
@@ -238,6 +225,17 @@
     methods: {
       ...mapActions('closet', [
         'toggleSidebarExpandOnHover'
+      ]),
+      ...mapActions('entities/packs', [
+        'destroyPack',
+        'fetchPacks',
+        'updatePack'
+      ]),
+      ...mapActions('entities/categories', [
+        'destroyCategory'
+      ]),
+      ...mapActions('entities/items', [
+        'destroyItem'
       ]),
       handleDelete (data) {
         switch (this.modalItem) {
@@ -254,9 +252,9 @@
           break;
         }
       },
-      async handleDeleteCategory (category) {
-        const payload = { category, apollo: this.$apollo };
-        await categoryService.destroy(payload);
+      handleDeleteCategory (category) {
+        const payload = { variables: { category } };
+        this.destroyCategory(payload);
       },
       handleDeleteCategoryModal (category) {
         this.deleteItem = category;
@@ -269,12 +267,12 @@
         this.deleteConfirmOpen = true;
       },
       async handleDeleteItem (item) {
-        const payload = { item, pack_id: this.selectedPackId, apollo: this.$apollo };
-        await itemService.destroy(payload);
+        const payload = { variables: { item, pack_id: this.selectedPackId } };
+        await this.destroyItem(payload);
       },
       async handleDeletePack (pack) {
-        const payload = { id: pack.id, apollo: this.$apollo };
-        await packService.destroy(payload);
+        const payload = { variables: { id: pack.id } };
+        await this.destroyPack(payload);
       },
       handleDeletePackModal () {
         this.modalItem = 'pack';
@@ -284,15 +282,19 @@
       handleSelectedPack (pack) {
         this.selectedPackId = pack.id;
       },
-      handleUpdatePackTheme (theme) {
+      handleSharePackListModal () {
+        this.packList = {
+          ...this.selectedPack,
+          uuid: generateUUID()
+        };
+        this.shareListModalOpen = true;
+      },
+      async handleUpdatePackTheme (theme) {
         this.localTheme = theme;
         this.packThemeModalOpen = false;
 
-        const payload = {
-          fields: { id: this.selectedPack.id, theme },
-          apollo: this.$apollo
-        };
-        packService.update(payload);
+        const payload = { variables: { id: this.selectedPack.id, theme } };
+        await this.updatePack(payload);
       },
       onResize () {
         console.log('onResize');
@@ -313,7 +315,7 @@
         this.chartData.datasets = [{
           label: 'Selected Pack Graph',
           data: this.selectedPack.categories.map(category => {
-            return convert(calculateCategoryWeight(category)).from('mg').to('lb').toFixed(2);
+            return parseFloat(convert(calculateCategoryWeight(category)).from('g').to(category.unit)).toFixed(2);
           })
         }];
       }
@@ -332,7 +334,6 @@
     components: {
       ClosetDataTable,
       ClosetSidebar,
-      CustomIcon,
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
       LoadingPage,
       SelectedPackGraph,

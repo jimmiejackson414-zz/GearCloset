@@ -49,7 +49,7 @@
 
 <script>
   export default {
-    name: 'NewUser',
+    name: 'Onboarding',
 
     data: () => ({
       currentStep: 1

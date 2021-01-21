@@ -31,11 +31,11 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <custom-icon
+                <unicon
                   fill="#494f57"
-                  :height="14"
+                  height="14"
                   name="dollar-alt"
-                  :width="14" />
+                  width="14" />
                 {{ priceTotal(category) }}
               </div>
             </td>
@@ -54,11 +54,11 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <custom-icon
+                <unicon
                   fill="#494f57"
-                  :height="14"
+                  height="14"
                   name="dollar-alt"
-                  :width="14" />
+                  width="14" />
                 {{ prices.consumable }}
               </div>
             </td>
@@ -77,11 +77,11 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <custom-icon
+                <unicon
                   fill="#494f57"
-                  :height="14"
+                  height="14"
                   name="dollar-alt"
-                  :width="14" />
+                  width="14" />
                 {{ prices.worn }}
               </div>
             </td>
@@ -100,11 +100,11 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <custom-icon
+                <unicon
                   fill="#494f57"
-                  :height="14"
+                  height="14"
                   name="dollar-alt"
-                  :width="14" />
+                  width="14" />
                 {{ prices.base }}
               </div>
             </td>
@@ -123,11 +123,11 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <custom-icon
+                <unicon
                   fill="#494f57"
-                  :height="14"
+                  height="14"
                   name="dollar-alt"
-                  :width="14" />
+                  width="14" />
                 {{ prices.total }}
               </div>
             </td>
@@ -147,7 +147,6 @@
 <script>
   import convert from 'convert-units';
   import { calculatePackPrices, calculatePackWeights, convertToDollars } from '~/helpers/functions';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     props: {
@@ -190,10 +189,6 @@
         const reduced = category.items.reduce((sum, elem) => sum + Number(elem.price), 0);
         return convertToDollars(reduced);
       }
-    },
-
-    components: {
-      CustomIcon
     }
   };
 </script>

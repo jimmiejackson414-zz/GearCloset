@@ -95,7 +95,7 @@
 </template>
 
 <script>
-  import resetPasswordMutation from '~/apollo/mutations/auth/resetPassword.gql';
+  import { mapActions } from 'vuex';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import FadeTransition from '~/components/transitions/FadeTransition.vue';
   import Loading from '~/components/Loading.vue';
@@ -121,20 +121,20 @@
     },
 
     methods: {
+      ...mapActions('entities/users', [
+        'forgotPassword'
+      ]),
       async handleSubmit () {
         if (this.$refs.forgotPasswordForm.validate()) {
           this.submitting = true;
-          const email = this.email;
-
           try {
-            const { errors } = await this.$apollo.mutate({
-              mutation: resetPasswordMutation,
-              variables: {
-                email
-              }
-            });
+            const payload = { variables: { email: this.email } };
+            const res = await this.forgotPassword(payload);
 
-            if (errors?.length) {
+            // TODO: Determine correct response status, and handle
+            // what happens when correct response is returned,
+            // e.g. "An email has been sent"
+            if (!res.status) {
               this.isError = true;
               this.submitting = false;
             }
