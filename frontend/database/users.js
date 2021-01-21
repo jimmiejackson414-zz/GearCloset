@@ -61,6 +61,11 @@ export const actions = {
     commit('fetchFriends', friends);
     return { friends };
   },
+  async forgotPassword ({ commit }, payload) {
+    payload.graphql = this.$graphql;
+    const { forgotPassword } = await userService.forgotPassword(payload);
+    return { forgotPassword };
+  },
   async login ({ commit }, payload) {
     payload.graphql = this.$graphql;
     const { login } = await userService.login(payload);

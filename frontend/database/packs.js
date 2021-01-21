@@ -8,9 +8,18 @@ export const state = () => ({
 });
 
 export const mutations = {
+  destroyPack (state, pack) {
+    Pack.delete(pack.id);
+  },
   fetchPacks (state, packs) {
     Pack.insertOrUpdate({
       data: [...packs]
+    });
+  },
+  resetPack (state, pack) {
+    Pack.update({
+      where: pack.id,
+      data: { ...pack }
     });
   },
   setSelectedPackId (state, id) {
@@ -22,20 +31,32 @@ export const mutations = {
 };
 
 export const actions = {
+  async destroyPack ({ commit }, payload) {
+    commit('toggleIsLoading');
+    payload.graphql = this.$graphql;
+
+    const { destroyPack } = await packService.destroy(payload);
+    commit('destroyPack', destroyPack);
+    commit('toggleIsLoading');
+  },
   async fetchPacks ({ commit }) {
     commit('toggleIsLoading');
-    const token = this.$cookies.get('gc_token');
-    const payload = { graphql: this.$graphql, token };
+    const payload = { graphql: this.$graphql };
 
     const { packs } = await packService.getPacks(payload);
     commit('fetchPacks', packs);
     commit('toggleIsLoading');
   },
+  async resetPack ({ commit }, payload) {
+    commit('toggleIsLoading');
+    payload.graphql = this.$graphql;
+    const { resetPack } = await packService.reset(payload);
+    commit('resetPack', resetPack);
+    commit('toggleIsLoading');
+  },
   async update ({ commit }, payload) {
     commit('toggleIsLoading');
-    const token = this.$cookies.get('gc_token');
     payload.graphql = this.$graphql;
-    payload.token = token;
 
     const { updatePack } = await packService.update(payload);
     Pack.insertOrUpdate({

@@ -19,9 +19,12 @@ import TripUser from './models/tripUser';
 import User from './models/user';
 
 // Import Vuex modules
+import * as categories from '~/database/categories';
 import * as forumCategories from '~/database/forumCategories';
 import * as forumPosts from '~/database/forumPosts';
 import * as forumSubcategories from '~/database/forumSubcategories';
+import * as items from '~/database/items';
+import * as notifications from '~/database/notifications';
 import * as packs from '~/database/packs';
 import * as shoppingListItems from '~/database/shoppingListItems';
 import * as todos from '~/database/todos';
@@ -31,15 +34,15 @@ import * as users from '~/database/users';
 
 // Register VuexORM databases
 const database = new Database();
-database.register(Category, {});
+database.register(Category, categories);
 database.register(CategoryItem, {});
 database.register(ForumCategory, forumCategories);
 database.register(ForumComment, {});
 database.register(ForumPost, forumPosts);
 database.register(ForumSubcategory, forumSubcategories);
 database.register(FriendUser, {});
-database.register(Item, {});
-database.register(Notification, {});
+database.register(Item, items);
+database.register(Notification, notifications);
 database.register(Pack, packs);
 database.register(ShoppingListItem, shoppingListItems);
 database.register(Todo, todos);

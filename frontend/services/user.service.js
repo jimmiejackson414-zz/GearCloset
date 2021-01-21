@@ -1,6 +1,7 @@
 import { ADD_FRIENDS_MUTATION } from '~/apollo/mutations/planning/addFriends';
 import { FRIEND_QUERY } from '~/apollo/queries/user/friend';
 import { FRIENDS_QUERY } from '~/apollo/queries/user/friends';
+import { RESET_PASSWORD_MUTATION } from '~/apollo/mutations/auth/resetPassword';
 import { LOGIN_MUTATION } from '~/apollo/mutations/auth/login';
 import { LOGOUT_MUTATION } from '~/apollo/mutations/auth/logout';
 import { REGISTER_MUTATION } from '~/apollo/mutations/auth/register';
@@ -18,6 +19,10 @@ async function fetchFriend ({ variables, graphql }) {
 
 async function fetchFriends ({ variables, graphql }) {
   return await graphql.request(FRIENDS_QUERY, variables);
+}
+
+async function forgotPassword ({ variables, graphql }) {
+  return await graphql.request(RESET_PASSWORD_MUTATION, variables);
 }
 
 async function login ({ variables, graphql }) {
@@ -48,6 +53,7 @@ export const userService = {
   addFriends,
   fetchFriend,
   fetchFriends,
+  forgotPassword,
   login,
   logout,
   register,

@@ -299,12 +299,10 @@
 <script>
   /* eslint-disable camelcase */
   import { mapActions } from 'vuex';
-  import createNumberMask from 'text-mask-addons/dist/createNumberMask';
-  // import convert from 'convert-units';
+  import convert from 'convert-units';
   import draggable from 'vuedraggable';
   import WeightRow from './WeightRow.vue';
   import { convertToDollars } from '~/helpers/functions';
-  // import { categoryService, itemService } from '~/services';
   import ClickToEdit from '~/components/ClickToEdit.vue';
 
   export default {
@@ -334,15 +332,6 @@
     }),
 
     computed: {
-      currencyMask () {
-        return createNumberMask({
-          allowDecimal: true,
-          allowNegative: false,
-          includeThousandsSeparator: true,
-          prefix: '$',
-          thousandsSeparatorSymbol: ','
-        });
-      },
       dragOptions () {
         return {
           animation: 200,
@@ -355,39 +344,37 @@
 
     methods: {
       ...mapActions({
-        success: 'alert/success'
+        createCategory: 'entities/categories/createCategory',
+        createItem: 'entities/items/createItem',
+        removeItem: 'entities/items/removeItem',
+        success: 'alert/success',
+        updateCategory: 'entities/categories/updateCategory',
+        updateItem: 'entities/items/updateItem'
       }),
       log (evt) {
         console.log('data table log: ', evt);
       },
-      handleAddNewCategory () {
-        // TODO: handleAddNewCategory
-        console.log('NEED TO RECREATE THIS METHOD');
-        // const payload = { variables: { name: 'New Category', pack_id: this.activePack.id } };
-        // categoryService.create(payload);
+      async handleAddNewCategory () {
+        const payload = { variables: { name: 'New Category', pack_id: this.activePack.id } };
+        await this.createCategory(payload);
       },
-      handleAddNewItem (category_id) {
-        // TODO: handleAddNewItem
-        console.log('NEED TO RECREATE THIS METHOD');
-        // const payload = { category_id, pack_id: this.activePack.id };
-        // itemService.create(payload);
+      async handleAddNewItem (category_id) {
+        const payload = { variables: { category_id, pack_id: this.activePack.id } };
+        await this.createItem(payload);
       },
       handleDeleteCategory (category) {
         this.$emit('handle-delete-category', category);
       },
-      handleRemoveRow (item, category) {
-        // TODO: handleRemoveRow
-        console.log('NEED TO RECREATE THIS METHOD');
-        // const payload = {
-        //   variables: {
-        //     item_id: item.id,
-        //     category_id: category.id
-        //   },
-        //   pack_id: this.activePack.id,
-        // };
+      async handleRemoveRow (item, category) {
+        const payload = {
+          variables: {
+            item_id: item.id,
+            category_id: category.id
+          },
+          pack_id: this.activePack.id
+        };
 
-        // await itemService.removeItem(payload);
-        // this.success('Successfully removed!');
+        await this.removeItem(payload);
       },
       handleUpdateUnits (event, item) {
         if ('quantity' in item) {
@@ -406,45 +393,39 @@
         const reduced = items.reduce((sum, elem) => sum + Number(elem.price), 0);
         return convertToDollars(reduced);
       },
-      updateBooleanItem (item, field) {
-        // TODO: updateBooleanItem
-        console.log('NEED TO RECREATE THIS METHOD');
-        // const payload = { variables: { id: item.id, [field]: !item[field] } };
-        // await itemService.update(payload);
+      async updateBooleanItem (item, field) {
+        const payload = { variables: { id: item.id, [field]: !item[field] } };
+        await this.updateItem(payload);
       },
-      updateCategory (value, category, field) {
-        // TODO: updateCategory
-        console.log('NEED TO RECREATE THIS METHOD');
+      async updateCategory (value, category, field) {
         // return if value hasn't changed
-        // if (value === String(category[field])) { return; }
+        if (value === String(category[field])) { return; }
 
-        // const payload = { variables: { id: category.id, [field]: value } };
-        // await categoryService.update(payload);
+        const payload = { variables: { id: category.id, [field]: value } };
+        await this.updateCategory(payload);
       },
-      updateItem (value, item, field) {
-        // TODO: updateItem
-        console.log('NEED TO RECREATE THIS METHOD');
+      async updateItem (value, item, field) {
         // return if value hasn't changed
-        // if (value === String(item[field])) { return; }
+        if (value === String(item[field])) { return; }
 
-        // const payload = {
-        //   variables: {
-        //     id: item.id,
-        //     [field]: value
-        //   },
-        // };
+        const payload = {
+          variables: {
+            id: item.id,
+            [field]: value
+          }
+        };
 
         // handle floating point issue converting between string & number
-        // if (field === 'price') {
-        //   payload.fields.price = Number((value * 100).toFixed(2));
-        // }
+        if (field === 'price') {
+          payload.fields.price = Number((value * 100).toFixed(2));
+        }
 
         // convert back to mg for storage in db
-        // if (field === 'weight') {
-        //   payload.fields.weight = convert(value).from(item.unit).to('mg');
-        // }
+        if (field === 'weight') {
+          payload.fields.weight = convert(value).from(item.unit).to('mg');
+        }
 
-        // await itemService.update(payload);
+        await this.updateItem(payload);
       },
       weightTotal (category) {
         const weight = category.items.reduce((sum, elem) => sum + elem.weight, 0);

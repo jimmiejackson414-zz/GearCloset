@@ -53,10 +53,11 @@
 
 <script>
   import { mapActions } from 'vuex';
+  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     props: {
-      list: {
+      packList: {
         type: Object,
         default: () => {},
         required: true
@@ -69,7 +70,7 @@
 
     computed: {
       shareableUrl () {
-        return `${process.env.baseUrl}/share/${this.list.uuid}`;
+        return `${process.env.NUXT_ENV_API_URL}/share/${this.packList.uuid}`;
       },
       show: {
         get () {
@@ -94,6 +95,10 @@
         document.execCommand('copy');
         this.success('Copied to clipboard.');
       }
+    },
+
+    components: {
+      CustomIcon
     }
   };
 </script>

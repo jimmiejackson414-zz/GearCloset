@@ -213,8 +213,8 @@
 
 <script>
   /* eslint-disable camelcase */
+  import { mapActions } from 'vuex';
   import { countries } from '~/helpers';
-  // import { userService } from '~/services';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import ImageUploader from '~/components/ImageUploader.vue';
   import Loading from '~/components/Loading.vue';
@@ -254,29 +254,27 @@
     },
 
     methods: {
-      handleImageUpload (avatar) {
-        // TODO: handleImageUpload
-        console.log('NEED TO RECREATE THIS METHOD');
-        // const payload = { variables: { file: avatar } };
-        // await userService.updateAvatar(payload);
+      ...mapActions('entities/users', [
+        'updateAvatar',
+        'updateUser'
+      ]),
+      async handleImageUpload (avatar) {
+        const payload = { variables: { file: avatar } };
+        await this.updateAvatar(payload);
       },
-      handleSubmit () {
+      async handleSubmit () {
         if (this.$refs.userSettingsForm.validate()) {
           this.submitting = true;
 
-          // TODO: handleSubmit
-          console.log('NEED TO RECREATE THIS METHOD');
-          // const payload = { variables: { id: this.currentUser.id, ...this.localUser } };
-          // await userService.update(payload);
+          const payload = { variables: { id: this.currentUser.id, ...this.localUser } };
+          await this.updateUser(payload);
 
           this.submitting = false;
         }
       },
-      removeAvatar () {
-        // TODO: removeAvatar
-        console.log('NEED TO RECREATE THIS METHOD');
-        // const payload = { variables: { file: null } };
-        // await userService.updateAvatar(payload);
+      async removeAvatar () {
+        const payload = { variables: { file: null } };
+        await this.updateAvatar(payload);
       }
     },
 

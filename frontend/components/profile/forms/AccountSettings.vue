@@ -132,18 +132,17 @@
 
     methods: {
       ...mapActions({
-        success: 'alert/success'
+        success: 'alert/success',
+        updatePassword: 'entities/users/updatePassword'
       }),
-      handleSubmit () {
-        // TODO: handleSubmit
-        console.log('NEED TO RECREATE THIS METHOD');
+      async handleSubmit () {
         if (this.$refs.accountSettingsForm.validate()) {
           this.submitting = true;
-          // const payload = {
-          //   variables: { password: this.new_password, password_confirmation: this.confirm_password }
-          // };
-          // const res = await userService.updatePassword(payload);
-
+          const payload = {
+            variables: { password: this.new_password, password_confirmation: this.confirm_password }
+          };
+          await this.updatePassword(payload);
+          this.submitting = false;
           // if (!res.data) {
           //   this.hasError = 'There was an error updating your password. Please check all values are correct.';
           //   this.submitting = false;

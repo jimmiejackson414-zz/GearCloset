@@ -95,7 +95,7 @@
 </template>
 
 <script>
-  // import { RESET_PASSWORD_MUTATION } from '~/apollo/mutations/auth/resetPassword';
+  import { mapActions } from 'vuex';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import FadeTransition from '~/components/transitions/FadeTransition.vue';
   import Loading from '~/components/Loading.vue';
@@ -121,30 +121,28 @@
     },
 
     methods: {
-      handleSubmit () {
+      ...mapActions('entities/users', [
+        'forgotPassword'
+      ]),
+      async handleSubmit () {
         if (this.$refs.forgotPasswordForm.validate()) {
-          // TODO: handleSubmit
-          console.log('NEED TO REWORK THIS METHOD');
           this.submitting = true;
-          // const email = this.email;
+          try {
+            const payload = { variables: { email: this.email } };
+            const res = await this.forgotPassword(payload);
 
-          // try {
-          //   const { errors } = await this.$apollo.mutate({
-          //     mutation: RESET_PASSWORD_MUTATION,
-          //     variables: {
-          //       email
-          //     }
-          //   });
-
-          //   if (errors?.length) {
-          //     this.isError = true;
-          //     this.submitting = false;
-          //   }
-          // } catch (e) {
-          //   console.error('reset password error: ', e);
-          //   this.isError = true;
-          //   this.submitting = false;
-          // }
+            // TODO: Determine correct response status, and handle
+            // what happens when correct response is returned,
+            // e.g. "An email has been sent"
+            if (!res.status) {
+              this.isError = true;
+              this.submitting = false;
+            }
+          } catch (e) {
+            console.error('reset password error: ', e);
+            this.isError = true;
+            this.submitting = false;
+          }
         }
       }
     },

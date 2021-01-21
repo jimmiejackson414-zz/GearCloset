@@ -17,10 +17,11 @@ export const mutations = {
 };
 
 export const actions = {
+
   async fetchForumIndex ({ commit }) {
     commit('toggleIsLoading');
 
-    const payload = { graphql: this.$graphql, token: this.$cookies.get('gc_token') };
+    const payload = { graphql: this.$graphql };
     const { forumCategories } = await forumService.fetchForumIndex(payload);
 
     commit('setForumCategories', forumCategories);

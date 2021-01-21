@@ -65,6 +65,7 @@
           <v-btn
             block
             color="primary"
+            :disabled="isDisabled"
             text
             @click="handleMarkAllAsRead">
             Mark All As Read
@@ -88,9 +89,8 @@
 
 <script>
   import * as dayjs from 'dayjs';
+  import { mapActions } from 'vuex';
   import relativeTime from 'dayjs/plugin/relativeTime';
-  // import { MARK_ALL_READ_MUTATION } from '~/apollo/mutations/notifications/markAllRead';
-  // import { ME_QUERY } from '~/apollo/queries/user/me';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
@@ -112,26 +112,23 @@
     }),
 
     computed: {
+      isDisabled () {
+        return !this.currentUser.notifications.length;
+      },
       showBadge () {
         return this.currentUser?.notifications.some(notification => !notification.viewed);
       }
     },
 
     methods: {
+      ...mapActions('entities/notifications', [
+        'markAllAsRead'
+      ]),
       formatDate (item) {
         return dayjs(item.date).fromNow();
       },
-      handleMarkAllAsRead () {
-        // TODO: handleMarkAllAsRead
-        console.log('NEED TO RECREATE THIS METHOD');
-        // await this.$apollo.mutate({
-        //   mutation: MARK_ALL_READ_MUTATION,
-        //   update (store, { data: { markAllRead } }) {
-        //     const data = store.readQuery({ query: ME_QUERY });
-        //     data.currentUser.notifications = markAllRead.notifications;
-        //     store.writeQuery({ query: ME_QUERY, data });
-        //   }
-        // });
+      async handleMarkAllAsRead () {
+        await this.markAllAsRead();
       },
       handleShowNotification (item) {
         this.activeNotification = item;
@@ -139,7 +136,7 @@
       },
       openNotificationsMenu (e) {
         this.showMenu = true;
-        this.menuPosition.x = e.clientX - 250;
+        this.menuPosition.x = e.clientX - 150;
         if (e.clientY < 60) {
           this.menuPosition.y = 60;
         } else {

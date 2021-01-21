@@ -31,7 +31,7 @@
                   class="share-btn"
                   icon
                   :ripple="false"
-                  @click="shareListModalOpen = true">
+                  @click="handleSharePackListModal">
                   <client-only>
                     <unicon
                       :fill="lightGrey"
@@ -130,7 +130,7 @@
       <!-- Modals -->
       <share-pack-list-modal
         v-model="shareListModalOpen"
-        :list="list" />
+        :pack-list="packList" />
 
       <pack-theme-modal
         v-model="packThemeModalOpen"
@@ -158,7 +158,6 @@
   import { calculateCategoryWeight, generateUUID } from '~/helpers/functions';
   import { generateThemeOptions } from '~/helpers';
   import isMobile from '~/mixins/isMobile';
-  // import { categoryService, itemService, packService } from '~/services';
   import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
   import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
   import LoadingPage from '~/components/LoadingPage.vue';
@@ -192,11 +191,7 @@
       deleteItem: null,
       isMobile: true,
       lightGrey: '',
-      list: { // TODO: Generate dynamically instead of hard-coded
-        id: 1,
-        title: 'Summer',
-        uuid: generateUUID()
-      },
+      packList: {},
       loadingPack: 0,
       localTheme: '',
       modalItem: '',
@@ -233,8 +228,15 @@
         'toggleSidebarExpandOnHover'
       ]),
       ...mapActions('entities/packs', [
+        'destroyPack',
         'fetchPacks',
         'updatePack'
+      ]),
+      ...mapActions('entities/categories', [
+        'destroyCategory'
+      ]),
+      ...mapActions('entities/items', [
+        'destroyItem'
       ]),
       handleDelete (data) {
         switch (this.modalItem) {
@@ -252,10 +254,8 @@
         }
       },
       handleDeleteCategory (category) {
-        // TODO: handleDeleteCategory
-        console.log('NEED TO REWORK THIS METHOD');
-        // const payload = { category };
-        // await categoryService.destroy(payload);
+        const payload = { variables: { category } };
+        this.destroyCategory(payload);
       },
       handleDeleteCategoryModal (category) {
         this.deleteItem = category;
@@ -267,17 +267,13 @@
         this.modalItem = 'item';
         this.deleteConfirmOpen = true;
       },
-      handleDeleteItem (item) {
-        // TODO: handleDeleteItem
-        console.log('NEED TO REWORK THIS METHOD');
-        // const payload = { item, pack_id: this.selectedPackId };
-        // await itemService.destroy(payload);
+      async handleDeleteItem (item) {
+        const payload = { variables: { item, pack_id: this.selectedPackId } };
+        await this.destroyItem(payload);
       },
-      handleDeletePack (pack) {
-        // TODO: handleDeletePack
-        console.log('NEED TO REWORK THIS METHOD');
-        // const payload = { id: pack.id };
-        // await packService.destroy(payload);
+      async handleDeletePack (pack) {
+        const payload = { variables: { id: pack.id } };
+        await this.destroyPack(payload);
       },
       handleDeletePackModal () {
         this.modalItem = 'pack';
@@ -286,6 +282,13 @@
       },
       handleSelectedPack (pack) {
         this.selectedPackId = pack.id;
+      },
+      handleSharePackListModal () {
+        this.packList = {
+          ...this.selectedPack,
+          uuid: generateUUID()
+        };
+        this.shareListModalOpen = true;
       },
       async handleUpdatePackTheme (theme) {
         this.localTheme = theme;
