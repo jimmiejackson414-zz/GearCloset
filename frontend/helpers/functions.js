@@ -1,7 +1,7 @@
 import Dinero from 'dinero.js';
 Dinero.defaultPrecision = 2;
 
-export const calculateCategoryWeight = category => category.items.reduce((sum, elem) => sum + +elem.weight, 0);
+export const calculateCategoryWeight = category => category.items.reduce((sum, elem) => sum + (+elem.weight * elem.quantity), 0);
 
 export const calculatePackPrices = pack => {
   const data = { total: 0, base: 0, worn: 0, consumable: 0 };

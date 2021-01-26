@@ -182,6 +182,7 @@
     },
 
     data: () => ({
+      animationComplete: false,
       chartData: {
         labels: null,
         datasets: null
@@ -204,7 +205,6 @@
     computed: {
       ...mapState({
         isLoading: state => state.entities.packs.isLoading,
-        selectedPackId: state => state.entities.packs.selectedPackId,
         sidebarExpandOnHover: state => state.closet.sidebarExpandOnHover
       }),
       graphStyles () {
@@ -216,6 +216,14 @@
         };
       },
       packs: () => Pack.query().with('categories.items').all(),
+      selectedPackId: {
+        get () {
+          return this.$store.state.entities.packs.selectedPackId;
+        },
+        set (newValue) {
+          this.$store.commit('entities/packs/setSelectedPackId', newValue);
+        }
+      },
       selectedPack () {
         return Pack.selectedPack();
       },
@@ -309,16 +317,18 @@
         }
       },
       setChartData () {
-        this.localTheme = this.selectedPack.theme;
-        this.chartData.labels = this.selectedPack.categories.map(category => {
-          return this.$options.filters.truncate(category.name, 20);
-        });
-        this.chartData.datasets = [{
-          label: 'Selected Pack Graph',
-          data: this.selectedPack.categories.map(category => {
-            return parseFloat(convert(calculateCategoryWeight(category)).from('g').to(category.unit)).toFixed(2);
-          })
-        }];
+        if (this.selectedPack) {
+          this.localTheme = this.selectedPack.theme;
+          this.chartData.labels = this.selectedPack.categories.map(category => {
+            return this.$options.filters.truncate(category.name, 20);
+          });
+          this.chartData.datasets = [{
+            label: 'Selected Pack Graph',
+            data: this.selectedPack.categories.map(category => {
+              return parseFloat(convert(calculateCategoryWeight(category)).from('g').to(category.unit)).toFixed(2);
+            })
+          }];
+        }
       }
     },
 

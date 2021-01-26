@@ -139,7 +139,7 @@
                     <weight-row
                       :identifier="`${item.id}-weight-${i}-${index}`"
                       :item="item"
-                      @handle-update-item="updateItem"
+                      @handle-update-item="handleUpdateItem"
                       @handle-update-units="handleUpdateUnits" />
 
                     <!-- Price Click To Edit -->
@@ -401,7 +401,7 @@
 
         // // convert back to mg for storage in db
         if (field === 'weight') {
-          payload.variables.weight = convert(value).from(item.unit).to('mg');
+          payload.variables.weight = convert(value).from(item.unit).to('g');
         }
 
         await this.updateItem(payload);
