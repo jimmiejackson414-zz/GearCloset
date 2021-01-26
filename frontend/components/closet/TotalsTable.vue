@@ -186,10 +186,10 @@
         const { base, consumable, total, worn } = calculatePackWeights(this.selectedPack);
 
         return {
-          base: `${convert(base).from('mg').to(this.selectedUnit).toFixed(2)}`,
-          consumable: `${convert(consumable).from('mg').to(this.selectedUnit).toFixed(2)}`,
-          total: `${convert(total).from('mg').to(this.selectedUnit).toFixed(2)}`,
-          worn: `${convert(worn).from('mg').to(this.selectedUnit).toFixed(2)}`
+          base: `${convert(base).from('g').to(this.selectedUnit).toFixed(2)}`,
+          consumable: `${convert(consumable).from('g').to(this.selectedUnit).toFixed(2)}`,
+          total: `${convert(total).from('g').to(this.selectedUnit).toFixed(2)}`,
+          worn: `${convert(worn).from('g').to(this.selectedUnit).toFixed(2)}`
         };
       }
     },
