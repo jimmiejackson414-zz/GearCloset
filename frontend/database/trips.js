@@ -10,6 +10,9 @@ export const mutations = {
   createTrip (state, trip) {
     Trip.insert({ data: trip });
   },
+  destroyTrip (state, trip) {
+    Trip.delete(trip.id);
+  },
   setSelectedTripId (state, id) {
     state.selectedTripId = id;
   },
@@ -33,6 +36,14 @@ export const actions = {
 
     commit('createTrip', createTrip);
     commit('setSelectedTripId', createTrip.id);
+    commit('toggleIsLoading');
+  },
+  async destroyTrip ({ commit }, payload) {
+    commit('toggleIsLoading');
+
+    payload.graphql = this.$graphql;
+    const { destroyTrip } = await tripService.destroy(payload);
+    commit('destroyTrip', destroyTrip);
     commit('toggleIsLoading');
   },
   async fetchTrips ({ commit }) {

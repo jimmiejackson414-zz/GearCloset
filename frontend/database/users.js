@@ -5,7 +5,9 @@ import { userService } from '~/services';
 /*
 ** State
 */
-export const state = () => ({});
+export const state = () => ({
+  isLoading: false
+});
 
 /*
 ** Mutations
@@ -25,6 +27,9 @@ export const mutations = {
     User.insertOrUpdate({
       data: [...friends]
     });
+  },
+  toggleIsLoading (state) {
+    state.isLoading = !state.isLoading;
   },
   updateAvatar (state, { id, avatar_url }) {
     User.update({
@@ -55,10 +60,12 @@ export const actions = {
     return { friend };
   },
   async fetchFriends ({ commit }) {
+    commit('toggleIsLoading');
     const payload = { graphql: this.$graphql };
     const { friends } = await userService.fetchFriends(payload);
 
     commit('fetchFriends', friends);
+    commit('toggleIsLoading');
     return { friends };
   },
   async forgotPassword ({ commit }, payload) {

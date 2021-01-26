@@ -63,6 +63,7 @@
         { title: 'Forums', to: '/forums', badge: false, hasMenu: false },
         { title: 'Planning', to: '/planning', badge: false, hasMenu: false },
         { title: 'Closet', to: '/closet', badge: false, hasMenu: false }
+        // { title: 'Friends', to: '/friends', badge: false, hasMenu: false }
       ]
     }),
 

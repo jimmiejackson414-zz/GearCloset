@@ -8,7 +8,6 @@ export const ITEM_FRAGMENT = gql`
     weight
     unit
     price
-    position
     generic_type
     consumable
     worn

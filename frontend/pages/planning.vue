@@ -24,7 +24,7 @@
             class="ellipsis"
             :items="listItems"
             @create-trip="handleCreateTrip"
-            @delete-trip="handleDeleteTrip" />
+            @delete-trip="deleteTripModalOpen = true" />
         </client-only>
       </div>
     </div>
@@ -75,7 +75,8 @@
 
     <delete-confirm-modal
       v-model="deleteTripModalOpen"
-      item="trip" />
+      item="trip"
+      @handle-remove-item="handleDeleteTrip" />
   </v-container>
 
   <loading-page v-else />
@@ -133,15 +134,16 @@
     methods: {
       ...mapActions('entities/trips', [
         'createTrip',
+        'destroyTrip',
         'fetchTrips'
       ]),
       async handleCreateTrip () {
         const payload = { variables: { owner_id: this.currentUser.id } };
-        const results = await this.createTrip(payload);
-        console.log({ results });
+        await this.createTrip(payload);
       },
-      handleDeleteTrip () {
-        this.deleteTripModalOpen = true;
+      async handleDeleteTrip () {
+        const payload = { variables: { id: this.selectedTripId } };
+        await this.destroyTrip(payload);
       }
     },
 

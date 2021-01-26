@@ -32,7 +32,7 @@
               <click-to-edit
                 :unique-identifier="`title${category.id}Ref`"
                 :value="category.name"
-                @handle-update-item="updateCategory($event, category, 'name')" />
+                @handle-update-item="handleUpdateCategory($event, category, 'name')" />
             </div>
             <v-data-table
               v-if="category.items"
@@ -81,7 +81,7 @@
                         :style="{ fontSize: '0.875rem' }"
                         :unique-identifier="`type${item.id}`"
                         :value="item.generic_type"
-                        @handle-update-item="updateItem($event, item, 'generic_type')" />
+                        @handle-update-item="handleUpdateItem($event, item, 'generic_type')" />
                     </td>
 
                     <!-- Name Click To Edit -->
@@ -92,7 +92,7 @@
                         :style="{ fontSize: '0.875rem' }"
                         :unique-identifier="`name${item.id}Ref`"
                         :value="item.name"
-                        @handle-update-item="updateItem($event, item, 'name')" />
+                        @handle-update-item="handleUpdateItem($event, item, 'name')" />
                     </td>
 
                     <!-- Consumable Toggle -->
@@ -146,20 +146,20 @@
                     <td
                       :key="`${item.id}-price-${i}-${index}`"
                       class="px-0 py-1">
-                      <click-to-edit
-                        :custom-class="'price-column'"
-                        :style="{ fontSize: '0.875rem', maxWidth: '100px', margin: '0 auto' }"
-                        :unique-identifier="`price${item.id}Ref`"
-                        :value="itemPrice(item)"
-                        @handle-update-item="updateItem($event, item, 'price')">
-                        <client-only>
+                      <client-only>
+                        <click-to-edit
+                          :custom-class="'price-column'"
+                          :style="{ fontSize: '0.875rem', maxWidth: '100px', margin: '0 auto' }"
+                          :unique-identifier="`price${item.id}Ref`"
+                          :value="itemPrice(item)"
+                          @handle-update-item="handleUpdateItem($event, item, 'price')">
                           <unicon
                             fill="#494f57"
                             height="14"
                             name="dollar-alt"
                             width="14" />
-                        </client-only>
-                      </click-to-edit>
+                        </click-to-edit>
+                      </client-only>
                     </td>
 
                     <!-- Quantity Click To Edit -->
@@ -172,7 +172,7 @@
                         type="number"
                         :unique-identifier="`quantity${item.id}Ref`"
                         :value="String(item.quantity)"
-                        @handle-update-item="updateItem($event, item, 'quantity')" />
+                        @handle-update-item="handleUpdateItem($event, item, 'quantity')" />
                     </td>
 
                     <!-- Remove button -->
@@ -376,11 +376,41 @@
 
         await this.removeItem(payload);
       },
+      async handleUpdateCategory (value, category, field) {
+        // return if value hasn't changed
+        if (value === String(category[field])) { return; }
+
+        const payload = { variables: { id: category.id, [field]: value } };
+        await this.updateCategory(payload);
+      },
+      async handleUpdateItem (value, item, field) {
+        // return if value hasn't changed
+        if (value === String(item[field])) { return; }
+
+        const payload = {
+          variables: {
+            id: item.id,
+            [field]: value
+          }
+        };
+
+        // // handle floating point issue converting between string & number
+        if (field === 'price') {
+          payload.variables.price = Number((value * 100).toFixed(2));
+        }
+
+        // // convert back to mg for storage in db
+        if (field === 'weight') {
+          payload.variables.weight = convert(value).from(item.unit).to('mg');
+        }
+
+        await this.updateItem(payload);
+      },
       handleUpdateUnits (event, item) {
         if ('quantity' in item) {
-          this.updateItem(event, item, 'unit');
+          this.handleUpdateItem(event, item, 'unit');
         } else {
-          this.updateCategory(event, item, 'unit');
+          this.handleUpdateCategory(event, item, 'unit');
         }
       },
       itemPrice (item) {
@@ -395,36 +425,6 @@
       },
       async updateBooleanItem (item, field) {
         const payload = { variables: { id: item.id, [field]: !item[field] } };
-        await this.updateItem(payload);
-      },
-      async updateCategory (value, category, field) {
-        // return if value hasn't changed
-        if (value === String(category[field])) { return; }
-
-        const payload = { variables: { id: category.id, [field]: value } };
-        await this.updateCategory(payload);
-      },
-      async updateItem (value, item, field) {
-        // return if value hasn't changed
-        if (value === String(item[field])) { return; }
-
-        const payload = {
-          variables: {
-            id: item.id,
-            [field]: value
-          }
-        };
-
-        // handle floating point issue converting between string & number
-        if (field === 'price') {
-          payload.fields.price = Number((value * 100).toFixed(2));
-        }
-
-        // convert back to mg for storage in db
-        if (field === 'weight') {
-          payload.fields.weight = convert(value).from(item.unit).to('mg');
-        }
-
         await this.updateItem(payload);
       },
       weightTotal (category) {

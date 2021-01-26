@@ -54,7 +54,7 @@ export const actions = {
     commit('resetPack', resetPack);
     commit('toggleIsLoading');
   },
-  async update ({ commit }, payload) {
+  async updatePack ({ commit }, payload) {
     commit('toggleIsLoading');
     payload.graphql = this.$graphql;
 

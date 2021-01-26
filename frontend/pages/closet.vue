@@ -59,11 +59,13 @@
                     :ripple="false"
                     text
                     v-on="on">
-                    <unicon
-                      :fill="lightGrey"
-                      height="25"
-                      name="setting"
-                      width="25" />
+                    <client-only>
+                      <unicon
+                        :fill="lightGrey"
+                        height="25"
+                        name="setting"
+                        width="25" />
+                    </client-only>
                   </v-btn>
                 </template>
                 <v-list>
@@ -297,7 +299,6 @@
         await this.updatePack(payload);
       },
       onResize () {
-        console.log('onResize');
         const width = window.innerWidth;
         if ((width < 560) || (width < 1264 && width > 959)) {
           this.chartWidth = 400;

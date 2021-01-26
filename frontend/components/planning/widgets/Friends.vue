@@ -79,10 +79,13 @@
 
 <script>
   import { mapState } from 'vuex';
+  import currentUser from '~/mixins/currentUser';
   import PlusButton from '~/components/icons/PlusButton.vue';
   import Trip from '~/database/models/trip';
 
   export default {
+    mixins: [currentUser],
+
     data: () => ({
       modalOpen: false
     }),
@@ -92,7 +95,7 @@
         selectedTripId: state => state.entities.trips.selectedTripId
       }),
       friends () {
-        return this.trip.users;
+        return this.trip.users.filter(user => user.id !== this.currentUser.id); ;
       },
       friendCount () {
         return this.friends.length;

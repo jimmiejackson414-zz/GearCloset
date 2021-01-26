@@ -115,7 +115,7 @@
 
     methods: {
       ...mapActions('entities/packs', [
-        'update'
+        'updatePack'
       ]),
       handleUpdatePackTheme (theme) {
         this.localTheme = theme;
@@ -138,16 +138,18 @@
         }
       },
       setChartData () {
-        this.localTheme = this.activePack.theme;
-        this.chartData.labels = this.activePack.categories.map(category => {
-          return this.$options.filters.truncate(category.name, 20);
-        });
-        this.chartData.datasets = [{
-          label: 'Selected Pack Graph',
-          data: this.activePack.categories.map(category => {
-            return parseFloat(convert(calculateCategoryWeight(category)).from('g').to(category.unit)).toFixed(2);
-          })
-        }];
+        if (this.activePack) {
+          this.localTheme = this.activePack.theme;
+          this.chartData.labels = this.activePack.categories.map(category => {
+            return this.$options.filters.truncate(category.name, 20);
+          });
+          this.chartData.datasets = [{
+            label: 'Selected Pack Graph',
+            data: this.activePack.categories.map(category => {
+              return parseFloat(convert(calculateCategoryWeight(category)).from('g').to(category.unit)).toFixed(2);
+            })
+          }];
+        }
       },
       triggerRerender () {
         this.setChartData();

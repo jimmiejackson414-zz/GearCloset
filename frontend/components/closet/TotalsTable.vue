@@ -31,11 +31,13 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <unicon
-                  fill="#494f57"
-                  height="14"
-                  name="dollar-alt"
-                  width="14" />
+                <client-only>
+                  <unicon
+                    fill="#494f57"
+                    height="14"
+                    name="dollar-alt"
+                    width="14" />
+                </client-only>
                 {{ priceTotal(category) }}
               </div>
             </td>
@@ -54,11 +56,13 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <unicon
-                  fill="#494f57"
-                  height="14"
-                  name="dollar-alt"
-                  width="14" />
+                <client-only>
+                  <unicon
+                    fill="#494f57"
+                    height="14"
+                    name="dollar-alt"
+                    width="14" />
+                </client-only>
                 {{ prices.consumable }}
               </div>
             </td>
@@ -77,11 +81,13 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <unicon
-                  fill="#494f57"
-                  height="14"
-                  name="dollar-alt"
-                  width="14" />
+                <client-only>
+                  <unicon
+                    fill="#494f57"
+                    height="14"
+                    name="dollar-alt"
+                    width="14" />
+                </client-only>
                 {{ prices.worn }}
               </div>
             </td>
@@ -100,11 +106,13 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <unicon
-                  fill="#494f57"
-                  height="14"
-                  name="dollar-alt"
-                  width="14" />
+                <client-only>
+                  <unicon
+                    fill="#494f57"
+                    height="14"
+                    name="dollar-alt"
+                    width="14" />
+                </client-only>
                 {{ prices.base }}
               </div>
             </td>
@@ -123,11 +131,13 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <unicon
-                  fill="#494f57"
-                  height="14"
-                  name="dollar-alt"
-                  width="14" />
+                <client-only>
+                  <unicon
+                    fill="#494f57"
+                    height="14"
+                    name="dollar-alt"
+                    width="14" />
+                </client-only>
                 {{ prices.total }}
               </div>
             </td>
