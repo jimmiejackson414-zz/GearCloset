@@ -80,29 +80,25 @@
                         <tr
                           v-for="(item, i) in items"
                           :key="item.id">
-                          <!-- Generic Type Click To Edit -->
+                          <!-- Generic Type -->
                           <td
                             :key="`${item.id}-type-${i}-${index}`"
                             class="px-0 py-1">
                             {{ item.generic_type }}
                           </td>
 
-                          <!-- Name Click To Edit -->
+                          <!-- Name -->
                           <td
                             :key="`${item.id}-name-${i}-${index}`"
                             class="px-0 py-1">
                             {{ item.name }}
                           </td>
 
-                          <!-- Consumable Toggle -->
+                          <!-- Consumable -->
                           <td
                             :key="`${item.id}-consumable-${i}-${index}`"
                             class="text-center px-0 py-1">
-                            <v-btn
-                              :class="[{ active: item.consumable }, 'consumable-btn']"
-                              icon
-                              :ripple="false"
-                              text>
+                            <span :class="[{ active: item.consumable }, 'consumable-btn']">
                               <client-only>
                                 <unicon
                                   :fill="item.consumable ? '#fff' : '#9e9e9e'"
@@ -110,18 +106,14 @@
                                   name="utensils-alt"
                                   width="20" />
                               </client-only>
-                            </v-btn>
+                            </span>
                           </td>
 
-                          <!-- Worn Toggle -->
+                          <!-- Worn -->
                           <td
                             :key="`${item.id}-worn-${i}-${index}`"
                             class="text-center px-0 py-1">
-                            <v-btn
-                              :class="[{ active: item.worn }, 'worn-btn']"
-                              icon
-                              :ripple="false"
-                              text>
+                            <span :class="[{ active: item.worn }, 'worn-btn']">
                               <client-only>
                                 <unicon
                                   :fill="item.worn ? '#fff' : '#9e9e9e'"
@@ -129,10 +121,10 @@
                                   name="layer-group"
                                   width="20" />
                               </client-only>
-                            </v-btn>
+                            </span>
                           </td>
 
-                          <!-- Weight Click To Edit and Dropdown -->
+                          <!-- Weight -->
                           <td
                             :key="`${item.id}-weight-${i}-${index}`"
                             class="px-0 py-1 text-center">
@@ -140,7 +132,7 @@
                             {{ item.unit }}
                           </td>
 
-                          <!-- Price Click To Edit -->
+                          <!-- Price -->
                           <td
                             :key="`${item.id}-price-${i}-${index}`"
                             class="px-0 py-1 text-center">
@@ -154,7 +146,7 @@
                             </client-only>
                           </td>
 
-                          <!-- Quantity Click To Edit -->
+                          <!-- Quantity -->
                           <td
                             :key="`${item.id}-quantity-${i}-${index}`"
                             class="px-0 py-1 text-center">
@@ -381,21 +373,41 @@
             }
           }
         }
-        .v-btn {
+
+        .consumable-btn {
+          align-items: center;
+          border-radius: 50%;
+          display: inline-flex;
+          flex: 0 0 auto;
+          height: 36px;
+          justify-content: center;
+          letter-spacing: 0.0892857143em;
+          width: 36px;
+
           &.active {
-            &.worn-btn {
-              background-color: $accentDarkest;
-              svg {
-                fill: white;
-              }
+            background-color: darken($secondaryLight, 10%);
+
+            svg {
+              fill: white;
             }
+          }
+        }
 
-            &.consumable-btn {
-              background-color: darken($secondaryLight, 10%);
+        .worn-btn {
+          align-items: center;
+          border-radius: 50%;
+          display: inline-flex;
+          flex: 0 0 auto;
+          height: 36px;
+          justify-content: center;
+          letter-spacing: 0.0892857143em;
+          width: 36px;
 
-              .v-btn__content svg {
-                fill: white;
-              }
+          &.active {
+            background-color: $accentDarkest;
+
+            svg {
+              fill: white;
             }
           }
         }
