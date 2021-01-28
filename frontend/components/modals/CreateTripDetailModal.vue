@@ -90,8 +90,8 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import { capitalize, prependProtocol } from '~/helpers/functions';
-  import { tripDetailService } from '~/services';
   import Loading from '~/components/Loading.vue';
 
   export default {
@@ -116,7 +116,7 @@
           title: '',
           url: '',
           value: '',
-          type: this.detailType || 'hike'
+          type: this.detailType || 'trip'
         },
         hasUrl: false,
         submitting: false
@@ -138,29 +138,31 @@
     },
 
     methods: {
+      ...mapActions('entities/tripDetails', [
+        'createTripDetail'
+      ]),
       closeModal () {
         this.show = false;
-        this.detail = { title: '', url: '', value: '', type: '' };
+        this.detail = { title: '', url: '', value: '' };
         this.$emit('handle-reset-modal');
       },
       handleCheckbox () {
         this.hasUrl = !this.hasUrl;
       },
-      handleCreate () {
+      async handleCreate () {
         this.submitting = true;
 
         const payload = {
-          fields: {
+          variables: {
             title: this.detail.title,
             type: this.detail.type,
             url: this.hasUrl ? prependProtocol(this.detail.url) : null,
             value: this.detail.value,
             trip: this.trip.id
-          },
-          apollo: this.$apollo
+          }
         };
 
-        tripDetailService.create(payload);
+        await this.createTripDetail(payload);
 
         this.submitting = false;
         this.closeModal();
@@ -170,6 +172,11 @@
     watch: {
       detail (val) {
         this.hasUrl = !!val.url;
+      },
+      value (val) {
+        if (val) {
+          this.detail.type = this.detailType;
+        }
       }
     },
 

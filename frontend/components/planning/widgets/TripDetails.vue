@@ -13,7 +13,7 @@
             :custom-style="tripPointsStyles"
             unique-identifier="tripStartingPointRef"
             :value="trip ? trip.starting_point : ''"
-            @handle-update-item="updateTrip($event, 'starting_point')" />
+            @handle-update-item="updateTripField($event, 'starting_point')" />
           <custom-icon
             :fill="arrowColor"
             :height="20"
@@ -23,7 +23,7 @@
             :custom-style="tripPointsStyles"
             unique-identifier="tripEndingPointRef"
             :value="trip ? trip.ending_point: ''"
-            @handle-update-item="updateTrip($event, 'ending_point')" />
+            @handle-update-item="updateTripField($event, 'ending_point')" />
         </div>
       </div>
       <transition-group
@@ -76,20 +76,15 @@
 </template>
 
 <script>
-  import { tripDetailService, tripService } from '~/services';
+  import { mapActions, mapState } from 'vuex';
   import ClickToEdit from '~/components/ClickToEdit.vue';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import PlusButton from '~/components/icons/PlusButton.vue';
+  import Trip from '~/database/models/trip';
+  import TripDetail from '~/database/models/tripDetail';
 
   export default {
-    props: {
-      trip: {
-        type: Object,
-        default: () => {}
-      }
-    },
-
     data: () => ({
       arrowColor: '',
       createTripDetailModalOpen: false,
@@ -104,9 +99,16 @@
     }),
 
     computed: {
+      ...mapState({
+        selectedTripId: state => state.entities.trips.selectedTripId
+      }),
+      trip () {
+        return Trip.find(this.selectedTripId);
+      },
       tripDetails () {
-        if (!this.trip) { return []; }
-        return this.trip.tripDetails.filter(detail => detail.type === 'trip');
+        return TripDetail.query().where(detail => {
+          return detail.trip_id === this.selectedTripId && detail.type === 'trip';
+        }).get();
       },
       tripPointsStyles () {
         return {
@@ -118,6 +120,12 @@
     },
 
     methods: {
+      ...mapActions('entities/tripDetails', [
+        'destroyTripDetail'
+      ]),
+      ...mapActions('entities/trips', [
+        'updateTrip'
+      ]),
       openCreate () {
         this.selectedDetail = { type: 'trip' };
         this.$nextTick(() => {
@@ -136,32 +144,28 @@
           this.updateTripDetailModalOpen = true;
         });
       },
-      removeDetail (detail) {
+      async removeDetail (detail) {
         const payload = {
-          fields: { id: detail.id, trip: this.trip.id },
-          apollo: this.$apollo
+          variables: { id: detail.id, trip: this.trip.id }
         };
-        tripDetailService.destroy(payload);
+        await this.destroyTripDetail(payload);
       },
       resetModal () {
         this.createTripDetailModalOpen = false;
         this.updateTripDetailModalOpen = false;
         this.selectedDetail = null;
       },
-      updateTrip (e, field) {
-        console.log({ e });
-        console.log({ field });
+      updateTripField (e, field) {
         // return if value hasn't changed
         if (e === this.trip[field]) { return; }
 
         const payload = {
-          fields: {
+          variables: {
             id: this.trip.id,
             [field]: e
-          },
-          apollo: this.$apollo
+          }
         };
-        tripService.update(payload);
+        this.updateTrip(payload);
       }
     },
 

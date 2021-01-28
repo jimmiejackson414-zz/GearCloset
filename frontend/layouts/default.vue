@@ -74,6 +74,7 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
+  import currentUser from '~/mixins/currentUser';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import HomeDrawer from '~/components/Drawer.vue';
   import Navbar from '~/components/navbar/Navbar.vue';
@@ -81,7 +82,10 @@
   export default {
     name: 'Default',
 
+    mixins: [currentUser],
+
     data: () => ({
+      // currentUserLoading: true,
       drawer: false,
       offsetTop: 0
     }),
@@ -111,6 +115,11 @@
       scrollToTop () {
         this.$vuetify.goTo('#app', { duration: 500, offset: 0 });
       }
+    },
+
+    created () {
+      const token = this.$cookies.get('gc_token');
+      this.$graphql.setHeaders({ authorization: `Bearer ${token}` });
     },
 
     watch: {

@@ -8,167 +8,198 @@
     <div class="right">
       <slide-fade-transition>
         <div class="form-wrapper">
-          <v-form
-            ref="registerForm"
-            v-model="valid"
-            @submit.prevent="handleSubmit">
-            <div class="form-header">
-              <logo-icon
-                height="50px"
-                width="50px" />
-              <div class="text-h4">
-                Register
+          <validation-observer
+            ref="observer"
+            v-slot="{ invalid }"
+            slim>
+            <v-form
+              ref="registerForm"
+              @submit.prevent="handleSubmit">
+              <div class="form-header">
+                <logo-icon
+                  height="50px"
+                  width="50px" />
+                <div class="text-h4">
+                  Register
+                </div>
+                <span class="text-body-1">or <router-link to="/login">login to your existing account.</router-link></span>
               </div>
-              <span class="text-body-1">or <router-link to="/login">login to your existing account.</router-link></span>
-            </div>
 
-            <!-- First Name -->
-            <v-text-field
-              v-model="user.first_name"
-              color="primary"
-              dense
-              :disabled="submitting"
-              :error="isError"
-              label="First Name*"
-              outlined
-              required
-              :rules="nameRules"
-              validate-on-blur
-              @keyup.enter="handleSubmit">
-              <template #prepend-inner>
-                <custom-icon
-                  fill="#0077be"
-                  :height="20"
-                  name="user-circle"
-                  :width="20" />
-              </template>
-            </v-text-field>
+              <!-- First Name -->
+              <validation-provider
+                v-slot="{ errors }"
+                name="First Name"
+                rules="required">
+                <v-text-field
+                  v-model="user.first_name"
+                  color="primary"
+                  dense
+                  :disabled="submitting"
+                  :error="!!errors.length"
+                  :error-messages="errors"
+                  label="First Name*"
+                  outlined
+                  required
+                  validate-on-blur
+                  @keyup.enter="handleSubmit">
+                  <template #prepend-inner>
+                    <custom-icon
+                      fill="#0077be"
+                      :height="20"
+                      name="user-circle"
+                      :width="20" />
+                  </template>
+                </v-text-field>
+              </validation-provider>
 
-            <!-- Last Name -->
-            <v-text-field
-              v-model="user.last_name"
-              color="primary"
-              dense
-              :disabled="submitting"
-              :error="isError"
-              label="Last Name*"
-              outlined
-              required
-              :rules="nameRules"
-              validate-on-blur
-              @keyup.enter="handleSubmit">
-              <template #prepend-inner>
-                <custom-icon
-                  fill="#0077be"
-                  :height="20"
-                  name="user-circle"
-                  :width="20" />
-              </template>
-            </v-text-field>
+              <!-- Last Name -->
+              <validation-provider
+                v-slot="{ errors }"
+                name="Last Name"
+                rules="required">
+                <v-text-field
+                  v-model="user.last_name"
+                  color="primary"
+                  dense
+                  :disabled="submitting"
+                  :error="!!errors.length"
+                  :error-messages="errors"
+                  label="Last Name*"
+                  outlined
+                  required
+                  validate-on-blur
+                  @keyup.enter="handleSubmit">
+                  <template #prepend-inner>
+                    <custom-icon
+                      fill="#0077be"
+                      :height="20"
+                      name="user-circle"
+                      :width="20" />
+                  </template>
+                </v-text-field>
+              </validation-provider>
 
-            <!-- Email -->
-            <v-text-field
-              v-model="user.email"
-              color="primary"
-              dense
-              :disabled="submitting"
-              :error="isError"
-              label="Email*"
-              outlined
-              required
-              :rules="emailRules"
-              validate-on-blur
-              @keyup.enter="handleSubmit">
-              <template #prepend-inner>
-                <custom-icon
-                  fill="#0077be"
-                  :height="20"
-                  name="envelope-alt"
-                  :width="20" />
-              </template>
-            </v-text-field>
+              <!-- Email -->
+              <validation-provider
+                v-slot="{ errors }"
+                name="Email"
+                rules="required|email">
+                <v-text-field
+                  v-model="user.email"
+                  color="primary"
+                  dense
+                  :disabled="submitting"
+                  :error="!!errors.length"
+                  :error-messages="errors"
+                  label="Email*"
+                  outlined
+                  required
+                  type="email"
+                  validate-on-blur
+                  @keyup.enter="handleSubmit">
+                  <template #prepend-inner>
+                    <custom-icon
+                      fill="#0077be"
+                      :height="20"
+                      name="envelope-alt"
+                      :width="20" />
+                  </template>
+                </v-text-field>
+              </validation-provider>
 
-            <!-- Password -->
-            <v-text-field
-              v-model="user.password"
-              color="primary"
-              dense
-              :disabled="submitting"
-              :error="isError"
-              label="Password*"
-              outlined
-              required
-              :rules="passwordRules"
-              type="password"
-              validate-on-blur
-              @keyup.enter="handleSubmit">
-              <template #prepend-inner>
-                <custom-icon
-                  fill="#0077be"
-                  :height="20"
-                  name="padlock"
-                  :width="20" />
-              </template>
-            </v-text-field>
+              <!-- Password -->
+              <validation-provider
+                v-slot="{ errors }"
+                name="Password"
+                rules="required|min:6"
+                vid="confirm">
+                <v-text-field
+                  v-model="user.password"
+                  color="primary"
+                  dense
+                  :disabled="submitting"
+                  :error="!!errors.length"
+                  :error-messages="errors"
+                  label="Password*"
+                  outlined
+                  required
+                  type="password"
+                  validate-on-blur
+                  @keyup.enter="handleSubmit">
+                  <template #prepend-inner>
+                    <custom-icon
+                      fill="#0077be"
+                      :height="20"
+                      name="padlock"
+                      :width="20" />
+                  </template>
+                </v-text-field>
+              </validation-provider>
 
-            <!-- Verify Password -->
-            <v-text-field
-              v-model="user.confirm_password"
-              color="primary"
-              dense
-              :disabled="submitting"
-              :error="isError"
-              label="Confirm Password*"
-              outlined
-              required
-              :rules="passwordsMatchRules"
-              type="password"
-              validate-on-blur
-              @keyup.enter="handleSubmit">
-              <template #prepend-inner>
-                <custom-icon
-                  fill="#0077be"
-                  :height="20"
-                  name="padlock"
-                  :width="20" />
-              </template>
-            </v-text-field>
+              <!-- Verify Password -->
+              <validation-provider
+                v-slot="{ errors }"
+                name="Password Confirmation"
+                rules="required|password:@confirm">
+                <v-text-field
+                  v-model="user.password_confirmation"
+                  color="primary"
+                  dense
+                  :disabled="submitting"
+                  :error="!!errors.length"
+                  :error-messages="errors"
+                  label="Confirm Password*"
+                  outlined
+                  required
+                  type="password"
+                  validate-on-blur
+                  @keyup.enter="handleSubmit">
+                  <template #prepend-inner>
+                    <custom-icon
+                      fill="#0077be"
+                      :height="20"
+                      name="padlock"
+                      :width="20" />
+                  </template>
+                </v-text-field>
+              </validation-provider>
 
-            <!-- Form Submit -->
-            <div class="btn-actions">
-              <v-alert
-                v-if="isError"
-                border="top"
-                color="error"
-                outlined>
-                <template #prepend>
-                  <custom-icon
-                    custom-class="mr-4"
-                    :fill="errorColor"
-                    :height="30"
-                    name="exclamation-triangle"
-                    :width="30" />
-                </template>
-                <p class="body-text-1 mb-0 error--text">
-                  There was an error creating your account. Please try again.
-                </p>
-              </v-alert>
-              <v-btn
-                block
-                color="primary"
-                depressed
-                :disabled="submitting"
-                :ripple="false"
-                type="submit">
-                <loading
-                  v-if="submitting"
-                  color="#0077be"
-                  height="30px"
-                  width="30px" />
-                <span v-else>Register</span>
-              </v-btn>
-            </div>
-          </v-form>
+              <!-- Form Submit -->
+              <div class="btn-actions">
+                <v-alert
+                  v-if="isError"
+                  border="top"
+                  color="error"
+                  outlined>
+                  <template #prepend>
+                    <custom-icon
+                      custom-class="mr-4"
+                      :fill="errorColor"
+                      :height="30"
+                      name="exclamation-triangle"
+                      :width="30" />
+                  </template>
+                  <p class="body-text-1 mb-0 error--text">
+                    There was an error creating your account. Please try again.
+                  </p>
+                </v-alert>
+                <v-btn
+                  block
+                  color="primary"
+                  depressed
+                  :disabled="submitting || invalid"
+                  :ripple="false"
+                  type="submit">
+                  <loading
+                    v-if="submitting"
+                    color="#0077be"
+                    height="30px"
+                    width="30px" />
+                  <span v-else>Register</span>
+                </v-btn>
+              </div>
+            </v-form>
+          </validation-observer>
         </div>
       </slide-fade-transition>
       <div class="contact-wrapper">
@@ -184,13 +215,38 @@
 </template>
 
 <script>
-  import registerMutation from '~/apollo/mutations/auth/register.gql';
+  import { mapActions } from 'vuex';
+  import { email, min, required } from 'vee-validate/dist/rules';
+  import { extend, ValidationProvider, ValidationObserver } from 'vee-validate';
   import CustomIcon from '~/components/icons/CustomIcon';
   import FadeTransition from '~/components/transitions/FadeTransition';
   import Loading from '~/components/Loading';
   import LoginDescriptionBox from '~/components/LoginDescriptionBox';
   import LogoIcon from '~/components/icons/LogoIcon';
   import SlideFadeTransition from '~/components/transitions/SlideFadeTransition';
+
+  extend('required', {
+    ...required,
+    message: '{_field_} is required'
+  });
+
+  extend('email', {
+    ...email,
+    message: 'Please provide a valid email'
+  });
+
+  extend('min', {
+    ...min,
+    message: 'Password must be minimum of six characters'
+  });
+
+  extend('password', {
+    params: ['target'],
+    validate (value, { target }) {
+      return value === target;
+    },
+    message: 'Password confirmation does not match'
+  });
 
   export default {
     layout: 'auth',
@@ -199,55 +255,43 @@
 
     data () {
       return {
-        emailRules: [
-          v => !!v || 'Email is required',
-          v => /.+@.+/.test(v) || 'E-mail must be valid'
-        ],
         errorColor: '',
         isError: false,
         submitting: false,
-        nameRules: [
-          v => !!v || 'This is a required field'
-        ],
         passwordRules: [v => !!v || 'Password is required'],
-        passwordsMatchRules: [
-          v => !!v || 'Password confirmation is required',
-          v => (this.user.password === this.confirm_password) || 'Passwords must match'
-        ],
         user: {
-          confirm_password: '',
+          password_confirmation: '',
           first_name: '',
           last_name: '',
           email: '',
           password: ''
-        },
-        valid: false
+        }
       };
     },
 
     methods: {
+      ...mapActions('entities/users', [
+        'register',
+        'logout'
+      ]),
       async handleSubmit () {
-        if (this.$refs.registerForm.validate()) {
+        if (await this.$refs.observer.validate()) {
           this.submitting = true;
 
-          try {
-            const { data: { register: { token } }, errors } = await this.$apollo.mutate({
-              mutation: registerMutation,
-              variables: {
-                ...this.user
-              }
-            });
+          const payload = { variables: { ...this.user } };
 
-            if (errors?.length) {
+          try {
+            const res = await this.register(payload);
+
+            if (!res.success) {
               this.isError = true;
               this.loggingIn = false;
+              return;
             }
 
-            // set the jwt to the this.$apolloHelpers.onLogin
-            await this.$apolloHelpers.onLogin(token);
             this.$router.push({ path: '/onboarding' });
           } catch (e) {
-            console.error('register error: ', e);
+            console.error(e);
             this.isError = true;
             this.submitting = false;
           }
@@ -255,11 +299,12 @@
       }
     },
 
-    async mounted () {
+    mounted () {
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
 
-      // clear apollo-token from cookies to make sure none were accidentally set
-      await this.$apolloHelpers.onLogout();
+      // clear token from cookies to make sure none were accidentally set
+      this.logout();
+      this.$store.dispatch('entities/deleteAll');
     },
 
     components: {
@@ -268,7 +313,9 @@
       Loading,
       LoginDescriptionBox,
       LogoIcon,
-      SlideFadeTransition
+      SlideFadeTransition,
+      ValidationObserver,
+      ValidationProvider
     },
 
     head () {

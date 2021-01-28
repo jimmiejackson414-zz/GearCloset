@@ -31,11 +31,14 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <custom-icon
-                  fill="#494f57"
-                  :height="14"
-                  name="dollar-alt"
-                  :width="14" />
+                <client-only>
+                  <unicon
+                    class="d-flex"
+                    fill="#494f57"
+                    height="14"
+                    name="dollar-alt"
+                    width="14" />
+                </client-only>
                 {{ priceTotal(category) }}
               </div>
             </td>
@@ -54,11 +57,13 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <custom-icon
-                  fill="#494f57"
-                  :height="14"
-                  name="dollar-alt"
-                  :width="14" />
+                <client-only>
+                  <unicon
+                    fill="#494f57"
+                    height="14"
+                    name="dollar-alt"
+                    width="14" />
+                </client-only>
                 {{ prices.consumable }}
               </div>
             </td>
@@ -77,11 +82,13 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <custom-icon
-                  fill="#494f57"
-                  :height="14"
-                  name="dollar-alt"
-                  :width="14" />
+                <client-only>
+                  <unicon
+                    fill="#494f57"
+                    height="14"
+                    name="dollar-alt"
+                    width="14" />
+                </client-only>
                 {{ prices.worn }}
               </div>
             </td>
@@ -100,11 +107,13 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <custom-icon
-                  fill="#494f57"
-                  :height="14"
-                  name="dollar-alt"
-                  :width="14" />
+                <client-only>
+                  <unicon
+                    fill="#494f57"
+                    height="14"
+                    name="dollar-alt"
+                    width="14" />
+                </client-only>
                 {{ prices.base }}
               </div>
             </td>
@@ -123,11 +132,13 @@
             </td>
             <td class="text-center">
               <div class="price-column">
-                <custom-icon
-                  fill="#494f57"
-                  :height="14"
-                  name="dollar-alt"
-                  :width="14" />
+                <client-only>
+                  <unicon
+                    fill="#494f57"
+                    height="14"
+                    name="dollar-alt"
+                    width="14" />
+                </client-only>
                 {{ prices.total }}
               </div>
             </td>
@@ -147,7 +158,6 @@
 <script>
   import convert from 'convert-units';
   import { calculatePackPrices, calculatePackWeights, convertToDollars } from '~/helpers/functions';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
     props: {
@@ -177,10 +187,10 @@
         const { base, consumable, total, worn } = calculatePackWeights(this.selectedPack);
 
         return {
-          base: `${convert(base).from('mg').to(this.selectedUnit).toFixed(2)}`,
-          consumable: `${convert(consumable).from('mg').to(this.selectedUnit).toFixed(2)}`,
-          total: `${convert(total).from('mg').to(this.selectedUnit).toFixed(2)}`,
-          worn: `${convert(worn).from('mg').to(this.selectedUnit).toFixed(2)}`
+          base: `${convert(base).from('g').to(this.selectedUnit).toFixed(2)}`,
+          consumable: `${convert(consumable).from('g').to(this.selectedUnit).toFixed(2)}`,
+          total: `${convert(total).from('g').to(this.selectedUnit).toFixed(2)}`,
+          worn: `${convert(worn).from('g').to(this.selectedUnit).toFixed(2)}`
         };
       }
     },
@@ -190,10 +200,6 @@
         const reduced = category.items.reduce((sum, elem) => sum + Number(elem.price), 0);
         return convertToDollars(reduced);
       }
-    },
-
-    components: {
-      CustomIcon
     }
   };
 </script>

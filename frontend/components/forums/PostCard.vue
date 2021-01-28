@@ -10,13 +10,16 @@
             <v-avatar
               color="primary"
               size="50">
-              <img
+              <cld-image
                 v-if="post.author.avatar_url"
                 alt="avatar"
-                :src="post.author.avatar_url">
+                crop="scale"
+                :public-id="post.author.avatar_url"
+                width="50" />
               <span
                 v-else
                 class="white--text text-body-1 font-weight-bold">{{ post.author | initials }}</span>
+              </cld-image>
             </v-avatar>
             <div class="author-information ml-6 d-flex flex-column">
               <div class="d-flex align-center">
@@ -49,9 +52,10 @@
         <v-col
           class="post-text"
           cols="9">
-          <p class="body-text-1 mb-0">
-            {{ post.text }}
-          </p>
+          <!-- eslint-disable -->
+          <span
+            class="mb-0"
+            v-html="postText" />
         </v-col>
         <v-col cols="2">
           <div class="right d-flex flex-column align-end">
@@ -107,6 +111,9 @@
       },
       postDate () {
         return dayjs(this.post.created_at).format('MM/DD/YYYY');
+      },
+      postText () {
+        return this.$sanitize(this.post.text);
       },
       postTime () {
         return dayjs(this.post.created_at).format('h:mm A');

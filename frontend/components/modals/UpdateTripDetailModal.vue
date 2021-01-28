@@ -89,8 +89,8 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import { capitalize, prependProtocol } from '~/helpers/functions';
-  import { tripDetailService } from '~/services';
   import Loading from '~/components/Loading.vue';
 
   export default {
@@ -135,6 +135,9 @@
     },
 
     methods: {
+      ...mapActions('entities/tripDetails', [
+        'updateTripDetail'
+      ]),
       closeModal () {
         this.show = false;
         this.$emit('handle-reset-modal');
@@ -143,18 +146,17 @@
         this.submitting = true;
 
         const payload = {
-          fields: {
+          variables: {
             id: this.detail.id,
             title: this.localDetail.title,
             type: this.localDetail.type,
             url: this.hasUrl ? prependProtocol(this.localDetail.url) : null,
             value: this.localDetail.value,
             trip: this.trip.id
-          },
-          apollo: this.$apollo
+          }
         };
 
-        tripDetailService.update(payload);
+        this.updateTripDetail(payload);
 
         this.submitting = false;
         this.closeModal();

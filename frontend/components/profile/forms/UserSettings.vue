@@ -213,8 +213,8 @@
 
 <script>
   /* eslint-disable camelcase */
+  import { mapActions } from 'vuex';
   import { countries } from '~/helpers';
-  import { userService } from '~/services';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import ImageUploader from '~/components/ImageUploader.vue';
   import Loading from '~/components/Loading.vue';
@@ -254,26 +254,27 @@
     },
 
     methods: {
+      ...mapActions('entities/users', [
+        'updateAvatar',
+        'updateUser'
+      ]),
       async handleImageUpload (avatar) {
-        const payload = { fields: { file: avatar }, apollo: this.$apollo };
-        await userService.updateAvatar(payload);
+        const payload = { variables: { file: avatar } };
+        await this.updateAvatar(payload);
       },
       async handleSubmit () {
         if (this.$refs.userSettingsForm.validate()) {
           this.submitting = true;
 
-          const payload = {
-            fields: { id: this.currentUser.id, ...this.localUser },
-            apollo: this.$apollo
-          };
-          await userService.update(payload);
+          const payload = { variables: { id: this.currentUser.id, ...this.localUser } };
+          await this.updateUser(payload);
 
           this.submitting = false;
         }
       },
       async removeAvatar () {
-        const payload = { fields: { file: null }, apollo: this.$apollo };
-        await userService.updateAvatar(payload);
+        const payload = { variables: { file: null } };
+        await this.updateAvatar(payload);
       }
     },
 

@@ -4,13 +4,14 @@
 
     <div
       v-else
-      v-resize="onResize"
+      v-resize.quiet="onResize"
       class="closet-page-styles">
       <!-- Sidebar -->
       <closet-sidebar
         :is-mobile="isMobile"
         :packs="packs"
         :selected-pack-id="selectedPackId"
+        @handle-delete-item="handleDeleteItemModal"
         @handle-selected-pack="handleSelectedPack" />
 
       <!-- Content -->
@@ -30,12 +31,14 @@
                   class="share-btn"
                   icon
                   :ripple="false"
-                  @click="shareListModalOpen = true">
-                  <custom-icon
-                    :fill="lightGrey"
-                    :height="20"
-                    name="share"
-                    :width="20" />
+                  @click="handleSharePackListModal">
+                  <client-only>
+                    <unicon
+                      :fill="lightGrey"
+                      height="20"
+                      name="share"
+                      width="20" />
+                  </client-only>
                   <p class="body-2 mb-0 grey7--text">
                     Share
                   </p>
@@ -56,11 +59,13 @@
                     :ripple="false"
                     text
                     v-on="on">
-                    <custom-icon
-                      :fill="lightGrey"
-                      :height="25"
-                      name="setting"
-                      :width="25" />
+                    <client-only>
+                      <unicon
+                        :fill="lightGrey"
+                        height="25"
+                        name="setting"
+                        width="25" />
+                    </client-only>
                   </v-btn>
                 </template>
                 <v-list>
@@ -103,7 +108,6 @@
             <v-col class="wrapper col-12 col-md-6 col-lg-7">
               <selected-pack-graph
                 v-if="selectedPack"
-                v-resize="onResize"
                 :chart-data="chartData"
                 :is-mobile="isMobile"
                 :styles="graphStyles"
@@ -119,14 +123,15 @@
           <!-- Data Tables -->
           <closet-data-table
             v-if="selectedPack"
-            :active-pack="selectedPack" />
+            :active-pack="selectedPack"
+            @handle-delete-category="handleDeleteCategoryModal" />
         </v-container>
       </div>
 
       <!-- Modals -->
       <share-pack-list-modal
         v-model="shareListModalOpen"
-        :list="list" />
+        :pack-list="packList" />
 
       <pack-theme-modal
         v-model="packThemeModalOpen"
@@ -141,57 +146,43 @@
       <delete-confirm-modal
         v-model="deleteConfirmOpen"
         :item="modalItem"
-        :selected-item="selectedPack"
-        @handle-remove-item="handleDeletePack" />
+        :selected-item="deleteItem"
+        @handle-remove-item="handleDelete" />
     </div>
   </div>
 </template>
 
 <script>
+  // eslint-disable-next-line no-unused-vars
   import { mapActions, mapState } from 'vuex';
   import convert from 'convert-units';
-  import { calculateCategoryWeight, generateUUID } from '~/helpers/functions';
-  import currentUser from '~/mixins/currentUser';
+  import { calculateCategoryWeight } from '~/helpers/functions';
   import { generateThemeOptions } from '~/helpers';
   import isMobile from '~/mixins/isMobile';
-  import { packService } from '~/services';
   import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
   import ClosetSidebar from '~/components/closet/ClosetSidebar.vue';
-  import CustomIcon from '~/components/icons/CustomIcon.vue';
   import LoadingPage from '~/components/LoadingPage.vue';
+  import Pack from '~/database/models/pack';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
   import TotalsTable from '~/components/closet/TotalsTable.vue';
-  import PACKS_QUERY from '~/apollo/queries/content/packs.gql';
-  import SELECTED_PACK_QUERY from '~/apollo/queries/content/pack.gql';
 
   export default {
     name: 'ClosetPage',
 
-    mixins: [currentUser, isMobile],
+    mixins: [isMobile],
 
     middleware: 'authenticated',
 
-    apollo: {
-      packs: {
-        query: PACKS_QUERY,
-        loadingKey: 'isLoading',
-        result ({ data: { packs } }) {
-          this.selectedPackId = packs.length ? packs[0].id : null;
-        }
-      },
-      selectedPack: {
-        query: SELECTED_PACK_QUERY,
-        prefetch: false,
-        loadingKey: 'loadingPack',
-        variables () {
-          return {
-            id: this.selectedPackId
-          };
-        }
+    async fetch () {
+      await this.fetchPacks();
+      if (this.packs.length) {
+        this.$store.commit('entities/packs/setSelectedPackId', this.packs[0].id);
+        this.setChartData();
       }
     },
 
     data: () => ({
+      animationComplete: false,
       chartData: {
         labels: null,
         datasets: null
@@ -199,35 +190,42 @@
       chartHeight: 300,
       chartWidth: 500,
       deleteConfirmOpen: false,
+      deleteItem: null,
       isMobile: true,
-      isLoading: 0,
       lightGrey: '',
-      list: { // TODO: Generate dynamically instead of hard-coded
-        id: 1,
-        title: 'Summer',
-        uuid: generateUUID()
-      },
+      packList: {},
       loadingPack: 0,
       localTheme: '',
       modalItem: '',
       packThemeModalOpen: false,
       resetPackModalOpen: false,
-      selectedPackId: null,
-      // selectedPack: {},
       shareListModalOpen: false
     }),
 
     computed: {
       ...mapState({
+        isLoading: state => state.entities.packs.isLoading,
         sidebarExpandOnHover: state => state.closet.sidebarExpandOnHover
       }),
       graphStyles () {
         return {
-          returnheight: `${this.chartHeight}px`,
+          height: `${this.chartHeight}px`,
           margin: '0 auto',
           position: 'relative',
           width: `${this.chartWidth}px`
         };
+      },
+      packs: () => Pack.query().with('categories.items').all(),
+      selectedPackId: {
+        get () {
+          return this.$store.state.entities.packs.selectedPackId;
+        },
+        set (newValue) {
+          this.$store.commit('entities/packs/setSelectedPackId', newValue);
+        }
+      },
+      selectedPack () {
+        return Pack.selectedPack();
       },
       themeOptions () {
         return generateThemeOptions();
@@ -238,35 +236,75 @@
       ...mapActions('closet', [
         'toggleSidebarExpandOnHover'
       ]),
-      // async fetchPack (id) {
-      //   this.loadingPack = true;
-      //   const { data } = await this.$apollo.query({
-      //     query: SELECTED_PACK_QUERY,
-      //     variables: { id }
-      //   });
-      //   this.selectedPack = data.selectedPack;
-      //   this.loadingPack = false;
-      // },
+      ...mapActions('entities/packs', [
+        'destroyPack',
+        'fetchPacks',
+        'updatePack'
+      ]),
+      ...mapActions('entities/categories', [
+        'destroyCategory'
+      ]),
+      ...mapActions('entities/items', [
+        'destroyItem'
+      ]),
+      handleDelete (data) {
+        switch (this.modalItem) {
+        case 'pack':
+          this.handleDeletePack(data);
+          break;
+        case 'category':
+          this.handleDeleteCategory(data);
+          break;
+        case 'item':
+          this.handleDeleteItem(data);
+          break;
+        default:
+          break;
+        }
+      },
+      handleDeleteCategory (category) {
+        const payload = { variables: { category } };
+        this.destroyCategory(payload);
+      },
+      handleDeleteCategoryModal (category) {
+        this.deleteItem = category;
+        this.modalItem = 'category';
+        this.deleteConfirmOpen = true;
+      },
+      handleDeleteItemModal (item) {
+        this.deleteItem = item;
+        this.modalItem = 'item';
+        this.deleteConfirmOpen = true;
+      },
+      async handleDeleteItem (item) {
+        const payload = { variables: { item, pack_id: this.selectedPackId } };
+        await this.destroyItem(payload);
+      },
       async handleDeletePack (pack) {
-        const payload = { id: pack.id, apollo: this.$apollo };
-        await packService.destroy(payload);
+        const payload = { variables: { id: pack.id } };
+        await this.destroyPack(payload);
       },
       handleDeletePackModal () {
         this.modalItem = 'pack';
+        this.deleteItem = this.selectedPack;
         this.deleteConfirmOpen = true;
       },
       handleSelectedPack (pack) {
         this.selectedPackId = pack.id;
       },
-      handleUpdatePackTheme (theme) {
+      handleSharePackListModal () {
+        this.packList = {
+          ...this.selectedPack,
+          uuid: this.selectedPack.uuid
+        };
+        this.shareListModalOpen = true;
+      },
+      async handleUpdatePackTheme (theme) {
         this.localTheme = theme;
         this.packThemeModalOpen = false;
 
-        const payload = {
-          fields: { id: this.selectedPack.id, theme },
-          apollo: this.$apollo
-        };
-        packService.update(payload);
+        const payload = { variables: { id: this.selectedPack.id, theme } };
+        await this.updatePack(payload);
       },
       onResize () {
         const width = window.innerWidth;
@@ -279,31 +317,26 @@
         }
       },
       setChartData () {
-        this.localTheme = this.selectedPack.theme;
-        this.chartData.labels = this.selectedPack.categories.map(category => {
-          return this.$options.filters.truncate(category.name, 20);
-        });
-        this.chartData.datasets = [{
-          label: 'Selected Pack Graph',
-          data: this.selectedPack.categories.map(category => {
-            return convert(calculateCategoryWeight(category)).from('mg').to('lb').toFixed(2);
-          })
-        }];
+        if (this.selectedPack) {
+          this.localTheme = this.selectedPack.theme;
+          this.chartData.labels = this.selectedPack.categories.map(category => {
+            return this.$options.filters.truncate(category.name, 20);
+          });
+          this.chartData.datasets = [{
+            label: 'Selected Pack Graph',
+            data: this.selectedPack.categories.map(category => {
+              return parseFloat(convert(calculateCategoryWeight(category)).from('g').to(category.unit)).toFixed(2);
+            })
+          }];
+        }
       }
     },
 
     mounted () {
       this.lightGrey = this.$nuxt.$vuetify.theme.themes.light.grey7;
-      this.onResize();
     },
 
     watch: {
-      // selectedPackId (newVal, oldVal) {
-      //   if (newVal !== oldVal) {
-      //     this.loadingPack = true;
-      //     // this.fetchPack(newVal);
-      //   }
-      // },
       selectedPack (val) {
         this.setChartData();
       }
@@ -312,7 +345,6 @@
     components: {
       ClosetDataTable,
       ClosetSidebar,
-      CustomIcon,
       DeleteConfirmModal: () => import(/* webpackPrefetch: true */ '~/components/modals/DeleteConfirmModal'),
       LoadingPage,
       SelectedPackGraph,

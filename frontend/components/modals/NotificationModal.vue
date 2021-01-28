@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import markAsReadMutation from '~/apollo/mutations/notifications/markAsRead.gql';
+  import { mapActions } from 'vuex';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
 
   export default {
@@ -62,15 +62,15 @@
     },
 
     methods: {
+      ...mapActions('entities/notifications', [
+        'markAsRead'
+      ]),
       closeModal () {
         this.show = false;
       },
       async handleMarkAsRead () {
-        const payload = { id: this.notification.id, viewed: true };
-        await this.$apollo.mutate({
-          mutation: markAsReadMutation,
-          variables: payload
-        });
+        const payload = { variables: { id: this.notification.id, viewed: true } };
+        await this.markAsRead(payload);
         this.show = false;
       }
     },

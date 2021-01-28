@@ -1,5 +1,6 @@
 extend type Mutation @guard(with: ["api"]) {
     createCategory(input: CategoryInput! @spread): Category @create
+    destroyCategory(id:ID!): Category @delete
     updateCategory(id:ID! input: CategoryInput! @spread): Category @update
 }
 

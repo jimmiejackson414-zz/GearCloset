@@ -61,7 +61,7 @@
           </div>
         </v-col>
         <v-col class="text-center">
-          {{ sub.postCount }}
+          {{ postCount(sub) }}
         </v-col>
         <v-col class="text-center">
           {{ commentsCount(sub) }}
@@ -89,6 +89,9 @@
     methods: {
       commentsCount (sub) {
         return sub.posts.reduce((sum, elem) => sum + elem.commentCount, 0);
+      },
+      postCount (sub) {
+        return sub.posts.length || 0;
       }
     },
 

@@ -15,7 +15,7 @@
     :value="localValue"
     @blur="handleUpdateItem($event)"
     @click="activateInput"
-    @keyup.enter.native="handleUpdateItem($event)">
+    @keyup.enter.native="$refs[uniqueIdentifier].blur()">
     <template #prepend-inner>
       <slot></slot>
     </template>
@@ -67,8 +67,6 @@
         this.localValue = e.target.value;
         this.active = false;
         this.$emit('handle-update-item', this.localValue);
-
-        if (e.type === 'keyup') { this.$refs[this.uniqueIdentifier].blur(); }
       }
     },
 

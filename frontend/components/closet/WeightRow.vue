@@ -38,6 +38,12 @@
       weightItems: ['oz', 'lb', 'g', 'kg']
     }),
 
+    computed: {
+      displayWeight () {
+        return this.$options.filters.displayWeight(this.item, this.item.unit);
+      }
+    },
+
     methods: {
       handleUpdateUnits (event, item) {
         this.$emit('handle-update-units', event, item);

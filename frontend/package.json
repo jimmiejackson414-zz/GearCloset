@@ -10,16 +10,16 @@
     "analyze": "nuxt build --analyze"
   },
   "dependencies": {
-    "@nuxtjs/apollo": "git@github.com:nuxt-community/apollo-module.git",
     "@nuxtjs/cloudinary": "^1.0.2",
     "@nuxtjs/dayjs": "^1.2.0",
     "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/pwa": "^3.0.2",
     "@nuxtjs/vuetify": "^1.11.2",
-    "apollo-link-http": "^1.5.17",
+    "@vuex-orm/core": "^0.36.3",
     "chart.js": "^2.9.4",
     "chartjs-plugin-colorschemes": "^0.4.0",
     "convert-units": "^2.3.4",
+    "cookie-universal-nuxt": "^2.1.4",
     "core-js": "^3.6.5",
     "dayjs": "^1.9.1",
     "dinero.js": "^1.8.1",
@@ -33,9 +33,7 @@
     "filepond-plugin-image-resize": "^2.0.7",
     "filepond-plugin-image-transform": "^3.7.4",
     "graphql-tag": "^2.11.0",
-    "immer": "^8.0.0",
     "lodash": "^4.17.20",
-    "node-fetch": "^2.6.1",
     "nuxt": "^2.14.5",
     "text-mask-addons": "^3.8.0",
     "tiptap-vuetify": "^2.24.0",
@@ -43,6 +41,7 @@
     "vee-validate": "^3.4.4",
     "vue-chartjs": "^3.5.1",
     "vue-filepond": "^6.0.3",
+    "vue-sanitize": "^0.2.1",
     "vue-unicons": "^2.3.0",
     "vuedraggable": "^2.24.3"
   },
@@ -58,6 +57,8 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.2",
     "eslint-plugin-vue-scoped-css": "^1.0.0",
+    "graphql": "^15.4.0",
+    "nuxt-graphql-request": "^3.2.0",
     "webpack-bundle-analyzer": "^4.3.0"
   },
   "resolutions": {

@@ -89,21 +89,16 @@
 </template>
 
 <script>
+  import { mapActions, mapState } from 'vuex';
   import isMobile from '~/mixins/isMobile';
-  import { shoppingListItemService } from '~/services';
   import ClickToEdit from '~/components/ClickToEdit.vue';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import PlusButton from '~/components/icons/PlusButton.vue';
+  import ShoppingListItem from '~/database/models/shoppingListItem';
+  import Trip from '~/database/models/trip';
 
   export default {
     mixins: [isMobile],
-
-    props: {
-      trip: {
-        type: Object,
-        default: () => {}
-      }
-    },
 
     data: () => ({
       deleteColor: '',
@@ -116,32 +111,36 @@
     }),
 
     computed: {
+      ...mapState({
+        selectedTripId: state => state.entities.trips.selectedTripId
+      }),
       allSelected () {
         return this.shoppingListItems.every(item => item.checked);
       },
       shoppingListItems () {
-        if (this.trip) {
-          return this.trip.shoppingListItems;
-        }
-        return [];
+        return ShoppingListItem.query().where('trip_id', this.selectedTripId).get();
+      },
+      trip () {
+        return Trip.find(this.selectedTripId);
       }
     },
 
     methods: {
-      addListItem () {
+      ...mapActions('entities/shoppingListItems', [
+        'createShoppingListItem',
+        'destroyShoppingListItem',
+        'updateShoppingListItem'
+      ]),
+      async addListItem () {
         const payload = {
-          fields: { title: 'New Item', checked: false, trip: this.trip.id, quantity: 0 },
-          apollo: this.$apollo
+          variables: { title: 'New Item', checked: false, trip: this.trip.id, quantity: 0 }
         };
 
-        shoppingListItemService.create(payload);
+        await this.createShoppingListItem(payload);
       },
-      removeItem (item) {
-        const payload = {
-          fields: { id: item.id, trip: this.trip.id },
-          apollo: this.$apollo
-        };
-        shoppingListItemService.destroy(payload);
+      async removeItem (item) {
+        const payload = { variables: { id: item.id, trip: this.trip.id } };
+        await this.destroyShoppingListItem(payload);
       },
       setEditing (ref) {
         this.editableItem = ref;
@@ -149,19 +148,16 @@
       },
       updateAllItems (value) {
         // TODO: Come up with batch update mutation instead
-        this.trip.shoppingListItems.forEach(i => this.updateItem(value, i, 'checked'));
+        this.shoppingListItems.forEach(i => this.updateItem(value, i, 'checked'));
       },
-      updateItem (event, item, field) {
+      async updateItem (event, item, field) {
         this.editableItem = null;
 
         // return if value hasn't changed
         if (event === String(item[field])) { return; }
 
-        const payload = {
-          fields: { id: item.id, [field]: event, trip: this.trip.id },
-          apollo: this.$apollo
-        };
-        shoppingListItemService.update(payload);
+        const payload = { variables: { id: item.id, [field]: event, trip: this.trip.id } };
+        await this.updateShoppingListItem(payload);
       }
     },
 

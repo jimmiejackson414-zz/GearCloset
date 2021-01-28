@@ -1,9 +1,0 @@
-fragment shoppingListItem on ShoppingListItem {
-  id
-  title
-  checked
-  quantity
-  trip_id
-  created_at
-  updated_at
-}

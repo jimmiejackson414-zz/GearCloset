@@ -1,6 +1,6 @@
 <template>
   <v-app-bar
-    v-if="!$apollo.loading"
+    v-if="!currentUserLoading"
     id="home-app-bar"
     v-resize="onResize"
     app
@@ -63,6 +63,7 @@
         { title: 'Forums', to: '/forums', badge: false, hasMenu: false },
         { title: 'Planning', to: '/planning', badge: false, hasMenu: false },
         { title: 'Closet', to: '/closet', badge: false, hasMenu: false }
+        // { title: 'Friends', to: '/friends', badge: false, hasMenu: false }
       ]
     }),
 
@@ -91,7 +92,6 @@
 
     mounted () {
       this.onResize();
-      this.loading = false;
     },
 
     components: {

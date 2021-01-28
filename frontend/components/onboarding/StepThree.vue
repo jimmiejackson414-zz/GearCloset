@@ -21,7 +21,7 @@
       </p>
     </v-alert>
     <div class="plans-wrapper">
-      <v-row>
+      <v-row v-if="currentUser">
         <!-- Cards -->
         <upgrade-card
           v-for="(card, index) in cards"
@@ -41,13 +41,12 @@
       </v-btn>
       <v-btn
         color="primary"
+        depressed
         :disabled="submitting"
         @click="completeOnboarding">
         <loading
           v-if="submitting"
-          color="#fff"
-          height="30px"
-          width="30px" />
+          color="#fff" />
         <span v-else>Finish</span>
       </v-btn>
     </div>
@@ -57,8 +56,8 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import currentUser from '~/mixins/currentUser';
-  import updateMutation from '~/apollo/mutations/auth/update.gql';
   import CustomIcon from '~/components/icons/CustomIcon.vue';
   import Loading from '~/components/Loading.vue';
   import UpgradeCard from '~/components/UpgradeCard.vue';
@@ -78,17 +77,23 @@
     }),
 
     methods: {
+      ...mapActions('entities/users', [
+        'updateUser'
+      ]),
       async completeOnboarding () {
         this.submitting = true;
 
         try {
-          const payload = { has_onboarded: true, id: Number(this.currentUser.id) };
-          const { errors } = await this.$apollo.mutate({
-            mutation: updateMutation,
-            variables: payload
-          });
+          const payload = {
+            variables: {
+              has_onboarded: true,
+              id: this.currentUser.id
+            }
+          };
 
-          if (errors?.length) {
+          const res = await this.updateUser(payload);
+
+          if (!res.success) {
             this.isError = true;
             this.submitting = false;
             return;
@@ -131,5 +136,6 @@
   .btn-wrapper {
     display: flex;
     justify-content: space-between;
+    margin-top: 2rem;
   }
 </style>

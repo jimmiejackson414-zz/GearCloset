@@ -50,16 +50,15 @@
 </template>
 
 <script>
+  import { authService } from '~/services';
   import Logo from '~/components/icons/Logo.vue';
-  import AUTH_IMAGES_QUERY from '~/apollo/queries/content/authImages.gql';
 
   export default {
     name: 'Auth',
 
-    apollo: {
-      authImages: {
-        query: AUTH_IMAGES_QUERY
-      }
+    async fetch () {
+      const { authImages } = await authService.fetchImages(this.$graphql);
+      this.authImages = authImages;
     },
 
     data: () => ({

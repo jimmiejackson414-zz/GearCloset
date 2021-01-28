@@ -175,6 +175,19 @@
                     <p class="mb-0 white--text">
                       {{ item.name }}
                     </p>
+                    <v-btn
+                      class="destroy-btn"
+                      icon
+                      @click="handleDeleteItem(item)">
+                      <client-only>
+                        <unicon
+                          class="pointer"
+                          fill="#ffffff"
+                          height="20"
+                          name="trash-alt"
+                          width="20" />
+                      </client-only>
+                    </v-btn>
                   </v-list-item>
                 </transition-group>
               </draggable>
@@ -294,6 +307,9 @@
       log (evt) {
         console.log('sidebar log: ', evt);
       },
+      handleDeleteItem (item) {
+        this.$emit('handle-delete-item', item);
+      },
       handleSelectedPack (pack) {
         this.$emit('handle-selected-pack', pack);
       }
@@ -368,14 +384,23 @@
               background-color: $primaryDark;
             }
 
-            .gear-handle {
+            .gear-handle, .destroy-btn {
               opacity: 0;
               transition: 0.2s opacity $cubicBezier;
+            }
+
+            p {
+              flex-grow: 1;
             }
 
             &:hover {
               .gear-handle {
                 cursor: grab;
+                opacity: 1;
+              }
+
+              .destroy-btn {
+                cursor: pointer;
                 opacity: 1;
               }
             }

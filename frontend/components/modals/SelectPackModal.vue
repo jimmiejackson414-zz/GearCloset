@@ -50,8 +50,8 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import { packService, tripService } from '~/services';
   import Loading from '~/components/Loading.vue';
+  import Pack from '~/database/models/pack';
 
   export default {
     props: {
@@ -85,10 +85,14 @@
     },
 
     methods: {
-      ...mapActions({
-        success: 'alert/success',
-        error: 'alert/error'
-      }),
+      ...mapActions('alert', [
+        'success',
+        'error'
+      ]),
+      ...mapActions('entities/packs', [
+        'fetchPacks',
+        'update'
+      ]),
       closeModal () {
         this.show = false;
       },
@@ -96,19 +100,18 @@
         this.submitting = true;
 
         const payload = {
-          fields: { pack_id: this.selectedPack.id, id: this.trip.id },
-          apollo: this.$apollo
+          variables: { pack_id: this.selectedPack.id, id: this.trip.id },
+          updateTrip: true
         };
-        await tripService.update(payload);
+        await this.update(payload);
+
         this.submitting = false;
-        this.$emit('handle-refetch-trips');
         this.$emit('handle-reset-modal');
       },
       async populatePacks () {
         this.isLoading = true;
-        const payload = { apollo: this.$apollo };
-        const { data } = await packService.getPacks(payload);
-        this.packs = data.packs;
+        await this.fetchPacks();
+        this.packs = Pack.all();
         this.isLoading = false;
       }
     },

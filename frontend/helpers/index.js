@@ -1,3 +1,3 @@
 export * from './countries';
-export * from './getCookie';
+export * from './handleCookies';
 export * from './themeOptions';

@@ -38,7 +38,6 @@
     <select-pack-modal
       v-model="modalOpen"
       :trip="trip"
-      @handle-refetch-trips="refetchTrips"
       @handle-reset-modal="resetModal" />
 
     <pack-theme-modal
@@ -50,21 +49,15 @@
 </template>
 
 <script>
+  import { mapActions, mapState } from 'vuex';
   import convert from 'convert-units';
   import { calculateCategoryWeight } from '~/helpers/functions';
   import { generateThemeOptions } from '~/helpers';
-  import { packService } from '~/services';
   import EllipsisButton from '~/components/icons/EllipsisButton.vue';
   import SelectedPackGraph from '~/components/graphs/SelectedPackGraph.vue';
+  import Trip from '~/database/models/trip';
 
   export default {
-    props: {
-      trip: {
-        type: Object,
-        default: () => {}
-      }
-    },
-
     data () {
       return {
         chartData: {
@@ -86,6 +79,9 @@
     },
 
     computed: {
+      ...mapState({
+        selectedTripId: state => state.entities.trips.selectedTripId
+      }),
       activePack () {
         if (!this.trip) { return null; }
         return this.trip.pack;
@@ -111,22 +107,22 @@
       },
       themeOptions () {
         return generateThemeOptions();
+      },
+      trip () {
+        return Trip.query().whereId(this.selectedTripId).with('pack.categories.items').first();
       }
     },
 
     methods: {
+      ...mapActions('entities/packs', [
+        'updatePack'
+      ]),
       handleUpdatePackTheme (theme) {
         this.localTheme = theme;
         this.packThemeModalOpen = false;
 
-        const payload = {
-          fields: { id: this.activePack.id, theme },
-          apollo: this.$apollo
-        };
-        packService.update(payload);
-      },
-      refetchTrips () {
-        this.$emit('handle-refetch-trips');
+        const payload = { variables: { id: this.activePack.id, theme } };
+        this.update(payload);
       },
       resetModal () {
         this.modalOpen = false;
@@ -142,16 +138,21 @@
         }
       },
       setChartData () {
-        this.localTheme = this.activePack.theme;
-        this.chartData.labels = this.activePack.categories.map(category => {
-          return this.$options.filters.truncate(category.name, 20);
-        });
-        this.chartData.datasets = [{
-          label: 'Selected Pack Graph',
-          data: this.activePack.categories.map(category => {
-            return parseFloat(convert(calculateCategoryWeight(category)).from('g').to('oz')).toFixed(2);
-          })
-        }];
+        if (this.activePack) {
+          this.localTheme = this.activePack.theme;
+          this.chartData.labels = this.activePack.categories.map(category => {
+            return this.$options.filters.truncate(category.name, 20);
+          });
+          this.chartData.datasets = [{
+            label: 'Selected Pack Graph',
+            data: this.activePack.categories.map(category => {
+              return parseFloat(convert(calculateCategoryWeight(category)).from('g').to(category.unit)).toFixed(2);
+            })
+          }];
+        }
+      },
+      triggerRerender () {
+        this.setChartData();
       }
     },
 
@@ -161,6 +162,16 @@
         this.setChartData();
       }
     },
+
+    // TODO: This watch rerenders the chart on change of unrelated events, such as adding/removing a Trip Detail
+    // Will need to modify so that only rerenders when category or item is modified.
+    // watch: {
+    //   trip (val, oldVal) {
+    //     if (val !== oldVal) {
+    //       this.setChartData();
+    //     }
+    //   }
+    // },
 
     components: {
       EllipsisButton,
