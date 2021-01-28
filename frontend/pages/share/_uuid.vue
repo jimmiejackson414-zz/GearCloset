@@ -22,13 +22,18 @@
         v-else
         class="content-wrapper">
         <v-row class="top">
-          <v-col class="col-12 header text-center">
-            <h4 class="page-title text-h4 mt-8 mb-2">
-              {{ pack.name }}
-            </h4>
-            <p class="font-weight-bold mb-4">
-              {{ pack.user | prettyName }}
-            </p>
+          <v-col class="col-12 header text-center mt-8 mb-4">
+            <avatar
+              :size="75"
+              :user="pack.user" />
+            <div class="pack-and-user">
+              <h4 class="page-title text-h4 mb-2">
+                {{ pack.name }}
+              </h4>
+              <p class="font-weight-bold mb-0">
+                {{ pack.user | prettyName }}
+              </p>
+            </div>
           </v-col>
           <v-col class="wrapper col-12 col-md-6 col-lg-7">
             <selected-pack-graph
@@ -217,6 +222,7 @@
 
 <script>
   import convert from 'convert-units';
+  import Avatar from '~/components/Avatar.vue';
   import { calculateCategoryWeight, convertToDollars } from '~/helpers/functions';
   import isMobile from '~/mixins/isMobile';
   import LoadingPage from '~/components/LoadingPage.vue';
@@ -325,6 +331,7 @@
     },
 
     components: {
+      Avatar,
       LoadingPage,
       LogoIcon,
       SelectedPackGraph,
@@ -343,6 +350,19 @@
       .not-found {
         height: 100%;
         margin-top: 5rem;
+      }
+
+      .content-wrapper {
+        .header {
+          align-items: center;
+          display: flex;
+          justify-content: center;
+
+          .pack-and-user {
+            margin-left: 2rem;
+            text-align: left;
+          }
+        }
       }
     }
 

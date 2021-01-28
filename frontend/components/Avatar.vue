@@ -1,7 +1,7 @@
 <template>
   <client-only>
     <v-avatar
-      color="primary"
+      :color="hasAvatar ? '' : 'primary'"
       :size="size">
       <cld-image
         v-if="hasAvatar"
@@ -9,10 +9,11 @@
         crop="fill"
         fetch-format="auto"
         gravity="auto:subject"
-        height="40"
+        :height="size"
         :public-id="user.avatar_url"
         quality="auto"
-        width="40" />
+        radius="max"
+        :width="size" />
       <span
         v-else
         class="white--text text-body-1 font-weight-bold">{{ initials }}</span>
