@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import Vue from 'vue';
 import convert from 'convert-units';
+import { convertToDollars } from '~/helpers/functions';
 
 Vue.filter('prettyName', (user, type) => {
   const { first_name, last_name, trail_name, email } = user;
@@ -49,6 +50,10 @@ Vue.filter('truncate', (string, length = 140) => {
   }
 
   return `${string.substring(0, length)}...`;
+});
+
+Vue.filter('displayPrice', value => {
+  return convertToDollars(value);
 });
 
 Vue.filter('displayWeight', (value, unit = 'g') => {

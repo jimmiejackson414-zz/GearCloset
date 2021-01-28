@@ -16,4 +16,10 @@ class PacksQuery
         }
         return [];
     }
+
+    public function find_by_uuid($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    {
+        $pack = \App\Models\Pack::findByUUID($args['uuid']);
+        return $pack;
+    }
 }

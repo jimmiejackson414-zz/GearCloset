@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use BinaryCabin\LaravelUUID\Traits\HasUUID;
 
 class Pack extends Model
 {
+    use HasUUID;
+
     protected $fillable = [
-        'name', 'user_id', 'active', 'theme', 'created_at', 'updated_at'
+        'name', 'user_id', 'active', 'theme', 'uuid', 'created_at', 'updated_at'
     ];
 
     // automatically eager load categories of a pack

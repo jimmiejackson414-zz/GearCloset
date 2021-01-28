@@ -10,6 +10,11 @@ extend type Query @guard(with: ["api"]) {
     packs: [Pack!]! @field(resolver: "PacksQuery@find_by_user")
 }
 
+# Public Query
+extend type Query {
+    packByUuid(uuid: String! @eq): Pack @field(resolver: "PacksQuery@find_by_uuid")
+}
+
 type Pack {
     id: ID!
     name: String!
@@ -18,6 +23,7 @@ type Pack {
     created_at: DateTime!
     updated_at: DateTime!
     user_id: ID
+    uuid: String!
 
     categories: [Category!]! @hasMany
     trips: [Trip]! @hasMany
