@@ -33,6 +33,7 @@
               <div class="price-column">
                 <client-only>
                   <unicon
+                    class="d-flex"
                     fill="#494f57"
                     height="14"
                     name="dollar-alt"

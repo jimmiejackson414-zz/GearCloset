@@ -154,9 +154,9 @@
 
 <script>
   // eslint-disable-next-line no-unused-vars
-  import { mapActions, mapMutations, mapState } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   import convert from 'convert-units';
-  import { calculateCategoryWeight, generateUUID } from '~/helpers/functions';
+  import { calculateCategoryWeight } from '~/helpers/functions';
   import { generateThemeOptions } from '~/helpers';
   import isMobile from '~/mixins/isMobile';
   import ClosetDataTable from '~/components/closet/ClosetDataTable.vue';
@@ -209,7 +209,7 @@
       }),
       graphStyles () {
         return {
-          returnheight: `${this.chartHeight}px`,
+          height: `${this.chartHeight}px`,
           margin: '0 auto',
           position: 'relative',
           width: `${this.chartWidth}px`
@@ -295,7 +295,7 @@
       handleSharePackListModal () {
         this.packList = {
           ...this.selectedPack,
-          uuid: generateUUID()
+          uuid: this.selectedPack.uuid
         };
         this.shareListModalOpen = true;
       },
