@@ -21,6 +21,7 @@
         "laravel/tinker": "^2.5",
         "mll-lab/laravel-graphql-playground": "^2.4",
         "nuwave/lighthouse": "^4.18",
+        "rutorika/sortable": "^8.0",
         "webpatser/laravel-uuid": "2.*"
     },
     "require-dev": {

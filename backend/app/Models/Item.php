@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Item extends Model
 {
+    use \Rutorika\Sortable\SortableTrait;
+
     protected $fillable = [
         'name', 'weight', 'price', 'generic_type', 'category_id', 'consumable', 'worn', 'quantity', 'unit'
     ];

@@ -352,7 +352,9 @@
         updateItem: 'entities/items/updateItem'
       }),
       log (evt) {
-        console.log('data table log: ', evt);
+        if (evt.moved) {
+          console.log('data table log: ', evt);
+        }
       },
       async handleAddNewCategory () {
         const payload = { variables: { name: 'New Category', pack_id: this.activePack.id } };
