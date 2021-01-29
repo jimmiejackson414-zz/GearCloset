@@ -153,7 +153,6 @@
 </template>
 
 <script>
-  // eslint-disable-next-line no-unused-vars
   import { mapActions, mapState } from 'vuex';
   import convert from 'convert-units';
   import { calculateCategoryWeight } from '~/helpers/functions';

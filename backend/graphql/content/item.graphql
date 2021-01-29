@@ -7,6 +7,7 @@ extend type Mutation @guard(with: ["api"]) {
     destroyItem(id:ID!): Item @delete
     removeItem(input: ItemCategoryInput! @spread): Item @field(resolver: "ItemMutator@removeItem")
     updateItem(id:ID! input: ItemInput! @spread): Item @update
+    updateItemPosition(id:ID! position:Int!): Item @field(resolver: "ItemMutator@updatePosition")
 }
 
 type Item {

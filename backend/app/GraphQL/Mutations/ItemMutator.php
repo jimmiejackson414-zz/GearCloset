@@ -40,4 +40,12 @@ class ItemMutator
 
     return Item::find($args['item_id']);
   }
+
+  /*
+  * Update item position
+  */
+  public function updatePosition($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+  {
+    dd('Need to write this function')
+  }
 }

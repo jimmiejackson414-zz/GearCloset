@@ -17,6 +17,7 @@ export default class Item extends Model {
       worn: this.boolean(0),
       unit: this.string(''),
       quantity: this.number(0),
+      position: this.attr(0),
       created_at: this.attr(''),
       updated_at: this.attr(''),
 

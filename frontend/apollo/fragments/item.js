@@ -11,6 +11,7 @@ export const ITEM_FRAGMENT = gql`
     generic_type
     consumable
     worn
+    position
     quantity
     created_at
     updated_at

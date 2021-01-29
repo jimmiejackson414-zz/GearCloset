@@ -5,7 +5,7 @@ import Pack from './pack';
 
 export default class Category extends Model {
   static entity = 'categories';
-  static eagerLoad = ['items'];
+  static eagerLoad = ['categoriesItem', 'items'];
 
   static fields () {
     return {
