@@ -22,7 +22,7 @@ type Item {
     quantity: Int
     created_at: DateTime!
     updated_at: DateTime!
-    position: Int!
+    position: Int
     category_id: ID
 
     categories: [Category!]! @belongsToMany

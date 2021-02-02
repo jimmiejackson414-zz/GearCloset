@@ -105,6 +105,12 @@
             }
           }
         });
+      },
+      rerender () {
+        // TODO: Figure out 'transition of null' error and how to only
+        // update when weight, quantity or theme values are updated.
+        console.log('rerender');
+        // this.$nextTick(() => this.$data._chart.update());
       }
     },
 
@@ -115,7 +121,9 @@
     watch: {
       chartData: {
         deep: true,
-        handler (val) {
+        handler (val, oldVal) {
+          // TODO: Once above rerender() function is worked out, can probably remove this watcher
+          console.log('rework watcher');
           this.$data._chart.update();
         }
       },

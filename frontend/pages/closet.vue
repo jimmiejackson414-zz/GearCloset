@@ -108,6 +108,7 @@
             <v-col class="wrapper col-12 col-md-6 col-lg-7">
               <selected-pack-graph
                 v-if="selectedPack"
+                ref="selectedPackRef"
                 :chart-data="chartData"
                 :is-mobile="isMobile"
                 :styles="graphStyles"
@@ -124,7 +125,8 @@
           <closet-data-table
             v-if="selectedPack"
             :active-pack="selectedPack"
-            @handle-delete-category="handleDeleteCategoryModal" />
+            @handle-delete-category="handleDeleteCategoryModal"
+            @trigger-rerender="triggerRerender" />
         </v-container>
       </div>
 
@@ -328,6 +330,9 @@
             })
           }];
         }
+      },
+      triggerRerender () {
+        this.$refs.selectedPackRef.rerender();
       }
     },
 

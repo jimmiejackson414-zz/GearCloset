@@ -46,6 +46,6 @@ class ItemMutator
   */
   public function updatePosition($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
   {
-    dd('Need to write this function')
+    dd('Need to write this function');
   }
 }

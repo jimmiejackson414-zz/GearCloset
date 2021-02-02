@@ -54,5 +54,10 @@ export const actions = {
     const { updateItem } = await itemService.update(payload);
     commit('updateItem', updateItem);
     commit('toggleIsLoading');
+  },
+  async updateItemPosition ({ commit }, payload) {
+    payload.graphql = this.$graphql;
+    const { updateItemPosition } = await itemService.updatePosition(payload);
+    console.log({ updateItemPosition });
   }
 };

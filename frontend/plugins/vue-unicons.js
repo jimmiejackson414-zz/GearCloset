@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Unicon from 'vue-unicons/dist/vue-unicons-ssr.common.js';
 import {
+  uniAngleDown,
   uniAngleLeft,
   uniAngleRight,
   uniAngleUp,
@@ -55,6 +56,7 @@ import {
 import 'vue-unicons/dist/vue-unicons-ssr.css';
 
 Unicon.add([
+  uniAngleDown,
   uniAngleLeft,
   uniAngleRight,
   uniAngleUp,

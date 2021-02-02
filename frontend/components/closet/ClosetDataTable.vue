@@ -4,269 +4,10 @@
       <h2 class="text-h6 ml-3">
         Pack Items
       </h2>
-      <v-row
-        v-for="(category, index) in activePack.categories"
-        :key="category.id"
-        :class="['categories-container', activePack.categories.length === index + 1 ? 'last' : '']">
-        <v-lazy
-          min-height="100"
-          :options="{ threshold: .25}"
-          :style="{ width: '100%' }"
-          transition="fade-transition"
-          :value="false">
-          <v-col
-            cols="12">
-            <div class="category-title">
-              <v-btn
-                icon
-                @click="handleDeleteCategory(category)">
-                <client-only>
-                  <unicon
-                    class="pointer"
-                    :fill="errorColor"
-                    height="20"
-                    name="trash-alt"
-                    width="20" />
-                </client-only>
-              </v-btn>
-              <click-to-edit
-                :unique-identifier="`title${category.id}Ref`"
-                :value="category.name"
-                @handle-update-item="handleUpdateCategory($event, category, 'name')" />
-            </div>
-            <v-data-table
-              v-if="category.items"
-              :ref="`sortableTable${index}`"
-              calculate-widths
-              class="items-table-container"
-              dense
-              disable-pagination
-              :headers="headers"
-              hide-default-footer
-              :items="category.items"
-              :mobile-breakpoint="0">
-              <template #body="{ items }">
-                <draggable
-                  v-bind="dragOptions"
-                  class="dragArea"
-                  group="items"
-                  handle=".drag"
-                  :list="items"
-                  tag="tbody"
-                  @change="log"
-                  @end="drag = false"
-                  @start="drag = true">
-                  <tr
-                    v-for="(item, i) in items"
-                    :key="item.id">
-                    <!-- Drag Handle -->
-                    <td
-                      :key="`${item.id}-drag-${i}-${index}`"
-                      class="px-0 py-1">
-                      <client-only>
-                        <unicon
-                          class="drag"
-                          fill="#9e9e9e"
-                          height="20"
-                          name="grip-horizontal-line"
-                          width="20" />
-                      </client-only>
-                    </td>
 
-                    <!-- Generic Type Click To Edit -->
-                    <td
-                      :key="`${item.id}-type-${i}-${index}`"
-                      class="px-0 py-1">
-                      <click-to-edit
-                        :style="{ fontSize: '0.875rem' }"
-                        :unique-identifier="`type${item.id}`"
-                        :value="item.generic_type"
-                        @handle-update-item="handleUpdateItem($event, item, 'generic_type')" />
-                    </td>
-
-                    <!-- Name Click To Edit -->
-                    <td
-                      :key="`${item.id}-name-${i}-${index}`"
-                      class="px-0 py-1">
-                      <click-to-edit
-                        :style="{ fontSize: '0.875rem' }"
-                        :unique-identifier="`name${item.id}Ref`"
-                        :value="item.name"
-                        @handle-update-item="handleUpdateItem($event, item, 'name')" />
-                    </td>
-
-                    <!-- Consumable Toggle -->
-                    <td
-                      :key="`${item.id}-consumable-${i}-${index}`"
-                      class="text-center px-0 py-1">
-                      <v-btn
-                        :class="[{ active: item.consumable }, 'consumable-btn']"
-                        icon
-                        :ripple="false"
-                        text
-                        @click.native="updateBooleanItem(item, 'consumable')">
-                        <client-only>
-                          <unicon
-                            fill="#9e9e9e"
-                            height="20"
-                            name="utensils-alt"
-                            width="20" />
-                        </client-only>
-                      </v-btn>
-                    </td>
-
-                    <!-- Worn Toggle -->
-                    <td
-                      :key="`${item.id}-worn-${i}-${index}`"
-                      class="text-center px-0 py-1">
-                      <v-btn
-                        :class="[{ active: item.worn }, 'worn-btn']"
-                        icon
-                        :ripple="false"
-                        text
-                        @click="updateBooleanItem(item, 'worn')">
-                        <client-only>
-                          <unicon
-                            fill="#9e9e9e"
-                            height="20"
-                            name="layer-group"
-                            width="20" />
-                        </client-only>
-                      </v-btn>
-                    </td>
-
-                    <!-- Weight Click To Edit and Dropdown -->
-                    <weight-row
-                      :identifier="`${item.id}-weight-${i}-${index}`"
-                      :item="item"
-                      @handle-update-item="handleUpdateItem"
-                      @handle-update-units="handleUpdateUnits" />
-
-                    <!-- Price Click To Edit -->
-                    <td
-                      :key="`${item.id}-price-${i}-${index}`"
-                      class="px-0 py-1">
-                      <client-only>
-                        <click-to-edit
-                          :custom-class="'price-column'"
-                          :style="{ fontSize: '0.875rem', maxWidth: '100px', margin: '0 auto' }"
-                          :unique-identifier="`price${item.id}Ref`"
-                          :value="itemPrice(item)"
-                          @handle-update-item="handleUpdateItem($event, item, 'price')">
-                          <unicon
-                            fill="#494f57"
-                            height="14"
-                            name="dollar-alt"
-                            width="14" />
-                        </click-to-edit>
-                      </client-only>
-                    </td>
-
-                    <!-- Quantity Click To Edit -->
-                    <td
-                      :key="`${item.id}-quantity-${i}-${index}`"
-                      class="px-0 py-1">
-                      <click-to-edit
-                        :custom-class="'quantity-column'"
-                        :style="{ fontSize: '0.875rem', width: '60px', margin: '0 auto' }"
-                        type="number"
-                        :unique-identifier="`quantity${item.id}Ref`"
-                        :value="String(item.quantity)"
-                        @handle-update-item="handleUpdateItem($event, item, 'quantity')" />
-                    </td>
-
-                    <!-- Remove button -->
-                    <td
-                      :key="`${item.id}-remove-${i}-${index}`"
-                      class="px-0 py-1">
-                      <v-btn
-                        icon
-                        @click="handleRemoveRow(item, category)">
-                        <client-only>
-                          <unicon
-                            class="pointer"
-                            :fill="errorColor"
-                            height="20"
-                            name="trash-alt"
-                            width="20" />
-                        </client-only>
-                      </v-btn>
-                    </td>
-                  </tr>
-
-                  <!-- Totals -->
-                  <tr class="totals cursor-default">
-                    <td :colspan="1"></td>
-                    <td :colspan="1">
-                      <span class="font-weight-bold px-3">Totals:</span>
-                    </td>
-                    <td :colspan="1"></td>
-                    <td :colspan="1"></td>
-                    <td :colspan="1"></td>
-
-                    <!-- Weight Total -->
-                    <td
-                      class="text-center"
-                      :colspan="1">
-                      <span class="weight-column">
-                        {{ category | displayCategoryWeight(category.unit) }}
-                        <v-select
-                          dense
-                          hide-details
-                          :items="weightItems"
-                          :value="category.unit"
-                          @change="handleUpdateUnits($event, category)" />
-                      </span>
-                    </td>
-
-                    <!-- Price Total -->
-                    <td
-                      class="text-center"
-                      :colspan="1">
-                      <span class="price-total">
-                        <client-only>
-                          <unicon
-                            fill="#494f57"
-                            height="14"
-                            name="dollar-alt"
-                            width="14" />
-                        </client-only>
-                        {{ priceTotal(items) }}
-                      </span>
-                    </td>
-
-                    <!-- Quantity Total -->
-                    <td
-                      class="text-center pr-4"
-                      :colspan="1">
-                      {{ quantityTotal(items) }}
-                    </td>
-                    <td :colspan="1"></td>
-                  </tr>
-                </draggable>
-              </template>
-            </v-data-table>
-
-            <!-- Add New Item Button -->
-            <v-btn
-              class="mb-8"
-              :ripple="false"
-              text
-              @click="handleAddNewItem(category.id)">
-              <client-only>
-                <unicon
-                  :fill="primaryColor"
-                  height="18"
-                  name="plus"
-                  width="18" />
-              </client-only>
-              <p class="body-2 primary--text mb-0 ml-3">
-                Add New Item
-              </p>
-            </v-btn>
-          </v-col>
-        </v-lazy>
-      </v-row>
+      <client-only>
+        <data-table :data="activePack" />
+      </client-only>
 
       <!-- Add New Category Button -->
       <v-container
@@ -300,10 +41,7 @@
   /* eslint-disable camelcase */
   import { mapActions } from 'vuex';
   import convert from 'convert-units';
-  import draggable from 'vuedraggable';
-  import WeightRow from './WeightRow.vue';
-  import { convertToDollars } from '~/helpers/functions';
-  import ClickToEdit from '~/components/ClickToEdit.vue';
+  import DataTable from '~/components/DataTable.vue';
 
   export default {
     props: {
@@ -313,33 +51,12 @@
       }
     },
 
-    data: () => ({
-      drag: false,
-      errorColor: '',
-      headers: [
-        { text: '', align: 'left', sortable: false, value: 'drag' },
-        { text: 'Type', align: 'left', sortable: true, value: 'generic_type' },
-        { text: 'Name', align: 'left', sortable: true, value: 'name' },
-        { text: 'Consumable', align: 'center', sortable: true, value: 'consumable' },
-        { text: 'Worn', align: 'center', sortable: true, value: 'worn' },
-        { text: 'Weight', align: 'center', sortable: true, value: 'weight' },
-        { text: 'Price', align: 'center', sortable: true, value: 'price' },
-        { text: 'Quantity', align: 'center', sortable: true, value: 'quantity' },
-        { text: '', align: 'right', sortable: false, value: 'remove' }
-      ],
-      primaryColor: '',
-      weightItems: ['oz', 'lb', 'g', 'kg']
-    }),
-
-    computed: {
-      dragOptions () {
-        return {
-          animation: 200,
-          group: 'description',
-          disabled: false,
-          ghostClass: 'ghost'
-        };
-      }
+    data () {
+      return {
+        errorColor: '',
+        primaryColor: '',
+        weightItems: ['oz', 'lb', 'g', 'kg']
+      };
     },
 
     methods: {
@@ -349,13 +66,9 @@
         removeItem: 'entities/items/removeItem',
         success: 'alert/success',
         updateCategory: 'entities/categories/updateCategory',
-        updateItem: 'entities/items/updateItem'
+        updateItem: 'entities/items/updateItem',
+        updateItemPosition: 'entities/items/updateItemPosition'
       }),
-      log (evt) {
-        if (evt.moved) {
-          console.log('data table log: ', evt);
-        }
-      },
       async handleAddNewCategory () {
         const payload = { variables: { name: 'New Category', pack_id: this.activePack.id } };
         await this.createCategory(payload);
@@ -404,6 +117,11 @@
         // // convert back to mg for storage in db
         if (field === 'weight') {
           payload.variables.weight = convert(value).from(item.unit).to('g');
+          this.$emit('trigger-rerender');
+        }
+
+        if (field === 'quantity' || field === 'theme') {
+          this.$emit('trigger-rerender');
         }
 
         await this.updateItem(payload);
@@ -415,36 +133,33 @@
           this.handleUpdateCategory(event, item, 'unit');
         }
       },
-      itemPrice (item) {
-        return convertToDollars(item.price);
-      },
-      quantityTotal (items) {
-        return items.reduce((sum, elem) => sum + elem.quantity, 0);
-      },
-      priceTotal (items) {
-        const reduced = items.reduce((sum, elem) => sum + Number(elem.price), 0);
-        return convertToDollars(reduced);
-      },
       async updateBooleanItem (item, field) {
         const payload = { variables: { id: item.id, [field]: !item[field] } };
         await this.updateItem(payload);
-      },
-      weightTotal (category) {
-        const weight = category.items.reduce((sum, elem) => sum + elem.weight, 0);
-        const payload = { weight };
-        return this.$options.filters.displayWeight(payload, category.unit);
       }
     },
 
     mounted () {
       this.primaryColor = this.$nuxt.$vuetify.theme.themes.light.primary;
       this.errorColor = this.$nuxt.$vuetify.theme.themes.light.error;
+
+      // const el = document.querySelector('.items-table-container tbody');
+      // this.sortable = Sortable.create(el, {
+      //   onEnd ({ newIndex, oldIndex }) {
+      //     console.log({ newIndex });
+      //     console.log({ oldIndex });
+      //   },
+      //   animation: 150,
+      //   draggable: '.draggable-row',
+      //   easing: 'cubic-bezier(1, 0, 0, 1)',
+      //   group: 'items',
+      //   handle: '.drag',
+      //   swapThreshold: 0.25
+      // });
     },
 
     components: {
-      ClickToEdit,
-      draggable,
-      WeightRow
+      DataTable
     }
   };
 </script>
@@ -472,7 +187,15 @@
     width: 100%;
 
     tr {
+      &.group-header {
+        background: #eeeeee;
+      }
+
       td {
+        &:last-child svg, &:first-child svg {
+          opacity   : 0;
+          transition: 0.2s opacity $cubicBezier;
+        }
 
         .price-column, .quantity-column {
           input {
@@ -541,11 +264,6 @@
             }
           }
         }
-
-        &:last-child svg, &:first-child svg {
-          opacity   : 0;
-          transition: 0.2s opacity $cubicBezier;
-        }
       }
 
       &:hover {
@@ -581,6 +299,12 @@
           justify-content: center;
         }
       }
+
+      &.add-new-item-row {
+        svg {
+          opacity: 1 !important;
+        }
+      }
     }
   }
 
@@ -589,7 +313,7 @@
   }
 
   .flip-list-move {
-    transition: transform 0.5s;
+    transition: transform 0.15s;
   }
 
   .no-move {

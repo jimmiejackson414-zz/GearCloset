@@ -90,7 +90,8 @@
   .v-input.click-to-edit {
     &.b-none {
       fieldset {
-        border: none !important;
+        border: 0px solid transparent;
+        transition: 0.15s border ease-in-out;
       }
     }
 
@@ -99,6 +100,12 @@
         align-self: center;
         margin: 0 0 3px;
         margin-top: 0 !important;
+      }
+    }
+
+    &:hover {
+      fieldset {
+        border: 1px solid $grey5;
       }
     }
   }

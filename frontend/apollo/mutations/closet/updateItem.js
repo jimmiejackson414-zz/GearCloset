@@ -27,7 +27,7 @@ export const UPDATE_ITEM_MUTATION = gql`
         worn: $worn
         quantity: $quantity
       }) {
-      ...item
+        ...item
     }
   }
   ${ITEM_FRAGMENT}
