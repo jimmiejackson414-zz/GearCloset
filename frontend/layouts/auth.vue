@@ -7,7 +7,7 @@
       flat>
       <v-toolbar-title>
         <nuxt-link to="/">
-          <logo :color="logoColor" />
+          <logo color="#4a4a4a" />
         </nuxt-link>
       </v-toolbar-title>
       <v-spacer />
@@ -31,12 +31,7 @@
       </v-toolbar-items>
     </v-app-bar>
     <v-main :style="randBackground">
-      <v-container
-        v-if="isUserPage"
-        fluid>
-        <nuxt />
-      </v-container>
-      <v-container v-else>
+      <v-container fluid>
         <nuxt />
       </v-container>
     </v-main>
@@ -67,15 +62,6 @@
       logo: null,
       randBackground: ''
     }),
-
-    computed: {
-      isUserPage () {
-        return this.$route.name === 'login' || this.$route.name === 'register' || this.$route.name === 'forgot-password' || this.$route.name === 'contact';
-      },
-      logoColor () {
-        return (this.$route.name !== 'login' || this.$route.name !== 'register' || this.$route.name !== 'forgot-password') ? '#4a4a4a' : '#fff';
-      }
-    },
 
     methods: {
       generateBackground () {

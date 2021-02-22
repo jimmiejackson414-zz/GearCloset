@@ -29,7 +29,7 @@
           @handle-update-item="handleUpdateCategory($event, category, 'name')" />
       </div>
       <div
-        class="flex-table header"
+        class="flex-table header mb-2"
         role="rowgroup">
         <div
           v-for="(header, index) in headers"
@@ -40,192 +40,187 @@
           <p class="mb-0 text-body-2 font-weight-medium">
             {{ header.label }}
           </p>
-          <v-btn
-            v-if="header.sortable"
-            class="sortable-btn"
-            icon
-            :ripple="false"
-            text
-            x-small
-            @click.native="toggleSort">
-            <client-only>
-              <unicon
-                fill="#4a4a4a"
-                height="20"
-                name="angle-down"
-                width="20" />
-            </client-only>
-          </v-btn>
         </div>
       </div>
 
-      <div class="group-items">
-        <div
-          v-for="(item, idx) in category.items"
-          :key="idx"
-          class="flex-table row"
-          role="rolegroup">
-          <!-- Drag Handle -->
+      <!-- Need to get drag 'n drop working -->
+      <draggable
+        v-bind="dragOptions"
+        class="group-items"
+        handle=".drag"
+        :list="category.items"
+        @end="drag = false"
+        @start="drag = true">
+        <transition-group
+          :name="!drag ? 'flip-list' : null"
+          type="transition">
           <div
-            :class="`flex-cell drag d-flex align-center justify-center text-${headers[0].align}`"
-            role="cell"
-            :style="{ width: `${headers[0].width}`}">
-            <client-only>
-              <unicon
-                class="drag"
-                fill="#9e9e9e"
-                height="20"
-                name="grip-horizontal-line"
-                width="20" />
-            </client-only>
-          </div>
-
-          <!-- Generic Type Click To Edit -->
-          <div
-            :class="`flex-cell text-${headers[1].align}`"
-            role="cell"
-            :style="{ width: `${headers[1].width}`}">
-            <click-to-edit
-              :style="{ fontSize: '0.875rem' }"
-              :unique-identifier="`type${item.id}`"
-              :value="item.generic_type"
-              @handle-update-item="handleUpdateItem($event, item, 'generic_type')" />
-          </div>
-
-          <!-- Name Click To Edit -->
-          <div
-            :class="`flex-cell text-${headers[2].align}`"
-            role="cell"
-            :style="{ width: `${headers[2].width}`}">
-            <click-to-edit
-              :style="{ fontSize: '0.875rem' }"
-              :unique-identifier="`name${item.id}Ref`"
-              :value="item.name"
-              @handle-update-item="handleUpdateItem($event, item, 'name')" />
-          </div>
-
-          <!-- Consumable Toggle -->
-          <div
-            :class="`flex-cell text-${headers[3].align}`"
-            role="cell"
-            :style="{ width: `${headers[3].width}`}">
-            <v-btn
-              :class="[{ active: item.consumable }, 'consumable-btn']"
-              icon
-              :ripple="false"
-              text
-              @click.native="handleUpdateBooleanItem(item, 'consumable')">
+            v-for="item in category.items"
+            :key="item.id"
+            class="flex-table row"
+            role="rolegroup">
+            <!-- Drag Handle -->
+            <div
+              :class="`flex-cell drag d-flex align-center justify-center text-${headers[0].align}`"
+              role="cell"
+              :style="{ width: `${headers[0].width}`}">
               <client-only>
                 <unicon
+                  class="drag"
                   fill="#9e9e9e"
                   height="20"
-                  name="utensils-alt"
+                  name="grip-horizontal-line"
                   width="20" />
               </client-only>
-            </v-btn>
-          </div>
+            </div>
 
-          <!-- Worn Toggle -->
-          <div
-            :class="`flex-cell text-${headers[4].align}`"
-            role="cell"
-            :style="{ width: `${headers[4].width}`}">
-            <v-btn
-              :class="[{ active: item.worn }, 'worn-btn']"
-              icon
-              :ripple="false"
-              text
-              @click="handleUpdateBooleanItem(item, 'worn')">
-              <client-only>
-                <unicon
-                  fill="#9e9e9e"
-                  height="20"
-                  name="layer-group"
-                  width="20" />
-              </client-only>
-            </v-btn>
-          </div>
-
-          <!-- Weight Click To Edit -->
-          <div
-            :class="`flex-cell text-${headers[5].align}`"
-            role="cell"
-            :style="{ width: `${headers[5].width}`}">
-            <span class="weight-column">
+            <!-- Generic Type Click To Edit -->
+            <div
+              :class="`flex-cell text-${headers[1].align}`"
+              role="cell"
+              :style="{ width: `${headers[1].width}`}">
               <click-to-edit
                 :style="{ fontSize: '0.875rem' }"
-                :unique-identifier="`weight${item.id}Ref`"
-                :value="item | displayWeight(item.unit)"
-                @handle-update-item="updateItem($event, item, 'weight')" />
-              <v-select
-                dense
-                hide-details
-                :items="weightItems"
-                :value="item.unit"
-                @change="handleUpdateUnits($event, item)" />
-            </span>
-          </div>
+                :unique-identifier="`type${item.id}`"
+                :value="item.generic_type"
+                @handle-update-item="handleUpdateItem($event, item, 'generic_type')" />
+            </div>
 
-          <!-- Price Click To Edit -->
-          <div
-            :class="`flex-cell text-${headers[6].align}`"
-            role="cell"
-            :style="{ width: `${headers[6].width}`}">
-            <click-to-edit
-              :custom-class="'price-column'"
-              :style="{ fontSize: '0.875rem', maxWidth: '100px', margin: '0 auto' }"
-              :unique-identifier="`price${item.id}Ref`"
-              :value="itemPrice(item)"
-              @handle-update-item="handleUpdateItem($event, item, 'price')">
-              <client-only>
-                <unicon
-                  fill="#494f57"
-                  height="14"
-                  name="dollar-alt"
-                  width="14" />
-              </client-only>
-            </click-to-edit>
-          </div>
+            <!-- Name Click To Edit -->
+            <div
+              :class="`flex-cell text-${headers[2].align}`"
+              role="cell"
+              :style="{ width: `${headers[2].width}`}">
+              <click-to-edit
+                :style="{ fontSize: '0.875rem' }"
+                :unique-identifier="`name${item.id}Ref`"
+                :value="item.name"
+                @handle-update-item="handleUpdateItem($event, item, 'name')" />
+            </div>
 
-          <!-- Quantity Click To Edit -->
-          <div
-            :class="`flex-cell text-${headers[7].align}`"
-            role="cell"
-            :style="{ width: `${headers[7].width}`}">
-            <click-to-edit
-              :custom-class="'quantity-column'"
-              :style="{ fontSize: '0.875rem', width: '60px', margin: '0 auto', textAlign: 'center' }"
-              type="number"
-              :unique-identifier="`quantity${item.id}Ref`"
-              :value="String(item.quantity)"
-              @handle-update-item="handleUpdateItem($event, item, 'quantity')" />
-          </div>
+            <!-- Consumable Toggle -->
+            <div
+              :class="`flex-cell text-${headers[3].align}`"
+              role="cell"
+              :style="{ width: `${headers[3].width}`}">
+              <v-btn
+                :class="[{ active: item.consumable }, 'consumable-btn']"
+                icon
+                :ripple="false"
+                text
+                @click.native="handleUpdateBooleanItem(item, 'consumable')">
+                <client-only>
+                  <unicon
+                    fill="#9e9e9e"
+                    height="20"
+                    name="utensils-alt"
+                    width="20" />
+                </client-only>
+              </v-btn>
+            </div>
 
-          <!-- Remove Item Button -->
-          <div
-            :class="`flex-cell d-flex justify-center align-center remove text-${headers[8].align}`"
-            role="cell"
-            :style="{ width: `${headers[8].width}`}">
-            <v-btn
-              icon
-              x-small
-              @click="handleRemoveRow(item, category)">
-              <client-only>
-                <unicon
-                  class="pointer"
-                  :fill="errorColor"
-                  height="20"
-                  name="trash-alt"
-                  width="20" />
-              </client-only>
-            </v-btn>
+            <!-- Worn Toggle -->
+            <div
+              :class="`flex-cell text-${headers[4].align}`"
+              role="cell"
+              :style="{ width: `${headers[4].width}`}">
+              <v-btn
+                :class="[{ active: item.worn }, 'worn-btn']"
+                icon
+                :ripple="false"
+                text
+                @click="handleUpdateBooleanItem(item, 'worn')">
+                <client-only>
+                  <unicon
+                    fill="#9e9e9e"
+                    height="20"
+                    name="layer-group"
+                    width="20" />
+                </client-only>
+              </v-btn>
+            </div>
+
+            <!-- Weight Click To Edit -->
+            <div
+              :class="`flex-cell text-${headers[5].align}`"
+              role="cell"
+              :style="{ width: `${headers[5].width}`}">
+              <span class="weight-column">
+                <click-to-edit
+                  :style="{ fontSize: '0.875rem' }"
+                  :unique-identifier="`weight${item.id}Ref`"
+                  :value="item | displayWeight(item.unit)"
+                  @handle-update-item="updateItem($event, item, 'weight')" />
+                <v-select
+                  dense
+                  hide-details
+                  :items="weightItems"
+                  :value="item.unit"
+                  @change="handleUpdateUnits($event, item)" />
+              </span>
+            </div>
+
+            <!-- Price Click To Edit -->
+            <div
+              :class="`flex-cell text-${headers[6].align}`"
+              role="cell"
+              :style="{ width: `${headers[6].width}`}">
+              <click-to-edit
+                :custom-class="'price-column'"
+                :style="{ fontSize: '0.875rem', maxWidth: '100px', margin: '0 auto' }"
+                :unique-identifier="`price${item.id}Ref`"
+                :value="itemPrice(item)"
+                @handle-update-item="handleUpdateItem($event, item, 'price')">
+                <client-only>
+                  <unicon
+                    fill="#494f57"
+                    height="14"
+                    name="dollar-alt"
+                    width="14" />
+                </client-only>
+              </click-to-edit>
+            </div>
+
+            <!-- Quantity Click To Edit -->
+            <div
+              :class="`flex-cell text-${headers[7].align}`"
+              role="cell"
+              :style="{ width: `${headers[7].width}`}">
+              <click-to-edit
+                :custom-class="'quantity-column'"
+                :style="{ fontSize: '0.875rem', width: '60px', margin: '0 auto', textAlign: 'center' }"
+                type="number"
+                :unique-identifier="`quantity${item.id}Ref`"
+                :value="String(item.quantity)"
+                @handle-update-item="handleUpdateItem($event, item, 'quantity')" />
+            </div>
+
+            <!-- Remove Item Button -->
+            <div
+              :class="`flex-cell d-flex justify-center align-center remove text-${headers[8].align}`"
+              role="cell"
+              :style="{ width: `${headers[8].width}`}">
+              <v-btn
+                icon
+                x-small
+                @click="handleRemoveRow(item, category)">
+                <client-only>
+                  <unicon
+                    class="pointer"
+                    :fill="errorColor"
+                    height="20"
+                    name="trash-alt"
+                    width="20" />
+                </client-only>
+              </v-btn>
+            </div>
           </div>
-        </div>
-      </div>
+        </transition-group>
+      </draggable>
 
       <!-- Totals -->
       <div
-        class="flex-table footer"
+        class="flex-table footer mb-4"
         role="rowgroup">
         <div
           class="flex-row"
@@ -314,6 +309,9 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
+  import convert from 'convert-units';
+  import draggable from 'vuedraggable';
   import ClickToEdit from '~/components/ClickToEdit.vue';
   import { convertToDollars } from '~/helpers/functions';
 
@@ -325,38 +323,81 @@
       }
     },
 
-    data: () => ({
-      errorColor: '',
-      headers: [
-        { label: '', align: 'start', field: 'drag', sortable: false, width: '3%', padding: '' },
-        { label: 'Type', align: 'start', field: 'generic_type', sortable: true, width: '17%', padding: 'pl-5' },
-        { label: 'Name', align: 'start', field: 'name', sortable: true, width: '19%', padding: 'pl-5' },
-        { label: 'Consumable', align: 'center', field: 'consumable', type: 'boolean', sortable: true, width: '12%', padding: '' },
-        { label: 'Worn', align: 'center', field: 'worn', type: 'boolean', sortable: true, width: '10%', padding: '' },
-        { label: 'Weight', align: 'center', field: 'weight', type: 'decimal', sortable: true, width: '15%', padding: '' },
-        { label: 'Price', align: 'center', field: 'price', type: 'decimal', sortable: true, width: '13%', padding: '' },
-        { label: 'Quantity', align: 'center', field: 'quantity', type: 'number', sortable: true, width: '8%', padding: '' },
-        { label: '', align: 'end', field: 'remove', sortable: false, width: '3%', padding: '' }
-      ],
-      primaryColor: '',
-      weightItems: ['oz', 'lb', 'g', 'kg']
-    }),
+    data () {
+      return {
+        drag: false,
+        errorColor: '',
+        headers: [
+          { label: '', align: 'start', field: 'drag', sortable: false, width: '3%', padding: '' },
+          { label: 'Type', align: 'start', field: 'generic_type', sortable: true, width: '15%', padding: 'pl-5' },
+          { label: 'Name', align: 'start', field: 'name', sortable: true, width: '19%', padding: 'pl-5' },
+          { label: 'Consumable', align: 'center', field: 'consumable', type: 'boolean', sortable: true, width: '12%', padding: '' },
+          { label: 'Worn', align: 'center', field: 'worn', type: 'boolean', sortable: true, width: '10%', padding: '' },
+          { label: 'Weight', align: 'center', field: 'weight', type: 'decimal', sortable: true, width: '17%', padding: '' },
+          { label: 'Price', align: 'center', field: 'price', type: 'decimal', sortable: true, width: '13%', padding: '' },
+          { label: 'Quantity', align: 'center', field: 'quantity', type: 'number', sortable: true, width: '8%', padding: '' },
+          { label: '', align: 'end', field: 'remove', sortable: false, width: '3%', padding: '' }
+        ],
+        primaryColor: '',
+        weightItems: ['oz', 'lb', 'g', 'kg']
+      };
+    },
+
+    computed: {
+      dragOptions () {
+        return {
+          animation: 200,
+          group: 'category',
+          disabled: false,
+          ghostClass: 'ghost'
+        };
+      }
+    },
 
     methods: {
+      ...mapActions({
+        updateCategory: 'entities/categories/updateCategory',
+        updateItem: 'entities/items/updateItem'
+      }),
       handleDeleteCategory () {
         console.log('handleDeleteCategory');
       },
       handleRemoveRow () {
         console.log('handleRemoveRow');
       },
-      handleUpdateBooleanItem () {
-        console.log('handleUpdateBooleanItem');
+      async handleUpdateBooleanItem (item, field) {
+        const payload = { variables: { id: item.id, [field]: !item[field] } };
+        await this.updateItem(payload);
       },
-      handleUpdateCategory () {
-        console.log('handleUpdateCategory');
+      async handleUpdateCategory (value, category, field) {
+        // return if value hasn't changed
+        if (value === String(category[field])) { return; }
+
+        const payload = { variables: { id: category.id, [field]: value } };
+        await this.updateCategory(payload);
       },
-      handleUpdateItem () {
-        console.log('handleUpdateItem');
+      async handleUpdateItem (value, item, field) {
+        // return if value hasn't changed
+        if (value === String(item[field])) { return; }
+
+        const payload = {
+          variables: {
+            id: item.id,
+            [field]: value
+          }
+        };
+
+        // handle floating point issue converting between string & number
+        if (field === 'price') {
+          payload.variables.price = Number((value * 100)).toFixed(2);
+        }
+
+        // convert back to g for storage in db
+        if (field === 'weight') {
+          payload.variables.weight = convert(value).from(item.unit).to('g');
+        }
+
+        await this.updateItem(payload);
       },
       handleUpdateUnits () {
         console.log('handleUpdateUnits');
@@ -370,9 +411,6 @@
       priceTotal (items) {
         const reduced = items.reduce((sum, elem) => sum + Number(elem.price), 0);
         return convertToDollars(reduced);
-      },
-      toggleSort () {
-        console.log('toggleSort');
       }
     },
 
@@ -382,7 +420,8 @@
     },
 
     components: {
-      ClickToEdit
+      ClickToEdit,
+      draggable
     }
   };
 </script>
@@ -561,12 +600,15 @@
       }
     }
 
-    .weight-column {
-      display: grid;
-      grid-template-columns: auto minmax(auto, 57px);
-      margin: 0 auto;
-      max-width: max-content;
+    .flex-row {
+      .flex-cell {
+        align-items: center;
+        display: flex;
+        height: 40px;
+      }
+    }
 
+    .weight-column {
       .v-select {
         .v-input__slot {
           &:before, &:after {
@@ -581,10 +623,6 @@
             text-align: right;
           }
         }
-      }
-
-      input {
-        max-width: 50px;
       }
     }
 
@@ -602,7 +640,7 @@
 
       .v-input {
         margin: 0 0 0 10px;
-        max-width: 57px;
+        /* max-width: 57px; */
 
         .v-select__selection {
           margin-bottom: 0;
@@ -626,5 +664,19 @@
       font-size: 0.875rem;
       padding: 0 12px;
     }
+  }
+
+  .flip-list-move {
+    transition: transform 0.5s;
+  }
+  .no-move {
+    transition: transform 0s;
+  }
+  .ghost {
+    opacity: 0.5;
+    background: #c8ebfb;
+  }
+  .group-items {
+    min-height: 20px;
   }
 </style>

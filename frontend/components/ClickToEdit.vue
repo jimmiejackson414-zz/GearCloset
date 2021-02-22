@@ -7,6 +7,7 @@
     :class="[ 'click-to-edit', active ? 'active' : 'b-none', customClass ]"
     color="primary"
     dense
+    :disabled="disabled"
     :full-width="false"
     hide-details
     outlined
@@ -33,6 +34,10 @@
       customStyle: { // if additional custom styles need to be added
         type: Object,
         default: () => {}
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       },
       mask: {
         type: Function,
